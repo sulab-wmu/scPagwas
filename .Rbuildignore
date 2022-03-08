@@ -1,2 +1,4 @@
+^renv$
+^renv\.lock$
 ^scPagwas\.Rproj$
 ^\.Rproj\.user$
