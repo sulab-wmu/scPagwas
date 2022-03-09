@@ -18,7 +18,6 @@ Requires rownames that are identitcal to block labels loaded previously.
 }
 \examples{
 library(scPagwas)
-#Pagwas should have inhibit data
+# Pagwas should have inhibit data
 Pagwas <- link_pwpca_block(Pagwas)
-
 }

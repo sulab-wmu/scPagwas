@@ -20,7 +20,6 @@ Deal with the pathway genes with snp blocks
 \examples{
 library(scPagwas)
 data(Genes_by_pathway.kegg)
-#the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
-Pagwas<-Pathway_annotation_input(Pagwas=Pagwas)
-
+# the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
+Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
 }

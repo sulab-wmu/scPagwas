@@ -15,7 +15,7 @@ Pagwas_main(
   Single_data = NULL,
   nfeatures = NULL,
   Pathway_list = NULL,
-  chrom_ld = chrom_ld,
+  chrom_ld = NULL,
   marg = 10000,
   maf_filter = 0.01,
   min.reads = 5,

@@ -23,5 +23,5 @@ Takes block information, potentially independent LD pathway_blocks or gene block
 \examples{
 library(scPagwas)
 data(chrom_ld)
-Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,chrom_ld=chrom_ld)
+Pagwas <- Link_pathway_blocks_gwas(Pagwas = Pagwas, chrom_ld = chrom_ld)
 }

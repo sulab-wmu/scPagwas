@@ -20,7 +20,6 @@ construct the final matrix for regression in blocks
 }
 \examples{
 library(scPagwas)
-#Pagwas should have inhibit data
+# Pagwas should have inhibit data
 Pagwas <- link_pwpca_block(Pagwas)
-
 }

@@ -37,6 +37,5 @@ Get the eqtls data and interact with GWAS summary data.
 library(scPagwas)
 data(eqtls_files)
 
-Pagwas<-Tissue_eqtls_Input(Pagwas=Pagwas,add_eqtls="OnlyEqtls",eqtls_files=eqtls_files)
-
+Pagwas <- Tissue_eqtls_Input(Pagwas = Pagwas, add_eqtls = "OnlyEqtls", eqtls_files = eqtls_files)
 }

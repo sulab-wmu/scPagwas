@@ -24,5 +24,4 @@ Run regression
 \examples{
 library(scPagwas)
 Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
-
 }

@@ -1,5 +1,3 @@
-
-
 #' @title Main wrapper functions for celltypes.
 #' @name Pagwas_main
 #' @description Main Pagwas wrapper function in order.
@@ -69,7 +67,7 @@ Pagwas_main <- function(Pagwas = NULL,
                         Single_data = NULL,
                         nfeatures =NULL,
                         Pathway_list=NULL,
-                        chrom_ld=chrom_ld,
+                        chrom_ld=NULL,
                         marg=10000,
                         maf_filter = 0.01,
                         min.reads = 5,
@@ -129,9 +127,7 @@ Pagwas_main <- function(Pagwas = NULL,
 
    }
    message('done!')
-  if(!is.null(nfeatures)){
-    nfeatures =nrow(Single_data)
-  }
+
    #4.calculated Snp2Gene
   message(paste(utils::timestamp(quiet = T), ' ******* 4th: Snp2Gene start!! ********',sep = ''))
 
@@ -139,7 +135,7 @@ Pagwas_main <- function(Pagwas = NULL,
 
     Pagwas$block_annotation<-block_annotation
 
-    if(add_eqtls!="FALSE"){
+    if(add_eqtls!="OnlyTSS"){
       if (!is.null(eqtls_files)){
 
         message("Filter snps for significant eqtls!")
@@ -179,9 +175,11 @@ Pagwas_main <- function(Pagwas = NULL,
 
   message(paste(utils::timestamp(quiet = T), ' ******* 6th: Link_pathway_blocks_gwas function start! ********',sep = ''))
 
-  if (!is.null(ld_folder)){
+  if (!is.null(chrom_ld)){
 
-    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,ld_folder=ld_folder,r2_threshold = .2,n.cores=n.cores)
+    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                       chrom_ld=chrom_ld,
+                                       n.cores=n.cores)
 
   message('done!')
     # save(merge_scexpr,file="merge_scexpr.RData")
@@ -212,10 +210,15 @@ Pagwas_main <- function(Pagwas = NULL,
 
   if(simp_results){
 
-  Pagwas$expected_block_values<- NULL
-  Pagwas$Pathway_block_heritability<- NULL
    Pagwas$Pathway_block_info<- NULL
-   Pagwas$Pathway_block_heritability<-NULL
+   Pagwas$gwas_data <- NULL
+   Pagwas$snp_gene_df <-NULL
+   Pagwas$Single_data <- NULL
+   Pagwas$pca_cell_df <-NULL
+   Pagwas$merge_scexpr <- NULL
+   Pagwas$Pathway_ld_gwas_data <- NULL
+   Pagwas$block_annotation <- NULL
+   Pagwas$chrom_ld<-NULL
 
   }
 
@@ -265,12 +268,12 @@ Pagwas_main <- function(Pagwas = NULL,
 #' data(chrom_ld)
 #' #1. OnlyTSS
 #' scPagwas_main <- function(Pagwas = NULL,
-#' gwas_data = GWAS_summ_example,
-#' add_eqtls="OnlyTSS",
-#' block_annotation = gtf_df,
-#' Single_data = scRNAexample,
-#' Pathway_list=Genes_by_pathway.kegg,
-#' chrom_ld = chrom_ld)
+#'                           gwas_data = GWAS_summ_example,
+#'                           add_eqtls="OnlyTSS",
+#'                           block_annotation = gtf_df,
+#'                           Single_data = scRNAexample,
+#'                           Pathway_list=Genes_by_pathway.kegg,
+#'                           chrom_ld = chrom_ld)
 #' #1. Both
 #' scPagwas_main <- function(Pagwas = NULL,
 #'                           gwas_data = GWAS_summ_example,
@@ -340,9 +343,6 @@ scPagwas_main <- function(Pagwas = NULL,
   message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
 
-  if(!is.null(nfeatures)){
-    nfeatures =nrow(Single_data)
-  }
   #3.calculated pca score
   message(paste(utils::timestamp(quiet = T), ' ******* 3rd: Pathway_pcascore_run function start!! ********',sep = ''))
 
@@ -364,7 +364,7 @@ scPagwas_main <- function(Pagwas = NULL,
 
     Pagwas$block_annotation<-block_annotation
 
-    if(add_eqtls!="FALSE"){
+    if(add_eqtls!="OnlyTSS"){
       if (!is.null(eqtls_files)){
 
         message("Filter snps for significant eqtls!")
@@ -406,7 +406,9 @@ scPagwas_main <- function(Pagwas = NULL,
 
   if (!is.null(ld_folder)){
 
-    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,ld_folder=ld_folder,r2_threshold = .2,n.cores=n.cores)
+    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                       chrom_ld=chrom_ld,
+                                       n.cores=n.cores)
 
   message('done!')
   }
@@ -433,10 +435,10 @@ scPagwas_main <- function(Pagwas = NULL,
   if(simp_results){
   Pagwas$gwas_data <- NULL
   Pagwas$Single_data <- NULL
-  Pagwas$Celltype_anno <-NULL
+  #Pagwas$Celltype_anno <-NULL
   Pagwas$snp_gene_df <-NULL
-  #Pagwas$Pathway_list <-NULL
-  Pagwas$rawPathway_list <-NULL
+  Pagwas$chrom_ld<-NULL
+  #Pagwas$rawPathway_list <-NULL
   Pagwas$pca_cell_df <-NULL
   Pagwas$block_annotation <- NULL
   Pagwas$merge_scexpr <- NULL

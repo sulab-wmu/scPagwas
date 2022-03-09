@@ -31,6 +31,6 @@ This bar plot shows the -log2(p value) for bootstrap result, using the ggplot pa
 }
 \examples{
 library(scPagwas)
-#Pagwas is the result of Pagwas_main()
-Bootstrap_P_Barplot(Pagwas,title="Test scPagwas",file="test_barplot.pdf",width=5,height =7)
+# Pagwas is the result of Pagwas_main()
+Bootstrap_P_Barplot(Pagwas, title = "Test scPagwas", file = "test_barplot.pdf", width = 5, height = 7)
 }

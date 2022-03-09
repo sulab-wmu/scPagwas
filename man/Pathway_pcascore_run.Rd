@@ -32,7 +32,6 @@ The function can calculate the pathway pcascore for celltypes and single cells.
 \examples{
 library(scPagwas)
 data(Genes_by_pathway.kegg)
-#the Pagwas shoul be after Single_data_input() and GWAS_summary_input()
-Pagwas<-Pathway_pcascore_run(Pagwas=Pagwas,Pathway_list=Genes_by_pathway.kegg)
-
+# the Pagwas shoul be after Single_data_input() and GWAS_summary_input()
+Pagwas <- Pathway_pcascore_run(Pagwas = Pagwas, Pathway_list = Genes_by_pathway.kegg)
 }

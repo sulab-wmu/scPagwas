@@ -30,7 +30,6 @@ This forest plot shows the correct estimate values and 95\% CI for different cel
 }
 \examples{
 library(scPagwas)
-#Pagwas is the result of Pagwas_main()
-Bootstrap_estimate_Plot(Pagwas,filenames="test_forest.pdf",width = 9,height =7)
-
+# Pagwas is the result of Pagwas_main()
+Bootstrap_estimate_Plot(Pagwas, filenames = "test_forest.pdf", width = 9, height = 7)
 }

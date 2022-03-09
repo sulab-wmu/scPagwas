@@ -40,7 +40,6 @@ Input the Single data in seruat format
 \examples{
 library(scPagwas)
 data(scRNAexample)
-#Pagwas is better getting from GWAS_summary_input(),or NULL is right,
-Pagwas<-Single_data_input(Pagwas=Pagwas, Single_data=scRNAexample)
-
+# Pagwas is better getting from GWAS_summary_input(),or NULL is right,
+Pagwas <- Single_data_input(Pagwas = Pagwas, Single_data = scRNAexample)
 }

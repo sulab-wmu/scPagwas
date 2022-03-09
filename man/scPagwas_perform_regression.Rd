@@ -19,6 +19,5 @@ Functions for inferring relevant annotations using the polyTest model.
 }
 \examples{
 library(scPagwas)
-scPagwas_perform_regression(Pagwas, n.cores=n.cores)
-
+scPagwas_perform_regression(Pagwas, n.cores = n.cores)
 }

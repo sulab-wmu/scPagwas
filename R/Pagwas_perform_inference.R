@@ -12,42 +12,43 @@
 #' @examples
 #' library(scPagwas)
 #' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
-#'
 Pagwas_perform_regression <- function(Pagwas,
                                       iters = iters,
-                                      part=0.5,
-                                      n.cores=n.cores){
+                                      part = 0.5,
+                                      n.cores = n.cores) {
   if (is.null(Pagwas$Pathway_ld_gwas_data)) {
-    warning('data has not been precomputed, returning without results')
+    warning("data has not been precomputed, returning without results")
     return(Pagwas)
   }
-  message('** Start inference')
+  message("** Start inference")
   # fit model
   vectorized_Pagwas_data <- xy2vector(Pagwas$Pathway_ld_gwas_data)
   Pagwas$lm_results <- Parameter_regression(vectorized_Pagwas_data)
 
-  #make sure there are no blank and + in colnames of pac_cell_df!
+  # make sure there are no blank and + in colnames of pac_cell_df!
 
-  colnames(Pagwas$pca_cell_df)<-stringr::str_replace_all(colnames(Pagwas$pca_cell_df)," ",".")
-  colnames(Pagwas$pca_cell_df)<-stringr::str_replace_all(colnames(Pagwas$pca_cell_df),"\\+",".")
-  #colnames(Pagwas$pca_scCell_mat)<-stringr::str_replace_all(colnames(Pagwas$pca_scCell_mat),"-",".")
+  colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), " ", ".")
+  colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), "\\+", ".")
+  # colnames(Pagwas$pca_scCell_mat)<-stringr::str_replace_all(colnames(Pagwas$pca_scCell_mat),"-",".")
 
-  Pagwas$lm_results <- para_names_adjust(Pagwas,lm_results=Pagwas$lm_results)
-  if(sum(is.na(Pagwas$lm_results$parameters))>1){
+  Pagwas$lm_results <- para_names_adjust(Pagwas, lm_results = Pagwas$lm_results)
+  if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
     stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
   }
   # add on block values
-  #Pagwas$Pathway_block_info <- Get_Pathway_block_info(
-   # pca_cell_df=Pagwas$pca_cell_df, parameters=Pagwas$lm_results$parameters)
+  # Pagwas$Pathway_block_info <- Get_Pathway_block_info(
+  # pca_cell_df=Pagwas$pca_cell_df, parameters=Pagwas$lm_results$parameters)
 
   # add on heritability values
   Pagwas$Pathway_block_heritability <-
-    Get_Pathway_heritability_contributions(Pagwas$pca_cell_df,
-                                            Pagwas$lm_results$parameters)
+    Get_Pathway_heritability_contributions(
+      Pagwas$pca_cell_df,
+      Pagwas$lm_results$parameters
+    )
 
   # Bootstrap error and 95% confidence interval estimates
   if (iters > 0) {
-    Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters,n.cores=n.cores,part=part)
+    Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, n.cores = n.cores, part = part)
   }
   return(Pagwas)
 }
@@ -63,12 +64,12 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
   lm_results <- list()
 
   m <- stats::lm(vectorized_Pagwas_data$y ~
-            offset(vectorized_Pagwas_data$noise_per_snp) +
-            vectorized_Pagwas_data$x);
+  offset(vectorized_Pagwas_data$noise_per_snp) +
+    vectorized_Pagwas_data$x)
 
   lm_results$parameters <- stats::coef(m)
 
-  annotation_names <- c('Intercept', colnames(vectorized_Pagwas_data$x))
+  annotation_names <- c("Intercept", colnames(vectorized_Pagwas_data$x))
   names(lm_results$parameters) <- annotation_names
   lm_results$model <- m
 
@@ -86,42 +87,44 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
 #' @return
 
 Boot_evaluate <- function(Pagwas,
-                          bootstrap_iters=200,
-                          part=0.5,
-                          n.cores=1) {
+                          bootstrap_iters = 200,
+                          part = 0.5,
+                          n.cores = 1) {
 
-  #partitions_present <- unique(unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) {block$partition})))
+  # partitions_present <- unique(unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) {block$partition})))
   # run things in parallel if user specified
-    message(paste0('* starting bootstrap iteration for ',  bootstrap_iters, " times"))
+  message(paste0("* starting bootstrap iteration for ", bootstrap_iters, " times"))
 
-    pb <- txtProgressBar(style=3)
+  pb <- txtProgressBar(style = 3)
   Boot_evaluate <-
-    papply(1:bootstrap_iters,function(i){
-      #boot_partitions <- sample(partitions_present, length(partitions_present), replace = T)
+    papply(1:bootstrap_iters, function(i) {
+      # boot_partitions <- sample(partitions_present, length(partitions_present), replace = T)
 
       boot_results <- Parameter_regression(
-
         xy2vector(Pagwas$Pathway_ld_gwas_data[
-          #unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) { block$partition %in% boot_partitions}))
-          sample(1:length(Pagwas$Pathway_ld_gwas_data),floor(length(Pagwas$Pathway_ld_gwas_data)*part))
-          ]
-          ))
-      boot_results <- para_names_adjust(Pagwas,lm_results=boot_results)
-      setTxtProgressBar(pb,i/bootstrap_iters)
+          # unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) { block$partition %in% boot_partitions}))
+          sample(1:length(Pagwas$Pathway_ld_gwas_data), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
+        ])
+      )
+      boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
+      setTxtProgressBar(pb, i / bootstrap_iters)
 
       # return the important bits
       return(
         list(
-        boot_parameters = boot_results$parameters,
-        block_heritability = Get_Pathway_heritability_contributions(
-          Pagwas$pca_cell_df, boot_results$parameters)
-      )
+          boot_parameters = boot_results$parameters,
+          block_heritability = Get_Pathway_heritability_contributions(
+            Pagwas$pca_cell_df, boot_results$parameters
+          )
         )
-    },n.cores=n.cores)
-    close(pb)
+      )
+    }, n.cores = n.cores)
+  close(pb)
 
   Pagwas$bootstrap_results <- Get_bootresults_df(
-    sapply(Boot_evaluate, function(boot) {boot$boot_parameters}),
+    sapply(Boot_evaluate, function(boot) {
+      boot$boot_parameters
+    }),
     names(Pagwas$lm_results$parameters),
     Pagwas$lm_results$parameters
   )
@@ -136,17 +139,17 @@ Boot_evaluate <- function(Pagwas,
 #'
 #' @return
 
-para_names_adjust<-function(Pagwas,lm_results=Pagwas$lm_results){
-    pca_cell_df<-Pagwas$pca_cell_df
-  if(sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)){
-  	#message("There is blank or '+' within cell names!")
-  	names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters)," ",".")
-  	names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters),"\\+",".")
-    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters),"-",".")
+para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
+  pca_cell_df <- Pagwas$pca_cell_df
+  if (sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)) {
+    # message("There is blank or '+' within cell names!")
+    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), " ", ".")
+    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "\\+", ".")
+    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "-", ".")
   }
 
-  if(sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)){
-  	stop("unidentified signal within cell names, please remove it!")
+  if (sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)) {
+    stop("unidentified signal within cell names, please remove it!")
   }
   return(lm_results)
 }
@@ -161,23 +164,35 @@ para_names_adjust<-function(Pagwas,lm_results=Pagwas$lm_results){
 #' @return
 #'
 
-xy2vector <- function(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data) {
+xy2vector <- function(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data) {
   # use only blocks flagged for inference inclusion
-  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(Pathway_ld_gwas_data, function(block) {block$include_in_inference})]
+  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(Pathway_ld_gwas_data, function(block) {
+    block$include_in_inference
+  })]
 
   # unpack Pathway_ld_gwas_data
-  y <- do.call('c', lapply(Pathway_ld_gwas_data, function(block) { block$y }))
-  x <- do.call('rbind', lapply(Pathway_ld_gwas_data, function(block) { block$x }))
+  y <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$y
+  }))
+  x <- do.call("rbind", lapply(Pathway_ld_gwas_data, function(block) {
+    block$x
+  }))
 
-  rownames(x) <- do.call('c', lapply(Pathway_ld_gwas_data, function(block) { block$snps$rsid }))
-  noise_per_snp <- do.call('c', lapply(Pathway_ld_gwas_data, function(block) { block$snps$se**2 }))
+  rownames(x) <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$snps$rsid
+  }))
+  noise_per_snp <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$snps$se**2
+  }))
 
   # exclude na elements
-  na_elements <- is.na(y) | apply(x, 1, function(x) { any(is.na(x))}) | is.na(noise_per_snp)
+  na_elements <- is.na(y) | apply(x, 1, function(x) {
+    any(is.na(x))
+  }) | is.na(noise_per_snp)
   return(list(
-    y = y[!na_elements], x = x[!na_elements,],
-    noise_per_snp = noise_per_snp[!na_elements])
-  )
+    y = y[!na_elements], x = x[!na_elements, ],
+    noise_per_snp = noise_per_snp[!na_elements]
+  ))
 }
 
 
@@ -192,7 +207,7 @@ xy2vector <- function(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data) {
 #'
 Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
   if (any(is.na(parameters))) {
-    warning('NA pameters found!')
+    warning("NA pameters found!")
     parameters[is.na(parameters)] <- 0
   }
 
@@ -215,7 +230,9 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
 Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 
   # in the case we're calculating single parameter estimates
-  if (is.null(dim(value_collection))) {value_collection <- matrix(value_collection, nrow = 1)}
+  if (is.null(dim(value_collection))) {
+    value_collection <- matrix(value_collection, nrow = 1)
+  }
 
   parameter_estimates <- data.frame(
     annotation = annotations,
@@ -229,9 +246,13 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
     )
 
   parameter_estimates$CI_lo <-
-    apply(value_collection, 1, function(x) { stats::quantile(x, 0.025, na.rm = T) })
+    apply(value_collection, 1, function(x) {
+      stats::quantile(x, 0.025, na.rm = T)
+    })
   parameter_estimates$CI_hi <-
-    apply(value_collection, 1, function(x) { stats::quantile(x, 0.975, na.rm = T) })
+    apply(value_collection, 1, function(x) {
+      stats::quantile(x, 0.975, na.rm = T)
+    })
 
   return(parameter_estimates)
 }
@@ -248,11 +269,11 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 #'
 #' @return
 
-Pagwas_perform_regularized_inference <- function(Pagwas,n_folds = 10) {
-
-  message('performing cross validation')
+Pagwas_perform_regularized_inference <- function(Pagwas, n_folds = 10) {
+  message("performing cross validation")
   Pagwas$cv_regularized_lm_results <- cv_regularized_parameter_estimator(
-    xy2vector(Pagwas$Pathway_ld_gwas_data),n_folds=n_folds
+    xy2vector(Pagwas$Pathway_ld_gwas_data),
+    n_folds = n_folds
   )
 
   # add on block values
@@ -262,7 +283,8 @@ Pagwas_perform_regularized_inference <- function(Pagwas,n_folds = 10) {
   # calculate expected block values (accounts for ld and snp error)
   Pagwas$regularized_expected_block_values <-
     calculate_expected_block_values_given_ld(
-      Pagwas, Pagwas$regularized_block_values)$expected_block_values
+      Pagwas, Pagwas$regularized_block_values
+    )$expected_block_values
 
   return(Pagwas)
 }
@@ -285,14 +307,13 @@ cv_regularized_parameter_estimator <- function(vectorized_Pagwas_data,
     y = vectorized_Pagwas_data$y,
     offset = vectorized_Pagwas_data$noise_per_snp,
     foldid = cut(1:length(vectorized_Pagwas_data$y), breaks = n_folds, labels = F),
-    family = 'gaussian', ... = ...
+    family = "gaussian", ... = ...
   )
 
   # can choose coefficients with either: lambda.min, or lambda.1se
-  lm_results$parameters <- stats::coef(m, s = 'lambda.min') %>% as.numeric()
-  annotation_names <- c('intercept', colnames(vectorized_Pagwas_data$x))
+  lm_results$parameters <- stats::coef(m, s = "lambda.min") %>% as.numeric()
+  annotation_names <- c("intercept", colnames(vectorized_Pagwas_data$x))
   names(lm_results$parameters) <- annotation_names
   lm_results$model <- m
   return(lm_results)
 }
-

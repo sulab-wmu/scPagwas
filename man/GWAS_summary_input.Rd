@@ -39,6 +39,5 @@ filter the maf and the sex chrom data
 \examples{
 library(scPagwas)
 data(GWAS_summ_example)
-Pagwas<-GWAS_summary_input(Pagwas=NULL,gwas_data=GWAS_summ_example)
-
+Pagwas <- GWAS_summary_input(Pagwas = NULL, gwas_data = GWAS_summ_example)
 }

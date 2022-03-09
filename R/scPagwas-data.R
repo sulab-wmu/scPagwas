@@ -152,7 +152,7 @@ NULL
 #' @source Generated from GTEx
 #' @examples data(eqtls_files)
 #' str(eqtls_files)
-eqtls_files<-"./inst/extdata/Liver.v8.egenes.txt.gz"
+eqtls_files <- "./inst/extdata/Liver.v8.egenes.txt.gz"
 
 
 #' ld_folder
@@ -188,4 +188,3 @@ eqtls_files<-"./inst/extdata/Liver.v8.egenes.txt.gz"
 #' @examples data(chrom_ld)
 #' str(chrom_ld)
 NULL
-

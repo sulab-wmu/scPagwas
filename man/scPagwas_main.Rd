@@ -103,12 +103,12 @@ data(eqtls_files)
 data(chrom_ld)
 #1. OnlyTSS
 scPagwas_main <- function(Pagwas = NULL,
-gwas_data = GWAS_summ_example,
-add_eqtls="OnlyTSS",
-block_annotation = gtf_df,
-Single_data = scRNAexample,
-Pathway_list=Genes_by_pathway.kegg,
-chrom_ld = chrom_ld)
+                          gwas_data = GWAS_summ_example,
+                          add_eqtls="OnlyTSS",
+                          block_annotation = gtf_df,
+                          Single_data = scRNAexample,
+                          Pathway_list=Genes_by_pathway.kegg,
+                          chrom_ld = chrom_ld)
 #1. Both
 scPagwas_main <- function(Pagwas = NULL,
                           gwas_data = GWAS_summ_example,

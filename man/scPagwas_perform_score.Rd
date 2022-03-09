@@ -22,5 +22,4 @@ Get the scPagwas score for each cells
 \examples{
 library(scPagwas)
 scPagwas_perform_score(Pagwas)
-
 }

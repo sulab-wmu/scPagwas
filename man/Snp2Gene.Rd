@@ -27,6 +27,5 @@ given unknown strand assignment for SNP array-based genotyping info
 \examples{
 library(scPagwas)
 data(gtf_df)
-snp_gene_df<-Snp2Gene(snp=as.data.frame(Pagwas$gwas_data),refGene=gtf_df,marg=10000)
-
+snp_gene_df <- Snp2Gene(snp = as.data.frame(Pagwas$gwas_data), refGene = gtf_df, marg = 10000)
 }
