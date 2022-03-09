@@ -18,7 +18,7 @@ Single_data_input(
 \arguments{
 \item{Pagwas}{Pagwas format}
 
-\item{Single_data}{nput the Single data in seruat format, Idents should be the celltypes annotation.}
+\item{Single_data}{Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
 \item{nfeatures}{The parameter for FindVariableFeatures, NULL means select all genes}
 

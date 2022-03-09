@@ -1,13 +1,13 @@
 
 #' Pathway_pcascore_run
-#' The function can calculate the pathway pcascore for celltypes and single cells.
+#' @description The function can calculate the pathway pcascore for celltypes and single cells.
 #' @param Pagwas Pagwas format
 #' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
 #' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#' @param min.pathway.size Threshold for min pathway size.
-#' @param max.pathway.size Threshold for max pathway size.
+#' @param min.pathway.size Threshold for min pathway gene size.
+#' @param max.pathway.size Threshold for max pathway gene size.
 #'
-#' @return Pagwas
+#' @return
 #' @export
 #'
 #' @examples
@@ -126,12 +126,12 @@ Pathway_pcascore_run <- function(Pagwas=NULL,
 
 
 #' PathwayPCAtest
-#'
+#' @description Calculate pca score
 #' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
 #' @param scCounts single cell Counts pathway
 #' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
-#' @return list(df,vscore)
+#' @return
 #'
 PathwayPCAtest=function(Pathway_list,
                         scCounts,

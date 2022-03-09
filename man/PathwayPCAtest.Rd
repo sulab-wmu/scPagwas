@@ -14,8 +14,8 @@ PathwayPCAtest(Pathway_list, scCounts, n.cores = 1)
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
-list(df,vscore)
+
 }
 \description{
-PathwayPCAtest
+Calculate pca score
 }

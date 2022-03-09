@@ -10,7 +10,7 @@
 #' @param MHC_filter Filter the SNPs in MHC chromosome,  default is TRUE.
 #' @param gwas_z_filter Filter the z-score, calculated by abs(beta/se)
 #'
-#' @return Pagwas
+#' @return
 #' @export
 #'
 #' @examples

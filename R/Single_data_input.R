@@ -3,7 +3,7 @@
 #' Single_data_input
 #' Input the Single data in seruat format
 #' @param Pagwas Pagwas format
-#' @param Single_data nput the Single data in seruat format, Idents should be the celltypes annotation.
+#' @param Single_data Input the Single data in seruat format, Idents should be the celltypes annotation.
 #' @param nfeatures The parameter for FindVariableFeatures, NULL means select all genes
 #' @param min.lib.size Threshold for single data library.
 #' @param min.reads Threshold for total reads fo each cells.
@@ -19,7 +19,13 @@
 #' #Pagwas is better getting from GWAS_summary_input(),or NULL is right,
 #' Pagwas<-Single_data_input(Pagwas=Pagwas, Single_data=scRNAexample)
 #'
-Single_data_input<- function(Pagwas, Single_data, nfeatures =NULL,min.lib.size = 1000, min.reads = 10, min.detected = 5, min_clustercells=50){
+Single_data_input<- function(Pagwas,
+                             Single_data,
+                             nfeatures =NULL,
+                             min.lib.size = 1000,
+                             min.reads = 10,
+                             min.detected = 5,
+                             min_clustercells=50){
    message('Input single cell count data and cell annotation data!')
 
   if (!('Seurat' %in% class(Single_data))) {
@@ -37,14 +43,19 @@ Single_data_input<- function(Pagwas, Single_data, nfeatures =NULL,min.lib.size =
 
   rownames(Celltype_anno)<-Celltype_anno$cellnames
   #VSingle_data <- Single_data
-  if(!is.null(nfeatures) & nfeatures!=nrow(Single_data)){
-
-  Single_data <- Seurat::FindVariableFeatures(Single_data,selection.method = "vst",
-                                  nfeatures = nfeatures)
-  Pagwas$VariableFeatures<-Seurat::VariableFeatures(Single_data)
-  #Single_data <- Single_data[,]
-  }else if(nfeatures==nrow(Single_data)){
-  Pagwas$VariableFeatures<-rownames(Single_data)
+  if(!is.null(nfeatures)){
+    if(nfeatures < nrow(Single_data)){
+      Single_data <- Seurat::FindVariableFeatures(Single_data,selection.method = "vst",
+                                                  nfeatures = nfeatures)
+      Pagwas$VariableFeatures<-Seurat::VariableFeatures(Single_data)
+      #Single_data <- Single_data[,]
+    }else if(nfeatures==nrow(Single_data)){
+      Pagwas$VariableFeatures<-rownames(Single_data)
+    }else{
+      stop("Error: nfeatures is too big")
+    }
+  }else{
+    Pagwas$VariableFeatures<-rownames(Single_data)
   }
 
   count <- Seurat::GetAssayData(object =Single_data, slot = "count")

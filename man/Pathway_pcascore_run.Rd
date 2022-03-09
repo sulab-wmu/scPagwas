@@ -2,8 +2,7 @@
 % Please edit documentation in R/Pathway_pcascore_run.R
 \name{Pathway_pcascore_run}
 \alias{Pathway_pcascore_run}
-\title{Pathway_pcascore_run
-The function can calculate the pathway pcascore for celltypes and single cells.}
+\title{Pathway_pcascore_run}
 \usage{
 Pathway_pcascore_run(
   Pagwas = NULL,
@@ -20,15 +19,14 @@ Pathway_pcascore_run(
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 
-\item{min.pathway.size}{Threshold for min pathway size.}
+\item{min.pathway.size}{Threshold for min pathway gene size.}
 
-\item{max.pathway.size}{Threshold for max pathway size.}
+\item{max.pathway.size}{Threshold for max pathway gene size.}
 }
 \value{
-Pagwas
+
 }
 \description{
-Pathway_pcascore_run
 The function can calculate the pathway pcascore for celltypes and single cells.
 }
 \examples{

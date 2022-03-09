@@ -2,8 +2,7 @@
 % Please edit documentation in R/bootstrap_result_visualize.R
 \name{Bootstrap_P_Barplot}
 \alias{Bootstrap_P_Barplot}
-\title{Bootstrap_P_Barplot
-This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages}
+\title{Bootstrap_P_Barplot}
 \usage{
 Bootstrap_P_Barplot(
   Pagwas,
@@ -28,7 +27,6 @@ Bootstrap_P_Barplot(
 A figure of barplot in pdf format, red color is significant.
 }
 \description{
-Bootstrap_P_Barplot
 This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages
 }
 \examples{

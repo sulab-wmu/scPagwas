@@ -1,7 +1,6 @@
 
 #' Bootstrap_P_Barplot
-#' This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages
-#'
+#' @description This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages
 #'
 #' @param Pagwas Pagwas format of result in Pagwas_main()
 #' @param title The title names of the plot

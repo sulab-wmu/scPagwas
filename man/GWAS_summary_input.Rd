@@ -29,7 +29,7 @@ GWAS_summary_input(
 \item{gwas_z_filter}{Filter the z-score, calculated by abs(beta/se)}
 }
 \value{
-Pagwas
+
 }
 \description{
 GWAS_summary_input :
