@@ -2,7 +2,7 @@
 #' papply
 #' @description wrapper around different mclapply mechanisms
 #' Abstracts out mclapply implementation, and defaults to lapply when only one core is requested (helps with debugging)
-#' @param ...parameters to pass to lapply, mclapply, bplapply, etc.
+#' @param ... parameters to pass to lapply, mclapply, bplapply, etc.
 #' @param n.cores default is 1.
 #'
 #' @return

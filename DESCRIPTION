@@ -1,16 +1,18 @@
 Package: scPagwas
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: A pathway-based polygenic integration method for inferring disease-associated individual cells in single cell sequencing data
+Version: 1.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Chunyu",
+           family = "Deng",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "dengcyelena@gmail.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Description: scPagwas, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.scPagwas is able to prioritize disease-associated individual cells by integrating the scRNA-seq data with polygenic signals from GWAS.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

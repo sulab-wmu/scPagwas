@@ -7,9 +7,9 @@
 papply(..., n.cores = detectCores())
 }
 \arguments{
-\item{n.cores}{default is 1.}
+\item{...}{parameters to pass to lapply, mclapply, bplapply, etc.}
 
-\item{...parameters}{to pass to lapply, mclapply, bplapply, etc.}
+\item{n.cores}{default is 1.}
 }
 \value{
 

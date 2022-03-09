@@ -2,7 +2,7 @@
 #' scPagwas_Visualization
 #' @description Visualize the scPagwas score in Umap and Tsne.
 #'
-#' @param scPagwas
+#' @param scPagwas Pagwas data for scPagwas_main()
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
 #' @param Reduction (logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.
 #' @param assay (character)"RNA" or "SCT", It depens on the Single_data.

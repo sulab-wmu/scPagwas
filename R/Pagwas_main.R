@@ -99,6 +99,8 @@ Pagwas_main <- function(Pagwas = NULL,
   #2.single data input
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
 
+  suppressMessages(require(SeuratObject))
+
   if (!is.null(Single_data)){
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 nfeatures =nfeatures,
@@ -228,6 +230,7 @@ Pagwas_main <- function(Pagwas = NULL,
 
 #' scPagwas_main
 #' @description Main scPagwas wrapper function for single cell data in order.
+#'
 #' @param Pagwas (list)Pagwas data list, default is "NULL"
 #' @param gwas_data (data.frame)GWAS summary data
 #' @param add_eqtls (character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;
@@ -253,7 +256,6 @@ Pagwas_main <- function(Pagwas = NULL,
 #' @param regression (logical)default FALSE, whither to run scPagwas_perform_regression, get the pvalue, the step is too slow.
 #' @param simp_results (logical)Whether to return a simple results.If TURE,there is only finaly result return; if FALSE, all the Intermediate Data will keep in pagwas, this option is used to save time when rerun the function.
 #' @param split_n (integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.
-#' @param ...
 #'
 #' @return
 #' @export
@@ -310,8 +312,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         n.cores=1,
                         regression=FALSE,
                         simp_results=F,
-                        split_n=1e9,
-                           ...) {
+                        split_n=1e9) {
   if (is.null(Pagwas)){
     Pagwas <- list();
     class(Pagwas) <- 'Pagwas'
@@ -330,6 +331,7 @@ scPagwas_main <- function(Pagwas = NULL,
   #2.single data input
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
 
+  suppressMessages(require(SeuratObject))
   if (!is.null(Single_data)){
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 nfeatures =nfeatures,
