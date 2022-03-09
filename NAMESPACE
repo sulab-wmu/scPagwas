@@ -2,3 +2,4 @@
 
 export(Bootstrap_P_Barplot)
 export(Bootstrap_estimate_Plot)
+export(GWAS_summary_input)
