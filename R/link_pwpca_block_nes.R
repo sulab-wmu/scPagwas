@@ -6,7 +6,6 @@
 #'
 #' @return
 #' @export
-#'
 #' @examples
 #' library(scPagwas)
 #' # Pagwas should have inhibit data

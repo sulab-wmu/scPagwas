@@ -4,7 +4,7 @@
 \alias{fortify.Seurat.umap}
 \title{fortify.Seurat.umap}
 \usage{
-fortify.Seurat.umap(x)
+\method{fortify}{Seurat.umap}(x)
 }
 \arguments{
 \item{x}{Seurat format}

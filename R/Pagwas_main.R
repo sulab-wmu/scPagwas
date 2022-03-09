@@ -1,3 +1,26 @@
+#' @import ggsci
+#' @import dplyr
+#' @import foreach
+#' @import data.table
+#' @importFrom irlba irlba
+#' @import Seurat
+#' @import SeuratObject
+#' @import Matrix
+#' @import stringr
+#' @import future
+#' @import future.apply
+#' @import glmnet
+#' @import GenomicRanges
+#' @import utils
+#' @import ggplot2
+#' @import ggthemes
+#' @import ggpubr
+#' @import ggtext
+#' @import ggnewscale
+#' @import bigstatsr
+
+
+
 #' @title Main wrapper functions for celltypes.
 #' @name Pagwas_main
 #' @description Main Pagwas wrapper function in order.
@@ -99,7 +122,7 @@ Pagwas_main <- function(Pagwas = NULL,
   #2.single data input
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
 
-  suppressMessages(require(SeuratObject))
+  #suppressMessages(require(SeuratObject))
 
   if (!is.null(Single_data)){
     Pagwas <- Single_data_input(Pagwas=Pagwas,

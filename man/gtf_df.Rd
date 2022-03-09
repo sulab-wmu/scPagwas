@@ -5,7 +5,7 @@
 \alias{gtf_df}
 \title{gtf_df}
 \format{
-data.frame.
+data.frame
 }
 \source{
 Generated from gencode.v34.annotation.gtf.gz

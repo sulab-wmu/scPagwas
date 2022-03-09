@@ -39,8 +39,8 @@ GWAS_summary_input <- function(Pagwas,
     gwas_data$pos <- as.numeric(gwas_data$pos)
   }
 
-  if (!is.numeric(z_filter) | !is.integer(z_filter)) {
-    z_filter <- as.numeric(z_filter)
+  if (!is.numeric(gwas_z_filter) | !is.integer(gwas_z_filter)) {
+    gwas_z_filter <- as.numeric(gwas_z_filter)
   }
 
   if (!is.numeric(maf_filter) | !is.integer(maf_filter)) {
@@ -75,12 +75,12 @@ GWAS_summary_input <- function(Pagwas,
     gwas_data <- rbind(gwas_data, gwas_data_6)
   }
 
-  if (z_filter > 0) {
+  if (gwas_z_filter > 0) {
     window_size <- 1e5
-    message(paste("removing SNPs with |z| > ", z_filter, sep = ""))
+    message(paste("removing SNPs with |z| > ", gwas_z_filter, sep = ""))
     gwas_data <- gwas_data %>%
       dplyr::mutate(abs_z = abs(beta / se)) %>%
-      dplyr::filter(abs_z < z_filter)
+      dplyr::filter(abs_z < gwas_z_filter)
   }
 
   # Pagwas$raw_gwas_data <- gwas_data

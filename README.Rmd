@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of scPagwas is to ...
+scPagwas, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.
 
 ## Installation
 
@@ -33,8 +33,23 @@ dengchunyu!
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-#library(scPagwas)
+library(scPagwas)
 ## basic example code
+load(Genes_by_pathway_kegg)
+data(GWAS_summ_example)
+data(gtf_df)
+data(scRNAexample)
+data(eqtls_files)
+data(chrom_ld)
+#' #1. OnlyTSS
+Pagwas<-Pagwas_main(Pagwas = NULL,
+                    gwas_data = GWAS_summ_example,
+                    add_eqtls="OnlyTSS",
+                    block_annotation = gtf_df,
+                    Single_data = scRNAexample,
+                    Pathway_list=Genes_by_pathway.kegg,
+                    chrom_ld = chrom_ld)
+
 ```
 
 What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:

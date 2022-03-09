@@ -17,12 +17,12 @@
 #' }
 #'
 #' @docType data
-#' @name Genes_by_pathway.kegg
-#' @format list.
+#' @name Genes_by_pathway_kegg
+#' @format list
 #' @source Generated from KEGGREST
-#' @examples data(Genes_by_pathway.kegg)
-#' str(Genes_by_pathway.kegg)
-NULL
+#' @examples data(Genes_by_pathway_kegg)
+#' str(Genes_by_pathway_kegg)
+"Genes_by_pathway_kegg"
 
 
 
@@ -31,18 +31,18 @@ NULL
 #' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/h.all.v7.5.1.symbols.gmt")
 #' res <- strsplit(x, "\t")
 #' names(res) <- vapply(res, function(y) y[1], character(1))
-#' Genes_by_pathway.hallmark <- lapply(res, "[", -c(1:2))
-#' save(Genes_by_pathway.hallmark,file="E:/RPakage/scPagwas/data/Genes_by_pathway.hallmark.RData")
+#' Genes_by_pathway_hallmark <- lapply(res, "[", -c(1:2))
+#' save(Genes_by_pathway_hallmark,file="E:/RPakage/scPagwas/data/Genes_by_pathway.hallmark_RData")
 #' }
 #' @docType data
-#' @name Genes_by_pathway.hallmark
+#' @name Genes_by_pathway_hallmark
 #' @format list
 #' @source Generated from h.all.v7.5.1.symbols.gmt
-#' @examples data(Genes_by_pathway.hallmark)
-#' str(Genes_by_pathway.hallmark)
-NULL
+#' @examples data(Genes_by_pathway_hallmark)
+#' str(Genes_by_pathway_hallmark)
+"Genes_by_pathway_hallmark"
 
-#' Genes_by_pathway.reactome
+#' Genes_by_pathway_reactome
 #'
 #' A reactome pathway gene set from \code{
 #' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/c2.cp.reactome.v7.5.1.symbols.gmt")
@@ -53,12 +53,12 @@ NULL
 #' }
 #'
 #' @docType data
-#' @name Genes_by_pathway.reactome
+#' @name Genes_by_pathway_reactome
 #' @format list
 #' @source Generated from c2.cp.reactome.v7.5.1.symbols.gmt
-#' @examples data(Genes_by_pathway.reactome)
-#' str(Genes_by_pathway.reactome)
-NULL
+#' @examples data(Genes_by_pathway_reactome)
+#' str(Genes_by_pathway_reactome)
+"Genes_by_pathway_reactome"
 
 
 
@@ -89,7 +89,7 @@ NULL
 #' @source Generated from PBC_GWAS_UKBiobank_summary_final
 #' @examples data(GWAS_summ_example)
 #' str(GWAS_summ_example)
-NULL
+"GWAS_summ_example"
 
 
 #' gtf_df
@@ -107,11 +107,11 @@ NULL
 #'
 #' @docType data
 #' @name gtf_df
-#' @format data.frame.
+#' @format data.frame
 #' @source Generated from gencode.v34.annotation.gtf.gz
 #' @examples data(gtf_df)
 #' str(gtf_df)
-NULL
+"gtf_df"
 
 
 #' scRNAexample
@@ -140,7 +140,7 @@ NULL
 #' @source Generated from PBC
 #' @examples data(scRNAexample)
 #' str(scRNAexample)
-NULL
+"scRNAexample"
 
 
 
@@ -152,7 +152,7 @@ NULL
 #' @source Generated from GTEx
 #' @examples data(eqtls_files)
 #' str(eqtls_files)
-eqtls_files <- "./inst/extdata/Liver.v8.egenes.txt.gz"
+"./inst/extdata/Liver.v8.egenes.txt.gz"
 
 
 #' ld_folder
@@ -187,4 +187,4 @@ eqtls_files <- "./inst/extdata/Liver.v8.egenes.txt.gz"
 #' @source Generated from PLINK 1.90 linux
 #' @examples data(chrom_ld)
 #' str(chrom_ld)
-NULL
+"chrom_ld"

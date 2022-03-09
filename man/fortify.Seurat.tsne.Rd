@@ -4,7 +4,7 @@
 \alias{fortify.Seurat.tsne}
 \title{fortify.Seurat.tsne}
 \usage{
-fortify.Seurat.tsne(x)
+\method{fortify}{Seurat.tsne}(x)
 }
 \arguments{
 \item{x}{seruat}
