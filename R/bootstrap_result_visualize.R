@@ -1,19 +1,22 @@
 
-#' bootstrap_P_Barplot
+#' Bootstrap_P_Barplot
+#' This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages
 #'
-#' @param Pagwas Pagwas format of result
-#' @param title the title names of the plot
-#' @param file the filename and address of the output plot,default is "test_barplot.pdf"
+#'
+#' @param Pagwas Pagwas format of result in Pagwas_main()
+#' @param title The title names of the plot
+#' @param file The filename and address of the output plot,default is "test_barplot.pdf"
 #' @param width figure width, default is 5
 #' @param height figure height,default is 7
 #'
-#' @return
+#' @return A figure of barplot in pdf format, red color is significant.
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
-#' bootstrap_P_Barplot(Pagwas,title="Test scPagwas",file="test_barplot.pdf",width=5,height =7)
-bootstrap_P_Barplot<-function(Pagwas,title="Test scPagwas",
+#' #Pagwas is the result of Pagwas_main()
+#' Bootstrap_P_Barplot(Pagwas,title="Test scPagwas",file="test_barplot.pdf",width=5,height =7)
+Bootstrap_P_Barplot<-function(Pagwas,title="Test scPagwas",
                               file="test_barplot.pdf",
                               width=5,height =7){
 
@@ -55,21 +58,22 @@ bootstrap_P_Barplot<-function(Pagwas,title="Test scPagwas",
 }
 
 
-#' bootstrap_estimate_Plot
-#'
-#' @param Pagwas Pagwas format of result
+#' Bootstrap_estimate_Plot
+#' This forest plot shows the correct estimate values and 95% CI for different celltyppes, using the ggplot packages
+#' @param Pagwas Pagwas format of result from Pagwas_main()
 #' @param filenames the filename of the output plot, default is test_forest.pdf"
 #' @param width figure width
 #' @param height figure height
 #'
-#' @return
+#' @return A forest plot with the table of p values
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
-#' bootstrap_estimate_Plot(Pagwas,filenames="test_forest.pdf",width = 9,height =7)
+#' #Pagwas is the result of Pagwas_main()
+#' Bootstrap_estimate_Plot(Pagwas,filenames="test_forest.pdf",width = 9,height =7)
 #'
-bootstrap_estimate_Plot<-function(Pagwas,filenames="test_forest.pdf",width = 9,height =7){
+Bootstrap_estimate_Plot<-function(Pagwas,filenames="test_forest.pdf",width = 9,height =7){
 
 
            bootstrap_results<-Pagwas$bootstrap_results[-1,c("bp_value","bias_corrected_estimate","CI_lo","CI_hi")]
