@@ -340,7 +340,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         n_folds = 10,
                         n.cores=1,
                         regression=FALSE,
-                        simp_results=F,
+                        simp_results=FALSE,
                         split_n=1e9,
                         remove_outlier=TRUE) {
   if (is.null(Pagwas)){

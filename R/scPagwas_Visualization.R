@@ -82,9 +82,9 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
     }
   }
 
-  if(!is.null(figurenames)){
-  if (!file.exists(paste0("./", files))) {
-    dir.create(files)
+  if(!is.null(filename)){
+  if (!file.exists(paste0("./", filename))) {
+    dir.create(filename)
   }
   }
   # num<-length(unique(as.vector(Idents(Single_data))))

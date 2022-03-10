@@ -33,8 +33,8 @@ install.packages("scPagwas")
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(scPagwas)
-## basic example code
+ library(scPagwas)
+ ## basic example code
  data(Genes_by_pathway_kegg)
  data(GWAS_summ_example)
  data(gtf_df)
@@ -50,10 +50,40 @@ library(scPagwas)
                      Single_data = scRNAexample,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
-Bootstrap_P_Barplot(Pagwas=Pagwas,
-                     title = "Test scPagwas",
-                     file = NULL,
-                     width = 5, height = 7)
+``` 
+
+```{r example}
+Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
+```
+
+```{r example}
+
+Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
+
+```
+
+```{r example}
+
+ scPagwas<- scPagwas_main(Pagwas = Pagwas,
+               #gwas_data = GWAS_summ_example,
+               #add_eqtls="OnlyTSS",
+               #block_annotation = gtf_df,
+               #Single_data = scRNAexample,
+               #Pathway_list=Genes_by_pathway_kegg,
+               #chrom_ld = chrom_ld,
+               simp_results=TRUE)
+ scPagwas_Visualization(scPagwas = scPagwas,
+                        Single_data = scRNAexample,
+                        Reduction = TRUE,
+                        assay = "SCT",
+                        cellpercent = 0.1,
+                        filename = "scPagwas_testFigure",
+                        FigureType = "tsne",
+                        width = 7,
+                        height = 7,
+                        lowColor = "#000957", highColor = "#EBE645",
+                        size = 0.5,
+                        title = "scPagwas_score")
 
 ```
 
