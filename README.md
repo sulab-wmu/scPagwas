@@ -19,8 +19,7 @@ install.packages("scPagwas")
 
 ## Example
 
-dengchunyu! This is a basic example which shows you how to solve a
-common problem:
+This is a basic example which shows you how to solve a common problem:
 
 ``` r
 #library(scPagwas)
