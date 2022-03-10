@@ -18,54 +18,65 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of scPagwas is to ...
+scPagwas, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.
+scPagwas is able to prioritize disease-associated individual cells by integrating the scRNA-seq data with polygenic signals from GWAS.
 
 ## Installation
 
-You can install the released version of scPagwas from [CRAN](https://CRAN.R-project.org) with:
+You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with:
 
 ``` r
-install_github("lijian13/rinds")
+#devtools::install_github("dengchunyu/scPagwas")
 #install.packages("scPagwas")
+
 ```
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
+### 1.Celltypes function
 
-```{r example}
+```{r Pagwas_main}
 
  library(scPagwas)
  ## basic example code
+ #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
+ #Input GWAS summry data(data.frame).
  data(GWAS_summ_example)
+ #gene annotation files.
  data(gtf_df)
+ #Single cell example data.
  data(scRNAexample)
- #data(eqtls_files)
+ #LD data
  data(chrom_ld)
- #1. OnlyTSS
- 
+ #Pagwas_main is a function wrapper other process codes
  Pagwas<-Pagwas_main(Pagwas = NULL,
                      gwas_data = GWAS_summ_example,
-                     add_eqtls="OnlyTSS",
+                     add_eqtls="OnlyTSS",# only snps within TSS windows
                      block_annotation = gtf_df,
                      Single_data = scRNAexample,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
 ``` 
+#### Visualize the celltypes results.
 
-```{r pressure, echo = FALSE}
+ 1.barplot
+```{r Bootstrap_P_Barplot}
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```
 
-```{r pressure, echo = FALSE}
+ 2.Forestplot for estimate values
+```{r Bootstrap_estimate_Plot}
 
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ```
 
-```{r example}
-
+### 1.Single cell function
+```{r scPagwas_main}
+ #scPagwas_main is a function wrapper other process codes
+ #as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
  scPagwas<- scPagwas_main(Pagwas = Pagwas,
                #gwas_data = GWAS_summ_example,
                #add_eqtls="OnlyTSS",
@@ -76,7 +87,9 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
                simp_results=TRUE)
 ```
 
-```{r pressure, echo = FALSE}
+
+#### Visualize the scPagwas_main results.
+```{r scPagwas_Visualization}
  scPagwas_Visualization(scPagwas_score = scPagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
@@ -93,3 +106,4 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 ```
 
 
+The workfile is ongoing...
