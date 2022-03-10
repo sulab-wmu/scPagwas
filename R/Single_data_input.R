@@ -88,6 +88,8 @@ Single_data_input <- function(Pagwas,
   Pagwas$Single_data <- Single_data[, colnames(count)]
 
 
-  Pagwas$merge_scexpr <- Seurat::AverageExpression(Pagwas$Single_data)[[1]]
+  Pagwas$merge_scexpr <- mean_expr(Pagwas)
+  #<- Seurat::AverageExpression(Pagwas$Single_data)[[1]]
+
   return(Pagwas)
 }

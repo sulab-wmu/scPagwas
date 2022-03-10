@@ -16,3 +16,24 @@ RoxygenNote: 7.1.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Imports: 
+    SeuratObject,
+    Seurat,
+    ggsci,
+    dplyr,
+    foreach,
+    data.table,
+    irlba,
+    Matrix,
+    stringr,
+    future,
+    future.apply,
+    glmnet,
+    GenomicRanges,
+    utils,
+    ggplot2,
+    ggthemes,
+    ggpubr,
+    ggtext,
+    ggnewscale,
+    bigstatsr

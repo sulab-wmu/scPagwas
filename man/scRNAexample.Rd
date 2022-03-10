@@ -3,33 +3,17 @@
 \docType{data}
 \name{scRNAexample}
 \alias{scRNAexample}
-\title{scRNAexample
-A single cell example data from \code{
-liver_data<-readRDS("/share/pub/qiuf/COVID/liver/Rpoly.rds")
-#set Idents
-liver_data@meta.data$annotation <- liver_data@meta.data$anno
-Idents(liver_data) <- liver_data@meta.data$anno
-#normalization
-liver_data <- NormalizeData(liver_data, normalization.method = "LogNormalize", scale.factor = 10000)
-#correct the cell names, need no specific signal
-anno <- liver_data@meta.data$annotation
- anno<-str_replace_all(anno,"-",".")
- anno<-str_replace_all(anno," ",".")
-anno[which(anno=="Inflammatory.monocyte/macrophages")]<-"Inflammatory.monocyte.macrophages"
-Celltype_anno$annotation<-str_replace_all(anno,"\\+",".")
-Idents(liver_data) <- as.factor(anno)
-liver_data<-subset(liver_data,idents = c("Stellate.cell","unknow","γδ.T.cell"), invert = TRUE)
-liver_data2<-liver_data[,sample(ncol(liver_data),1000)]
-save(scRNAexample,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/scRNAexample.RData")
-}}
+\title{scRNAexample}
 \format{
-Seruat
+a Seruat.
 }
 \source{
 Generated from PBC
 }
+\usage{
+data(scRNAexample)
+}
 \description{
-scRNAexample
 A single cell example data from \code{
 liver_data<-readRDS("/share/pub/qiuf/COVID/liver/Rpoly.rds")
 #set Idents
@@ -53,3 +37,4 @@ save(scRNAexample,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/scRNAexamp
 data(scRNAexample)
 str(scRNAexample)
 }
+\keyword{datasets}

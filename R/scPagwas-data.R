@@ -1,6 +1,6 @@
-
-#' KEGG pathway gene list
+#' Genes_by_pathway_kegg
 #'
+#' @description
 #' A few numbers from \code{
 #' library(KEGGREST)
 #' pathways.list <- keggList("pathway", "hsa")
@@ -18,16 +18,19 @@
 #'
 #' @docType data
 #' @name Genes_by_pathway_kegg
-#' @format list
-#' @source Generated from KEGGREST
-#' @examples data(Genes_by_pathway_kegg)
+#' @usage data(Genes_by_pathway_kegg)
+#' @format a list.
+#' @keywords datasets
+#' @examples
+#' data(Genes_by_pathway_kegg)
 #' str(Genes_by_pathway_kegg)
-"Genes_by_pathway_kegg"
+NULL
 
 
 
-#' Genes_by_pathway.hallmark
-#' A hallmark pathway gene set from \code{
+#' Genes_by_pathway_hallmark
+#'
+#' @description A hallmark pathway gene set from \code{
 #' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/h.all.v7.5.1.symbols.gmt")
 #' res <- strsplit(x, "\t")
 #' names(res) <- vapply(res, function(y) y[1], character(1))
@@ -36,15 +39,17 @@
 #' }
 #' @docType data
 #' @name Genes_by_pathway_hallmark
-#' @format list
-#' @source Generated from h.all.v7.5.1.symbols.gmt
-#' @examples data(Genes_by_pathway_hallmark)
+#' @usage data(Genes_by_pathway_hallmark)
+#' @format a list.
+#' @keywords datasets
+#' @examples
+#' data(Genes_by_pathway_hallmark)
 #' str(Genes_by_pathway_hallmark)
-"Genes_by_pathway_hallmark"
+NULL
 
 #' Genes_by_pathway_reactome
 #'
-#' A reactome pathway gene set from \code{
+#' @description A reactome pathway gene set from \code{
 #' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/c2.cp.reactome.v7.5.1.symbols.gmt")
 #' res <- strsplit(x, "\t")
 #' names(res) <- vapply(res, function(y) y[1], character(1))
@@ -54,17 +59,19 @@
 #'
 #' @docType data
 #' @name Genes_by_pathway_reactome
+#' @usage data(Genes_by_pathway_reactome)
 #' @format list
-#' @source Generated from c2.cp.reactome.v7.5.1.symbols.gmt
+#' @keywords datasets
 #' @examples data(Genes_by_pathway_reactome)
 #' str(Genes_by_pathway_reactome)
-"Genes_by_pathway_reactome"
+NULL
 
 
 
 
-#' GWAS summary data frame
+#' GWAS_summ_example
 #'
+#' @description
 #' A GWAS summary data from \code{
 #' library(readr)
 #' library(dplyr)
@@ -85,15 +92,19 @@
 #'
 #' @docType data
 #' @name GWAS_summ_example
-#' @format data.frame.
+#' @usage data(GWAS_summ_example)
+#' @format a data.frame.
 #' @source Generated from PBC_GWAS_UKBiobank_summary_final
-#' @examples data(GWAS_summ_example)
+#' @keywords datasets
+#' @examples
+#' data(GWAS_summ_example)
 #' str(GWAS_summ_example)
-"GWAS_summ_example"
+NULL
 
 
 #' gtf_df
 #'
+#' @description
 #' A gene annotation files from \code{
 #' library("rtracklayer")
 #' gtf_df<- rtracklayer::import("/share/pub/dengcy/GWAS_Multiomics/pagwas/data/gencode.v34.annotation.gtf.gz")
@@ -107,14 +118,18 @@
 #'
 #' @docType data
 #' @name gtf_df
-#' @format data.frame
+#' @usage data(gtf_df)
+#' @format a data.frame,
 #' @source Generated from gencode.v34.annotation.gtf.gz
+#' @keywords datasets
 #' @examples data(gtf_df)
 #' str(gtf_df)
-"gtf_df"
+NULL
 
 
 #' scRNAexample
+#'
+#' @description
 #' A single cell example data from \code{
 #' liver_data<-readRDS("/share/pub/qiuf/COVID/liver/Rpoly.rds")
 #' #set Idents
@@ -136,27 +151,19 @@
 #'
 #' @docType data
 #' @name scRNAexample
-#' @format Seruat
+#' @usage data(scRNAexample)
+#' @format a Seruat.
 #' @source Generated from PBC
-#' @examples data(scRNAexample)
+#' @keywords datasets
+#' @examples
+#' data(scRNAexample)
 #' str(scRNAexample)
-"scRNAexample"
+NULL
 
 
-
-#' eqtls_files
-#' Generated from GTEx
-#' @docType data
-#' @name eqtls_files
-#' @format vector
-#' @source Generated from GTEx
-#' @examples data(eqtls_files)
-#' str(eqtls_files)
-"./inst/extdata/Liver.v8.egenes.txt.gz"
-
-
-#' ld_folder
-#' use vcftools to get ped and map files
+#' chrom_ld
+#'
+#' @description use vcftools to get ped and map files
 #' LD data from \code{
 #' /share/apps/vcftools/bin/vcftools --vcf /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.vcf --plink-tped --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes
 #'
@@ -183,8 +190,11 @@
 #'
 #' @docType data
 #' @name chrom_ld
-#' @format list
+#' @usage data(chrom_ld)
+#' @format a list.
 #' @source Generated from PLINK 1.90 linux
-#' @examples data(chrom_ld)
+#' @keywords datasets
+#' @examples
+#' data(chrom_ld)
 #' str(chrom_ld)
-"chrom_ld"
+NULL

@@ -3,31 +3,31 @@
 \docType{data}
 \name{Genes_by_pathway_kegg}
 \alias{Genes_by_pathway_kegg}
-\title{KEGG pathway gene list}
+\title{Genes_by_pathway_kegg}
 \format{
-list
+a list.
 }
-\source{
-Generated from KEGGREST
+\usage{
+data(Genes_by_pathway_kegg)
 }
 \description{
-KEGG pathway gene list
-}
-\details{
-
-}
-\section{Pull all genes for each pathway}{
+A few numbers from \code{
+library(KEGGREST)
+pathways.list <- keggList("pathway", "hsa")
+# Pull all genes for each pathway
 pathway.codes <- sub("path:", "", names(pathways.list))
 Genes_by_pathway.kegg <- sapply(pathway.codes,function(pwid){
 pw <- keggGet(pwid)
-if (is.null(pw[\link{1}]$GENE)) return(NA)
-pw2 <- pw[\link{1}]$GENE\link{c(FALSE,TRUE)} # may need to modify this to c(FALSE, TRUE) for other organisms
-pw2 <- unlist(lapply(strsplit(pw2, split = ";", fixed = T), function(x)x\link{1}))
-return(pw2)
+if (is.null(pw[[1]]$GENE)) return(NA)
+pw2 <- pw[[1]]$GENE[c(FALSE,TRUE)] # may need to modify this to c(FALSE, TRUE) for other organisms
+pw2 <- unlist(lapply(strsplit(pw2, split = ";", fixed = T), function(x)x[1]))
+ return(pw2)
 })
-}
 
+}
+}
 \examples{
 data(Genes_by_pathway_kegg)
 str(Genes_by_pathway_kegg)
 }
+\keyword{datasets}

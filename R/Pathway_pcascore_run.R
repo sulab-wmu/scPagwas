@@ -76,9 +76,9 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
     # scCounts<-scCounts[Pagwas$VariableFeatures,]
     scPCAscore <- PathwayPCAtest(
-      Pathway_list = Pagwas$Pathway_list, scCounts = scCounts,
-      n.cores = n.cores,
-      z.score = z.score
+      Pathway_list = Pagwas$Pathway_list,
+      scCounts = scCounts,
+      n.cores = n.cores
     )
     setTxtProgressBar(pb, which(celltypes == celltype) / length(celltypes))
     print(celltype)

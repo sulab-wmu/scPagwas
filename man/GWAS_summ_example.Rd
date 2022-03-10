@@ -3,12 +3,15 @@
 \docType{data}
 \name{GWAS_summ_example}
 \alias{GWAS_summ_example}
-\title{GWAS summary data frame}
+\title{GWAS_summ_example}
 \format{
-data.frame.
+a data.frame.
 }
 \source{
 Generated from PBC_GWAS_UKBiobank_summary_final
+}
+\usage{
+data(GWAS_summ_example)
 }
 \description{
 A GWAS summary data from \code{
@@ -33,3 +36,4 @@ save(GWAS_summ_example,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/GWAS_
 data(GWAS_summ_example)
 str(GWAS_summ_example)
 }
+\keyword{datasets}

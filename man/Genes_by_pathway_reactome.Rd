@@ -7,8 +7,8 @@
 \format{
 list
 }
-\source{
-Generated from c2.cp.reactome.v7.5.1.symbols.gmt
+\usage{
+data(Genes_by_pathway_reactome)
 }
 \description{
 A reactome pathway gene set from \code{
@@ -23,3 +23,4 @@ save(Genes_by_pathway.reactome,file="E:/RPakage/scPagwas/data/Genes_by_pathway.r
 data(Genes_by_pathway_reactome)
 str(Genes_by_pathway_reactome)
 }
+\keyword{datasets}

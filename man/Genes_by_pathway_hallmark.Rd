@@ -3,22 +3,14 @@
 \docType{data}
 \name{Genes_by_pathway_hallmark}
 \alias{Genes_by_pathway_hallmark}
-\title{Genes_by_pathway.hallmark
-A hallmark pathway gene set from \code{
-x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/h.all.v7.5.1.symbols.gmt")
-res <- strsplit(x, "\t")
-names(res) <- vapply(res, function(y) y[1], character(1))
-Genes_by_pathway_hallmark <- lapply(res, "[", -c(1:2))
-save(Genes_by_pathway_hallmark,file="E:/RPakage/scPagwas/data/Genes_by_pathway.hallmark_RData")
-}}
+\title{Genes_by_pathway_hallmark}
 \format{
-list
+a list.
 }
-\source{
-Generated from h.all.v7.5.1.symbols.gmt
+\usage{
+data(Genes_by_pathway_hallmark)
 }
 \description{
-Genes_by_pathway.hallmark
 A hallmark pathway gene set from \code{
 x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/h.all.v7.5.1.symbols.gmt")
 res <- strsplit(x, "\t")
@@ -31,3 +23,4 @@ save(Genes_by_pathway_hallmark,file="E:/RPakage/scPagwas/data/Genes_by_pathway.h
 data(Genes_by_pathway_hallmark)
 str(Genes_by_pathway_hallmark)
 }
+\keyword{datasets}

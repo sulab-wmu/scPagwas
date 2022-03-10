@@ -44,6 +44,27 @@ bh.adjust <- function(x, log = FALSE) {
   ox
 }
 
+#' mean_expr
+#' @description To get the mean expression for single cell data.
+#' @param Pagwas Pagwas data list
+#'
+#' @return
+#'
+#' @examples
+#' library(scPagwas)
+#' Pagwas$merge_scexpr <- mean_expr(Pagwas)
+#'
+mean_expr <- function(Pagwas){
+  datamat<-GetAssayData(object =Pagwas$Single_data, slot = "data")
+  merge_scexpr<-lapply(unique(Pagwas$Celltype_anno$annotation),function(x){
+    an<-Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation %in% x]
+    return(apply(datamat[,an],1,mean))
+  })
+  rm(datamat)
+  merge_scexpr<-as.data.frame(merge_scexpr)
+  colnames(merge_scexpr)<-unique(Pagwas$Celltype_anno$annotation)
+  return(merge_scexpr)
+}
 
 #' Snps to Genes
 #' @description Maps SNPs to their nearest genes within TSS windows.

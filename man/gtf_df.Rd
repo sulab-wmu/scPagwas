@@ -5,10 +5,13 @@
 \alias{gtf_df}
 \title{gtf_df}
 \format{
-data.frame
+a data.frame,
 }
 \source{
 Generated from gencode.v34.annotation.gtf.gz
+}
+\usage{
+data(gtf_df)
 }
 \description{
 A gene annotation files from \code{
@@ -26,3 +29,4 @@ save(gtf_df,file = "/share/pub/dengcy/GWAS_Multiomics/pagwas/data/gtf_df.RData")
 data(gtf_df)
 str(gtf_df)
 }
+\keyword{datasets}

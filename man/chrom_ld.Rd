@@ -3,32 +3,44 @@
 \docType{data}
 \name{chrom_ld}
 \alias{chrom_ld}
-\title{ld_folder
-use vcftools to get ped and map files
-LD data from \code{
-/share/apps/vcftools/bin/vcftools --vcf /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.vcf --plink-tped --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes}
+\title{chrom_ld}
 \format{
-list
+a list.
 }
 \source{
 Generated from PLINK 1.90 linux
 }
+\usage{
+data(chrom_ld)
+}
 \description{
+use vcftools to get ped and map files
+LD data from \code{
+/share/apps/vcftools/bin/vcftools --vcf /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.vcf --plink-tped --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes
+
 /share/pub/dengcy/Singlecell/COVID19/PLINK/plink --tfile /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes --recode --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes
 /share/pub/dengcy/Singlecell/COVID19/PLINK/plink --map /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.map --ped /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out /share/pub/dengcy/Singlecell/COVID19/ld_1000genome
 covid_ld<-read.delim("/share/pub/dengcy/Singlecell/COVID19/ld_1000genome.ld")
-covid_ld<-covid_ld\link{!(covid_ld$\%in\% 23),}
-colnames(covid_ld)\link{7}<-"R"
+covid_ld<-covid_ld[!(covid_ld$%in% 23),]
+colnames(covid_ld)[7]<-"R"
 lapply(unique(covid_ld$CHR_A), function(i){
-a<-data.table(covid_ld\link{covid_ld$CHR_A == i,})
-file_name <- paste0("/share/pub/dengcy/Singlecell/COVID19/data/LD/",i,".Rds")
-saveRDS(a, file = file_name)
+  a<-data.table(covid_ld[covid_ld$CHR_A == i,])
+  file_name <- paste0("/share/pub/dengcy/Singlecell/COVID19/data/LD/",i,".Rds")
+  saveRDS(a, file = file_name)
 })
-}
-\details{
 
+
+chrom_ld<-lapply(as.character(1:22),function(chrom){
+  chrom_ld_file_path <- paste(ld_folder, '/', chrom, '.Rds', sep = '')
+ ld_data <- readRDS(chrom_ld_file_path)[(R**2 > r2_threshold), .(SNP_A, SNP_B, R)]
+  return(ld_data)
+})
+save(chrom_ld,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.RData")
+
+}
 }
 \examples{
 data(chrom_ld)
 str(chrom_ld)
 }
+\keyword{datasets}
