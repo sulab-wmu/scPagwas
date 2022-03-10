@@ -34,7 +34,8 @@ you can also check the details in (file:///E:/RPakage/scPagwas/docs/reference/in
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
-### 1.Celltypes function
+ 
+### 1.Celltypes function 
 
 ```{r Pagwas_main}
 
