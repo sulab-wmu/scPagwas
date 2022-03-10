@@ -5,8 +5,8 @@
 \title{scPagwas_Visualization}
 \usage{
 scPagwas_Visualization(
-  scPagwas = Pagwas,
-  Single_data,
+  scPagwas_score = NULL,
+  Single_data = NULL,
   Reduction = FALSE,
   assay = "SCT",
   cellpercent = 0.1,
@@ -21,7 +21,7 @@ scPagwas_Visualization(
 )
 }
 \arguments{
-\item{scPagwas}{Pagwas data for scPagwas_main()}
+\item{scPagwas_score}{scPagwas_score for scPagwas_main result}
 
 \item{Single_data}{Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE}
 
@@ -62,7 +62,7 @@ data(scRNAexample)
 #  Reduction = FALSE,
 #  assay = "SCT",
 #  cellpercent = 0.1,
-#  files = "scpagwas_pbc_False",
+#  filename = "scpagwas_pbc_False",
 #  FigureType = "tsne",
 #  width = 7,
 #  height = 7,

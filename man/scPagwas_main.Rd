@@ -29,7 +29,7 @@ scPagwas_main(
   n_folds = 10,
   n.cores = 1,
   regression = FALSE,
-  simp_results = F,
+  simp_results = FALSE,
   split_n = 1e+09,
   remove_outlier = TRUE
 )

@@ -2,7 +2,7 @@
 #' scPagwas_Visualization
 #' @description Visualize the scPagwas score in Umap and Tsne.
 #'
-#' @param scPagwas Pagwas data for scPagwas_main()
+#' @param scPagwas_score scPagwas_score for scPagwas_main result
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
 #' @param Reduction (logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.
 #' @param assay (character)"RNA" or "SCT", It depens on the Single_data.
@@ -28,7 +28,7 @@
 #' #  Reduction = FALSE,
 #' #  assay = "SCT",
 #' #  cellpercent = 0.1,
-#' #  files = "scpagwas_pbc_False",
+#' #  filename = "scpagwas_pbc_False",
 #' #  FigureType = "tsne",
 #' #  width = 7,
 #' #  height = 7,
@@ -36,8 +36,8 @@
 #' #  size = 0.5,
 #' #  title = "scPagwas_score"
 #' #)
-scPagwas_Visualization <- function(scPagwas = Pagwas,
-                                   Single_data,
+scPagwas_Visualization <- function(scPagwas_score = NULL,
+                                   Single_data=NULL,
                                    Reduction = FALSE,
                                    assay = "SCT",
                                    cellpercent = 0.1,
@@ -54,9 +54,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
 
   #if(colnames(Single_data@meta.data) %in% "tsne")
 
-  if (!is.null(scPagwas$scPagwas_score)) {
-    scPagwas_score <- scPagwas$scPagwas_score
-  } else {
+  if (is.null(scPagwas_score)) {
     stop("ERROR: scPagwas_score is NULL. scPagwas_score can be calsulated by scPagwas_perform_score function!")
   }
 
@@ -103,7 +101,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1)
     print(plot_scPagwas_score)
-    pdf(file = paste0("./", files, "/scPagwas_score_umap.pdf"), height = height, width = width)
+    pdf(file = paste0("./", filename, "/scPagwas_score_umap.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
 
@@ -123,7 +121,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
     print(plots_sigp1)
-    pdf(file = paste0("./", files, "/scPagwas_TOP", cellpercent, "_umap.pdf"), height = height, width = width)
+    pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_umap.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
   }
@@ -142,7 +140,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       ggtitle("scPagwas_score") + theme(aspect.ratio = 1)
 
     print(plot_scPagwas_score)
-    pdf(file = paste0("./", files, "/scPagwas_score_tsne.pdf"), height = height, width = width)
+    pdf(file = paste0("./", filename, "/scPagwas_score_tsne.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
 
@@ -162,7 +160,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
     print(plots_sigp1)
-    pdf(file = paste0("./", files, "/scPagwas_TOP", cellpercent, "_tsne.pdf"), height = height, width = width)
+    pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_tsne.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
   }
