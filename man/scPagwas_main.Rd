@@ -30,7 +30,8 @@ scPagwas_main(
   n.cores = 1,
   regression = FALSE,
   simp_results = F,
-  split_n = 1e+09
+  split_n = 1e+09,
+  remove_outlier = TRUE
 )
 }
 \arguments{
@@ -83,6 +84,8 @@ scPagwas_main(
 \item{simp_results}{(logical)Whether to return a simple results.If TURE,there is only finaly result return; if FALSE, all the Intermediate Data will keep in pagwas, this option is used to save time when rerun the function.}
 
 \item{split_n}{(integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.}
+
+\item{remove_outlier}{(logical)whether to remove the outlier value for scPagwas score.}
 }
 \value{
 

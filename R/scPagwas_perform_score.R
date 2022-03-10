@@ -4,7 +4,7 @@
 #' @param Pagwas Pagwas data list
 #' @param n.cores cores
 #' @param split_n (integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.
-#'
+#' @param remove_outlier Whether to remove the outlier for scPagwas score.
 #' @return
 #' @export
 #'
@@ -13,7 +13,8 @@
 #' scPagwas_perform_score(Pagwas)
 scPagwas_perform_score <- function(Pagwas,
                                    n.cores = n.cores,
-                                   split_n = NULL) {
+                                   split_n = NULL,
+                                   remove_outlier=TRUE) {
   if (is.null(Pagwas$Pathway_ld_gwas_data)) {
     stop("data has not been precomputed, returning without results")
     # return(Pagwas)
@@ -72,11 +73,11 @@ scPagwas_perform_score <- function(Pagwas,
   names(Pathway_sclm_results) <- Pathway_names
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_names <- names(Pathway_sclm_results)
-  Pathway_sclm_results2 <- as.data.frame(lapply(Pathway_sclm_results, function(x) {
+  Pathway_sclm_results <- as.data.frame(lapply(Pathway_sclm_results, function(x) {
     x[is.na(x)] <- 0
     return(x)
   }))
-  Pagwas$Pathway_sclm_results <- data.table(Pathway_sclm_results2)
+  Pagwas$Pathway_sclm_results <- data.table(Pathway_sclm_results)
 
   pca_scCell_mat <- Pagwas$pca_scCell_mat[Pathway_names, ]
 
@@ -98,19 +99,19 @@ scPagwas_perform_score <- function(Pagwas,
   colnames(pathway_expr) <- Pathway_names
   pathway_expr <- as.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
   pa_exp_mat <- Matrix::Matrix(t(as.matrix(pca_scCell_mat)) * pathway_expr)
-  scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results2) * pa_exp_mat)
+  scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results) * pa_exp_mat)
   scs <- rowSums(scPagwas_mat)
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
   # m<-mean(scs,na.rm = T)
   # d<-sd(scs,na.rm = T)
   # scs<-(scs-m)/d
 
-  Pagwas$scPagwas_score <- data.frame(cellid = colnames(Pagwas$Single_data), scPagwas_score = scs)
-  rownames(Pagwas$scPagwas_score) <- Pagwas$scPagwas_score$cellid
+  df <- data.frame(cellid = colnames(Pagwas$Single_data), scPagwas_score = scs)
+  rownames(df) <- df$cellid
   if (remove_outlier) {
-    Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = Pagwas$scPagwas_score)
+    Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
-
+  names(Pagwas$scPagwas_score)<-df$cellid
   Pagwas$pca_scCell_mat <- Matrix::Matrix(as.matrix(pca_scCell_mat))
   return(Pagwas)
 }
@@ -149,22 +150,25 @@ scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 
 #' @return
 
 scPagwas_score_filter <- function(scPagwas_score) {
-  scPagwas_score <- scPagwas_score$scPagwas_score
-
+  #scPagwas_score <- scPagwas_score$scPagwas_score
+  # remove the NAN!
+  if(sum(is.nan(scPagwas_score))>0){
+    scPagwas_score[is.nan(scPagwas_score)]<-min(scPagwas_score)
+  }
   # remove the inf values!
-  if (Inf %in% scPagwas_score$scPagwas_score) {
-    scPagwas_score$scPagwas_score[which(scPagwas_score$scPagwas_score == Inf)] <- max(scPagwas_score$scPagwas_score[-which(scPagwas_score$scPagwas_score == Inf)])
+  if (Inf %in% scPagwas_score) {
+    scPagwas_score[which(scPagwas_score == Inf)] <- max(scPagwas_score[-which(scPagwas_score == Inf)],na.rm=TRUE)
   }
-  if (-Inf %in% scPagwas_score$scPagwas_score) {
-    scPagwas_score$scPagwas_score[which(scPagwas_score$scPagwas_score == -Inf)] <- min(scPagwas_score$scPagwas_score[-which(scPagwas_score$scPagwas_score == -Inf)])
+  if (-Inf %in% scPagwas_score) {
+    scPagwas_score[which(scPagwas_score == -Inf)] <- min(scPagwas_score[-which(scPagwas_score == -Inf)],na.rm=TRUE)
   }
-  lower_bound <- quantile(scPagwas_score$scPagwas_score, 0.01)
-  upper_bound <- quantile(scPagwas_score$scPagwas_score, 0.99)
+  lower_bound <- quantile(scPagwas_score, 0.01,na.rm=TRUE)
+  upper_bound <- quantile(scPagwas_score, 0.99,na.rm=TRUE)
 
-  lower_ind <- which(scPagwas_score$scPagwas_score < lower_bound)
-  upper_ind <- which(scPagwas_score$scPagwas_score > upper_bound)
-  scPagwas_score$scPagwas_score[lower_ind] <- lower_bound
-  scPagwas_score$scPagwas_score[upper_ind] <- upper_bound
+  lower_ind <- which(scPagwas_score < lower_bound)
+  upper_ind <- which(scPagwas_score > upper_bound)
+  scPagwas_score[lower_ind] <- lower_bound
+  scPagwas_score[upper_ind] <- upper_bound
 
   return(scPagwas_score)
 }

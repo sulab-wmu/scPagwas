@@ -38,4 +38,6 @@ Imports:
     ggtext,
     ggnewscale,
     bigstatsr,
-    IRanges
+    IRanges,
+    RMTstat,
+    gridExtra

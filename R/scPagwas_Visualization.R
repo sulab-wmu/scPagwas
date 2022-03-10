@@ -22,20 +22,20 @@
 #' @examples
 #' library(scPagwas)
 #' data(scRNAexample)
-#' scPagwas_Visualization(
-#'   scPagwas = Pagwas,
-#'   Single_data = scRNAexample,
-#'   Reduction = FALSE,
-#'   assay = "SCT",
-#'   cellpercent = 0.1,
-#'   files = "scpagwas_pbc_False",
-#'   FigureType = "tsne",
-#'   width = 7,
-#'   height = 7,
-#'   lowColor = "#000957", highColor = "#EBE645",
-#'   size = 0.5,
-#'   title = "scPagwas_score"
-#' )
+#' #scPagwas_Visualization(
+#' #  scPagwas = Pagwas,
+#' #  Single_data = scRNAexample,
+#' #  Reduction = FALSE,
+#' #  assay = "SCT",
+#' #  cellpercent = 0.1,
+#' #  files = "scpagwas_pbc_False",
+#' #  FigureType = "tsne",
+#' #  width = 7,
+#' #  height = 7,
+#' #  lowColor = "#000957", highColor = "#EBE645",
+#' #  size = 0.5,
+#' #  title = "scPagwas_score"
+#' #)
 scPagwas_Visualization <- function(scPagwas = Pagwas,
                                    Single_data,
                                    Reduction = FALSE,
@@ -52,23 +52,24 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
   suppressMessages(require(ggtext))
   suppressMessages(require(ggrepel))
 
+  #if(colnames(Single_data@meta.data) %in% "tsne")
+
   if (!is.null(scPagwas$scPagwas_score)) {
     scPagwas_score <- scPagwas$scPagwas_score
   } else {
     stop("ERROR: scPagwas_score is NULL. scPagwas_score can be calsulated by scPagwas_perform_score function!")
   }
 
-  if (sum(colnames(Single_data) %in% scPagwas$sclm_results$cellnames) != length(scPagwas$sclm_results$cellnames)) {
+  if (sum(colnames(Single_data) %in% names(scPagwas_score)) != length(names(scPagwas_score))) {
     message("There is blank , '-' or '+' within cell names!")
     colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), " ", ".")
     colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "\\+", ".")
     colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "-", ".")
   }
 
-  cell_id <- intersect(colnames(Single_data) %in% scPagwas_score$cellid)
-  Single_data <- Single_data[, cell_id]
-  scPagwas_score <- scPagwas_score[cell_id, ]
-  Single_data$scPagwas_score <- scPagwas_score$scPagwas_score
+  Single_data <- Single_data[, intersect(colnames(Single_data),names(scPagwas_score))]
+  scPagwas_score <- scPagwas_score[intersect(colnames(Single_data),names(scPagwas_score))]
+  Single_data$scPagwas_score <- scPagwas_score
 
   if (Reduction) {
     Single_data <- RunPCA(object = Single_data, assay = assay, npcs = 50)
@@ -88,7 +89,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
   # num<-length(unique(as.vector(Idents(Single_data))))
   Single_data <- Single_data[, !is.na(Single_data$scPagwas_score)]
 
-  thre <- sort(Single_data$scPagwas_score, decreasing = T)[nrow(Single_data) * cellpercent]
+  thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * cellpercent]
 
   if (FigureType == "umap") {
     all_fortify_can <- fortify.Seurat.umap(Single_data)
@@ -100,7 +101,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1)
-
+    print(plot_scPagwas_score)
     pdf(file = paste0("./", files, "/scPagwas_score_umap.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
@@ -120,6 +121,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
       new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
+    print(plots_sigp1)
     pdf(file = paste0("./", files, "/scPagwas_TOP", cellpercent, "_umap.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
@@ -131,13 +133,14 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
 
     plot_scPagwas_score <- ggscatter(all_fortify_can,
       x = "TSNE_1", y = "TSNE_2",
-      color = "scPagwas_score", fill = "scPagwas_score", size = 0.5,
+      color = "scPagwas_score", fill = "scPagwas_score", size =size,
       repel = TRUE
     ) + umap_theme() +
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       ggtitle("scPagwas_score") + theme(aspect.ratio = 1)
 
+    print(plot_scPagwas_score)
     pdf(file = paste0("./", files, "/scPagwas_score_tsne.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
@@ -145,18 +148,19 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
     plots_sigp1 <- ggplot() +
       geom_point(
         data = all_fortify_can[all_fortify_can$scPagwas_score <= thre, ],
-        aes(x = TSNE_1, y = TSNE_2), size = 0.2, alpha = 0.8, color = "gray"
+        aes(x = TSNE_1, y = TSNE_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       new_scale_color() +
       geom_point(
         data = all_fortify_can[all_fortify_can$scPagwas_score > thre, ],
-        aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = .2
+        aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +
       new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
+    print(plots_sigp1)
     pdf(file = paste0("./", files, "/scPagwas_TOP", cellpercent, "_tsne.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()

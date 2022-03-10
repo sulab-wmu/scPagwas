@@ -72,7 +72,10 @@ Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
 #' Bootstrap_estimate_Plot(Pagwas=Pagwas,
 #'                         filenames = "test_forest.pdf",
 #'                         width = 9, height = 7)
-Bootstrap_estimate_Plot <- function(Pagwas, filenames = "test_forest.pdf", width = 9, height = 7) {
+Bootstrap_estimate_Plot <- function(Pagwas,
+                                    filenames = "test_forest.pdf",
+                                    width = 9,
+                                    height = 7) {
   bootstrap_results <- Pagwas$bootstrap_results[-1, c("bp_value", "bias_corrected_estimate", "CI_lo", "CI_hi")]
   bootstrap_results <- bootstrap_results[order(bootstrap_results$bias_corrected_estimate, decreasing = T), ]
 
