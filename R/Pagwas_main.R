@@ -5,12 +5,13 @@
 #' @importFrom irlba irlba
 #' @import Seurat
 #' @import SeuratObject
-#' @import Matrix
+#' @importFrom Matrix Matrix
 #' @import stringr
 #' @import future
 #' @import future.apply
 #' @import glmnet
 #' @import GenomicRanges
+#' @importFrom IRanges IRanges
 #' @import utils
 #' @import ggplot2
 #' @import ggthemes
@@ -18,6 +19,8 @@
 #' @import ggtext
 #' @import ggnewscale
 #' @import bigstatsr
+#' @importFrom RMTstat qWishartMax
+#' @importFrom gridExtra grid.arrange
 
 
 

@@ -150,7 +150,7 @@ PathwayPCAtest <- function(Pathway_list,
 
   ## filter pathway
   nPcs <- 1
-  scCounts <- t(scCounts)
+  scCounts <- t(Matrix::Matrix(scCounts))
   cm <- Matrix::colMeans(scCounts)
   proper.gene.names <- colnames(scCounts)
   ###### calculate the pca for each pathway terms.

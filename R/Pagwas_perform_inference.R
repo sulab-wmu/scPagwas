@@ -269,7 +269,7 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 #'
 #' @return
 
-Pagwas_perform_regularized_inference <- function(Pagwas, n_folds = 10) {
+Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
   message("performing cross validation")
   Pagwas$cv_regularized_lm_results <- cv_regularized_parameter_estimator(
     xy2vector(Pagwas$Pathway_ld_gwas_data),
@@ -277,14 +277,9 @@ Pagwas_perform_regularized_inference <- function(Pagwas, n_folds = 10) {
   )
 
   # add on block values
-  Pagwas$regularized_block_values <- calculate_block_values(
+  Pagwas$regularized_Pathway_heritability_contributions <- Get_Pathway_heritability_contributions(
     Pagwas$pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
   )
-  # calculate expected block values (accounts for ld and snp error)
-  Pagwas$regularized_expected_block_values <-
-    calculate_expected_block_values_given_ld(
-      Pagwas, Pagwas$regularized_block_values
-    )$expected_block_values
 
   return(Pagwas)
 }

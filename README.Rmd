@@ -34,6 +34,7 @@ This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
 library(scPagwas)
+
 ## basic example code
 data(Genes_by_pathway_kegg)
 
@@ -42,6 +43,31 @@ data(gtf_df)
 data(scRNAexample)
 eqtls_files<-"E:/RPakage/scPagwas/inst/extdata/Liver.v8.egenes.txt.gz"
 data(chrom_ld)
+
+Pagwas = NULL
+gwas_data = GWAS_summ_example
+add_eqtls="OnlyTSS"
+eqtls_files=eqtls_files
+eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta")
+block_annotation = gtf_df
+nfeatures = NULL
+Single_data = scRNAexample
+Pathway_list=genes.by.pathway_kegg
+chrom_ld=chrom_ld
+marg=10000
+maf_filter = 0.01
+min.reads = 5
+min.detected = 1
+min.lib.size = 200
+min_clustercells=10
+min.pathway.size=5
+max.pathway.size=300
+iters = 200
+perform_cv = F
+n_folds = 10
+n.cores=1
+simp_results=F
+
 #' #1. OnlyTSS
 Pagwas<-Pagwas_main(Pagwas = NULL,
                     gwas_data = GWAS_summ_example,
@@ -50,6 +76,127 @@ Pagwas<-Pagwas_main(Pagwas = NULL,
                     Single_data = scRNAexample,
                     Pathway_list=genes.by.pathway_kegg,
                     chrom_ld = chrom_ld)
+##########################################
+ if (is.null(Pagwas)) {
+  Pagwas <- list();
+  class(Pagwas) <- 'Pagwas'
+  }
+  #1.gwas summary data input
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 1st: GWAS_summary_input function start! ********',sep = ''))
+
+  if (!is.null(gwas_data)){
+
+    Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
+                                 gwas_data=gwas_data,
+                                 maf_filter=maf_filter)  }
+  message('done!')
+  #2.single data input
+  message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
+
+  #suppressMessages(require(SeuratObject))
+
+  if (!is.null(Single_data)){
+    Pagwas <- Single_data_input(Pagwas=Pagwas,
+                                nfeatures =nfeatures,
+                                Single_data=Single_data,
+                                min.lib.size = min.lib.size,
+                                min.reads =min.reads,
+                                min.detected =min.detected,
+                                min_clustercells=min_clustercells)
+
+  }
+  message(ncol(Pagwas$Single_data)," cells are remain!" )
+  message('done!')
+
+  #3.calculated pca score
+  message(paste(utils::timestamp(quiet = T), ' ******* 3rd: Pathway_pcascore_run function start!! ********',sep = ''))
+
+
+  if (!is.null(Pathway_list)){
+
+
+  Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,n.cores=n.cores,
+                                 Pathway_list=Pathway_list,
+                                 min.pathway.size=min.pathway.size,
+                                 max.pathway.size=max.pathway.size
+                                 )
+
+   }
+   message('done!')
+
+   #4.calculated Snp2Gene
+  message(paste(utils::timestamp(quiet = T), ' ******* 4th: Snp2Gene start!! ********',sep = ''))
+
+  if(!is.null(block_annotation)){
+
+    Pagwas$block_annotation<-block_annotation
+
+    if(add_eqtls!="OnlyTSS"){
+      if (!is.null(eqtls_files)){
+
+        message("Filter snps for significant eqtls!")
+        Pagwas<-  Tissue_eqtls_Input(Pagwas=Pagwas,
+                                     add_eqtls=add_eqtls,
+                                     eqtls_files=eqtls_files,
+                                     eqtl_p=0.05,
+                                     eqtls_cols=eqtls_cols,
+                                     marg=marg)
+        message(nrow(Pagwas$gwas_data)," snps for significant eqtls! Please set 'add_eqtls=F' if the amount of snps were too little!")
+
+       }else{
+
+        stop("Since the add_eqtls is TURE! No parameter 'eqtls_files' Input!  ")
+       }
+    }else{
+      #Pagwas$block_annotation <- block_annotation
+       snp_gene_df<-Snp2Gene(snp=as.data.frame(Pagwas$gwas_data),refGene=block_annotation,marg=marg)
+       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
+       Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
+
+    }
+  }
+
+
+  #3.pathway block data
+  message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
+
+  if (!is.null(block_annotation)){
+
+    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,n.cores=n.cores)
+  }
+
+  message('done!')
+
+  #4.ld data folder,which is preprogress
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 6th: Link_pathway_blocks_gwas function start! ********',sep = ''))
+
+  if (!is.null(chrom_ld)){
+
+    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                       chrom_ld=chrom_ld,
+                                       n.cores=n.cores)
+
+  message('done!')
+    # save(merge_scexpr,file="merge_scexpr.RData")
+  #Pathwat_sumexpr<-lapply(Pagwas$Pathway_list,function(x) sapply(merge_scexpr[x,],function(y) sum(y,na.rm =T)))
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_pwpca_block function start!! ********',sep = ''))
+
+  #timestart<-Sys.time()
+  Pagwas <- link_pwpca_block(Pagwas)
+  message('done!')
+  }
+
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
+
+  #timestart<-Sys.time()
+  Pagwas <- Pagwas_perform_regression(Pagwas, iters = iters,n.cores=n.cores)
+
+  message('done!')
+
 
 ```
 
