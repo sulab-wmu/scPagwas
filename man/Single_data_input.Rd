@@ -9,6 +9,7 @@ Single_data_input(
   Pagwas,
   Single_data,
   nfeatures = NULL,
+  FilterSingleCell = TRUE,
   min.lib.size = 1000,
   min.reads = 10,
   min.detected = 5,
@@ -21,6 +22,8 @@ Single_data_input(
 \item{Single_data}{Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
 \item{nfeatures}{The parameter for FindVariableFeatures, NULL means select all genes}
+
+\item{FilterSingleCell}{whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.}
 
 \item{min.lib.size}{Threshold for single data library.}
 

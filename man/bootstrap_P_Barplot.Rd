@@ -7,7 +7,7 @@
 Bootstrap_P_Barplot(
   Pagwas,
   title = "Test scPagwas",
-  file = "test_barplot.pdf",
+  figurenames = "test_barplot.pdf",
   width = 5,
   height = 7
 )
@@ -17,7 +17,7 @@ Bootstrap_P_Barplot(
 
 \item{title}{The title names of the plot}
 
-\item{file}{The filename and address of the output plot,default is "test_barplot.pdf"}
+\item{figurenames}{The filename and address of the output plot,default is "test_barplot.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.}
 
 \item{width}{figure width, default is 5}
 
@@ -34,6 +34,6 @@ library(scPagwas)
 # Pagwas is the result of Pagwas_main()
 Bootstrap_P_Barplot(Pagwas=Pagwas,
                     title = "Test scPagwas",
-                    file = "test_barplot.pdf",
+                    figurenames = "test_barplot.pdf",
                     width = 5, height = 7)
 }

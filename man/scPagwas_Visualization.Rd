@@ -10,7 +10,7 @@ scPagwas_Visualization(
   Reduction = FALSE,
   assay = "SCT",
   cellpercent = 0.1,
-  files = "scpagwas_pbc_False",
+  filename = NULL,
   FigureType = "tsne",
   width = 7,
   height = 7,
@@ -31,7 +31,7 @@ scPagwas_Visualization(
 
 \item{cellpercent}{(numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.}
 
-\item{files}{(character)the file for save the figures.}
+\item{filename}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, print the figure to current environment, check setwd().}
 
 \item{FigureType}{(character)"tsne" or "umap}
 

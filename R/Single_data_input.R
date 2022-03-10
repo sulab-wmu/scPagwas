@@ -4,6 +4,7 @@
 #' Input the Single data in seruat format
 #' @param Pagwas Pagwas format
 #' @param Single_data Input the Single data in seruat format, Idents should be the celltypes annotation.
+#' @param FilterSingleCell whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.
 #' @param nfeatures The parameter for FindVariableFeatures, NULL means select all genes
 #' @param min.lib.size Threshold for single data library.
 #' @param min.reads Threshold for total reads fo each cells.
@@ -21,6 +22,7 @@
 Single_data_input <- function(Pagwas,
                               Single_data,
                               nfeatures = NULL,
+                              FilterSingleCell=TRUE,
                               min.lib.size = 1000,
                               min.reads = 10,
                               min.detected = 5,
@@ -41,6 +43,7 @@ Single_data_input <- function(Pagwas,
   Celltype_anno$annotation <- str_replace_all(Celltype_anno$annotation, "\\+", ".")
 
   rownames(Celltype_anno) <- Celltype_anno$cellnames
+  Pagwas$Celltype_anno <- Celltype_anno
   # VSingle_data <- Single_data
   if (!is.null(nfeatures)) {
     if (nfeatures < nrow(Single_data)) {
@@ -58,6 +61,8 @@ Single_data_input <- function(Pagwas,
   } else {
     Pagwas$VariableFeatures <- rownames(Single_data)
   }
+
+  if(FilterSingleCell){
 
   count <- Seurat::GetAssayData(object = Single_data, slot = "count")
 
@@ -77,16 +82,15 @@ Single_data_input <- function(Pagwas,
   celltypes <- unique(Celltype_anno$annotation)
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
   Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
-  message(Afterre_cell_types, " are remain, after filter!")
+  message(length(Afterre_cell_types), "cell types are remain, after filter!")
 
   Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
 
   count <- count[, Celltype_anno$annotation %in% Afterre_cell_types]
   # Single_data <- GetAssayData(object =Single_data, slot = "data")
-
   Pagwas$Celltype_anno <- Celltype_anno
   Pagwas$Single_data <- Single_data[, colnames(count)]
-
+  }
 
   Pagwas$merge_scexpr <- mean_expr(Pagwas)
   #<- Seurat::AverageExpression(Pagwas$Single_data)[[1]]

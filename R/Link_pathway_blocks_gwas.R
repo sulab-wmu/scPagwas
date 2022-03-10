@@ -89,7 +89,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       snps = snp_data,
       ld_data = sub_ld,
       n_snps = nrow(snp_data),
-      ld_matrix_squared = Matrix::Matrix(ld_matrix * ld_matrix),
+      ld_matrix_squared = ld_matrix * ld_matrix,
       y = unlist(lapply(1:length(Pa_chrom_data), function(i) Pa_chrom_data[[i]][[2]]))
     )
 

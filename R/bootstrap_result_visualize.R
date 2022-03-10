@@ -4,7 +4,7 @@
 #'
 #' @param Pagwas Pagwas format of result in Pagwas_main()
 #' @param title The title names of the plot
-#' @param file The filename and address of the output plot,default is "test_barplot.pdf"
+#' @param figurenames The filename and address of the output plot,default is "test_barplot.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.
 #' @param width figure width, default is 5
 #' @param height figure height,default is 7
 #'
@@ -16,10 +16,10 @@
 #' # Pagwas is the result of Pagwas_main()
 #' Bootstrap_P_Barplot(Pagwas=Pagwas,
 #'                     title = "Test scPagwas",
-#'                     file = "test_barplot.pdf",
+#'                     figurenames = "test_barplot.pdf",
 #'                     width = 5, height = 7)
 Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
-                                file = "test_barplot.pdf",
+                                figurenames = "test_barplot.pdf",
                                 width = 5, height = 7) {
   cell_severe <- Pagwas$bootstrap_results
   # rm(Pagwas)
@@ -50,16 +50,19 @@ Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
     # geom_hline(aes(yintercept=4.321), colour="#990000", linetype="dashed")+
   }
   print(p1)
-  pdf(file, width = width, height = height)
-  print(p1)
-  dev.off()
+  if(!is.null(figurenames)){
+    pdf(figurenames, width = width, height = height)
+    print(p1)
+    dev.off()
+  }
+
 }
 
 
 #' Bootstrap_estimate_Plot
 #' This forest plot shows the correct estimate values and 95% CI for different celltyppes, using the ggplot packages
 #' @param Pagwas Pagwas format of result from Pagwas_main()
-#' @param filenames the filename of the output plot, default is test_forest.pdf"
+#' @param figurenames The filename and address of the output plot,default is "test_forest.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.
 #' @param width figure width
 #' @param height figure height
 #'
@@ -70,10 +73,10 @@ Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
 #' library(scPagwas)
 #' # Pagwas is the result of Pagwas_main()
 #' Bootstrap_estimate_Plot(Pagwas=Pagwas,
-#'                         filenames = "test_forest.pdf",
+#'                         figurenames = "test_forest.pdf",
 #'                         width = 9, height = 7)
 Bootstrap_estimate_Plot <- function(Pagwas,
-                                    filenames = "test_forest.pdf",
+                                    figurenames = "test_forest.pdf",
                                     width = 9,
                                     height = 7) {
   bootstrap_results <- Pagwas$bootstrap_results[-1, c("bp_value", "bias_corrected_estimate", "CI_lo", "CI_hi")]
@@ -137,7 +140,9 @@ Bootstrap_estimate_Plot <- function(Pagwas,
   plot2 <- gridExtra::grid.arrange(plot1, tab1, layout_matrix = lay)
   print(plot2)
   ## save the pdf figure
-  pdf(file = filenames, width = width, height = height)
+  if(!is.null(figurenames)){
+  pdf(file = figurenames, width = width, height = height)
   print(plot2)
   dev.off()
+  }
 }

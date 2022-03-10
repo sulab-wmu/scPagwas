@@ -7,7 +7,7 @@ This forest plot shows the correct estimate values and 95\% CI for different cel
 \usage{
 Bootstrap_estimate_Plot(
   Pagwas,
-  filenames = "test_forest.pdf",
+  figurenames = "test_forest.pdf",
   width = 9,
   height = 7
 )
@@ -15,7 +15,7 @@ Bootstrap_estimate_Plot(
 \arguments{
 \item{Pagwas}{Pagwas format of result from Pagwas_main()}
 
-\item{filenames}{the filename of the output plot, default is test_forest.pdf"}
+\item{figurenames}{The filename and address of the output plot,default is "test_forest.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.}
 
 \item{width}{figure width}
 
@@ -32,6 +32,6 @@ This forest plot shows the correct estimate values and 95\% CI for different cel
 library(scPagwas)
 # Pagwas is the result of Pagwas_main()
 Bootstrap_estimate_Plot(Pagwas=Pagwas,
-                        filenames = "test_forest.pdf",
+                        figurenames = "test_forest.pdf",
                         width = 9, height = 7)
 }

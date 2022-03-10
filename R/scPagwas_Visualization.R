@@ -6,7 +6,7 @@
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
 #' @param Reduction (logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.
 #' @param assay (character)"RNA" or "SCT", It depens on the Single_data.
-#' @param files (character)the file for save the figures.
+#' @param filename (character)default is NULL.the file folder name for save the figures.NULL means no folder is created, print the figure to current environment, check setwd().
 #' @param FigureType (character)"tsne" or "umap
 #' @param cellpercent (numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.
 #' @param width (numeric)Figure width
@@ -41,7 +41,7 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
                                    Reduction = FALSE,
                                    assay = "SCT",
                                    cellpercent = 0.1,
-                                   files = "scpagwas_pbc_False",
+                                   filename = NULL,
                                    FigureType = "tsne",
                                    width = 7,
                                    height = 7,
@@ -82,10 +82,11 @@ scPagwas_Visualization <- function(scPagwas = Pagwas,
     }
   }
 
+  if(!is.null(figurenames)){
   if (!file.exists(paste0("./", files))) {
     dir.create(files)
   }
-
+  }
   # num<-length(unique(as.vector(Idents(Single_data))))
   Single_data <- Single_data[, !is.na(Single_data$scPagwas_score)]
 

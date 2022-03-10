@@ -57,6 +57,9 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   # keep the raw pathway
   Pagwas$rawPathway_list <- Pathway_list
 
+  # single data
+  Pagwas$Single_data<-Pagwas$Single_data[intersect(rownames(Pagwas$Single_data),unique(unlist(Pathway_list))),]
+
   # filter the gene for no expression in single cells in pathway
   celltypes <- as.vector(unique(Idents(Pagwas$Single_data)))
 
@@ -150,7 +153,7 @@ PathwayPCAtest <- function(Pathway_list,
 
   ## filter pathway
   nPcs <- 1
-  scCounts <- t(Matrix::Matrix(scCounts))
+  scCounts <- t(as.matrix(scCounts))
   cm <- Matrix::colMeans(scCounts)
   proper.gene.names <- colnames(scCounts)
   ###### calculate the pca for each pathway terms.

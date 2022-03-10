@@ -7,7 +7,7 @@
 Pagwas_main(
   Pagwas = NULL,
   gwas_data = NULL,
-  add_eqtls,
+  add_eqtls = "OnlyTSS",
   eqtls_files = NULL,
   eqtls_cols = c("rs_id_dbSNP151_GRCh38p7", "variant_pos", "tss_distance", "gene_chr",
     "gene_start", "gene_end", "gene_name", "pval_beta"),
@@ -18,6 +18,7 @@ Pagwas_main(
   chrom_ld = NULL,
   marg = 10000,
   maf_filter = 0.01,
+  FilterSingleCell = TRUE,
   min.reads = 5,
   min.detected = 1,
   min.lib.size = 200,
@@ -57,6 +58,8 @@ Pagwas_main(
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
 
+\item{FilterSingleCell}{(logical)whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.}
+
 \item{min.reads}{(integr)Threshold for total reads fo each cells. default is 5}
 
 \item{min.detected}{(integr)Threshold for total cells fo each gene. default is 1}
@@ -92,11 +95,11 @@ The entry point for Pagwas analysis.
 }
 \examples{
 library(scPagwas)
-data(Genes_by_pathway.kegg)
+data(Genes_by_pathway_kegg)
 data(GWAS_summ_example)
 data(gtf_df)
 data(scRNAexample)
-data(eqtls_files)
+#data(eqtls_files)
 data(chrom_ld)
 #1. OnlyTSS
 Pagwas<-Pagwas_main(Pagwas = NULL,
@@ -104,7 +107,7 @@ Pagwas<-Pagwas_main(Pagwas = NULL,
                     add_eqtls="OnlyTSS",
                     block_annotation = gtf_df,
                     Single_data = scRNAexample,
-                    Pathway_list=Genes_by_pathway.kegg,
+                    Pathway_list=genes.by.pathway_kegg,
                     chrom_ld = chrom_ld)
 #1. Both
 scPagwas_main <- function(Pagwas = NULL,
