@@ -30,8 +30,9 @@ You can install the released version of scPagwas from [github](https://github.co
 #install.packages("scPagwas")
 
 ```
-you can also check the details in (file:///E:/RPakage/scPagwas/docs/reference/index.html)
-## Example
+you can also check the details in (file:///E:/RPakage/scPagwas/docs/reference/index.html) 
+
+## Example 
 
 This is a basic example which shows you how to solve a common problem:
  
