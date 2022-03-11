@@ -1,11 +1,14 @@
 
 
 #' Single_data_input
-#' Input the Single data in seruat format
+#' @description Input the Single data in seruat format
 #' @param Pagwas Pagwas format
-#' @param Single_data Input the Single data in seruat format, Idents should be the celltypes annotation.
-#' @param FilterSingleCell whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.
-#' @param nfeatures The parameter for FindVariableFeatures, NULL means select all genes
+#' @param Single_data Input the Single data in seruat format, Idents should be
+#' the celltypes annotation.
+#' @param FilterSingleCell whther to filter the single cell data,if you
+#' filter it before,choose FALSE, otherwise set TRUE.
+#' @param nfeatures The parameter for FindVariableFeatures,
+#' NULL means select all genes
 #' @param min.lib.size Threshold for single data library.
 #' @param min.reads Threshold for total reads fo each cells.
 #' @param min.detected Threshold for total cells fo each gene.
@@ -22,7 +25,7 @@
 Single_data_input <- function(Pagwas,
                               Single_data,
                               nfeatures = NULL,
-                              FilterSingleCell=TRUE,
+                              FilterSingleCell=FALSE,
                               min.lib.size = 1000,
                               min.reads = 10,
                               min.detected = 5,
@@ -35,12 +38,13 @@ Single_data_input <- function(Pagwas,
   }
   ## get the Variable genes for cells
 
-  Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data), annotation = as.vector(Idents(Single_data)))
+  Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
+                              annotation = as.vector(SeuratObject::Idents(Single_data)))
 
   #
-  Celltype_anno$annotation <- str_replace_all(Celltype_anno$annotation, "-", ".")
-  Celltype_anno$annotation <- str_replace_all(Celltype_anno$annotation, " ", ".")
-  Celltype_anno$annotation <- str_replace_all(Celltype_anno$annotation, "\\+", ".")
+  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "-", ".")
+  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, " ", ".")
+  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "\\+", ".")
 
   rownames(Celltype_anno) <- Celltype_anno$cellnames
   Pagwas$Celltype_anno <- Celltype_anno
@@ -67,19 +71,19 @@ Single_data_input <- function(Pagwas,
   count <- Seurat::GetAssayData(object = Single_data, slot = "count")
 
   # remove cells that don't have enough counts
-  count <- count[, colSums(count > 0) > min.lib.size]
+  count <- count[, Matrix::colSums(count > 0) > min.lib.size]
 
   # remove genes that don't have many reads
-  count <- count[rowSums(count) > min.reads, ]
+  count <- count[Matrix::rowSums(count) > min.reads, ]
 
   # remove genes that are not seen in a sufficient number of cells
-  count <- count[rowSums(count > 0) > min.detected, ]
+  count <- count[Matrix::rowSums(count > 0) > min.detected, ]
 
   # identify for Celltype_anno
   Celltype_anno <- Celltype_anno[colnames(count), ]
 
   # remove celltypes that don't have enough cell
-  celltypes <- unique(Celltype_anno$annotation)
+
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
   Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
   message(length(Afterre_cell_types), "cell types are remain, after filter!")
@@ -92,8 +96,9 @@ Single_data_input <- function(Pagwas,
   Pagwas$Single_data <- Single_data[, colnames(count)]
   }
 
+  Pagwas$Single_data <- Single_data
   Pagwas$merge_scexpr <- mean_expr(Pagwas)
-  #<- Seurat::AverageExpression(Pagwas$Single_data)[[1]]
+
 
   return(Pagwas)
 }

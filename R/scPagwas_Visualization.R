@@ -12,6 +12,7 @@
 #' @param width (numeric)Figure width
 #' @param height (numeric)Figure height
 #' @param size (numeric)size for scatters
+#' @param npcs (integr) the parameter of Seurat::RunPCA.
 #' @param title (character)Figure title
 #' @param lowColor (character)Color for low scPagwas score
 #' @param highColor (character)Color for high scPagwas score
@@ -47,10 +48,11 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
                                    height = 7,
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
+                                   npcs=50,
                                    title = "scPagwas_score") {
-  suppressMessages(require(ggnewscale))
-  suppressMessages(require(ggtext))
-  suppressMessages(require(ggrepel))
+  #suppressMessages(require(ggnewscale))
+  #suppressMessages(require(ggtext))
+  #suppressMessages(require(ggrepel))
 
   #if(colnames(Single_data@meta.data) %in% "tsne")
 
@@ -70,11 +72,11 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
   Single_data$scPagwas_score <- scPagwas_score
 
   if (Reduction) {
-    Single_data <- RunPCA(object = Single_data, assay = assay, npcs = 50)
+    Single_data <- suppressMessages(Seurat::RunPCA(object = Single_data, assay = assay, npcs = npcs))
     if (FigureType == "tsne") {
-      Single_data <- RunTSNE(object = Single_data, assay = assay, reduction = "pca", dims = 1:50)
+      Single_data <- suppressMessages(Seurat::RunTSNE(object = Single_data, assay = assay, reduction = "pca", dims = 1:npcs))
     } else if (FigureType == "umap") {
-      Single_data <- RunUMAP(object = Single_data, assay = assay, reduction = "pca", dims = 1:50)
+      Single_data <- suppressMessages(Seurat::RunUMAP(object = Single_data, assay = assay, reduction = "pca", dims = 1:npcs))
     } else {
       stop("ERROR:: The Reduction is TRUE, but no correct FigureType is choose, either tsne or umap")
     }
@@ -92,7 +94,7 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
 
   if (FigureType == "umap") {
     all_fortify_can <- fortify.Seurat.umap(Single_data)
-    plot_scPagwas_score <- ggscatter(all_fortify_can,
+    plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
       x = "UMAP_1", y = "UMAP_2",
       color = "scPagwas_score", fill = "scPagwas_score", size = size, title = title,
       repel = TRUE
@@ -111,13 +113,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
-      new_scale_color() +
+      #new_scale_color() +
       geom_point(
         data = all_fortify_can[all_fortify_can$scPagwas_score > thre, ],
         aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
       ) +
       umap_theme() +
-      new_scale_color() +
+      #new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
     print(plots_sigp1)
@@ -130,7 +132,7 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
   if (FigureType == "tsne") {
     all_fortify_can <- fortify.Seurat.tsne(Single_data)
 
-    plot_scPagwas_score <- ggscatter(all_fortify_can,
+    plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
       x = "TSNE_1", y = "TSNE_2",
       color = "scPagwas_score", fill = "scPagwas_score", size =size,
       repel = TRUE
@@ -150,13 +152,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
         aes(x = TSNE_1, y = TSNE_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
-      new_scale_color() +
+      #new_scale_color() +
       geom_point(
         data = all_fortify_can[all_fortify_can$scPagwas_score > thre, ],
         aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +
-      new_scale_color() +
+      #new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
     print(plots_sigp1)

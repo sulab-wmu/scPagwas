@@ -1,27 +1,21 @@
-#' @import ggsci
-#' @import dplyr
-#' @import foreach
-#' @import data.table
+
+#' @importFrom dplyr mutate filter inner_join %>%
 #' @importFrom irlba irlba
-#' @import Seurat
-#' @import SeuratObject
-#' @importFrom Matrix Matrix
-#' @import stringr
-#' @import future
-#' @import future.apply
-#' @import glmnet
-#' @import GenomicRanges
+#' @importFrom Seurat FindVariableFeatures VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP
+#' @importFrom SeuratObject Idents
+#' @importFrom Matrix Matrix colSums rowSums crossprod
+#' @importFrom stringr str_replace_all
+#' @importFrom parallel mclapply
+#' @importFrom glmnet cv.glmnet
+#' @importFrom GenomicRanges GRanges resize resize
 #' @importFrom IRanges IRanges
-#' @import utils
+#' @importFrom utils timestamp
 #' @import ggplot2
-#' @import ggthemes
-#' @import ggpubr
-#' @import ggtext
-#' @import ggnewscale
-#' @import bigstatsr
+#' @importFrom ggpubr ggscatter
+#' @importFrom bigstatsr big_apply as_FBM big_univLinReg covar_from_df
 #' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
-
+#' @importFrom data.table setkey data.table as.data.table
 
 
 #' @title Main wrapper functions for celltypes.
@@ -37,15 +31,16 @@
 #' @param eqtls_cols (character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")
 #' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
 #' @param Single_data (Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.
+#' @param FilterSingleCell (logical)whether to filter the single cell data.if you
+#' filter it before,choose FALSE, otherwise set TRUE.
 #' @param nfeatures (integr) The parameter for FindVariableFeatures, NULL means select all genes
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
-#' @param FilterSingleCell (logical)whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.
-#' @param min.reads (integr)Threshold for total reads fo each cells. default is 5
-#' @param min.detected (integr)Threshold for total cells fo each gene. default is 1
-#' @param min.lib.size (integr)Threshold for single data library. default is 200
-#' @param min_clustercells (integr)Threshold for total cells fo each cluster.default is 10
+#' @param min.reads (integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5
+#' @param min.detected (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1
+#' @param min.lib.size (integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200
+#' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
 #' @param iters (integr)number of bootstrap iterations to perform, default is 200
@@ -92,12 +87,12 @@ Pagwas_main <- function(Pagwas = NULL,
                         eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta"),
                         block_annotation = NULL,
                         Single_data = NULL,
+                        FilterSingleCell=FALSE,
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
                         marg=10000,
                         maf_filter = 0.01,
-                        FilterSingleCell=TRUE,
                         min.reads = 5,
                         min.detected = 1,
                         min.lib.size = 200,
@@ -122,7 +117,8 @@ Pagwas_main <- function(Pagwas = NULL,
 
     Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
                                  gwas_data=gwas_data,
-                                 maf_filter=maf_filter)  }
+                                 maf_filter=maf_filter)
+    }
   message('done!')
   #2.single data input
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
@@ -226,15 +222,10 @@ Pagwas_main <- function(Pagwas = NULL,
 
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
 
-  #timestart<-Sys.time()
   Pagwas <- Pagwas_perform_regression(Pagwas, iters = iters,n.cores=n.cores)
 
   message('done!')
 
-  #message(paste(utils::timestamp(quiet = T), ' ******* 9th: Pagwas_perform_regression function start!! ********',sep = ''))
-
-
-  #write.csv(Pagwas$bootstrap_results,file="Pagwas_kegg_rawResult.csv")
   if (perform_cv) {
   Pagwas <- Pagwas_perform_regularized_regression(Pagwas, n_folds = n_folds)
   }
@@ -268,15 +259,17 @@ Pagwas_main <- function(Pagwas = NULL,
 #' @param eqtl_p (numeric)default is 0.05,
 #' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
 #' @param Single_data (Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.
+#' @param FilterSingleCell (logical)whether to filter the single cell data.if you
+#' filter it before,choose FALSE, otherwise set TRUE.
 #' @param nfeatures (integr) The parameter for FindVariableFeatures, NULL means select all genes
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
 #' @param marg (integr)gene-TSS-window size
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
-#' @param min.reads (integr)Threshold for total reads fo each cells. default is 5
-#' @param min.detected (integr)Threshold for total cells fo each gene. default is 1
-#' @param min.lib.size (integr)Threshold for single data library. default is 200
-#' @param min_clustercells (integr)Threshold for total cells fo each cluster.default is 10
+#' @param min.reads (integr),Only use is when FilterSingleCell is TRUE. Threshold for total reads fo each cells. default is 5
+#' @param min.detected (integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1
+#' @param min.lib.size (integr) Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200
+#' @param min_clustercells (integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
 #' @param perform_cv (logical)whether to Perform regularization inference.
@@ -291,7 +284,7 @@ Pagwas_main <- function(Pagwas = NULL,
 #'
 #' @examples
 #' library(scPagwas)
-#' data(Genes_by_pathway.kegg)
+#' data(Genes_by_pathway_kegg)
 #' data(GWAS_summ_example)
 #' data(gtf_df)
 #' data(scRNAexample)
@@ -325,6 +318,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         eqtl_p=0.05,
                         block_annotation = NULL,
                         Single_data = NULL,
+                        FilterSingleCell=FALSE,
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld = NULL,
@@ -366,6 +360,7 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 nfeatures =nfeatures,
                                 Single_data=Single_data,
+                                FilterSingleCell=FilterSingleCell,
                                 min.lib.size = min.lib.size,
                                 min.reads =min.reads,
                                 min.detected =min.detected,
@@ -414,7 +409,7 @@ scPagwas_main <- function(Pagwas = NULL,
         stop("Since the add_eqtls is TURE! No parameter 'eqtls_files' Input!  ")
        }
     }else{
-      #Pagwas$block_annotation <- block_annotation
+
        snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,refGene=block_annotation,marg=marg)
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
        Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
@@ -470,10 +465,9 @@ scPagwas_main <- function(Pagwas = NULL,
   if(simp_results){
   Pagwas$gwas_data <- NULL
   Pagwas$Single_data <- NULL
-  #Pagwas$Celltype_anno <-NULL
+  Pagwas$Celltype_anno <-NULL
   Pagwas$snp_gene_df <-NULL
   Pagwas$chrom_ld<-NULL
-  #Pagwas$rawPathway_list <-NULL
   Pagwas$pca_cell_df <-NULL
   Pagwas$block_annotation <- NULL
   Pagwas$merge_scexpr <- NULL

@@ -17,7 +17,9 @@ Bootstrap_P_Barplot(
 
 \item{title}{The title names of the plot}
 
-\item{figurenames}{The filename and address of the output plot,default is "test_barplot.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.}
+\item{figurenames}{The filename and address of the output plot,
+default is "test_barplot.pdf".IF figurenames= NULL, only plot the figure
+and have not pdf figure.}
 
 \item{width}{figure width, default is 5}
 
@@ -27,7 +29,8 @@ Bootstrap_P_Barplot(
 A figure of barplot in pdf format, red color is significant.
 }
 \description{
-This bar plot shows the -log2(p value) for bootstrap result, using the ggplot packages
+This bar plot shows the -log2(p value) for bootstrap result,
+using the ggplot packages
 }
 \examples{
 library(scPagwas)

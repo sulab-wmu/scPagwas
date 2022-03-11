@@ -13,7 +13,8 @@ link_pwpca_block(Pagwas)
 
 }
 \description{
-Link the pca score and expression for each pathway genes for each block
+Link the pca score and expression for each pathway genes
+for each block
 Requires rownames that are identitcal to block labels loaded previously.
 }
 \examples{

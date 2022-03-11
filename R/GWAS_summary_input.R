@@ -1,7 +1,7 @@
 
 
-#' GWAS_summary_input :
-#' Input and progress the GWAS summary statistics data
+#' GWAS_summary_input
+#' @description Input and progress the GWAS summary statistics data
 #' filter the maf and the sex chrom data
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param gwas_data A data set object, need a data frame format, There must be have colomue with 'chrom', 'pos', 'rsid', 'beta', 'se', 'maf'
@@ -29,7 +29,8 @@ GWAS_summary_input <- function(Pagwas,
     stop("It is not a data frame format!")
   }
 
-  necessary_cols <- c("chrom", "pos", "rsid", "beta", "se", "maf") # try to control for maf
+  necessary_cols <- c("chrom", "pos", "rsid", "beta", "se", "maf")
+  # try to control for maf
 
   if (all(!(necessary_cols %in% colnames(gwas_data)))) {
     stop("There are missing the colomn for chrom, pos, beta, or se, maf")
@@ -70,20 +71,21 @@ GWAS_summary_input <- function(Pagwas,
 
   if (MHC_filter) {
     gwas_data_6 <- gwas_data[gwas_data$chrom %in% "chr6", ]
-    gwas_data_6 <- gwas_data_6[!(gwas_data_6$pos > 25000000 & gwas_data_6$pos < 34000000), ]
+    gwas_data_6 <- gwas_data_6[!(gwas_data_6$pos > 25000000 &
+                                   gwas_data_6$pos < 34000000), ]
     gwas_data <- gwas_data[!(gwas_data$chrom %in% "chr6"), ]
     gwas_data <- rbind(gwas_data, gwas_data_6)
   }
 
   if (gwas_z_filter > 0) {
-    window_size <- 1e5
+
     message(paste("removing SNPs with |z| > ", gwas_z_filter, sep = ""))
     gwas_data <- gwas_data %>%
       dplyr::mutate(abs_z = abs(beta / se)) %>%
       dplyr::filter(abs_z < gwas_z_filter)
   }
 
-  # Pagwas$raw_gwas_data <- gwas_data
+
   Pagwas$gwas_data <- gwas_data
   return(Pagwas)
 }

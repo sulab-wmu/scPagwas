@@ -89,7 +89,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   })
   close(pb)
   ## merge all PCAscore list
-  pca_df <- reshape::merge_all(lapply(1:length(scPCAscore_list), function(i) {
+  pca_df <- reshape::merge_all(lapply(seq_len(length(scPCAscore_list)), function(i) {
     df <- scPCAscore_list[[i]][[1]]
     df$celltype <- rep(celltypes[i], nrow(df))
     # print(i)
@@ -114,7 +114,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   Pagwas$pca_cell_df <- pca_cell_df
 
-  pca_scCell_mat <- data.frame(do.call(cbind, (lapply(1:length(scPCAscore_list), function(i) {
+  pca_scCell_mat <- data.frame(do.call(cbind, (lapply(seq_len(length(scPCAscore_list)), function(i) {
     scPCAscore_list[[i]][[2]]
   }))))
   # keep cellnames the same as Single_data
@@ -172,7 +172,7 @@ PathwayPCAtest <- function(Pathway_list,
     pcs$scores <- pcs$scores * cs
     pcs$rotation <- pcs$rotation * cs
     rownames(pcs$rotation) <- colnames(scCounts)[lab]
-    # print("done")
+
     return(list(xp = pcs))
   }, n.cores = n.cores)
 
@@ -181,7 +181,7 @@ PathwayPCAtest <- function(Pathway_list,
     result <- tryCatch(
       {
         vars <- as.numeric((papca[[i]]$xp$d))
-        cbind(i = i, var = vars, n = papca[[i]]$n, npc = seq(1:ncol(papca[[i]]$xp$rotation)))
+        cbind(i = i, var = vars, n = papca[[i]]$n, npc = seq(seq_len(ncol(papca[[i]]$xp$rotation))))
       },
       error = function(e) {
         return(NULL)
@@ -201,6 +201,6 @@ PathwayPCAtest <- function(Pathway_list,
 
   rownames(vscore) <- names(papca)[vdf$i]
   colnames(vscore) <- rownames(scCounts)
-  # vscore<-NULL
+
   return(list(df, vscore))
 }

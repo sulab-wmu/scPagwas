@@ -2,9 +2,7 @@
 % Please edit documentation in R/GWAS_summary_input.R
 \name{GWAS_summary_input}
 \alias{GWAS_summary_input}
-\title{GWAS_summary_input :
-Input and progress the GWAS summary statistics data
-filter the maf and the sex chrom data}
+\title{GWAS_summary_input}
 \usage{
 GWAS_summary_input(
   Pagwas,
@@ -32,7 +30,6 @@ GWAS_summary_input(
 
 }
 \description{
-GWAS_summary_input :
 Input and progress the GWAS summary statistics data
 filter the maf and the sex chrom data
 }

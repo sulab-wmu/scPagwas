@@ -50,6 +50,8 @@ This is a basic example which shows you how to solve a common problem:
  data(gtf_df)
  #Single cell example data.
  data(scRNAexample)
+
+
  #LD data
  data(chrom_ld)
  #Pagwas_main is a function wrapper other process codes
@@ -58,8 +60,10 @@ This is a basic example which shows you how to solve a common problem:
                      add_eqtls="OnlyTSS",# only snps within TSS windows
                      block_annotation = gtf_df,
                      Single_data = scRNAexample,
+                     FilterSingleCell=TRUE,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
+ 
 ``` 
 #### Visualize the celltypes results.
 

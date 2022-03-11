@@ -9,13 +9,15 @@ link_scCell_pwpca_block(Pagwas, n.cores = n.cores)
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+\item{n.cores}{Parallel cores,default is 1. use detectCores() to
+check the cores in computer.}
 }
 \value{
 
 }
 \description{
-link the single cell pca score and expression for each pathway genes for each block(single cell)
+link the single cell pca score and expression for each
+pathway genes for each block(single cell)
 construct the final matrix for regression in blocks
 }
 \examples{

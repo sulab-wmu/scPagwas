@@ -13,12 +13,12 @@ Pagwas_main(
     "gene_start", "gene_end", "gene_name", "pval_beta"),
   block_annotation = NULL,
   Single_data = NULL,
+  FilterSingleCell = FALSE,
   nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
   marg = 10000,
   maf_filter = 0.01,
-  FilterSingleCell = TRUE,
   min.reads = 5,
   min.detected = 1,
   min.lib.size = 200,
@@ -48,6 +48,9 @@ Pagwas_main(
 
 \item{Single_data}{(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
+\item{FilterSingleCell}{(logical)whether to filter the single cell data.if you
+filter it before,choose FALSE, otherwise set TRUE.}
+
 \item{nfeatures}{(integr) The parameter for FindVariableFeatures, NULL means select all genes}
 
 \item{Pathway_list}{(list,character) pathway gene sets list}
@@ -58,15 +61,13 @@ Pagwas_main(
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
 
-\item{FilterSingleCell}{(logical)whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.}
+\item{min.reads}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5}
 
-\item{min.reads}{(integr)Threshold for total reads fo each cells. default is 5}
+\item{min.detected}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1}
 
-\item{min.detected}{(integr)Threshold for total cells fo each gene. default is 1}
+\item{min.lib.size}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200}
 
-\item{min.lib.size}{(integr)Threshold for single data library. default is 200}
-
-\item{min_clustercells}{(integr)Threshold for total cells fo each cluster.default is 10}
+\item{min_clustercells}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10}
 
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 

@@ -9,12 +9,7 @@
 #'
 papply <- function(..., n.cores = detectCores()) {
   if (n.cores > 1) {
-    if (is.element("parallel", installed.packages()[, 1])) {
-      mclapply(..., mc.cores = n.cores)
-    } else {
-      # last resort
-      bplapply(..., BPPARAM = MulticoreParam(workers = n.cores))
-    }
+    parallel::mclapply(..., mc.cores = n.cores)
   } else {
     lapply(...)
   }
@@ -55,7 +50,7 @@ bh.adjust <- function(x, log = FALSE) {
 #' Pagwas$merge_scexpr <- mean_expr(Pagwas)
 #'
 mean_expr <- function(Pagwas){
-  datamat<-GetAssayData(object =Pagwas$Single_data, slot = "data")
+  datamat<-Seurat::GetAssayData(object =Pagwas$Single_data, slot = "data")
   merge_scexpr<-lapply(unique(Pagwas$Celltype_anno$annotation),function(x){
     an<-Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation %in% x]
     return(apply(datamat[,an],1,mean))
@@ -84,7 +79,7 @@ mean_expr <- function(Pagwas){
 #' snp_gene_df <- Snp2Gene(snp = as.data.frame(Pagwas$gwas_data), refGene = gtf_df, marg = 10000)
 Snp2Gene <- function(snp, refGene, marg = 5000) {
   snp_GR <- GenomicRanges::GRanges(snp[, "chrom"],
-    IRanges(as.numeric(snp[, "pos"]), as.numeric(snp[, "pos"])),
+                                   IRanges::IRanges(as.numeric(snp[, "pos"]), as.numeric(snp[, "pos"])),
     name = snp[, "rsid"]
   )
 
@@ -96,8 +91,8 @@ Snp2Gene <- function(snp, refGene, marg = 5000) {
     name = refGene[, "label"]
   )
 
-  start_GR <- resize(gene_GR, fix = "start", width = 1L)
-  end_GR <- resize(gene_GR, fix = "end", width = 1L)
+  start_GR <- GenomicRanges::resize(gene_GR, fix = "start", width = 1L)
+  end_GR <- GenomicRanges::resize(gene_GR, fix = "end", width = 1L)
 
   cat("* Computing distances between SNPs and genes\n")
   # SNPs inside the gene domain
@@ -152,7 +147,7 @@ Snp2Gene <- function(snp, refGene, marg = 5000) {
     as.numeric(snp[d_both$queryHits[idx], "pos"]),
     d_both$dbit.x[idx]
   )
-  idx <- setdiff(1:nrow(d_both), idx)
+  idx <- setdiff(seq_len(nrow(d_both)) , idx)
   out3 <- cbind(
     snp2_GR$name[d_both$queryHits[idx]],
     end_GR$name[d_both$subjectHits.y[idx]],

@@ -11,14 +11,16 @@ Link_pathway_blocks_gwas(Pagwas, chrom_ld = chrom_ld, n.cores = n.cores)
 
 \item{chrom_ld}{LD data for 22 chromosome.}
 
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+\item{n.cores}{Parallel cores,default is 1. use detectCores()
+to check the cores in computer.}
 }
 \value{
 
 }
 \description{
 Link pathway blocks region and gwas summary snps
-Takes block information, potentially independent LD pathway_blocks or gene blocks,
+Takes block information, potentially independent LD pathway_blocks
+or gene blocks,
 }
 \examples{
 library(scPagwas)

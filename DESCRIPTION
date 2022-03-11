@@ -24,13 +24,9 @@ Imports:
     Seurat,
     ggsci,
     dplyr,
-    foreach,
-    data.table,
     irlba,
     Matrix,
     stringr,
-    future,
-    future.apply,
     glmnet,
     GenomicRanges,
     utils,
@@ -38,9 +34,10 @@ Imports:
     ggthemes,
     ggpubr,
     ggtext,
-    ggnewscale,
     bigstatsr,
     IRanges,
     RMTstat,
     gridExtra
 VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)

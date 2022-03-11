@@ -14,6 +14,7 @@ scPagwas_main(
   eqtl_p = 0.05,
   block_annotation = NULL,
   Single_data = NULL,
+  FilterSingleCell = FALSE,
   nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
@@ -51,6 +52,9 @@ scPagwas_main(
 
 \item{Single_data}{(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
+\item{FilterSingleCell}{(logical)whether to filter the single cell data.if you
+filter it before,choose FALSE, otherwise set TRUE.}
+
 \item{nfeatures}{(integr) The parameter for FindVariableFeatures, NULL means select all genes}
 
 \item{Pathway_list}{(list,character) pathway gene sets list}
@@ -61,13 +65,13 @@ scPagwas_main(
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
 
-\item{min.reads}{(integr)Threshold for total reads fo each cells. default is 5}
+\item{min.reads}{(integr),Only use is when FilterSingleCell is TRUE. Threshold for total reads fo each cells. default is 5}
 
-\item{min.detected}{(integr)Threshold for total cells fo each gene. default is 1}
+\item{min.detected}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1}
 
-\item{min.lib.size}{(integr)Threshold for single data library. default is 200}
+\item{min.lib.size}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200}
 
-\item{min_clustercells}{(integr)Threshold for total cells fo each cluster.default is 10}
+\item{min_clustercells}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10}
 
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 
@@ -95,7 +99,7 @@ Main scPagwas wrapper function for single cell data in order.
 }
 \examples{
 library(scPagwas)
-data(Genes_by_pathway.kegg)
+data(Genes_by_pathway_kegg)
 data(GWAS_summ_example)
 data(gtf_df)
 data(scRNAexample)

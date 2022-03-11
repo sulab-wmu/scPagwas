@@ -29,15 +29,11 @@ Pagwas_perform_regression <- function(Pagwas,
 
   colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), " ", ".")
   colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), "\\+", ".")
-  # colnames(Pagwas$pca_scCell_mat)<-stringr::str_replace_all(colnames(Pagwas$pca_scCell_mat),"-",".")
 
   Pagwas$lm_results <- para_names_adjust(Pagwas, lm_results = Pagwas$lm_results)
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
     stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
   }
-  # add on block values
-  # Pagwas$Pathway_block_info <- Get_Pathway_block_info(
-  # pca_cell_df=Pagwas$pca_cell_df, parameters=Pagwas$lm_results$parameters)
 
   # add on heritability values
   Pagwas$Pathway_block_heritability <-
@@ -91,19 +87,16 @@ Boot_evaluate <- function(Pagwas,
                           part = 0.5,
                           n.cores = 1) {
 
-  # partitions_present <- unique(unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) {block$partition})))
   # run things in parallel if user specified
   message(paste0("* starting bootstrap iteration for ", bootstrap_iters, " times"))
 
   pb <- txtProgressBar(style = 3)
   Boot_evaluate <-
     papply(1:bootstrap_iters, function(i) {
-      # boot_partitions <- sample(partitions_present, length(partitions_present), replace = T)
 
       boot_results <- Parameter_regression(
         xy2vector(Pagwas$Pathway_ld_gwas_data[
-          # unlist(sapply(Pagwas$Pathway_ld_gwas_data, function(block) { block$partition %in% boot_partitions}))
-          sample(1:length(Pagwas$Pathway_ld_gwas_data), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
+          sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
         ])
       )
       boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
@@ -301,7 +294,7 @@ cv_regularized_parameter_estimator <- function(vectorized_Pagwas_data,
     x = vectorized_Pagwas_data$x,
     y = vectorized_Pagwas_data$y,
     offset = vectorized_Pagwas_data$noise_per_snp,
-    foldid = cut(1:length(vectorized_Pagwas_data$y), breaks = n_folds, labels = F),
+    foldid = cut(seq_len(length(vectorized_Pagwas_data$y)), breaks = n_folds, labels = F),
     family = "gaussian", ... = ...
   )
 

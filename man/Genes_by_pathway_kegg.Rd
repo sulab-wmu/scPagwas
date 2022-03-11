@@ -19,7 +19,8 @@ pathway.codes <- sub("path:", "", names(pathways.list))
 Genes_by_pathway.kegg <- sapply(pathway.codes,function(pwid){
 pw <- keggGet(pwid)
 if (is.null(pw[[1]]$GENE)) return(NA)
-pw2 <- pw[[1]]$GENE[c(FALSE,TRUE)] # may need to modify this to c(FALSE, TRUE) for other organisms
+pw2 <- pw[[1]]$GENE[c(FALSE,TRUE)]
+# may need to modify this to c(FALSE, TRUE) for other organisms
 pw2 <- unlist(lapply(strsplit(pw2, split = ";", fixed = T), function(x)x[1]))
  return(pw2)
 })

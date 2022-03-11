@@ -1,6 +1,7 @@
 
 #' link_pwpca_block
-#' @description Link the pca score and expression for each pathway genes for each block
+#' @description Link the pca score and expression for each pathway genes
+#' for each block
 #' Requires rownames that are identitcal to block labels loaded previously.
 #' @param Pagwas Pagwas format, deault is NULL.
 #'
@@ -29,7 +30,6 @@ link_pwpca_block <- function(Pagwas) {
   pca_cell_df <- pca_cell_df[, cell_names]
   Pagwas$pca_cell_df <- pca_cell_df
 
-  # pca_cell_df2 <- pca_cell_df %>% as.data.frame() %>% dplyr::mutate(partition = cut(row_number(), breaks = 10, labels = F))
 
   message("*  merging functional information about blocks")
   pb <- txtProgressBar(style = 3)
@@ -38,10 +38,8 @@ link_pwpca_block <- function(Pagwas) {
 
     pathway <- unique(pa_block$block_info$pathway)
 
-    # print(pathway)
+
     x <- pca_cell_df[pathway, ]
-    # if (nrow(x) != 1) {stop("remove duplicates from pa_block data")}
-    # pa_block$partition  <- pca_cell_df2[pathway,"partition"]
 
     if (nrow(pa_block$snps) == 0) {
       pa_block$include_in_inference <- F
@@ -56,13 +54,13 @@ link_pwpca_block <- function(Pagwas) {
 
     if (length(mg) > 1) {
       x2 <- as.data.frame(apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x))))
-      # x2 <- as.data.frame(apply(x2,2, function(x) x/sum(x)))
+
     }
 
     if (pa_block$n_snps > 1) {
       x2 <- Matrix::Matrix(as.matrix(x2[pa_block$snps$label, ]))
       pa_block$n_snps <- nrow(pa_block$snps)
-      # pa_block$x2 <- x2
+
       x <- Matrix::Matrix(as.matrix(x[rep(1, pa_block$n_snps), ], drop = FALSE))
       rownames(x) <- pa_block$snps$rsid
 
@@ -83,9 +81,9 @@ link_pwpca_block <- function(Pagwas) {
     }
 
     rownames(x3) <- pa_block$snps$rsid
-    pa_block$x <- as.matrix(crossprod(t(pa_block$ld_matrix_squared), x3))
+    pa_block$x <- as.matrix(Matrix::crossprod(t(pa_block$ld_matrix_squared), x3))
     pa_block$include_in_inference <- T
-    #message("1")
+
     setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
 
     return(pa_block)

@@ -14,7 +14,9 @@ Bootstrap_estimate_Plot(
 \arguments{
 \item{Pagwas}{Pagwas format of result from Pagwas_main()}
 
-\item{figurenames}{The filename and address of the output plot,default is "test_forest.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.}
+\item{figurenames}{The filename and address of the output plot,
+default is "test_forest.pdf".IF figurenames= NULL,
+only plot the figure and have not pdf figure.}
 
 \item{width}{figure width}
 
@@ -24,7 +26,8 @@ Bootstrap_estimate_Plot(
 A forest plot with the table of p values
 }
 \description{
-This forest plot shows the correct estimate values and 95\% CI for different celltyppes, using the ggplot packages
+This forest plot shows the correct estimate values and
+95\% CI for different celltyppes, using the ggplot packages
 }
 \examples{
 library(scPagwas)

@@ -17,6 +17,7 @@ scPagwas_Visualization(
   lowColor = "#000957",
   highColor = "#EBE645",
   size = 0.5,
+  npcs = 50,
   title = "scPagwas_score"
 )
 }
@@ -44,6 +45,8 @@ scPagwas_Visualization(
 \item{highColor}{(character)Color for high scPagwas score}
 
 \item{size}{(numeric)size for scatters}
+
+\item{npcs}{(integr) the parameter of Seurat::RunPCA.}
 
 \item{title}{(character)Figure title}
 }

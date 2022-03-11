@@ -46,8 +46,7 @@ Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
 
   Pathway_list <- Pathway_list[Pa_index]
 
-  pca_cell_df <- Pagwas$pca_cell_df[Pa_index, ]
-  # zScores<-zScores(Pagwas$gwas_data$pvalue,tails=2, limit=.Machine$double.xmin)
+
   message("obtain the pathway block information")
 
   paan_df <- papply(names(Pathway_list), function(pa) {
@@ -58,8 +57,6 @@ Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
 
   Pagwas$pathway_blocks <- lapply(paan_df, function(pa) {
     blocks <- pa %>% dplyr::arrange(chrom, start)
-    # %>%
-    # dplyr::mutate(partition = cut(row_number(), breaks = 10, labels = F))
     return(blocks)
   })
 

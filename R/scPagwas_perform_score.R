@@ -21,15 +21,15 @@ scPagwas_perform_score <- function(Pagwas,
   }
 
   # fit model
-  # Pagwas$pca_scCell_mat
+
   Pathway_names <- names(Pagwas$Pathway_ld_gwas_data)
   message("Run regression for ", length(Pathway_names), " pathways")
   pb <- txtProgressBar(style = 3)
 
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
-    # message(Pathway)
+
     Pathway_block <- Pagwas$Pathway_ld_gwas_data[[Pathway]]
-    # message(Pathway)
+
     noise_per_snp <- Pathway_block$snps$se**2
 
     if (!is.null(Pathway_block$x)) {
@@ -45,7 +45,7 @@ scPagwas_perform_score <- function(Pagwas,
           # message("There are too much cells, regression progress will split the data!")
 
           cellsN <- colnames(Pathway_block$x)
-          # x <- 1:10
+
           n <- ceiling(ncol(Pathway_block$x) / split_n)
           chunk <- function(x, n) split(x, factor(sort(rank(x) %% n)))
           chunk_list <- chunk(x = cellsN, n)
@@ -81,11 +81,11 @@ scPagwas_perform_score <- function(Pagwas,
     x[is.na(x)] <- 0
     return(x)
   }))
-  Pagwas$Pathway_sclm_results <- data.table(Pathway_sclm_results)
+  Pagwas$Pathway_sclm_results <- Pathway_sclm_results
 
   pca_scCell_mat <- Pagwas$pca_scCell_mat[Pathway_names, ]
 
-  Vdata <- GetAssayData(object = Pagwas$Single_data, slot = "data")
+  Vdata <- SeuratObject::GetAssayData(object = Pagwas$Single_data, slot = "data")
   pathway_expr <- lapply(Pathway_names, function(pa) {
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Vdata))
 
@@ -106,9 +106,7 @@ scPagwas_perform_score <- function(Pagwas,
   scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results) * pa_exp_mat)
   scs <- rowSums(scPagwas_mat)
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
-  # m<-mean(scs,na.rm = T)
-  # d<-sd(scs,na.rm = T)
-  # scs<-(scs-m)/d
+
 
   df <- data.frame(cellid = colnames(Pagwas$Single_data), scPagwas_score = scs)
   rownames(df) <- df$cellid
@@ -132,12 +130,12 @@ scPagwas_perform_score <- function(Pagwas,
 #' @return
 
 scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 1) {
-  x_df <- as_FBM(as.matrix(Pagwas_x), type = "double")
+  x_df <- bigstatsr::as_FBM(as.matrix(Pagwas_x), type = "double")
 
-  liear_m <- big_univLinReg(
+  liear_m <- bigstatsr::big_univLinReg(
     X = x_df,
     y.train = Pagwas_y,
-    covar.train = covar_from_df(data.frame(offset(noise_per_snp))),
+    covar.train = bigstatsr::covar_from_df(data.frame(offset(noise_per_snp))),
     ncores = n.cores
   )
   # liear_m$p.value <- predict(liear_m, log10 = FALSE)

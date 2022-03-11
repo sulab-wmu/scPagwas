@@ -2,10 +2,12 @@
 #' Link_pathway_blocks_gwas
 #'
 #' @description Link pathway blocks region and gwas summary snps
-#' Takes block information, potentially independent LD pathway_blocks or gene blocks,
+#' Takes block information, potentially independent LD pathway_blocks
+#' or gene blocks,
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param chrom_ld LD data for 22 chromosome.
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param n.cores Parallel cores,default is 1. use detectCores()
+#' to check the cores in computer.
 #'
 #' @return
 #' @export
@@ -23,8 +25,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
   names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
 
-  chrom_gwas_list <- lapply( # make sure we have this key set
-    split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
+  chrom_gwas_list <- lapply( split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
       data.table::setkey(gwas, pos)
       return(gwas)
@@ -32,21 +33,20 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   )
   # prevent naming issues and indexing issues
 
-  message(paste0("* Start to link gwas and pathway block annotations for ", length(Pachrom_block_list), " pathways!"))
+  message(paste0("* Start to link gwas and pathway block annotations for ",
+                 length(Pachrom_block_list), " pathways!"))
   pb <- txtProgressBar(style = 3)
-  start_time <- Sys.time()
+
   Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pa) {
 
     # message(paste(' - starting blocks on pathway: ', pa, sep = ''))
     Pa_chrom_block <- Pachrom_block_list[[pa]]
-    # Pa_chrom_block<-Pa_chrom_block[paste('chr',as.character(1:22), sep = '')]
 
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
       chrom_block <- Pa_chrom_block[[chrom]]
-      # chr <- as.vector(chrom_block[[1]][1,]$chrom)
       ld_data <- chrom_ld[[chrom]]
 
-      setkey(ld_data, SNP_A) # just in case
+      data.table::setkey(ld_data, SNP_A) # just in case
       if (!(chrom %in% names(chrom_gwas_list))) {
         warning(paste(chrom, " for gwas is missing, could be a problem!", sep = ""))
         return(NULL)
@@ -56,9 +56,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
         return(NULL)
       }
 
-      rsids <- Pagwas$snp_gene_df[which(Pagwas$snp_gene_df$label %in% chrom_block$label), c("rsid", "label")]
+      rsids <- Pagwas$snp_gene_df[which(Pagwas$snp_gene_df$label %in%
+                                          chrom_block$label), c("rsid", "label")]
       c2 <- chrom_gwas_list[[chrom]]
-      rsids_gwas <- suppressMessages(inner_join(rsids, c2))
+      rsids_gwas <- suppressMessages(dplyr::inner_join(rsids, c2))
       if (is.null(nrow(rsids_gwas))) {
         return(NULL)
       }
@@ -69,13 +70,19 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       return(list(rsids_gwas, beta_squared, sub_ld, chrom_block))
     })
 
-    snp_data <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2), lapply(1:length(Pa_chrom_data), function(i) Pa_chrom_data[[i]][[1]]))
+    snp_data <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+                       lapply(seq_len(length(Pa_chrom_data)),
+                              function(i) Pa_chrom_data[[i]][[1]]))
     # message(paste0("snp is ",nrow(snp_data)))
-    sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2), lapply(1:length(Pa_chrom_data), function(i) Pa_chrom_data[[i]][[3]])))
+    sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+                                   lapply(seq_len(length(Pa_chrom_data)),
+                                          function(i) Pa_chrom_data[[i]][[3]])))
 
     rsid_x <- intersect(snp_data$rsid, unique(unlist(sub_ld[, 1:2])))
 
-    sub_ld <- as.data.frame(sub_ld[sub_ld$SNP_A %in% rsid_x & sub_ld$SNP_B %in% rsid_x, ])
+    sub_ld <- as.data.frame(sub_ld[sub_ld$SNP_A
+                                   %in% rsid_x & sub_ld$SNP_B
+                                   %in% rsid_x, ])
 
     # message(paste0("ld is ",nrow(sub_ld)))
     if (nrow(sub_ld) == 0) {
@@ -85,21 +92,24 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     }
 
     Pa_block_data <- list(
-      block_info = Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2), lapply(1:length(Pa_chrom_data), function(i) Pa_chrom_data[[i]][[4]])),
+      block_info = Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+                          lapply(seq_len(length(Pa_chrom_data)),
+                                 function(i) Pa_chrom_data[[i]][[4]])),
       snps = snp_data,
       ld_data = sub_ld,
       n_snps = nrow(snp_data),
       ld_matrix_squared = ld_matrix * ld_matrix,
-      y = unlist(lapply(1:length(Pa_chrom_data), function(i) Pa_chrom_data[[i]][[2]]))
+      y = unlist(lapply(seq_len(length(Pa_chrom_data)),
+                        function(i) Pa_chrom_data[[i]][[2]]))
     )
 
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pa) / length(names(Pachrom_block_list)))
 
     return(Pa_block_data)
   }, n.cores = n.cores)
-  end_time <- Sys.time()
+
   close(pb)
-  run_time <- end_time - start_time
+
 
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   Pagwas$Pathway_ld_gwas_data <- Pathway_ld_gwas_data
@@ -125,7 +135,7 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
   if (mat_dim >= 2) {
     rownames(ld_matrix) <- all_snps
     colnames(ld_matrix) <- all_snps
-    for (n in 1:nrow(ld_data)) {
+    for (n in seq_len(nrow(ld_data))) {
       n_x <- as.vector(unlist(ld_data[n, ]))
       ld_matrix[n_x[1], n_x[2]] <- as.numeric(n_x[3])
       ld_matrix[n_x[2], n_x[1]] <- as.numeric(n_x[3])

@@ -2,14 +2,13 @@
 % Please edit documentation in R/Single_data_input.R
 \name{Single_data_input}
 \alias{Single_data_input}
-\title{Single_data_input
-Input the Single data in seruat format}
+\title{Single_data_input}
 \usage{
 Single_data_input(
   Pagwas,
   Single_data,
   nfeatures = NULL,
-  FilterSingleCell = TRUE,
+  FilterSingleCell = FALSE,
   min.lib.size = 1000,
   min.reads = 10,
   min.detected = 5,
@@ -19,11 +18,14 @@ Single_data_input(
 \arguments{
 \item{Pagwas}{Pagwas format}
 
-\item{Single_data}{Input the Single data in seruat format, Idents should be the celltypes annotation.}
+\item{Single_data}{Input the Single data in seruat format, Idents should be
+the celltypes annotation.}
 
-\item{nfeatures}{The parameter for FindVariableFeatures, NULL means select all genes}
+\item{nfeatures}{The parameter for FindVariableFeatures,
+NULL means select all genes}
 
-\item{FilterSingleCell}{whther to filter the single cell data,if you filter it before,choose FALSE, otherwise set TRUE.}
+\item{FilterSingleCell}{whther to filter the single cell data,if you
+filter it before,choose FALSE, otherwise set TRUE.}
 
 \item{min.lib.size}{Threshold for single data library.}
 
@@ -37,7 +39,6 @@ Single_data_input(
 Pagwas
 }
 \description{
-Single_data_input
 Input the Single data in seruat format
 }
 \examples{
