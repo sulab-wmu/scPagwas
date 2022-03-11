@@ -16,7 +16,7 @@ scPagwas_perform_score(
 
 \item{n.cores}{cores}
 
-\item{split_n}{(integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.}
+\item{split_n}{(integr)default NULL, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.}
 }

@@ -83,7 +83,7 @@ scPagwas_main(
 
 \item{simp_results}{(logical)Whether to return a simple results.If TURE,there is only finaly result return; if FALSE, all the Intermediate Data will keep in pagwas, this option is used to save time when rerun the function.}
 
-\item{split_n}{(integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.}
+\item{split_n}{(integr)default NULL. When the number of cell is too big, there may have memory errors, set split_n=10000 or other numbers can split the cell data with giving away the advantage of time.}
 
 \item{remove_outlier}{(logical)whether to remove the outlier value for scPagwas score.}
 }
@@ -107,7 +107,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           add_eqtls="OnlyTSS",
                           block_annotation = gtf_df,
                           Single_data = scRNAexample,
-                          Pathway_list=Genes_by_pathway.kegg,
+                          Pathway_list=Genes_by_pathway_kegg,
                           chrom_ld = chrom_ld)
 #1. Both
 scPagwas_main <- function(Pagwas = NULL,
@@ -117,7 +117,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           eqtl_p=0.05,
                           block_annotation = gtf_df,
                           Single_data = scRNAexample,
-                          Pathway_list=Genes_by_pathway.kegg,
+                          Pathway_list=Genes_by_pathway_kegg,
                           chrom_ld = chrom_ld)
 
 

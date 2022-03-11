@@ -107,7 +107,7 @@ Pagwas<-Pagwas_main(Pagwas = NULL,
                     add_eqtls="OnlyTSS",
                     block_annotation = gtf_df,
                     Single_data = scRNAexample,
-                    Pathway_list=genes.by.pathway_kegg,
+                    Pathway_list=Genes_by_pathway_kegg,
                     chrom_ld = chrom_ld)
 #1. Both
 scPagwas_main <- function(Pagwas = NULL,
@@ -117,7 +117,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           eqtl_p=0.05,
                           block_annotation = gtf_df,
                           Single_data = scRNAexample,
-                          Pathway_list=Genes_by_pathway.kegg,
+                          Pathway_list=Genes_by_pathway_kegg,
                           chrom_ld = chrom_ld)
 
 }

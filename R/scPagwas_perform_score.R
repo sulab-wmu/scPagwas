@@ -3,7 +3,7 @@
 #' @description Get the scPagwas score for each cells
 #' @param Pagwas Pagwas data list
 #' @param n.cores cores
-#' @param split_n (integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.
+#' @param split_n (integr)default NULL, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.
 #' @param remove_outlier Whether to remove the outlier for scPagwas score.
 #' @return
 #' @export
@@ -40,8 +40,8 @@ scPagwas_perform_score <- function(Pagwas,
         x <- Pathway_block$x
         rownames(x) <- Pathway_block$snps$rsid
 
-
-        if (ncol(Pathway_block$x) > split_n) {
+    if(!is.null(split_n)){
+      if (ncol(Pathway_block$x) > split_n) {
           # message("There are too much cells, regression progress will split the data!")
 
           cellsN <- colnames(Pathway_block$x)
@@ -54,9 +54,13 @@ scPagwas_perform_score <- function(Pagwas,
             sclm_1 <- scParameter_regression(Pagwas_x = x[!na_elements, index], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
             return(sclm_1)
           }))
-        } else {
+      }else{
           results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
-        }
+
+          }
+      }else {
+          results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
+           }
 
         results[is.na(results)] <- 0
         setTxtProgressBar(pb, which(Pathway_names == Pathway) / length(Pathway_names))

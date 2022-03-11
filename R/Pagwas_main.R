@@ -72,7 +72,7 @@
 #'                     add_eqtls="OnlyTSS",
 #'                     block_annotation = gtf_df,
 #'                     Single_data = scRNAexample,
-#'                     Pathway_list=genes.by.pathway_kegg,
+#'                     Pathway_list=Genes_by_pathway_kegg,
 #'                     chrom_ld = chrom_ld)
 #' #1. Both
 #' scPagwas_main <- function(Pagwas = NULL,
@@ -82,7 +82,7 @@
 #'                           eqtl_p=0.05,
 #'                           block_annotation = gtf_df,
 #'                           Single_data = scRNAexample,
-#'                           Pathway_list=Genes_by_pathway.kegg,
+#'                           Pathway_list=Genes_by_pathway_kegg,
 #'                           chrom_ld = chrom_ld)
 #'
 Pagwas_main <- function(Pagwas = NULL,
@@ -284,7 +284,7 @@ Pagwas_main <- function(Pagwas = NULL,
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #' @param regression (logical)default FALSE, whither to run scPagwas_perform_regression, get the pvalue, the step is too slow.
 #' @param simp_results (logical)Whether to return a simple results.If TURE,there is only finaly result return; if FALSE, all the Intermediate Data will keep in pagwas, this option is used to save time when rerun the function.
-#' @param split_n (integr)default 1e9, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.
+#' @param split_n (integr)default NULL. When the number of cell is too big, there may have memory errors, set split_n=10000 or other numbers can split the cell data with giving away the advantage of time.
 #' @param remove_outlier (logical)whether to remove the outlier value for scPagwas score.
 #' @return
 #' @export
@@ -303,7 +303,7 @@ Pagwas_main <- function(Pagwas = NULL,
 #'                           add_eqtls="OnlyTSS",
 #'                           block_annotation = gtf_df,
 #'                           Single_data = scRNAexample,
-#'                           Pathway_list=Genes_by_pathway.kegg,
+#'                           Pathway_list=Genes_by_pathway_kegg,
 #'                           chrom_ld = chrom_ld)
 #' #1. Both
 #' scPagwas_main <- function(Pagwas = NULL,
@@ -313,7 +313,7 @@ Pagwas_main <- function(Pagwas = NULL,
 #'                           eqtl_p=0.05,
 #'                           block_annotation = gtf_df,
 #'                           Single_data = scRNAexample,
-#'                           Pathway_list=Genes_by_pathway.kegg,
+#'                           Pathway_list=Genes_by_pathway_kegg,
 #'                           chrom_ld = chrom_ld)
 #'
 #'
