@@ -14,7 +14,9 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Suggests: 
+    knitr,
     renv,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
@@ -41,3 +43,4 @@ Imports:
     IRanges,
     RMTstat,
     gridExtra
+VignetteBuilder: knitr
