@@ -60,7 +60,7 @@ Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
 
 
 #' Bootstrap_estimate_Plot
-#' This forest plot shows the correct estimate values and 95% CI for different celltyppes, using the ggplot packages
+#' @description This forest plot shows the correct estimate values and 95% CI for different celltyppes, using the ggplot packages
 #' @param Pagwas Pagwas format of result from Pagwas_main()
 #' @param figurenames The filename and address of the output plot,default is "test_forest.pdf".IF figurenames= NULL, only plot the figure and have not pdf figure.
 #' @param width figure width

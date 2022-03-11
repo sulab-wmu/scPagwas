@@ -2,8 +2,7 @@
 % Please edit documentation in R/bootstrap_result_visualize.R
 \name{Bootstrap_estimate_Plot}
 \alias{Bootstrap_estimate_Plot}
-\title{Bootstrap_estimate_Plot
-This forest plot shows the correct estimate values and 95\% CI for different celltyppes, using the ggplot packages}
+\title{Bootstrap_estimate_Plot}
 \usage{
 Bootstrap_estimate_Plot(
   Pagwas,
@@ -25,7 +24,6 @@ Bootstrap_estimate_Plot(
 A forest plot with the table of p values
 }
 \description{
-Bootstrap_estimate_Plot
 This forest plot shows the correct estimate values and 95\% CI for different celltyppes, using the ggplot packages
 }
 \examples{

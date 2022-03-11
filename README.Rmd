@@ -30,7 +30,7 @@ You can install the released version of scPagwas from [github](https://github.co
 #install.packages("scPagwas")
 
 ```
-you can also check the details in (file:///E:/RPakage/scPagwas/docs/reference/index.html) 
+you can also check the details in (./scPagwas/docs/reference/index.html) 
 
 ## Example 
 
