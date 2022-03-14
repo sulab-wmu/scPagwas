@@ -53,6 +53,14 @@ mean_expr <- function(Pagwas){
   datamat<-Seurat::GetAssayData(object =Pagwas$Single_data, slot = "data")
   merge_scexpr<-lapply(unique(Pagwas$Celltype_anno$annotation),function(x){
     an<-Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation %in% x]
+    tryCatch(
+      {
+        datamat<-as.matrix(datamat)
+      }, error = function(e) {
+        datamat<-as_matrix(datamat)
+
+      })
+
     return(apply(datamat[,an],1,mean))
   })
   rm(datamat)
