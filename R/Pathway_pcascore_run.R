@@ -121,6 +121,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
   Pagwas$pca_scCell_mat <- pca_scCell_mat
 
+  colnames(Pagwas$merge_scexpr)<-colnames(Pagwas$pca_cell_df)
   # Pagwas$Single_data <- GetAssayData(object = Pagwas$VSingle_data, slot = "data")
   # Pagwas$VSingle_data <- NULL
   return(Pagwas)

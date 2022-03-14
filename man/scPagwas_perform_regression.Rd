@@ -4,7 +4,7 @@
 \alias{scPagwas_perform_regression}
 \title{scPagwas_perform_regression}
 \usage{
-scPagwas_perform_regression(Pagwas, n.cores = n.cores)
+scPagwas_perform_regression(Pagwas, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list, default is "NULL"}

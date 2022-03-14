@@ -9,7 +9,7 @@
 #' @examples
 #' library(scPagwas)
 #' scPagwas_perform_regression(Pagwas, n.cores = n.cores)
-scPagwas_perform_regression <- function(Pagwas, n.cores = n.cores) {
+scPagwas_perform_regression <- function(Pagwas, n.cores = 1) {
   if (is.null(Pagwas$Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)

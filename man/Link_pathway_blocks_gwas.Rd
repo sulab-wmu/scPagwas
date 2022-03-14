@@ -4,7 +4,7 @@
 \alias{Link_pathway_blocks_gwas}
 \title{Link_pathway_blocks_gwas}
 \usage{
-Link_pathway_blocks_gwas(Pagwas, chrom_ld = chrom_ld, n.cores = n.cores)
+Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}

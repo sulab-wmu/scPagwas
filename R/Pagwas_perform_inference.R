@@ -13,9 +13,9 @@
 #' library(scPagwas)
 #' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
 Pagwas_perform_regression <- function(Pagwas,
-                                      iters = iters,
+                                      iters = 200,
                                       part = 0.5,
-                                      n.cores = n.cores) {
+                                      n.cores = 1) {
   if (is.null(Pagwas$Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)

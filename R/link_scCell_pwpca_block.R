@@ -39,6 +39,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = n.cores) {
 
   message("* Merging pathway score and expression information about blocks in ", length(Pagwas$Pathway_ld_gwas_data), " pathways")
   pb <- txtProgressBar(style = 3)
+
   Pathway_ld_gwas_data <- papply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
     pathway <- unique(pa_block$block_info$pathway)
 

@@ -4,7 +4,7 @@
 \alias{Pagwas_perform_regression}
 \title{Pagwas_perform_regression}
 \usage{
-Pagwas_perform_regression(Pagwas, iters = iters, part = 0.5, n.cores = n.cores)
+Pagwas_perform_regression(Pagwas, iters = 200, part = 0.5, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}

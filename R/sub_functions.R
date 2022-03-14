@@ -80,6 +80,7 @@ mean_expr <- function(Pagwas){
 #' @param marg (integer) region upstream and downstream(default=0).
 #'
 #' @return
+#' @export
 #'
 #' @examples
 #' library(scPagwas)

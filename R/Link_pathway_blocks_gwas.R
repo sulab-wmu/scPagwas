@@ -17,8 +17,8 @@
 #' data(chrom_ld)
 #' Pagwas <- Link_pathway_blocks_gwas(Pagwas = Pagwas, chrom_ld = chrom_ld)
 Link_pathway_blocks_gwas <- function(Pagwas,
-                                     chrom_ld = chrom_ld,
-                                     n.cores = n.cores) {
+                                     chrom_ld = NULL,
+                                     n.cores = 1) {
 
   # nested lists of chrom and then individual pathway_blocks
   Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
@@ -37,10 +37,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                  length(Pachrom_block_list), " pathways!"))
   pb <- txtProgressBar(style = 3)
 
-  Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pa) {
+  Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pathway) {
 
     # message(paste(' - starting blocks on pathway: ', pa, sep = ''))
-    Pa_chrom_block <- Pachrom_block_list[[pa]]
+    Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
       chrom_block <- Pa_chrom_block[[chrom]]
@@ -73,6 +73,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     snp_data <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
                        lapply(seq_len(length(Pa_chrom_data)),
                               function(i) Pa_chrom_data[[i]][[1]]))
+
     # message(paste0("snp is ",nrow(snp_data)))
     sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
                                    lapply(seq_len(length(Pa_chrom_data)),
@@ -103,7 +104,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                         function(i) Pa_chrom_data[[i]][[2]]))
     )
 
-    setTxtProgressBar(pb, which(names(Pachrom_block_list) == pa) / length(names(Pachrom_block_list)))
+    setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
     return(Pa_block_data)
   }, n.cores = n.cores)
