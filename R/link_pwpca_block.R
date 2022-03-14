@@ -11,6 +11,7 @@
 #' library(scPagwas)
 #' # Pagwas should have inhibit data
 #' Pagwas <- link_pwpca_block(Pagwas)
+
 link_pwpca_block <- function(Pagwas) {
   if (is.null(Pagwas$merge_scexpr)) {
     message("* no load merge_scexpr data in single cell data input step!")
