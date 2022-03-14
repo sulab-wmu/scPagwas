@@ -16,10 +16,11 @@ Pagwas_perform_regression <- function(Pagwas,
                                       iters = 200,
                                       part = 0.5,
                                       n.cores = 1) {
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+
+    if (is.null(Pagwas$Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
-  }
+    }
   message("** Start inference")
   # fit model
   vectorized_Pagwas_data <- xy2vector(Pagwas$Pathway_ld_gwas_data)
@@ -27,10 +28,10 @@ Pagwas_perform_regression <- function(Pagwas,
 
   # make sure there are no blank and + in colnames of pac_cell_df!
 
-  colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), " ", ".")
-  colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), "\\+", ".")
+  #colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), " ", ".")
+  #colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), "\\+", ".")
 
-  Pagwas$lm_results <- para_names_adjust(Pagwas, lm_results = Pagwas$lm_results)
+  #Pagwas$lm_results <- para_names_adjust(Pagwas, lm_results = Pagwas$lm_results)
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
     stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
   }

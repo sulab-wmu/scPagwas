@@ -58,8 +58,7 @@ library(stringr)
  Idents(scRNAexample)<-scRNAexample@meta.data$anno
  #LD data
  data(chrom_ld)
- ld<-chrom_ld
- rm(chrom_ld)
+
  #Pagwas_main is a function wrapper other process codes
  Pagwas<-Pagwas_main(Pagwas = NULL,
                      gwas_data = GWAS_summ_example,
@@ -70,26 +69,29 @@ library(stringr)
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
  
-   Pagwas_test <- GWAS_summary_input(Pagwas=NULL,
+   Pagwas <- GWAS_summary_input(Pagwas=NULL,
                                  gwas_data=GWAS_summ_example)
 
-    Pagwas_test <- Single_data_input(Pagwas=Pagwas_test,
+    Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 Single_data=scRNAexample)
 
-   Pagwas_test <- Pathway_pcascore_run(Pagwas=Pagwas_test,
+   Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
                                  Pathway_list=Genes_by_pathway_kegg
                                  )
-   Pagwas_test$block_annotation<-gtf_df
-   snp_gene_df<-Snp2Gene(snp=as.data.frame(Pagwas_test$gwas_data),refGene=gtf_df)
+   Pagwas$block_annotation<-gtf_df
+   snp_gene_df<-Snp2Gene(snp=as.data.frame(Pagwas$gwas_data),refGene=gtf_df)
    snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-   Pagwas_test$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-      Pagwas_test <- Pathway_annotation_input(Pagwas=Pagwas_test)
-  Pagwas_test <- Link_pathway_blocks_gwas(Pagwas=Pagwas_test,
-                                       chrom_ld=ld)
+   Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
+      Pagwas <- Pathway_annotation_input(Pagwas=Pagwas)
+  Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                       chrom_ld=chrom_ld)
   
-  Pagwas_test <- link_pwpca_block(Pagwas=Pagwas_test)
-  Pagwas_test <- Pagwas_perform_regression(Pagwas=Pagwas_test, iters = 100)
+  Pagwas <- link_pwpca_block(Pagwas=Pagwas)
+  Pagwas <- Pagwas_perform_regression(Pagwas=Pagwas, iters = 100)
  
+  Pagwas<- Boot_evaluate(Pagwas)
+  
+
 ``` 
 #### Visualize the celltypes results.
 
