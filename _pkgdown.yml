@@ -64,4 +64,7 @@ reference:
       - '`GWAS_summ_example`'
       - '`gtf_df`'
 
+navbar:
+  type: inverse
 
+  
