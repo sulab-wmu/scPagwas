@@ -1,3 +1,14 @@
+pandoc: 2.11.4
+pkgdown: 2.0.2
+pkgdown_sha: ~
+articles:
+  my-vignette: my-vignette.html
+last_built: 2022-03-14T05:58Z
+urls:
+  reference: https://github.com/dengchunyu/scPagwas/reference
+  article: https://github.com/dengchunyu/scPagwas/articles
+
+
 title: scPagwas
 url: https://github.com/dengchunyu/scPagwas
 template:
@@ -68,3 +79,5 @@ navbar:
   type: inverse
 
   
+
+
