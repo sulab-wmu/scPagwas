@@ -82,7 +82,13 @@ scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, parameters)
   }
 
   # only include parameter for which we have block data
-  Pathway_block_info <- as.numeric(as.matrix(pca_scCell_mat) %*% parameters[colnames(pca_scCell_mat)])
+  tryCatch(
+    {
+      Pathway_block_info <- as.numeric(as.matrix(pca_scCell_mat) %*% parameters[colnames(pca_scCell_mat)])
+    }, error = function(e) {
+      Pathway_block_info <- as.numeric(as_matrix(pca_scCell_mat) %*% parameters[colnames(pca_scCell_mat)])
+    })
+
   names(Pathway_block_info) <- rownames(pca_scCell_mat)
   return(Pathway_block_info)
 }

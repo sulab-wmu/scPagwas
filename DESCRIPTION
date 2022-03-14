@@ -22,6 +22,7 @@ Config/testthat/edition: 3
 Imports: 
     SeuratObject,
     Seurat,
+    data.table,
     ggsci,
     dplyr,
     irlba,

@@ -101,9 +101,19 @@ scPagwas_perform_score <- function(Pagwas,
 
   pathway_expr <- as.data.frame(pathway_expr)
   colnames(pathway_expr) <- Pathway_names
-  pathway_expr <- as.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-  pa_exp_mat <- Matrix::Matrix(t(as.matrix(pca_scCell_mat)) * pathway_expr)
-  scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results) * pa_exp_mat)
+
+  tryCatch(
+    {
+      pathway_expr <- as.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
+      pa_exp_mat <- Matrix::Matrix(t(as.matrix(pca_scCell_mat)) * pathway_expr)
+      scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results) * pa_exp_mat)
+
+      }, error = function(e) {
+        pathway_expr <- as_matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
+        pa_exp_mat <- Matrix::Matrix(t(as_matrix(pca_scCell_mat)) * pathway_expr)
+        scPagwas_mat <- Matrix::Matrix(as_matrix(Pathway_sclm_results) * pa_exp_mat)
+      })
+
   scs <- rowSums(scPagwas_mat)
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
 
@@ -114,7 +124,15 @@ scPagwas_perform_score <- function(Pagwas,
     Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
   names(Pagwas$scPagwas_score)<-df$cellid
-  Pagwas$pca_scCell_mat <- Matrix::Matrix(as.matrix(pca_scCell_mat))
+
+  tryCatch(
+    {
+      Pagwas$pca_scCell_mat <- Matrix::Matrix(as.matrix(pca_scCell_mat))
+
+    }, error = function(e) {
+      Pagwas$pca_scCell_mat <- Matrix::Matrix(as_matrix(pca_scCell_mat))
+    })
+
   return(Pagwas)
 }
 

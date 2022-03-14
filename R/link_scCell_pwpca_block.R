@@ -42,7 +42,13 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = n.cores) {
   Pathway_ld_gwas_data <- papply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
     pathway <- unique(pa_block$block_info$pathway)
 
-    x <- as.matrix(pca_scCell_mat[pathway, ])
+    tryCatch(
+      {
+        x <- as.matrix(pca_scCell_mat[pathway, ])
+      }, error = function(e) {
+        x <- as_matrix(pca_scCell_mat[pathway, ])
+      })
+
     if (nrow(pa_block$snps) == 0) {
       pa_block$include_in_inference <- F
       pa_block$x <- NULL # to make sure we totally replace previous stuffs
@@ -54,7 +60,13 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = n.cores) {
     if (length(mg) < 2) {
       return(NULL)
     }
-    x_FBM <- bigstatsr::as_FBM(as.matrix(scexpr[mg, ]))
+
+    tryCatch(
+      {
+        x_FBM <- bigstatsr::as_FBM(as.matrix(scexpr[mg, ]))
+      }, error = function(e) {
+        x_FBM <- bigstatsr::as_FBM(as_matrix(scexpr[mg, ]))
+      })
 
     if (length(mg) > 1) {
       colnorm_sub <- function(X, ind) {
