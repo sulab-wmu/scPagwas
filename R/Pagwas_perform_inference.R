@@ -46,7 +46,8 @@ Pagwas_perform_regression <- function(Pagwas,
   # Bootstrap error and 95% confidence interval estimates
   if (iters > 0) {
     Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, n.cores = n.cores, part = part)
-  }
+    Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
+    }
   return(Pagwas)
 }
 

@@ -21,8 +21,9 @@
 #'                     title = "Test scPagwas",
 #'                     figurenames = "test_barplot.pdf",
 #'                     width = 5, height = 7)
-Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
-                                figurenames = "test_barplot.pdf",
+Bootstrap_P_Barplot <- function(Pagwas,
+                                title = "Test scPagwas",
+                                figurenames = NULL,
                                 width = 5, height = 7) {
   cell_severe <- Pagwas$bootstrap_results[-1, ]
   cell_severe$logp <- -log2(cell_severe$bp_value)
@@ -85,7 +86,7 @@ Bootstrap_P_Barplot <- function(Pagwas, title = "Test scPagwas",
 #'                         figurenames = "test_forest.pdf",
 #'                         width = 9, height = 7)
 Bootstrap_estimate_Plot <- function(Pagwas,
-                                    figurenames = "test_forest.pdf",
+                                    figurenames = NULL,
                                     width = 9,
                                     height = 7) {
   bootstrap_results <- Pagwas$bootstrap_results[-1, c("bp_value",
