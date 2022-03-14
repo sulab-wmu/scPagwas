@@ -42,9 +42,9 @@ Single_data_input <- function(Pagwas,
                               annotation = as.vector(SeuratObject::Idents(Single_data)))
 
   #
-  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "-", ".")
-  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, " ", ".")
-  Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "\\+", ".")
+  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "-", ".")
+  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, " ", ".")
+  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "\\+", ".")
 
   rownames(Celltype_anno) <- Celltype_anno$cellnames
   Pagwas$Celltype_anno <- Celltype_anno
