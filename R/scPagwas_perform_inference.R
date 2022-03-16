@@ -17,7 +17,7 @@ scPagwas_perform_regression <- function(Pagwas, n.cores = 1) {
   message("Start inference")
   # fit model
   vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
-  rm(Pathway_ld_gwas_data)
+  #rm(Pathway_ld_gwas_data)
   sclm_results <- scParameter_regression(Pagwas_x=vectorized_Pagwas_data[[2]],
                                                 Pagwas_y=vectorized_Pagwas_data[[1]],
                                                 noise_per_snp=vectorized_Pagwas_data[[3]],
