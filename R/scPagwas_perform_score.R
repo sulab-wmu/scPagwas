@@ -12,23 +12,23 @@
 #' library(scPagwas)
 #' scPagwas_perform_score(Pagwas)
 scPagwas_perform_score <- function(Pagwas,
-                                   n.cores = n.cores,
+                                   n.cores = 1,
                                    split_n = NULL,
                                    remove_outlier=TRUE) {
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  if (is.null(Pathway_ld_gwas_data)) {
     stop("data has not been precomputed, returning without results")
     # return(Pagwas)
   }
 
   # fit model
 
-  Pathway_names <- names(Pagwas$Pathway_ld_gwas_data)
+  Pathway_names <- names(Pathway_ld_gwas_data)
   message("Run regression for ", length(Pathway_names), " pathways")
   pb <- txtProgressBar(style = 3)
 
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
 
-    Pathway_block <- Pagwas$Pathway_ld_gwas_data[[Pathway]]
+    Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
 
     noise_per_snp <- Pathway_block$snps$se**2
 
@@ -81,11 +81,16 @@ scPagwas_perform_score <- function(Pagwas,
     x[is.na(x)] <- 0
     return(x)
   }))
-  Pagwas$Pathway_sclm_results <- Pathway_sclm_results
 
-  pca_scCell_mat <- Pagwas$pca_scCell_mat[Pathway_names, ]
+  SOAR::Store(Pathway_ld_gwas_data)
+  #Pagwas$Pathway_sclm_results <- Pathway_sclm_results
 
-  Vdata <- SeuratObject::GetAssayData(object = Pagwas$Single_data, slot = "data")
+
+  pca_scCell_mat <- pca_scCell_mat[Pathway_names, ]
+
+  Vdata <- SeuratObject::GetAssayData(object = Single_data, slot = "data")
+  SOAR::Store(Single_data)
+
   pathway_expr <- lapply(Pathway_names, function(pa) {
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Vdata))
 
@@ -98,40 +103,42 @@ scPagwas_perform_score <- function(Pagwas,
       return(b)
     }
   })
-
+  rm(Vdata)
   pathway_expr <- as.data.frame(pathway_expr)
   colnames(pathway_expr) <- Pathway_names
 
   tryCatch(
     {
       pathway_expr <- as.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-      pa_exp_mat <- Matrix::Matrix(t(as.matrix(pca_scCell_mat)) * pathway_expr)
-      scPagwas_mat <- Matrix::Matrix(as.matrix(Pathway_sclm_results) * pa_exp_mat)
+      pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
+      scPagwas_mat <- as.matrix(Pathway_sclm_results) * pa_exp_mat
 
       }, error = function(e) {
         pathway_expr <- as_matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-        pa_exp_mat <- Matrix::Matrix(t(as_matrix(pca_scCell_mat)) * pathway_expr)
-        scPagwas_mat <- Matrix::Matrix(as_matrix(Pathway_sclm_results) * pa_exp_mat)
+        pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
+        scPagwas_mat <- as_matrix(Pathway_sclm_results) * pa_exp_mat
       })
 
   scs <- rowSums(scPagwas_mat)
+
+
+  rm(scPagwas_mat)
+  rm(pa_exp_mat)
+  rm(pathway_expr)
+
+  SOAR::Store(Pathway_sclm_results)
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
 
-
-  df <- data.frame(cellid = colnames(Pagwas$Single_data), scPagwas_score = scs)
+  df <- data.frame(cellid = colnames(pca_scCell_mat), scPagwas_score = scs)
+  rm(scs)
   rownames(df) <- df$cellid
   if (remove_outlier) {
     Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
+
   names(Pagwas$scPagwas_score)<-df$cellid
-
-  tryCatch(
-    {
-      Pagwas$pca_scCell_mat <- Matrix::Matrix(as.matrix(pca_scCell_mat))
-
-    }, error = function(e) {
-      Pagwas$pca_scCell_mat <- Matrix::Matrix(as_matrix(pca_scCell_mat))
-    })
+  rm(df)
+  SOAR::Store(pca_scCell_mat)
 
   return(Pagwas)
 }
@@ -156,9 +163,7 @@ scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 
     covar.train = bigstatsr::covar_from_df(data.frame(offset(noise_per_snp))),
     ncores = n.cores
   )
-  # liear_m$p.value <- predict(liear_m, log10 = FALSE)
-  # lm_results$parameters <- liear_m$estim
-  # lm_results$model <- liear_m
+
   return(liear_m$estim)
 }
 

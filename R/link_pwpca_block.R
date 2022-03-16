@@ -13,34 +13,36 @@
 #' Pagwas <- link_pwpca_block(Pagwas)
 
 link_pwpca_block <- function(Pagwas) {
-  if (is.null(Pagwas$merge_scexpr)) {
-    message("* no load merge_scexpr data in single cell data input step!")
-    return(Pagwas)
-  }
-  merge_scexpr <- Pagwas$merge_scexpr
+ # if (is.null(Pagwas$merge_scexpr)) {
+  #  message("* no load merge_scexpr data in single cell data input step!")
+  #  return(Pagwas)
+  #}
+  #merge_scexpr <- Pagwas$merge_scexpr
 
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
-    message("* no loaded Pathway_ld_gwas data")
-    return(Pagwas)
-  }
+ #if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  #  message("* no loaded Pathway_ld_gwas data")
+  #  return(Pagwas)
+  #}
 
-  pca_cell_df <- Pagwas$pca_cell_df
+  #pca_cell_df <- Pagwas$pca_cell_df
   cell_names <- intersect(colnames(merge_scexpr), colnames(pca_cell_df))
 
   merge_scexpr <- merge_scexpr[, cell_names]
-  pca_cell_df <- pca_cell_df[, cell_names]
-  Pagwas$pca_cell_df <- pca_cell_df
-
+  pca_cell_df <- as.matrix(pca_cell_df[, cell_names])
+  #Pagwas$pca_cell_df <- pca_cell_df
 
   message("*  merging functional information about blocks")
   pb <- txtProgressBar(style = 3)
 
-  Pathway_ld_gwas_data <- lapply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
+  Pathway_ld_gwas_data <- lapply(Pathway_ld_gwas_data, function(pa_block) {
 
     pathway <- unique(pa_block$block_info$pathway)
 
-
     x <- pca_cell_df[pathway, ]
+    if(length(pathway)==1){
+    x <- matrix(x, nrow = 1)
+    rownames(x)<-pathway
+    }
 
     if (nrow(pa_block$snps) == 0) {
       pa_block$include_in_inference <- F
@@ -54,44 +56,53 @@ link_pwpca_block <- function(Pagwas) {
     x2 <- merge_scexpr[mg, ]
 
     if (length(mg) > 1) {
-      x2 <- as.data.frame(apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x))))
+      x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
 
     }
 
     if (pa_block$n_snps > 1) {
-      x2 <- Matrix::Matrix(as.matrix(x2[pa_block$snps$label, ]))
+      x2 <- x2[pa_block$snps$label, ]
       pa_block$n_snps <- nrow(pa_block$snps)
 
-      x <- Matrix::Matrix(as.matrix(x[rep(1, pa_block$n_snps), ], drop = FALSE))
+      x <-x[rep(1, pa_block$n_snps), ]
       rownames(x) <- pa_block$snps$rsid
 
-      snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- Pagwas$snp_gene_df$rsid
+      #snp_gene_df <- Pagwas$snp_gene_df
+      rownames(snp_gene_df) <- snp_gene_df$rsid
       x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-      x3 <- Matrix::Matrix(x2 * x)
+      x3 <- x2 * x
     } else {
+
       x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
       rownames(x2) <- pa_block$snps$label
       pa_block$n_snps <- nrow(pa_block$snps)
-      x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
+
       rownames(x) <- pa_block$snps$rsid
-      snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- Pagwas$snp_gene_df$rsid
+      #snp_gene_df <- Pagwas$snp_gene_df
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+
       x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
       x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
     }
+    rm(x)
+    rm(x2)
 
-    rownames(x3) <- pa_block$snps$rsid
-    pa_block$x <- as.matrix(Matrix::crossprod(t(pa_block$ld_matrix_squared), x3))
+    pa_block$x <-Matrix::crossprod(t(pa_block$ld_matrix_squared), x3)
+    rownames(pa_block$x) <- pa_block$snps$rsid
+    colnames(pa_block$x) <- colnames(merge_scexpr)
+    rm(x3)
     pa_block$include_in_inference <- T
 
-    setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
+    setTxtProgressBar(pb, which(names(Pathway_ld_gwas_data) == pathway) / length(Pathway_ld_gwas_data))
 
     return(pa_block)
   })
   close(pb)
-  Pagwas$Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-
+  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
+  SOAR::Store(Pathway_ld_gwas_data)
+  SOAR::Store(merge_scexpr)
+  SOAR::Store(pca_cell_df)
+  SOAR::Store(snp_gene_df)
   return(Pagwas)
 }
 

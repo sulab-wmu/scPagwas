@@ -70,11 +70,12 @@ GWAS_summary_input <- function(Pagwas,
   }
 
   if (MHC_filter) {
-    gwas_data_6 <- gwas_data[gwas_data$chrom %in% "chr6", ]
-    gwas_data_6 <- gwas_data_6[!(gwas_data_6$pos > 25000000 &
-                                   gwas_data_6$pos < 34000000), ]
+    gwas_data_6 <- gwas_data %>% dplyr::filter(chrom %in% "chr6") %>%
+      dplyr::filter(pos > 25000000 & pos < 34000000)
+
     gwas_data <- gwas_data[!(gwas_data$chrom %in% "chr6"), ]
     gwas_data <- rbind(gwas_data, gwas_data_6)
+    rm(gwas_data_6)
   }
 
   if (gwas_z_filter > 0) {
@@ -85,7 +86,7 @@ GWAS_summary_input <- function(Pagwas,
       dplyr::filter(abs_z < gwas_z_filter)
   }
 
-
-  Pagwas$gwas_data <- gwas_data
+  #Pagwas$gwas_data <- gwas_data
+  SOAR::Store(gwas_data)
   return(Pagwas)
 }

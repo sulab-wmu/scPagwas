@@ -41,14 +41,9 @@ Single_data_input <- function(Pagwas,
   Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
                               annotation = as.vector(SeuratObject::Idents(Single_data)))
 
-  #
-  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "-", ".")
-  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, " ", ".")
-  #Celltype_anno$annotation <- stringr::str_replace_all(Celltype_anno$annotation, "\\+", ".")
-
   rownames(Celltype_anno) <- Celltype_anno$cellnames
-  Pagwas$Celltype_anno <- Celltype_anno
-  # VSingle_data <- Single_data
+  #Pagwas$Celltype_anno <- Celltype_anno
+
   if (!is.null(nfeatures)) {
     if (nfeatures < nrow(Single_data)) {
       Single_data <- Seurat::FindVariableFeatures(Single_data,
@@ -91,14 +86,17 @@ Single_data_input <- function(Pagwas,
   Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
 
   count <- count[, Celltype_anno$annotation %in% Afterre_cell_types]
-  # Single_data <- GetAssayData(object =Single_data, slot = "data")
-  Pagwas$Celltype_anno <- Celltype_anno
-  Pagwas$Single_data <- Single_data[, colnames(count)]
+
+  #Pagwas$Celltype_anno <- Celltype_anno
+  Single_data <- Single_data[, colnames(count)]
+  rm(count)
   }
 
-  Pagwas$Single_data <- Single_data
-  Pagwas$merge_scexpr <- mean_expr(Pagwas)
+  merge_scexpr <- Seurat::AverageExpression(Single_data)
+  merge_scexpr<-merge_scexpr[["RNA"]]
 
-
+  #merge_scexpr <- mean_expr(Single_data)
+  SOAR::Store(merge_scexpr)
+  SOAR::Store(Single_data)
   return(Pagwas)
 }

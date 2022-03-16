@@ -27,6 +27,7 @@ Imports:
     dplyr,
     irlba,
     Matrix,
+    SOAR,
     stringr,
     glmnet,
     GenomicRanges,

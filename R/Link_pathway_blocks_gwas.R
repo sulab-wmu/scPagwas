@@ -21,11 +21,11 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                      n.cores = 1) {
 
   # nested lists of chrom and then individual pathway_blocks
-  Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
+  Pachrom_block_list <- lapply(pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
-  names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
+  names(Pachrom_block_list) <- names(pathway_blocks)
 
-  chrom_gwas_list <- lapply( split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
+  chrom_gwas_list <- lapply( split(gwas_data, f = gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
       data.table::setkey(gwas, pos)
       return(gwas)
@@ -56,8 +56,9 @@ Link_pathway_blocks_gwas <- function(Pagwas,
         return(NULL)
       }
 
-      rsids <- Pagwas$snp_gene_df[which(Pagwas$snp_gene_df$label %in%
+      rsids <- snp_gene_df[which(snp_gene_df$label %in%
                                           chrom_block$label), c("rsid", "label")]
+
       c2 <- chrom_gwas_list[[chrom]]
       rsids_gwas <- suppressMessages(dplyr::inner_join(rsids, c2))
       if (is.null(nrow(rsids_gwas))) {
@@ -113,8 +114,13 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
 
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
-  Pagwas$Pathway_ld_gwas_data <- Pathway_ld_gwas_data
+  rm(Pachrom_block_list)
+  rm(chrom_gwas_list)
 
+  SOAR::Store(Pathway_ld_gwas_data)
+  SOAR::Store(pathway_blocks)
+  SOAR::Store(gwas_data)
+  SOAR::Store(snp_gene_df)
   return(Pagwas)
 }
 
@@ -142,6 +148,6 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
       ld_matrix[n_x[2], n_x[1]] <- as.numeric(n_x[3])
     }
   }
-
+  #storage.mode(ld_matrix)<-"integer"
   return(ld_matrix)
 }

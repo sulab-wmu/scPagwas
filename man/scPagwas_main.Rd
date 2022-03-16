@@ -2,7 +2,7 @@
 % Please edit documentation in R/Pagwas_main.R
 \name{scPagwas_main}
 \alias{scPagwas_main}
-\title{scPagwas_main}
+\title{Main wrapper functions for scPagwas}
 \usage{
 scPagwas_main(
   Pagwas = NULL,
@@ -11,7 +11,6 @@ scPagwas_main(
   eqtls_files = NULL,
   eqtls_cols = c("rs_id_dbSNP151_GRCh38p7", "variant_pos", "tss_distance", "gene_chr",
     "gene_start", "gene_end", "gene_name", "pval_beta"),
-  eqtl_p = 0.05,
   block_annotation = NULL,
   Single_data = NULL,
   FilterSingleCell = FALSE,
@@ -26,13 +25,9 @@ scPagwas_main(
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
-  perform_cv = F,
-  n_folds = 10,
   n.cores = 1,
-  regression = FALSE,
-  simp_results = FALSE,
-  split_n = 1e+09,
-  remove_outlier = TRUE
+  scPagwasSession = "scPagwasSession",
+  ...
 )
 }
 \arguments{
@@ -45,8 +40,6 @@ scPagwas_main(
 \item{eqtls_files}{(character)eqtls files names,frome GTEx.}
 
 \item{eqtls_cols}{(character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")}
-
-\item{eqtl_p}{(numeric)default is 0.05,}
 
 \item{block_annotation}{(data.frame) Start and end points for block traits, usually genes.}
 
@@ -65,37 +58,32 @@ filter it before,choose FALSE, otherwise set TRUE.}
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
 
-\item{min.reads}{(integr),Only use is when FilterSingleCell is TRUE. Threshold for total reads fo each cells. default is 5}
+\item{min.reads}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5}
 
-\item{min.detected}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1}
+\item{min.detected}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1}
 
-\item{min.lib.size}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200}
+\item{min.lib.size}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200}
 
-\item{min_clustercells}{(integr) Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10}
+\item{min_clustercells}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10}
 
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
-\item{perform_cv}{(logical)whether to Perform regularization inference.}
-
-\item{n_folds}{(integr)folds for regularized inference,default is 10.}
-
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 
-\item{regression}{(logical)default FALSE, whither to run scPagwas_perform_regression, get the pvalue, the step is too slow.}
+\item{scPagwasSession}{(character)The file names for scPagwas Session.}
 
-\item{simp_results}{(logical)Whether to return a simple results.If TURE,there is only finaly result return; if FALSE, all the Intermediate Data will keep in pagwas, this option is used to save time when rerun the function.}
-
-\item{split_n}{(integr)default NULL. When the number of cell is too big, there may have memory errors, set split_n=10000 or other numbers can split the cell data with giving away the advantage of time.}
-
-\item{remove_outlier}{(logical)whether to remove the outlier value for scPagwas score.}
+\item{...}{}
 }
 \value{
 
 }
 \description{
-Main scPagwas wrapper function for single cell data in order.
+Main Pagwas wrapper re-progress function.
+}
+\details{
+The entry point for Pagwas analysis.
 }
 \examples{
 library(scPagwas)
@@ -103,26 +91,15 @@ data(Genes_by_pathway_kegg)
 data(GWAS_summ_example)
 data(gtf_df)
 data(scRNAexample)
-data(eqtls_files)
+#data(eqtls_files)
 data(chrom_ld)
 #1. OnlyTSS
-scPagwas_main <- function(Pagwas = NULL,
-                          gwas_data = GWAS_summ_example,
-                          add_eqtls="OnlyTSS",
-                          block_annotation = gtf_df,
-                          Single_data = scRNAexample,
-                          Pathway_list=Genes_by_pathway_kegg,
-                          chrom_ld = chrom_ld)
-#1. Both
-scPagwas_main <- function(Pagwas = NULL,
-                          gwas_data = GWAS_summ_example,
-                          add_eqtls="Both",
-                          eqtls_files=eqtls_files,
-                          eqtl_p=0.05,
-                          block_annotation = gtf_df,
-                          Single_data = scRNAexample,
-                          Pathway_list=Genes_by_pathway_kegg,
-                          chrom_ld = chrom_ld)
-
+Pagwas<-scPagwas_main(Pagwas = NULL,
+                    gwas_data = GWAS_summ_example,
+                    add_eqtls="OnlyTSS",
+                    block_annotation = gtf_df,
+                    Single_data = scRNAexample,
+                    Pathway_list=Genes_by_pathway_kegg,
+                    chrom_ld = chrom_ld)
 
 }

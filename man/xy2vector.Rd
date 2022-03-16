@@ -4,7 +4,7 @@
 \alias{xy2vector}
 \title{xy2vector}
 \usage{
-xy2vector(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data)
+xy2vector(Pathway_ld_gwas_data = NULL)
 }
 \arguments{
 \item{Pathway_ld_gwas_data}{the list of block information from Pagwas object}

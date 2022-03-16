@@ -8,6 +8,7 @@
 #' @param eqtl_p pvalue threshold for eqtls data.
 #' @param eqtls_cols c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","slope")
 #' @param marg gene-TSS-window size
+#' @param block_annotation gene annotation
 #'
 #' @return
 #' @export
@@ -17,7 +18,8 @@
 #' data(eqtls_files)
 #'
 #' Pagwas <- Tissue_eqtls_Input(Pagwas = Pagwas, add_eqtls = "OnlyEqtls", eqtls_files = eqtls_files)
-Tissue_eqtls_Input <- function(Pagwas = Pagwas,
+Tissue_eqtls_Input <- function(Pagwas = NULL,
+                               block_annotation=NULL,
                                add_eqtls = "OnlyEqtls",
                                eqtls_files = NULL,
                                eqtl_p = 0.05,
@@ -39,12 +41,13 @@ Tissue_eqtls_Input <- function(Pagwas = Pagwas,
 
   if ("pval_true_df" %in% colnames(eqtls_sig)) {
     eqtls_sig <- eqtls_sig[eqtls_sig$pval_true_df < eqtl_p, eqtls_cols]
+
   }
 
   colnames(eqtls_sig) <- c("rsid", "pos", "Disstance", "gene_chr", "gene_start", "geng_end", "gene_name", "slope")
 
   eqtls_sig <- unique(eqtls_sig)
-  inter_snps <- unique(intersect(Pagwas$gwas_data$rsid, eqtls_sig$rsid))
+  inter_snps <- unique(intersect(gwas_data$rsid, eqtls_sig$rsid))
 
   message("There are ", length(inter_snps), " snps for significant eqtls!")
 
@@ -53,7 +56,7 @@ Tissue_eqtls_Input <- function(Pagwas = Pagwas,
   }
   eqtls_sig <- eqtls_sig[eqtls_sig$rsid %in% inter_snps, ]
 
-  a2 <- Pagwas$gwas_data[!(Pagwas$gwas_data$rsid %in% inter_snps), ]
+  a2 <- gwas_data[!(gwas_data$rsid %in% inter_snps), ]
 
   # The 1st condition
   snp_gene_df1 <- unique(eqtls_sig[, c("rsid", "gene_name", "pos", "Disstance", "slope")])
@@ -61,16 +64,20 @@ Tissue_eqtls_Input <- function(Pagwas = Pagwas,
   snp_gene_df1 <- snp_gene_df1[!duplicated(snp_gene_df1$rsid), ]
 
   if (add_eqtls == "OnlyEqtls") {
-    Pagwas$snp_gene_df <- snp_gene_df1
-    Pagwas$gwas_data <- Pagwas$gwas_data[Pagwas$gwas_data$rsid %in% inter_snps, ]
+    snp_gene_df <- snp_gene_df1
+    gwas_data <- gwas_data[gwas_data$rsid %in% inter_snps, ]
   } else if (add_eqtls == "Both") {
 
     # The 2nd condition
-    snp_gene_df2 <- Snp2Gene(snp = a2, refGene = Pagwas$block_annotation, marg = marg)
+    snp_gene_df2 <- Snp2Gene(snp = a2, refGene = block_annotation, marg = marg)
     snp_gene_df2 <- snp_gene_df2[snp_gene_df2$Disstance == "0", ]
     snp_gene_df2$slope <- median(snp_gene_df1$slope)
-    Pagwas$snp_gene_df <- rbind(snp_gene_df1, snp_gene_df2)
-  }
+    snp_gene_df <- rbind(snp_gene_df1, snp_gene_df2)
 
+    rm(snp_gene_df1,snp_gene_df2)
+  }
+  SOAR::Store(gwas_data)
+  SOAR::Store(snp_gene_df)
+  SOAR::Store(block_annotation)
   return(Pagwas)
 }

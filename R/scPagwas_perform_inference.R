@@ -10,23 +10,32 @@
 #' library(scPagwas)
 #' scPagwas_perform_regression(Pagwas, n.cores = n.cores)
 scPagwas_perform_regression <- function(Pagwas, n.cores = 1) {
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  if (is.null(Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
   }
   message("Start inference")
   # fit model
-  vectorized_Pagwas_data <- xy2vector(Pagwas$Pathway_ld_gwas_data)
-  Pagwas$sclm_results <- scParameter_regression(vectorized_Pagwas_data)
+  vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
+  SOAR::Store(Pathway_ld_gwas_data)
+  sclm_results <- scParameter_regression(Pagwas_x=vectorized_Pagwas_data[[2]],
+                                                Pagwas_y=vectorized_Pagwas_data[[1]],
+                                                noise_per_snp=vectorized_Pagwas_data[[3]],
+                                                n.cores = 1)
 
-  Pagwas$sclm_results$model$cellnames <- rownames(Pagwas$sclm_results$model$cellnames)
-  Pagwas$sclm_results <- data.table::as.data.table(Pagwas$sclm_results$model)
+  sclm_results[is.na(sclm_results)] <- 0
+  names(sclm_results)<-colnames(vectorized_Pagwas_data[[2]])
+  rm(vectorized_Pagwas_data)
+  Pagwas$sclm_results <- sclm_results
+  rm(sclm_results)
 
   Pagwas$scPathway_heritability_contributions <-
     scGet_Pathway_heritability_contributions(
-      Pagwas$pca_scCell_mat,
+      pca_scCell_mat,
       Pagwas$sclm_results
     )
+
+  SOAR::Store(pca_scCell_mat)
 
   return(Pagwas)
 }
@@ -45,19 +54,21 @@ scBoot_evaluate <- function(Pagwas, bootstrap_iters = bootstrap_iters, n.cores =
 
   scBoot_evaluate <- papply(1:bootstrap_iters, function(i) {
 
-    part_vector <- xy2vector(Pagwas$Pathway_ld_gwas_data[
-      sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)),
-             floor(length(Pagwas$Pathway_ld_gwas_data) * 0.25))
+    part_vector <- xy2vector(Pathway_ld_gwas_data[
+      sample(seq_len(length(Pathway_ld_gwas_data)),
+             floor(length(Pathway_ld_gwas_data) * 0.25))
     ])
     boot_results <- scParameter_regression(part_vector)
 
     return(boot_results$parameters)
   }, n.cores = n.cores)
 
+  SOAR::Store(Pathway_ld_gwas_data)
+
   df <- as.data.frame(sapply(scBoot_evaluate, function(boot) {
     boot
   }))
-
+  rm(scBoot_evaluate)
   Pagwas$scbootstrap_results <- Get_bootresults_df(
     value_collection = df,
     annotations = names(Pagwas$sclm_results$parameters),
@@ -82,13 +93,10 @@ scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, parameters)
   }
 
   # only include parameter for which we have block data
-  tryCatch(
-    {
-      Pathway_block_info <- as.numeric(as.matrix(pca_scCell_mat) %*% parameters[colnames(pca_scCell_mat)])
-    }, error = function(e) {
-      Pathway_block_info <- as.numeric(as_matrix(pca_scCell_mat) %*% parameters[colnames(pca_scCell_mat)])
-    })
 
+  Pathway_block_info <- as.numeric(pca_scCell_mat %*% parameters[colnames(pca_scCell_mat)])
   names(Pathway_block_info) <- rownames(pca_scCell_mat)
+  SOAR::Store(pca_scCell_mat)
+
   return(Pathway_block_info)
 }

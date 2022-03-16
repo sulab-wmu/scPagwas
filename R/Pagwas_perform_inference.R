@@ -17,21 +17,18 @@ Pagwas_perform_regression <- function(Pagwas,
                                       part = 0.5,
                                       n.cores = 1) {
 
-    if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  if (is.null(Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
     }
   message("** Start inference")
   # fit model
-  vectorized_Pagwas_data <- xy2vector(Pagwas$Pathway_ld_gwas_data)
+  vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
+
   Pagwas$lm_results <- Parameter_regression(vectorized_Pagwas_data)
 
   # make sure there are no blank and + in colnames of pac_cell_df!
 
-  #colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), " ", ".")
-  #colnames(Pagwas$pca_cell_df) <- stringr::str_replace_all(colnames(Pagwas$pca_cell_df), "\\+", ".")
-
-  #Pagwas$lm_results <- para_names_adjust(Pagwas, lm_results = Pagwas$lm_results)
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
     stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
   }
@@ -39,15 +36,17 @@ Pagwas_perform_regression <- function(Pagwas,
   # add on heritability values
   Pagwas$Pathway_block_heritability <-
     Get_Pathway_heritability_contributions(
-      Pagwas$pca_cell_df,
+      pca_cell_df,
       Pagwas$lm_results$parameters
     )
 
   # Bootstrap error and 95% confidence interval estimates
   if (iters > 0) {
     Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, n.cores = n.cores, part = part)
-    Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
-    }
+    Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(pca_cell_df))
+  }
+  SOAR::Store(pca_cell_df)
+  SOAR::Store(Pathway_ld_gwas_data)
   return(Pagwas)
 }
 
@@ -97,8 +96,8 @@ Boot_evaluate <- function(Pagwas,
     papply(1:bootstrap_iters, function(i) {
 
       boot_results <- Parameter_regression(
-        xy2vector(Pagwas$Pathway_ld_gwas_data[
-          sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
+        xy2vector(Pathway_ld_gwas_data[
+          sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
         ])
       )
       boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
@@ -109,7 +108,7 @@ Boot_evaluate <- function(Pagwas,
         list(
           boot_parameters = boot_results$parameters,
           block_heritability = Get_Pathway_heritability_contributions(
-            Pagwas$pca_cell_df, boot_results$parameters
+            pca_cell_df, boot_results$parameters
           )
         )
       )
@@ -135,7 +134,7 @@ Boot_evaluate <- function(Pagwas,
 #' @return
 
 para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
-  pca_cell_df <- Pagwas$pca_cell_df
+  #pca_cell_df <- Pagwas$pca_cell_df
   if (sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)) {
     # message("There is blank or '+' within cell names!")
     names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), " ", ".")
@@ -159,7 +158,7 @@ para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
 #' @return
 #'
 
-xy2vector <- function(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data) {
+xy2vector <- function(Pathway_ld_gwas_data = NULL) {
   # use only blocks flagged for inference inclusion
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(Pathway_ld_gwas_data, function(block) {
     block$include_in_inference
@@ -209,6 +208,8 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
   # only include parameter for which we have block data
   Pathway_block_info <- as.numeric(as.matrix(pca_cell_df) %*% parameters[colnames(pca_cell_df)])
   names(Pathway_block_info) <- rownames(pca_cell_df)
+
+  SOAR::Store(pca_cell_df)
   return(Pathway_block_info)
 }
 
@@ -267,15 +268,16 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
   message("performing cross validation")
   Pagwas$cv_regularized_lm_results <- cv_regularized_parameter_estimator(
-    xy2vector(Pagwas$Pathway_ld_gwas_data),
+    xy2vector(Pathway_ld_gwas_data),
     n_folds = n_folds
   )
 
   # add on block values
   Pagwas$regularized_Pathway_heritability_contributions <- Get_Pathway_heritability_contributions(
-    Pagwas$pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
+    pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
   )
-
+  SOAR::Store(pca_cell_df)
+  SOAR::Store(Pathway_ld_gwas_data)
   return(Pagwas)
 }
 

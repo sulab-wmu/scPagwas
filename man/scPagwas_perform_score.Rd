@@ -6,7 +6,7 @@
 \usage{
 scPagwas_perform_score(
   Pagwas,
-  n.cores = n.cores,
+  n.cores = 1,
   split_n = NULL,
   remove_outlier = TRUE
 )

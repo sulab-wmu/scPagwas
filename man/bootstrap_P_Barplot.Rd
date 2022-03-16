@@ -7,7 +7,7 @@
 Bootstrap_P_Barplot(
   Pagwas,
   title = "Test scPagwas",
-  figurenames = "test_barplot.pdf",
+  figurenames = NULL,
   width = 5,
   height = 7
 )

@@ -12,10 +12,9 @@
 #' data(Genes_by_pathway.kegg)
 #' # the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
 #' Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
-Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
-  message("adding block annotations")
-
-  block_annotation <- Pagwas$block_annotation
+Pathway_annotation_input <- function(Pagwas,
+                                     n.cores = 1) {
+  #message("adding block annotations")
 
   if (class(Pagwas$Pathway_list) != "list") {
     stop("require list of Pathway_list")
@@ -33,7 +32,7 @@ Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
     block_annotation <- block_annotation[!duplicated(block_annotation$label), ]
   }
 
-  proper.gene.names <- intersect(Pagwas$VariableFeatures, Pagwas$snp_gene_df$label)
+  proper.gene.names <- intersect(Pagwas$VariableFeatures,snp_gene_df$label)
 
   if (length(intersect(unlist(Pagwas$Pathway_list), proper.gene.names)) < 1) {
     stop("no match for Pathway gene and VariableFeatures")
@@ -42,7 +41,7 @@ Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
   # sort and add a random partition label for bootstrap
   Pathway_list <- lapply(Pagwas$Pathway_list, function(Pa) intersect(Pa, proper.gene.names))
 
-  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(Pagwas$pca_cell_df))
+  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
 
@@ -55,16 +54,19 @@ Pathway_annotation_input <- function(Pagwas, n.cores = 1) {
     return(paan)
   }, n.cores = n.cores)
 
-  Pagwas$pathway_blocks <- lapply(paan_df, function(pa) {
+  pathway_blocks <- lapply(paan_df, function(pa) {
     blocks <- pa %>% dplyr::arrange(chrom, start)
     return(blocks)
   })
 
-  names(Pagwas$pathway_blocks) <- names(Pathway_list)
+  names(pathway_blocks) <- names(Pathway_list)
 
   Pagwas$Pathway_list <- Pathway_list
 
-  Pagwas$block_annotation <- block_annotation
-
+  #Pagwas$block_annotation <- block_annotation
+  SOAR::Store(pathway_blocks)
+  SOAR::Store(pca_cell_df)
+  SOAR::Store(snp_gene_df)
+  SOAR::Store(block_annotation)
   return(Pagwas)
 }

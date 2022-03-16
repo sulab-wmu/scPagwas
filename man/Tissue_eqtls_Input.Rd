@@ -5,7 +5,8 @@
 \title{Tissue_eqtls_Input}
 \usage{
 Tissue_eqtls_Input(
-  Pagwas = Pagwas,
+  Pagwas = NULL,
+  block_annotation = NULL,
   add_eqtls = "OnlyEqtls",
   eqtls_files = NULL,
   eqtl_p = 0.05,
@@ -16,6 +17,8 @@ Tissue_eqtls_Input(
 }
 \arguments{
 \item{Pagwas}{Pagwas format data list inherit from other functions.}
+
+\item{block_annotation}{gene annotation}
 
 \item{add_eqtls}{There is options: "OnlyEqtls","Both"; "OnlyEqtls" means only eqtls snps will choose; "Both" means both eqtls and gene-TSS-window snps will choose;}
 

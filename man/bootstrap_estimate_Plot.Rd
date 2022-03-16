@@ -4,12 +4,7 @@
 \alias{Bootstrap_estimate_Plot}
 \title{Bootstrap_estimate_Plot}
 \usage{
-Bootstrap_estimate_Plot(
-  Pagwas,
-  figurenames = "test_forest.pdf",
-  width = 9,
-  height = 7
-)
+Bootstrap_estimate_Plot(Pagwas, figurenames = NULL, width = 9, height = 7)
 }
 \arguments{
 \item{Pagwas}{Pagwas format of result from Pagwas_main()}

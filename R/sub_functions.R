@@ -49,10 +49,10 @@ bh.adjust <- function(x, log = FALSE) {
 #' library(scPagwas)
 #' Pagwas$merge_scexpr <- mean_expr(Pagwas)
 #'
-mean_expr <- function(Pagwas){
-  datamat<-Seurat::GetAssayData(object =Pagwas$Single_data, slot = "data")
-  merge_scexpr<-lapply(unique(Pagwas$Celltype_anno$annotation),function(x){
-    an<-Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation %in% x]
+mean_expr <- function(Single_data){
+  datamat<-Seurat::GetAssayData(object =Single_data, slot = "data")
+  merge_scexpr<-lapply(as.vector(unique(Idents(Single_data))),function(x){
+    an<-Idents(Single_data)[as.vector(Idents(Single_data)) %in% x]
     tryCatch(
       {
         datamat<-as.matrix(datamat)
@@ -65,7 +65,7 @@ mean_expr <- function(Pagwas){
   })
   rm(datamat)
   merge_scexpr<-as.data.frame(merge_scexpr)
-  colnames(merge_scexpr)<-unique(Pagwas$Celltype_anno$annotation)
+  colnames(merge_scexpr)<-as.vector(unique(Idents(Single_data)))
   return(merge_scexpr)
 }
 

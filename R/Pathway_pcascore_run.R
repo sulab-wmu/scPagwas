@@ -20,14 +20,14 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
                                  n.cores = 1,
                                  min.pathway.size = 10,
                                  max.pathway.size = 1000) {
-  if (is.null(Pagwas$Single_data)) {
-    stop("not loaded Single-cell data")
+  #if (is.null(Pagwas$Single_data)) {
+  #  stop("not loaded Single-cell data")
     # return(Pagwas)
-  }
-  if (is.null(Pagwas$Celltype_anno)) {
-    stop("not loaded Celltype_anno data")
+  #}
+  #if (is.null(Pagwas$Celltype_anno)) {
+  #  stop("not loaded Celltype_anno data")
     # return(Pagwas)
-  }
+  #}
   if (is.null(Pathway_list)) {
     stop("not loaded Pathway_list data")
     # return(Pagwas)
@@ -52,35 +52,36 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   # filter the scarce pathway
   pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, Pagwas$VariableFeatures)))) > 2)]
-  Pagwas$Pathway_list <- Pathway_list[pana]
-
+  Pathway_list <- Pathway_list[pana]
   # keep the raw pathway
   Pagwas$rawPathway_list <- Pathway_list
 
   # single data
-  Pagwas$Single_data<-Pagwas$Single_data[intersect(rownames(Pagwas$Single_data),unique(unlist(Pathway_list))),]
+  # Single_data<- Single_data[intersect(rownames( Single_data),unique(unlist(Pathway_list))),]
 
   # filter the gene for no expression in single cells in pathway
-  celltypes <- as.vector(unique(Idents(Pagwas$Single_data)))
+  celltypes<-as.vector(unique(Idents(Single_data)))
 
   pana_list <- lapply(celltypes, function(celltype) {
-    scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
+    scCounts <- GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data")
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
     pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, proper.gene.names)))) > 2)]
     return(pana)
   })
+
   Pagwas$Pathway_list <- Pathway_list[Reduce(intersect, pana_list)]
-  Pagwas$rawPathway_list <- Pagwas$rawPathway_list[Reduce(intersect, pana_list)]
+  Pagwas$rawPathway_list <- Pathway_list[Reduce(intersect, pana_list)]
+  rm(pana_list)
+  rm(Pathway_list)
 
   message("* Start to get Pathway PCA socre!")
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
-    scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
-    # scCounts<-scCounts[Pagwas$VariableFeatures,]
+
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
-      scCounts = scCounts,
+      scCounts = GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data"),
       n.cores = n.cores
     )
     setTxtProgressBar(pb, which(celltypes == celltype) / length(celltypes))
@@ -96,14 +97,13 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     return(df)
   }))
 
-  pca_scoremat <- pca_df[, c("name", "celltype", "score")]
-  pca_scoremat <- reshape2::dcast(pca_scoremat, name ~ celltype)
+  pca_scoremat <- reshape2::dcast(pca_df[, c("name", "celltype", "score")], name ~ celltype)
 
   rownames(pca_scoremat) <- pca_scoremat$name
-  pca_cell_df <- data.frame(pca_scoremat[, -1])
+  pca_cell_df <- pca_scoremat[, -1]
   rownames(pca_cell_df) <- pca_scoremat$name
   colnames(pca_cell_df) <- colnames(pca_scoremat)[-1]
-  # pca_cell_df <- apply(pca_cell_df,2, function(x) (x-min(x))/(max(x)-min(x)))
+  rm(pca_scoremat)
 
   index <- !is.na(pca_cell_df[1, ])
 
@@ -112,18 +112,21 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     pca_cell_df <- pca_cell_df[, index]
   }
 
-  Pagwas$pca_cell_df <- pca_cell_df
-
-  pca_scCell_mat <- data.frame(do.call(cbind, (lapply(seq_len(length(scPCAscore_list)), function(i) {
+  pca_scCell_mat <- do.call(cbind, (lapply(seq_len(length(scPCAscore_list)), function(i) {
     scPCAscore_list[[i]][[2]]
-  }))))
+  })))
+  rm(scPCAscore_list)
   # keep cellnames the same as Single_data
-  colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
-  Pagwas$pca_scCell_mat <- pca_scCell_mat
+  colnames(pca_scCell_mat) <- colnames(Single_data)
+  pca_scCell_mat<-data.matrix(pca_scCell_mat, rownames.force = NA)
 
-  colnames(Pagwas$merge_scexpr)<-colnames(Pagwas$pca_cell_df)
-  # Pagwas$Single_data <- GetAssayData(object = Pagwas$VSingle_data, slot = "data")
-  # Pagwas$VSingle_data <- NULL
+  colnames(merge_scexpr)<-colnames(pca_cell_df)
+  Pagwas$VariableFeatures<-rownames(Single_data)
+  SOAR::Store(pca_cell_df)
+  SOAR::Store(pca_scCell_mat)
+  SOAR::Store(merge_scexpr)
+  SOAR::Store(Single_data)
+
   return(Pagwas)
 }
 
@@ -159,9 +162,8 @@ PathwayPCAtest <- function(Pathway_list,
   proper.gene.names <- colnames(scCounts)
   ###### calculate the pca for each pathway terms.
   papca <- papply(Pathway_list, function(Pa_id) {
-    Pa_id <- intersect(proper.gene.names, Pa_id)
 
-    lab <- proper.gene.names %in% Pa_id
+    lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
 
     pcs <- irlba::irlba(scCounts[, lab], nv = nPcs, nu = 0, center = cm[lab])
 

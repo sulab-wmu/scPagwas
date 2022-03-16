@@ -26,25 +26,19 @@ scPagwas is able to prioritize disease-associated individual cells by integratin
 You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with:
 
 ``` r
-#devtools::install_github("dengchunyu/scPagwas")
-#install.packages("scPagwas")
+devtools::install_github("dengchunyu/scPagwas")
 
 ```
-you can also check the details in (./scPagwas/docs/reference/index.html) 
 
 ## Example 
 
-This is a basic example which shows you how to solve a common problem:
- 
-### 1.Celltypes function 
+### 1.Preprogress and create internal storage
 
 ```{r Pagwas_main}
  library(Seurat)
  library(scPagwas)
-library("dplyr")
-library("data.table")
-library("Matrix")
-library(stringr) 
+ library(SOAR)
+
  ## basic example code
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
@@ -54,44 +48,35 @@ library(stringr)
  data(gtf_df)
  #Single cell example data.
  data(scRNAexample)
- scRNAexample@meta.data$anno[which(scRNAexample@meta.data$anno=="Celltype4")]<-"Effector CD8+T cell"
- Idents(scRNAexample)<-scRNAexample@meta.data$anno
  #LD data
  data(chrom_ld)
+ ##create a session for internal storage
+ Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 
- #Pagwas_main is a function wrapper other process codes
- Pagwas<-Pagwas_main(Pagwas = NULL,
+ #1.start to run the wrapper functions for preprogress.
+ Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data = GWAS_summ_example,
-                     add_eqtls="OnlyTSS",# only snps within TSS windows
+                     add_eqtls="OnlyTSS",
                      block_annotation = gtf_df,
                      Single_data = scRNAexample,
                      FilterSingleCell=TRUE,
                      Pathway_list=Genes_by_pathway_kegg,
-                     chrom_ld = chrom_ld)
+                     chrom_ld = chrom_ld,
+                     scPagwasSession="scPagwasSession")
+
+```
  
-   Pagwas <- GWAS_summary_input(Pagwas=NULL,
-                                 gwas_data=GWAS_summ_example)
-
-    Pagwas <- Single_data_input(Pagwas=Pagwas,
-                                Single_data=scRNAexample)
-
-   Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
-                                 Pathway_list=Genes_by_pathway_kegg
-                                 )
-   Pagwas$block_annotation<-gtf_df
-   snp_gene_df<-Snp2Gene(snp=as.data.frame(Pagwas$gwas_data),refGene=gtf_df)
-   snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-   Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-      Pagwas <- Pathway_annotation_input(Pagwas=Pagwas)
-  Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
-                                       chrom_ld=chrom_ld)
-  
-  Pagwas <- link_pwpca_block(Pagwas=Pagwas)
-  Pagwas <- Pagwas_perform_regression(Pagwas=Pagwas, iters = 100)
+### 2. Cell types functions  
  
-  Pagwas<- Boot_evaluate(Pagwas)
+```{r link_pwpca_block}
+ 
+   message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_pwpca_block function start!! ********',sep = ''))
+  #timestart<-Sys.time()
+  Pagwas <- link_pwpca_block(Pagwas)
   
-
+  message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
+  Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200,n.cores=1)
+  
 ``` 
 #### Visualize the celltypes results.
 
@@ -107,24 +92,23 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ```
 
-### 1.Single cell function
-```{r scPagwas_main}
+### 3.Single cell function 
+```{r link_scCell_pwpca_block}
  #scPagwas_main is a function wrapper other process codes
  #as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
- scPagwas<- scPagwas_main(Pagwas = Pagwas,
-               #gwas_data = GWAS_summ_example,
-               #add_eqtls="OnlyTSS",
-               #block_annotation = gtf_df,
-               #Single_data = scRNAexample,
-               #Pathway_list=Genes_by_pathway_kegg,
-               #chrom_ld = chrom_ld,
-               simp_results=TRUE)
+  message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_scCell_pwpca_block function start!! ********',sep = ''))
+  Pagwas <- link_scCell_pwpca_block(Pagwas)
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
+  Pagwas <- scPagwas_perform_score(Pagwas)
+  
+
 ```
 
 
 #### Visualize the scPagwas_main results.
 ```{r scPagwas_Visualization}
- scPagwas_Visualization(scPagwas_score = scPagwas$scPagwas_score,
+ scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
                         assay = "SCT",
@@ -138,6 +122,11 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
                         title = "scPagwas_score")
 
 ```
+#### Single cell regression
 
+```{r scPagwas_perform_regression}
+    message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
+    Pagwas <- scPagwas_perform_regression(Pagwas)
 
+```
 The workfile is ongoing...

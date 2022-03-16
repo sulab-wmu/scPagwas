@@ -4,7 +4,7 @@
 \alias{mean_expr}
 \title{mean_expr}
 \usage{
-mean_expr(Pagwas)
+mean_expr(Single_data)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list}
