@@ -45,8 +45,6 @@ Pagwas_perform_regression <- function(Pagwas,
     Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, n.cores = n.cores, part = part)
     Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(pca_cell_df))
   }
-  SOAR::Store(pca_cell_df)
-  SOAR::Store(Pathway_ld_gwas_data)
   return(Pagwas)
 }
 
@@ -100,6 +98,8 @@ Boot_evaluate <- function(Pagwas,
           sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
         ])
       )
+
+
       boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
       setTxtProgressBar(pb, i / bootstrap_iters)
 
@@ -209,7 +209,7 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
   Pathway_block_info <- as.numeric(as.matrix(pca_cell_df) %*% parameters[colnames(pca_cell_df)])
   names(Pathway_block_info) <- rownames(pca_cell_df)
 
-  SOAR::Store(pca_cell_df)
+
   return(Pathway_block_info)
 }
 
@@ -276,8 +276,7 @@ Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
   Pagwas$regularized_Pathway_heritability_contributions <- Get_Pathway_heritability_contributions(
     pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
   )
-  SOAR::Store(pca_cell_df)
-  SOAR::Store(Pathway_ld_gwas_data)
+
   return(Pagwas)
 }
 

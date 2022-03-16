@@ -14,125 +14,22 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
- library(Seurat)
- library(scPagwas)
-library("dplyr")
-library("data.table")
-library("Matrix")
-library(stringr) 
- ## basic example code
- #Input pathway gene list, you can construct with youself.
+## 1.Adult-healthy-MDD
+```{r setup, eval = FALSE}
+library("Seurat")
+library("stringr") 
+library(ggplot2)
+library(ggthemes)
+library(ggpubr)
+library(scPagwas)
+ library(SOAR)
+options(future.globals.maxSize= 891289600)
+data<-readRDS("/share/pub/qiuf/brain/01-data/healthy/adult/resolution0.2_final1.rds")
+object.size(data)
+#We advice you to set a R_LOCAL_CACHE for your data
+Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
+
+object.size(data)
  data(Genes_by_pathway_kegg)
- #Input GWAS summry data(data.frame).
- data(GWAS_summ_example)
- #gene annotation files.
- data(gtf_df)
- #Single cell example data.
- data(scRNAexample)
-# scRNAexample@meta.data$anno[which(scRNAexample@meta.data$anno=="Celltype4")]<-"Effector CD8+T cell"
- Idents(scRNAexample)<-scRNAexample@meta.data$anno
- #LD data
- data(chrom_ld)
-
-  gwas_data = GWAS_summ_example
-  block_annotation = gtf_df
-  Single_data = scRNAexample
-  Pathway_list=Genes_by_pathway_kegg
-   #1.gwas summary data input
-  Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
-
-  SOAR::Store(gwas_data)
-  SOAR::Store(block_annotation)
-  SOAR::Store(Single_data)
-  SOAR::Store(Pathway_list)
-  SOAR::Store(chrom_ld)
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 1st: GWAS_summary_input function start! ********',sep = ''))
-
-    Pagwas <- GWAS_summary_input(Pagwas=NULL,
-                                 gwas_data=gwas_data)
-  
-
-  #2.single data input
-  message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
-
-  #suppressMessages(require(SeuratObject))
-
-    Pagwas <- Single_data_input(Pagwas=Pagwas,
-                                Single_data=Single_data)
-
-   #3.calculated pca score
-  message(paste(utils::timestamp(quiet = T), ' ******* 3rd: Pathway_pcascore_run function start!! ********',sep = ''))
-  
-    Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
-                                   Pathway_list=Pathway_list
-                                 )
-   #4.calculated Snp2Gene
-  message(paste(utils::timestamp(quiet = T), ' ******* 4th: Snp2Gene start!! ********',sep = ''))
-
-  if(!is.null(block_annotation)){
-
-    if(add_eqtls!="OnlyTSS"){
-      if (!is.null(eqtls_files)){
-
-        message("Filter snps for significant eqtls!")
-        Pagwas<-  Tissue_eqtls_Input(Pagwas=Pagwas,
-                                     block_annotation=block_annotation)
-        #add the eqtls genes' snp
-        message(nrow(gwas_data)," snps for significant eqtls! Please set 'add_eqtls=F' if the amount of snps were too little!")
-
-       }else{
-
-        stop("Since the add_eqtls is TURE! No parameter 'eqtls_files' Input!  ")
-       }
-    }else{
-       snp_gene_df<-Snp2Gene(snp=gwas_data,refGene=block_annotation)
-       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-
-       SOAR::Store(snp_gene_df)
-       #SOAR::Store(block_annotation)
-    }
-  }
-
-  #3.pathway block data
-  message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
-    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas)
-  #4.ld data folder,which is preprogress
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 6th: Link_pathway_blocks_gwas function start! ********',sep = ''))
-    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
-                                       chrom_ld=chrom_ld)
-  message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_pwpca_block function start!! ********',sep = ''))
-
-  #timestart<-Sys.time()
-  Pagwas <- link_pwpca_block(Pagwas)
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
-
-  Pagwas <- Pagwas_perform_regression(Pagwas, iters = iters,n.cores=n.cores)
-
-
-  Pagwas <- Pagwas_perform_regularized_regression(Pagwas, n_folds = n_folds)
-  
-
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_scCell_pwpca_block function start!! ********',sep = ''))
-  Pagwas <- link_scCell_pwpca_block(Pagwas)
-
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
-  Pagwas <- scPagwas_perform_score(Pagwas,split_n=500)
-
-
-  if(regression){
-  message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
-  Pagwas <- scPagwas_perform_regression(Pagwas)
-  message('done!')
-
-
-  }
-
 
 ```

@@ -29,6 +29,7 @@ scPagwas_perform_score <- function(Pagwas,
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
 
     Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
+    rm(Pathway_ld_gwas_data)
 
     noise_per_snp <- Pathway_block$snps$se**2
 
@@ -37,8 +38,9 @@ scPagwas_perform_score <- function(Pagwas,
         na_elements <- is.na(Pathway_block$y) | apply(Pathway_block$x, 1, function(x) {
           any(is.na(x))
         }) | is.na(noise_per_snp)
-        x <- Pathway_block$x
-        rownames(x) <- Pathway_block$snps$rsid
+
+      x <- Pathway_block$x
+      rownames(x) <- Pathway_block$snps$rsid
 
     if(!is.null(split_n)){
       if (ncol(Pathway_block$x) > split_n) {
@@ -54,6 +56,9 @@ scPagwas_perform_score <- function(Pagwas,
             sclm_1 <- scParameter_regression(Pagwas_x = x[!na_elements, index], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
             return(sclm_1)
           }))
+          rm(x)
+          rm(noise_per_snp)
+          gc()
       }else{
           results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
 
@@ -61,6 +66,9 @@ scPagwas_perform_score <- function(Pagwas,
       }else {
           results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
            }
+       rm(x)
+       rm(noise_per_snp)
+       gc()
 
         results[is.na(results)] <- 0
         setTxtProgressBar(pb, which(Pathway_names == Pathway) / length(Pathway_names))
@@ -74,6 +82,7 @@ scPagwas_perform_score <- function(Pagwas,
   })
   close(pb)
 
+
   names(Pathway_sclm_results) <- Pathway_names
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_names <- names(Pathway_sclm_results)
@@ -82,28 +91,20 @@ scPagwas_perform_score <- function(Pagwas,
     return(x)
   }))
 
-  SOAR::Store(Pathway_ld_gwas_data)
-  #Pagwas$Pathway_sclm_results <- Pathway_sclm_results
-
-
   pca_scCell_mat <- pca_scCell_mat[Pathway_names, ]
 
-  Vdata <- SeuratObject::GetAssayData(object = Single_data, slot = "data")
-  SOAR::Store(Single_data)
-
   pathway_expr <- lapply(Pathway_names, function(pa) {
-    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Vdata))
+    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(data_mat))
 
     if (length(a) == 0) {
-      return(rep(0, ncol(Vdata)))
+      return(rep(0, ncol(data_mat)))
     } else if (length(a) == 1) {
-      return(Vdata[intersect(a, rownames(Vdata)), ])
+      return(data_mat[intersect(a, rownames(data_mat)), ])
     } else {
-      b <- apply(Vdata[intersect(a, rownames(Vdata)), ], 2, mean)
+      b <- apply(data_mat[intersect(a, rownames(data_mat)), ], 2, mean)
       return(b)
     }
   })
-  rm(Vdata)
   pathway_expr <- as.data.frame(pathway_expr)
   colnames(pathway_expr) <- Pathway_names
 
@@ -114,19 +115,19 @@ scPagwas_perform_score <- function(Pagwas,
       scPagwas_mat <- as.matrix(Pathway_sclm_results) * pa_exp_mat
 
       }, error = function(e) {
-        pathway_expr <- as_matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-        pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
-        scPagwas_mat <- as_matrix(Pathway_sclm_results) * pa_exp_mat
+      pathway_expr <- as_matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
+      pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
+      scPagwas_mat <- as_matrix(Pathway_sclm_results) * pa_exp_mat
       })
-
-  scs <- rowSums(scPagwas_mat)
-
-
-  rm(scPagwas_mat)
   rm(pa_exp_mat)
   rm(pathway_expr)
+  scs <- rowSums(scPagwas_mat)
+  rm(scPagwas_mat)
+
+  gc()
 
   SOAR::Store(Pathway_sclm_results)
+
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
 
   df <- data.frame(cellid = colnames(pca_scCell_mat), scPagwas_score = scs)
@@ -138,7 +139,6 @@ scPagwas_perform_score <- function(Pagwas,
 
   names(Pagwas$scPagwas_score)<-df$cellid
   rm(df)
-  SOAR::Store(pca_scCell_mat)
 
   return(Pagwas)
 }

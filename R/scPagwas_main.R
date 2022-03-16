@@ -96,11 +96,9 @@ scPagwas_main <- function(Pagwas = NULL,
   }
   #1.gwas summary data input
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-
   SOAR::Store(gwas_data)
   SOAR::Store(block_annotation)
   SOAR::Store(Single_data)
-  SOAR::Store(Pathway_list)
   SOAR::Store(chrom_ld)
 
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: GWAS_summary_input function start! ********',sep = ''))
@@ -145,7 +143,6 @@ scPagwas_main <- function(Pagwas = NULL,
                                  max.pathway.size=max.pathway.size
                                  )
 
-
    }
    message('done!')
 
@@ -153,8 +150,6 @@ scPagwas_main <- function(Pagwas = NULL,
   message(paste(utils::timestamp(quiet = T), ' ******* 4th: Snp2Gene start!! ********',sep = ''))
 
   if(!is.null(block_annotation)){
-
-    #Pagwas$block_annotation<-block_annotation
 
     if(add_eqtls!="OnlyTSS"){
       if (!is.null(eqtls_files)){
@@ -181,7 +176,7 @@ scPagwas_main <- function(Pagwas = NULL,
        snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
        #SOAR::Store(gwas_data)
        SOAR::Store(snp_gene_df)
-       #SOAR::Store(block_annotation)
+       SOAR::Store(block_annotation)
     }
   }
 

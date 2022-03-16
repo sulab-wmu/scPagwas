@@ -13,18 +13,7 @@
 #' Pagwas <- link_pwpca_block(Pagwas)
 
 link_pwpca_block <- function(Pagwas) {
- # if (is.null(Pagwas$merge_scexpr)) {
-  #  message("* no load merge_scexpr data in single cell data input step!")
-  #  return(Pagwas)
-  #}
-  #merge_scexpr <- Pagwas$merge_scexpr
 
- #if (is.null(Pagwas$Pathway_ld_gwas_data)) {
-  #  message("* no loaded Pathway_ld_gwas data")
-  #  return(Pagwas)
-  #}
-
-  #pca_cell_df <- Pagwas$pca_cell_df
   cell_names <- intersect(colnames(merge_scexpr), colnames(pca_cell_df))
 
   merge_scexpr <- merge_scexpr[, cell_names]
@@ -102,7 +91,7 @@ link_pwpca_block <- function(Pagwas) {
   SOAR::Store(Pathway_ld_gwas_data)
   SOAR::Store(merge_scexpr)
   SOAR::Store(pca_cell_df)
-  SOAR::Store(snp_gene_df)
+  gc()
   return(Pagwas)
 }
 

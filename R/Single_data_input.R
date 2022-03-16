@@ -94,9 +94,11 @@ Single_data_input <- function(Pagwas,
 
   merge_scexpr <- Seurat::AverageExpression(Single_data)
   merge_scexpr<-merge_scexpr[["RNA"]]
+  data_mat <- Seurat::GetAssayData(object = Single_data, slot = "data")
 
   #merge_scexpr <- mean_expr(Single_data)
   SOAR::Store(merge_scexpr)
   SOAR::Store(Single_data)
+  SOAR::Store(data_mat)
   return(Pagwas)
 }

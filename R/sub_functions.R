@@ -39,36 +39,6 @@ bh.adjust <- function(x, log = FALSE) {
   ox
 }
 
-#' mean_expr
-#' @description To get the mean expression for single cell data.
-#' @param Pagwas Pagwas data list
-#'
-#' @return
-#'
-#' @examples
-#' library(scPagwas)
-#' Pagwas$merge_scexpr <- mean_expr(Pagwas)
-#'
-mean_expr <- function(Single_data){
-  datamat<-Seurat::GetAssayData(object =Single_data, slot = "data")
-  merge_scexpr<-lapply(as.vector(unique(Idents(Single_data))),function(x){
-    an<-Idents(Single_data)[as.vector(Idents(Single_data)) %in% x]
-    tryCatch(
-      {
-        datamat<-as.matrix(datamat)
-      }, error = function(e) {
-        datamat<-as_matrix(datamat)
-
-      })
-
-    return(apply(datamat[,an],1,mean))
-  })
-  rm(datamat)
-  merge_scexpr<-as.data.frame(merge_scexpr)
-  colnames(merge_scexpr)<-as.vector(unique(Idents(Single_data)))
-  return(merge_scexpr)
-}
-
 #' Snps to Genes
 #' @description Maps SNPs to their nearest genes within TSS windows.
 #'

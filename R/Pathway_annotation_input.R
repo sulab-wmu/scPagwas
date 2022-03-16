@@ -63,10 +63,7 @@ Pathway_annotation_input <- function(Pagwas,
 
   Pagwas$Pathway_list <- Pathway_list
 
-  #Pagwas$block_annotation <- block_annotation
   SOAR::Store(pathway_blocks)
-  SOAR::Store(pca_cell_df)
-  SOAR::Store(snp_gene_df)
-  SOAR::Store(block_annotation)
+
   return(Pagwas)
 }

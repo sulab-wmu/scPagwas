@@ -51,7 +51,7 @@ devtools::install_github("dengchunyu/scPagwas")
  #LD data
  data(chrom_ld)
  ##create a session for internal storage
- Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
+# Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
@@ -102,7 +102,6 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
   Pagwas <- scPagwas_perform_score(Pagwas)
   
-
 ```
 
 
@@ -127,6 +126,14 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 ```{r scPagwas_perform_regression}
     message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
     Pagwas <- scPagwas_perform_regression(Pagwas)
+
+```
+
+
+```{r removeCathe}
+# empty the cache
+#Objects()
+Remove(Objects())
 
 ```
 The workfile is ongoing...

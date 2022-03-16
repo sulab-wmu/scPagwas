@@ -5,8 +5,6 @@
 \title{colnorm_sub}
 \usage{
 colnorm_sub(X, ind)
-
-colnorm_sub(X, ind)
 }
 \arguments{
 \item{X}{data}
@@ -15,11 +13,7 @@ colnorm_sub(X, ind)
 }
 \value{
 
-
-
 }
 \description{
-colnorm_sub
-
 colnorm_sub
 }

@@ -5,8 +5,6 @@
 \title{link_scCell_pwpca_block}
 \usage{
 link_scCell_pwpca_block(Pagwas, n.cores = 1)
-
-link_scCell_pwpca_block(Pagwas, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
@@ -16,22 +14,13 @@ check the cores in computer.}
 }
 \value{
 
-
-
 }
 \description{
 link the single cell pca score and expression for each
 pathway genes for each block(single cell)
 construct the final matrix for regression in blocks
-
-link the single cell pca score and expression for each
-pathway genes for each block(single cell)
-construct the final matrix for regression in blocks
 }
 \examples{
-library(scPagwas)
-# Pagwas should have inhibit data
-Pagwas <- link_pwpca_block(Pagwas)
 library(scPagwas)
 # Pagwas should have inhibit data
 Pagwas <- link_pwpca_block(Pagwas)

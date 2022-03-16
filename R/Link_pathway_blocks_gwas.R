@@ -24,6 +24,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   Pachrom_block_list <- lapply(pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
   names(Pachrom_block_list) <- names(pathway_blocks)
+  #rm(pathway_blocks)
 
   chrom_gwas_list <- lapply( split(gwas_data, f = gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
@@ -31,6 +32,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       return(gwas)
     }
   )
+  #rm(gwas_data)
   # prevent naming issues and indexing issues
 
   message(paste0("* Start to link gwas and pathway block annotations for ",
@@ -93,7 +95,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       ld_matrix <- make_ld_matrix(all_snps = snp_data$rsid, ld_data = sub_ld)
     }
 
-    Pa_block_data <- list(
+
+    setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
+
+    return(list(
       block_info = Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
                           lapply(seq_len(length(Pa_chrom_data)),
                                  function(i) Pa_chrom_data[[i]][[4]])),
@@ -103,24 +108,17 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       ld_matrix_squared = ld_matrix * ld_matrix,
       y = unlist(lapply(seq_len(length(Pa_chrom_data)),
                         function(i) Pa_chrom_data[[i]][[2]]))
-    )
-
-    setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
-
-    return(Pa_block_data)
+    ))
   }, n.cores = n.cores)
 
   close(pb)
 
-
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
-  rm(Pachrom_block_list)
   rm(chrom_gwas_list)
 
   SOAR::Store(Pathway_ld_gwas_data)
-  SOAR::Store(pathway_blocks)
-  SOAR::Store(gwas_data)
-  SOAR::Store(snp_gene_df)
+
+  gc()
   return(Pagwas)
 }
 

@@ -20,14 +20,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
                                  n.cores = 1,
                                  min.pathway.size = 10,
                                  max.pathway.size = 1000) {
-  #if (is.null(Pagwas$Single_data)) {
-  #  stop("not loaded Single-cell data")
-    # return(Pagwas)
-  #}
-  #if (is.null(Pagwas$Celltype_anno)) {
-  #  stop("not loaded Celltype_anno data")
-    # return(Pagwas)
-  #}
+
   if (is.null(Pathway_list)) {
     stop("not loaded Pathway_list data")
     # return(Pagwas)
@@ -55,9 +48,6 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   Pathway_list <- Pathway_list[pana]
   # keep the raw pathway
   Pagwas$rawPathway_list <- Pathway_list
-
-  # single data
-  # Single_data<- Single_data[intersect(rownames( Single_data),unique(unlist(Pathway_list))),]
 
   # filter the gene for no expression in single cells in pathway
   celltypes<-as.vector(unique(Idents(Single_data)))
@@ -98,7 +88,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   }))
 
   pca_scoremat <- reshape2::dcast(pca_df[, c("name", "celltype", "score")], name ~ celltype)
-
+  rm(pca_df)
   rownames(pca_scoremat) <- pca_scoremat$name
   pca_cell_df <- pca_scoremat[, -1]
   rownames(pca_cell_df) <- pca_scoremat$name
@@ -125,7 +115,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   SOAR::Store(pca_cell_df)
   SOAR::Store(pca_scCell_mat)
   SOAR::Store(merge_scexpr)
-  SOAR::Store(Single_data)
+  #SOAR::Store(Single_data)
 
   return(Pagwas)
 }
