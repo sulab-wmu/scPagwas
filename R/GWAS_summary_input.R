@@ -17,8 +17,8 @@
 #' library(scPagwas)
 #' data(GWAS_summ_example)
 #' Pagwas <- GWAS_summary_input(Pagwas = NULL, gwas_data = GWAS_summ_example)
-GWAS_summary_input <- function(Pagwas,
-                               gwas_data,
+GWAS_summary_input <- function(Pagwas=NULL,
+                               gwas_data=NULL,
                                maf_filter = 0.01,
                                Sex_filter = TRUE,
                                MHC_filter = TRUE,
@@ -50,8 +50,8 @@ GWAS_summary_input <- function(Pagwas,
 
   if (!grepl("chr", gwas_data$chrom[1])) {
     message('No "chr" from chrom!, now pasting it!')
+    gwas_data$chrom <- paste("chr",gwas_data$chrom,sep = "")
 
-    gwas_data$chrom <- paste0("chr", gwas_data$chrom)
   }
 
   if ("maf" %in% colnames(gwas_data)) {
@@ -74,7 +74,7 @@ GWAS_summary_input <- function(Pagwas,
       dplyr::filter(pos > 25000000 & pos < 34000000)
 
     gwas_data <- gwas_data[!(gwas_data$chrom %in% "chr6"), ]
-    gwas_data <- merge(gwas_data, gwas_data_6, all = TURE)
+    gwas_data <- merge(gwas_data, gwas_data_6, all = TRUE)
     rm(gwas_data_6)
   }
 

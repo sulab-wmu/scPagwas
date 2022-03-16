@@ -5,8 +5,8 @@
 \title{GWAS_summary_input}
 \usage{
 GWAS_summary_input(
-  Pagwas,
-  gwas_data,
+  Pagwas = NULL,
+  gwas_data = NULL,
   maf_filter = 0.01,
   Sex_filter = TRUE,
   MHC_filter = TRUE,

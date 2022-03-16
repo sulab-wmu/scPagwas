@@ -38,6 +38,7 @@ devtools::install_github("dengchunyu/scPagwas")
  library(Seurat)
  library(scPagwas)
  library(SOAR)
+ library("dplyr")
 
  ## basic example code
  #Input pathway gene list, you can construct with youself.
@@ -64,7 +65,8 @@ devtools::install_github("dengchunyu/scPagwas")
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
 
-
+    Pagwas <- GWAS_summary_input(Pagwas=NULL,
+                                 gwas_data=GWAS_summ_example)
 ```
  
 ### 2. Cell types functions  

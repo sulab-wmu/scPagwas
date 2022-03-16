@@ -41,7 +41,6 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     pathway <- unique(pa_block$block_info$pathway)
 
     x <- pca_scCell_mat[pathway, ]
-    rm(pca_scCell_mat)
 
     if(length(pathway)==1){
       x <- matrix(x, nrow = 1)
@@ -66,12 +65,11 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
       }, error = function(e) {
         x_FBM <- bigstatsr::as_FBM(as_matrix(data_mat[mg, ]))
       })
-    rm(data_mat)
 
     if (length(mg) > 1) {
 
       x2 <- bigstatsr::big_apply(x_FBM, a.FUN = colnorm_sub, a.combine = "cbind")
-      rm(x_FBM)
+      #rm(x_FBM)
       rownames(x2) <- mg
       #colnames(x2) <- colnames(x)
     }
@@ -105,13 +103,13 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     }
     rm(x)
     rm(x2)
-    gc()
+    #gc()
 
     ## add the slope of eqtls for x
     rownames(x3) <- pa_block$snps$rsid
     pa_block$x <- Matrix::crossprod(t(pa_block$ld_matrix_squared), x3)
     rm(x3)
-    gc()
+    #gc()
     pa_block$include_in_inference <- T
 
     setTxtProgressBar(pb, which(names(Pathway_ld_gwas_data) == pathway) / length(Pathway_ld_gwas_data))

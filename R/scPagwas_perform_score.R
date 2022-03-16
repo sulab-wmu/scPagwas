@@ -29,7 +29,6 @@ scPagwas_perform_score <- function(Pagwas,
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
 
     Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
-    rm(Pathway_ld_gwas_data)
 
     noise_per_snp <- Pathway_block$snps$se**2
 
@@ -58,7 +57,7 @@ scPagwas_perform_score <- function(Pagwas,
           }))
           rm(x)
           rm(noise_per_snp)
-          gc()
+
       }else{
           results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
 
@@ -68,7 +67,7 @@ scPagwas_perform_score <- function(Pagwas,
            }
        rm(x)
        rm(noise_per_snp)
-       gc()
+
 
         results[is.na(results)] <- 0
         setTxtProgressBar(pb, which(Pathway_names == Pathway) / length(Pathway_names))
@@ -123,9 +122,6 @@ scPagwas_perform_score <- function(Pagwas,
   rm(pathway_expr)
   scs <- rowSums(scPagwas_mat)
   rm(scPagwas_mat)
-
-  gc()
-
   SOAR::Store(Pathway_sclm_results)
 
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
@@ -136,10 +132,9 @@ scPagwas_perform_score <- function(Pagwas,
   if (remove_outlier) {
     Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
-
   names(Pagwas$scPagwas_score)<-df$cellid
   rm(df)
-
+  gc()
   return(Pagwas)
 }
 
