@@ -115,6 +115,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   SOAR::Store(pca_cell_df)
   SOAR::Store(pca_scCell_mat)
   SOAR::Store(merge_scexpr)
+  gc()
   #SOAR::Store(Single_data)
 
   return(Pagwas)

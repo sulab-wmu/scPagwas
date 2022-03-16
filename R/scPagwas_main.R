@@ -95,10 +95,15 @@ scPagwas_main <- function(Pagwas = NULL,
   class(Pagwas) <- 'Pagwas'
   }
   #1.gwas summary data input
+  message("*** Start to store the variables:")
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  message("*1)gwas_data")
   SOAR::Store(gwas_data)
+  message("*2)block_annotation")
   SOAR::Store(block_annotation)
+  message("*3)Single_data")
   SOAR::Store(Single_data)
+  message("*4)chrom_ld")
   SOAR::Store(chrom_ld)
 
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: GWAS_summary_input function start! ********',sep = ''))

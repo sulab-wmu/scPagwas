@@ -64,6 +64,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
 
+
 ```
  
 ### 2. Cell types functions  

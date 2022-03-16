@@ -73,12 +73,12 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       return(list(rsids_gwas, beta_squared, sub_ld, chrom_block))
     })
 
-    snp_data <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+    snp_data <- Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, all = TRUE),
                        lapply(seq_len(length(Pa_chrom_data)),
                               function(i) Pa_chrom_data[[i]][[1]]))
 
     # message(paste0("snp is ",nrow(snp_data)))
-    sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+    sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, all = TRUE),
                                    lapply(seq_len(length(Pa_chrom_data)),
                                           function(i) Pa_chrom_data[[i]][[3]])))
 
@@ -99,7 +99,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
     return(list(
-      block_info = Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
+      block_info = Reduce(function(dtf1, dtf2) merge(dtf1, dtf2, all = TRUE),
                           lapply(seq_len(length(Pa_chrom_data)),
                                  function(i) Pa_chrom_data[[i]][[4]])),
       snps = snp_data,

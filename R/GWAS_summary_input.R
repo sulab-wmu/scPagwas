@@ -74,7 +74,7 @@ GWAS_summary_input <- function(Pagwas,
       dplyr::filter(pos > 25000000 & pos < 34000000)
 
     gwas_data <- gwas_data[!(gwas_data$chrom %in% "chr6"), ]
-    gwas_data <- rbind(gwas_data, gwas_data_6)
+    gwas_data <- merge(gwas_data, gwas_data_6, all = TURE)
     rm(gwas_data_6)
   }
 
@@ -88,5 +88,6 @@ GWAS_summary_input <- function(Pagwas,
 
   #Pagwas$gwas_data <- gwas_data
   SOAR::Store(gwas_data)
+  gc()
   return(Pagwas)
 }
