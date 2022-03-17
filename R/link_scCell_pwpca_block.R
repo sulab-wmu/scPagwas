@@ -59,12 +59,8 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
       return(NULL)
     }
 
-    tryCatch(
-      {
-        x_FBM <- bigstatsr::as_FBM(as.matrix(data_mat[mg, ]))
-      }, error = function(e) {
-        x_FBM <- bigstatsr::as_FBM(as_matrix(data_mat[mg, ]))
-      })
+        x_FBM <- bigstatsr::as_FBM(data_mat[mg, ])
+
 
     if (length(mg) > 1) {
 

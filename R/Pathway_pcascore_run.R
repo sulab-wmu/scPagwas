@@ -54,6 +54,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   pana_list <- lapply(celltypes, function(celltype) {
     scCounts <- GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data")
+    scCounts<-suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
     pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, proper.gene.names)))) > 2)]
@@ -68,10 +69,11 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   message("* Start to get Pathway PCA socre!")
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
-
+    scCounts <- GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data")
+    scCounts <- suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
-      scCounts = GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data"),
+      scCounts = scCounts,
       n.cores = n.cores
     )
     setTxtProgressBar(pb, which(celltypes == celltype) / length(celltypes))
@@ -148,7 +150,7 @@ PathwayPCAtest <- function(Pathway_list,
 
   ## filter pathway
   nPcs <- 1
-  scCounts <- t(as.matrix(scCounts))
+  scCounts <- t(scCounts)
   cm <- Matrix::colMeans(scCounts)
   proper.gene.names <- colnames(scCounts)
   ###### calculate the pca for each pathway terms.
@@ -161,7 +163,7 @@ PathwayPCAtest <- function(Pathway_list,
     pcs$d <- pcs$d / sqrt(nrow(scCounts))
     pcs$rotation <- pcs$v
     pcs$v <- NULL
-    pcs$scores <- as.matrix(t(scCounts[, lab] %*% pcs$rotation) - as.numeric((cm[lab] %*% pcs$rotation)))
+    pcs$scores <- t(scCounts[, lab] %*% pcs$rotation) - as.numeric((cm[lab] %*% pcs$rotation))
     cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(cor(pcs$scores[i, ], colMeans(t(scCounts[, lab, drop = FALSE]) * abs(pcs$rotation[, i]))))))
     pcs$scores <- pcs$scores * cs
     pcs$rotation <- pcs$rotation * cs

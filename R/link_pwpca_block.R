@@ -17,7 +17,7 @@ link_pwpca_block <- function(Pagwas) {
   cell_names <- intersect(colnames(merge_scexpr), colnames(pca_cell_df))
 
   merge_scexpr <- merge_scexpr[, cell_names]
-  pca_cell_df <- as.matrix(pca_cell_df[, cell_names])
+  pca_cell_df <- data.matrix(pca_cell_df[, cell_names])
   #Pagwas$pca_cell_df <- pca_cell_df
 
   message("*  merging functional information about blocks")

@@ -65,8 +65,6 @@ devtools::install_github("dengchunyu/scPagwas")
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
 
-    Pagwas <- GWAS_summary_input(Pagwas=NULL,
-                                 gwas_data=GWAS_summ_example)
 ```
  
 ### 2. Cell types functions  
@@ -129,7 +127,8 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 ```{r scPagwas_perform_regression}
     message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
     Pagwas <- scPagwas_perform_regression(Pagwas)
-
+    
+Remove(Objects())
 ```
 
 

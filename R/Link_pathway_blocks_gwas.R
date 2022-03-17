@@ -135,7 +135,7 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
   ld_matrix <- diag(mat_dim)
 
   if (mat_dim == 1) {
-    return(as.matrix(1))
+    return(data.matrix(1))
   } # no need to check psd
   if (mat_dim >= 2) {
     rownames(ld_matrix) <- all_snps

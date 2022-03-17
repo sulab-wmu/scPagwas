@@ -206,7 +206,7 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
   }
 
   # only include parameter for which we have block data
-  Pathway_block_info <- as.numeric(as.matrix(pca_cell_df) %*% parameters[colnames(pca_cell_df)])
+  Pathway_block_info <- as.numeric(data.matrix(pca_cell_df) %*% parameters[colnames(pca_cell_df)])
   names(Pathway_block_info) <- rownames(pca_cell_df)
 
 

@@ -141,20 +141,52 @@ Snp2Gene <- function(snp, refGene, marg = 5000) {
 }
 
 
-#' as_matrix
+#' Convert a large sparse matrix into a dense matrix without errors
+#' @description  https://rdrr.io/github/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/src/R/utils.R
+#' Avoid the following error
+#' . Error in asMethod(object) :
+#' . Cholmod error 'problem too large' at file ../Core/cholmod_dense.c,
+#' . by slicing the matrix into submatrices, converting and cbinding them
+#' . Increases number of slices until they succeed.
 #'
-#' @param mat matrix
+#' @param sparseMat a big sparse matrix of a type coercible to dense Matrix::Matrix
+#' @param n_slices_init initial number of slices. Default value 1, i.e. whole matrix
+#' @param verbose print progress
 #'
-#' @return
-as_matrix <- function(mat){
-  tmp <- matrix(data=0L, nrow = mat@Dim[1], ncol = mat@Dim[2])
-  row_pos <- mat@i+1
-  col_pos <- findInterval(seq(mat@x)-1,mat@p[-1])+1
-  val <- mat@x
-  for (i in seq_along(val)){
-    tmp[row_pos[i],col_pos[i]] <- val[i]
+#' @return a dense matrix
+#' @export
+#'
+utils_big_as.matrix <- function(
+  sparseMat,
+  n_slices_init=1,
+  verbose=T
+) {
+
+  n_slices <- n_slices_init-1
+  while (TRUE) {
+    list_densemat = list()
+    n_slices = n_slices+1
+    if (verbose) message(paste0("n_slices=",n_slices))
+    idx_to = 0
+    for (slice in 1:n_slices) {
+      if (verbose) message(paste0("converting slice ",slice,"/",n_slices))
+      idx_from <- idx_to+1
+      idx_to <- if (slice<n_slices) as.integer(ncol(sparseMat)*slice/n_slices) else ncol(sparseMat)
+      if (verbose) message(paste0("columns ", idx_from,":", idx_to))
+      densemat_sub = try(
+        expr = {
+          as.matrix(sparseMat[,idx_from:idx_to])
+        }, silent = if (verbose) FALSE else TRUE)
+      if ("try-error" %in% class(densemat_sub)) {
+        break # exit to while loop
+      } else {
+        list_densemat[[slice]] = densemat_sub
+      }
+    }
+    if (length(list_densemat)==n_slices) break # exit while loop
   }
-  row.names(tmp) <- mat@Dimnames[[1]]
-  colnames(tmp) <- mat@Dimnames[[2]]
-  return(tmp)
+  if (verbose) message("cbind dense submatrices")
+  densemat <- Reduce(f=cbind, x=list_densemat)
+  return(densemat)
 }
+

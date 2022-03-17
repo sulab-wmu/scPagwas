@@ -107,17 +107,11 @@ scPagwas_perform_score <- function(Pagwas,
   pathway_expr <- as.data.frame(pathway_expr)
   colnames(pathway_expr) <- Pathway_names
 
-  tryCatch(
-    {
-      pathway_expr <- as.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-      pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
-      scPagwas_mat <- as.matrix(Pathway_sclm_results) * pa_exp_mat
 
-      }, error = function(e) {
-      pathway_expr <- as_matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
-      pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
-      scPagwas_mat <- as_matrix(Pathway_sclm_results) * pa_exp_mat
-      })
+  pathway_expr <- data.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)])
+  pa_exp_mat <- t(pca_scCell_mat) * pathway_expr
+  scPagwas_mat <- data.matrix(Pathway_sclm_results) * pa_exp_mat
+
   rm(pa_exp_mat)
   rm(pathway_expr)
   scs <- rowSums(scPagwas_mat)
@@ -127,8 +121,9 @@ scPagwas_perform_score <- function(Pagwas,
   scs <- sign(scs) * log10(abs(scs) + 0.0001)
 
   df <- data.frame(cellid = colnames(pca_scCell_mat), scPagwas_score = scs)
-  rm(scs)
   rownames(df) <- df$cellid
+  rm(scs)
+
   if (remove_outlier) {
     Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
@@ -150,7 +145,7 @@ scPagwas_perform_score <- function(Pagwas,
 #' @return
 
 scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 1) {
-  x_df <- bigstatsr::as_FBM(as.matrix(Pagwas_x), type = "double")
+  x_df <- bigstatsr::as_FBM(Pagwas_x, type = "double")
 
   liear_m <- bigstatsr::big_univLinReg(
     X = x_df,

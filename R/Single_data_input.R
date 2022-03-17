@@ -64,7 +64,7 @@ Single_data_input <- function(Pagwas,
   if(FilterSingleCell){
 
   count <- Seurat::GetAssayData(object = Single_data, slot = "count")
-
+  count <- suppressMessages(utils_big_as.matrix(count))
   # remove cells that don't have enough counts
   count <- count[, Matrix::colSums(count > 0) > min.lib.size]
 
@@ -95,7 +95,8 @@ Single_data_input <- function(Pagwas,
   merge_scexpr <- Seurat::AverageExpression(Single_data)
   merge_scexpr<-merge_scexpr[["RNA"]]
   data_mat <- Seurat::GetAssayData(object = Single_data, slot = "data")
-
+  data_mat <- suppressMessages(utils_big_as.matrix(data_mat,n_slices_init=1,
+                                  verbose=T))
   #merge_scexpr <- mean_expr(Single_data)
   SOAR::Store(merge_scexpr)
   SOAR::Store(Single_data)
