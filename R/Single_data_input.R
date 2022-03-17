@@ -66,13 +66,13 @@ Single_data_input <- function(Pagwas,
   count <- Seurat::GetAssayData(object = Single_data, slot = "count")
   count <- suppressMessages(utils_big_as.matrix(count))
   # remove cells that don't have enough counts
-  count <- count[, Matrix::colSums(count > 0) > min.lib.size]
+  count <- count[, colSums(count > 0) > min.lib.size]
 
   # remove genes that don't have many reads
-  count <- count[Matrix::rowSums(count) > min.reads, ]
+  count <- count[rowSums(count) > min.reads, ]
 
   # remove genes that are not seen in a sufficient number of cells
-  count <- count[Matrix::rowSums(count > 0) > min.detected, ]
+  count <- count[rowSums(count > 0) > min.detected, ]
 
   # identify for Celltype_anno
   Celltype_anno <- Celltype_anno[colnames(count), ]
