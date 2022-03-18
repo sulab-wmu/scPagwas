@@ -62,19 +62,6 @@ devtools::install_github("dengchunyu/scPagwas")
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
 
-   Pagwas <- GWAS_summary_input(Pagwas=NULL,
-                                 gwas_data=GWAS_summ_example)
-  Pagwas <- Single_data_input(Pagwas=Pagwas,
-                                nfeatures =NULL,
-                                Single_data=scRNAexample)
-    Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
-                                 Pathway_list=Genes_by_pathway_kegg
-                                 )
-       snp_gene_df<-Snp2Gene(snp=gwas_data,refGene=block_annotation)
-       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-       #SOAR::Store(gwas_data)
-       SOAR::Store(snp_gene_df)
 
 
 ```

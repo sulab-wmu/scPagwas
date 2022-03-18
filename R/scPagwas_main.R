@@ -221,6 +221,7 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
                                        chrom_ld=chrom_ld,
                                        n.cores=n.cores)
+    rm(chrom_ld)
   message('done!')
   }
   #Pagwas$rawPathway_list<-NULL
