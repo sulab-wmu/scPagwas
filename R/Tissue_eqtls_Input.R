@@ -56,7 +56,7 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
   }
   eqtls_sig <- eqtls_sig[eqtls_sig$rsid %in% inter_snps, ]
 
-  a2 <- gwas_data[!(gwas_data$rsid %in% inter_snps), ]
+  a2 <- Pagwas$gwas_data[!(Pagwas$gwas_data$rsid %in% inter_snps), ]
 
   # The 1st condition
   snp_gene_df1 <- unique(eqtls_sig[, c("rsid", "gene_name", "pos", "Disstance", "slope")])
@@ -65,7 +65,7 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
 
   if (add_eqtls == "OnlyEqtls") {
     snp_gene_df <- snp_gene_df1
-    gwas_data <- gwas_data[gwas_data$rsid %in% inter_snps, ]
+    Pagwas$gwas_data <- Pagwas$gwas_data[Pagwas$gwas_data$rsid %in% inter_snps, ]
   } else if (add_eqtls == "Both") {
 
     # The 2nd condition
@@ -76,8 +76,9 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
 
     rm(snp_gene_df1,snp_gene_df2)
   }
-  SOAR::Store(gwas_data)
+  #SOAR::Store(gwas_data)
+  Pagwas$gwas_data<-NULL
   SOAR::Store(snp_gene_df)
-  SOAR::Store(block_annotation)
+  #SOAR::Store(block_annotation)
   return(Pagwas)
 }

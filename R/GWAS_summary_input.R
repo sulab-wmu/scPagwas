@@ -86,8 +86,10 @@ GWAS_summary_input <- function(Pagwas=NULL,
       dplyr::filter(abs_z < gwas_z_filter)
   }
 
+  message("*** Start to store the variables: gwas_data")
   #Pagwas$gwas_data <- gwas_data
-  SOAR::Store(gwas_data)
-  gc()
+  #SOAR::Store(gwas_data)
+  Pagwas$gwas_data<-gwas_data
+  #gc()
   return(Pagwas)
 }

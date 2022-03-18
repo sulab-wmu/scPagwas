@@ -115,8 +115,13 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
   close(pb)
 
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
+
+  message("*** Start to store the variables: ")
+  message("*1)Pathway_ld_gwas_data")
   SOAR::Store(Pathway_ld_gwas_data)
+  message("*2)pca_scCell_mat")
   SOAR::Store(pca_scCell_mat)
+  message("*3)data_mat")
   SOAR::Store(data_mat)
 
 

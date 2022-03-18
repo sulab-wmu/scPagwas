@@ -63,7 +63,7 @@ Pathway_annotation_input <- function(Pagwas,
 
   Pagwas$Pathway_list <- Pathway_list
 
-  SOAR::Store(pathway_blocks)
-
+  #SOAR::Store(pathway_blocks)
+  Pagwas$pathway_blocks<-pathway_blocks
   return(Pagwas)
 }

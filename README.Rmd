@@ -35,6 +35,7 @@ devtools::install_github("dengchunyu/scPagwas")
 ### 1.Preprogress and create internal storage
 
 ```{r Pagwas_main}
+ 
  library(Seurat)
  library(scPagwas)
  library(SOAR)
@@ -65,6 +66,21 @@ devtools::install_github("dengchunyu/scPagwas")
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
 
+   Pagwas <- GWAS_summary_input(Pagwas=NULL,
+                                 gwas_data=GWAS_summ_example)
+  Pagwas <- Single_data_input(Pagwas=Pagwas,
+                                nfeatures =NULL,
+                                Single_data=scRNAexample)
+    Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
+                                 Pathway_list=Genes_by_pathway_kegg
+                                 )
+       snp_gene_df<-Snp2Gene(snp=gwas_data,refGene=block_annotation)
+       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
+       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
+       #SOAR::Store(gwas_data)
+       SOAR::Store(snp_gene_df)
+
+
 ```
  
 ### 2. Cell types functions  
@@ -72,7 +88,6 @@ devtools::install_github("dengchunyu/scPagwas")
 ```{r link_pwpca_block}
  
    message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_pwpca_block function start!! ********',sep = ''))
-  #timestart<-Sys.time()
   Pagwas <- link_pwpca_block(Pagwas)
   
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
@@ -90,6 +105,23 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```{r Bootstrap_estimate_Plot}
 
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
+
+```
+
+#### pathway network
+
+```{r plot_network}
+library()
+plot_network(
+  mat_datExpr=pca_cell_df,
+  vec_geneImportance=Pagwas$Pathway_block_heritability,
+  vec_genes_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
+  n_max_genes=20,
+  igraph_algorithm = "drl",
+  fontface_labels="bold.italic",
+  color_edge = "grey70",
+  edge_thickness = 1
+  )
 
 ```
 

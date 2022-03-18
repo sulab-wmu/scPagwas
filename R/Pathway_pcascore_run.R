@@ -50,10 +50,10 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   Pagwas$rawPathway_list <- Pathway_list
 
   # filter the gene for no expression in single cells in pathway
-  celltypes<-as.vector(unique(Idents(Single_data)))
+  celltypes<-as.vector(unique(Idents(Pagwas$Single_data)))
 
   pana_list <- lapply(celltypes, function(celltype) {
-    scCounts <- GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data")
+    scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
     scCounts<-suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
@@ -69,7 +69,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   message("* Start to get Pathway PCA socre!")
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
-    scCounts <- GetAssayData(object = Single_data[, Idents(Single_data) %in% celltype], slot = "data")
+    scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
     scCounts <- suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
@@ -109,14 +109,21 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   })))
   rm(scPCAscore_list)
   # keep cellnames the same as Single_data
-  colnames(pca_scCell_mat) <- colnames(Single_data)
+  colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
   pca_scCell_mat<-data.matrix(pca_scCell_mat, rownames.force = NA)
 
   colnames(merge_scexpr)<-colnames(pca_cell_df)
-  Pagwas$VariableFeatures<-rownames(Single_data)
+  Pagwas$VariableFeatures<-rownames(Pagwas$Single_data)
+  Pagwas$Single_data<-NULL
+
+  message("*** Start to store the variables: ")
+  message("*1)pca_cell_df")
   SOAR::Store(pca_cell_df)
+  message("*2)pca_scCell_mat")
   SOAR::Store(pca_scCell_mat)
+  message("*3)merge_scexpr")
   SOAR::Store(merge_scexpr)
+
   gc()
   #SOAR::Store(Single_data)
 

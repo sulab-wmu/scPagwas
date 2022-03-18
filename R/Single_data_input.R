@@ -98,8 +98,13 @@ Single_data_input <- function(Pagwas,
   data_mat <- suppressMessages(utils_big_as.matrix(data_mat,n_slices_init=1,
                                   verbose=T))
   #merge_scexpr <- mean_expr(Single_data)
+  message("*** Start to store the variables: ")
+  message("*1)merge_scexpr")
   SOAR::Store(merge_scexpr)
-  SOAR::Store(Single_data)
+  #message("*2)Single_data,it may take some time!")
+  #SOAR::Store(Single_data)
+  message("*2)data_mat")
   SOAR::Store(data_mat)
+  Pagwas$Single_data<-Single_data
   return(Pagwas)
 }

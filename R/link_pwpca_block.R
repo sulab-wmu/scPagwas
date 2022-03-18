@@ -88,8 +88,13 @@ link_pwpca_block <- function(Pagwas) {
   })
   close(pb)
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
+
+  message("*** Start to store the variables: ")
+  message("*1)Pathway_ld_gwas_data")
   SOAR::Store(Pathway_ld_gwas_data)
+  message("*2)merge_scexpr")
   SOAR::Store(merge_scexpr)
+  message("*3)pca_cell_df")
   SOAR::Store(pca_cell_df)
   gc()
   return(Pagwas)

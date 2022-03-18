@@ -157,7 +157,24 @@ scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 
   return(liear_m$estim)
 }
 
+#' scGet_gene_heritability_contributions
+#'
+#' @param scPagwas_score
+#' @param data_mat
+#'
+#' @return
 
+scGet_gene_heritability_contributions <- function(scPagwas_score,data_mat){
+
+ if(all(names(scPagwas_score))==(colnames(data_mat))){
+   scPagwas_score<-data.matrix(scPagwas_score)
+   corSparse(X, Y)
+ }else{
+   data_mat<-data_mat[,names(scPagwas_score)]
+
+ }
+
+}
 #' scPagwas_score_filter
 #' @description filter the cPagwas_score for outliers.
 #' @param scPagwas_score (data.frame)

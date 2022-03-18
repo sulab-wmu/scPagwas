@@ -56,14 +56,15 @@ bh.adjust <- function(x, log = FALSE) {
 #' library(scPagwas)
 #' data(gtf_df)
 #' snp_gene_df <- Snp2Gene(snp = as.data.frame(Pagwas$gwas_data), refGene = gtf_df, marg = 10000)
-Snp2Gene <- function(snp, refGene, marg = 5000) {
+Snp2Gene <- function(snp, refGene, marg = 10000) {
   snp_GR <- GenomicRanges::GRanges(snp[, "chrom"],
-                                   IRanges::IRanges(as.numeric(snp[, "pos"]), as.numeric(snp[, "pos"])),
+                                   IRanges::IRanges(as.numeric(snp[, "pos"]),
+                                                    as.numeric(snp[, "pos"])),
     name = snp[, "rsid"]
   )
 
   gene_GR <- GenomicRanges::GRanges(refGene[, "chrom"],
-    IRanges(
+                                    IRanges::IRanges(
       refGene[, "start"] + 1 - marg,
       refGene[, "start"] + marg
     ),
@@ -154,7 +155,6 @@ Snp2Gene <- function(snp, refGene, marg = 5000) {
 #' @param verbose print progress
 #'
 #' @return a dense matrix
-#' @export
 #'
 utils_big_as.matrix <- function(
   sparseMat,
@@ -189,4 +189,42 @@ utils_big_as.matrix <- function(
   densemat <- Reduce(f=cbind, x=list_densemat)
   return(densemat)
 }
+
+
+
+
+#' various association measures between sparse matrices
+#'
+#' @description https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
+#' @note Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
+#'
+#' covmat uses E[(X-muX)'(Y-muY)] = E[X'Y] - muX'muY
+#' with sample correction n/(n-1) this leads to cov = ( X'Y - n*muX'muY ) / (n-1)
+#'
+#' the sd in the case Y!=NULL uses E[X-mu]^2 = E[X^2]-mu^2
+#' with sample correction n/(n-1) this leads to sd^2 = ( X^2 - n*mu^2 ) / (n-1)
+#'
+#'
+#' @param X
+#' @param Y
+#'
+#' @return
+#'
+corSparse <- function(X, Y) {
+
+  X <- as(X,"dgCMatrix")
+  n <- nrow(X)
+  muX <- colMeans(X)
+
+  #if (!is.null(Y)) {
+    stopifnot( nrow(X) == nrow(Y) )
+    Y <- as(Y,"dgCMatrix")
+    muY <- colMeans(Y)
+    covmat <- ( as.matrix(crossprod(X,Y)) - n*tcrossprod(muX,muY) ) / (n-1)
+    sdvecX <- sqrt( (colSums(X^2) - n*muX^2) / (n-1) )
+    sdvecY <- sqrt( (colSums(Y^2) - n*muY^2) / (n-1) )
+    cormat <- covmat/tcrossprod(sdvecX,sdvecY)
+
+}
+
 

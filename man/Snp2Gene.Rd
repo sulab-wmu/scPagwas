@@ -4,7 +4,7 @@
 \alias{Snp2Gene}
 \title{Snps to Genes}
 \usage{
-Snp2Gene(snp, refGene, marg = 5000)
+Snp2Gene(snp, refGene, marg = 10000)
 }
 \arguments{
 \item{snp}{(char) PLINK bim file (only CHR, SNP, and BP columns considered).}

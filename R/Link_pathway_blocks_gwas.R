@@ -21,9 +21,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                      n.cores = 1) {
 
   # nested lists of chrom and then individual pathway_blocks
-  Pachrom_block_list <- lapply(pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
+  Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
-  names(Pachrom_block_list) <- names(pathway_blocks)
+  names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
+  Pagwas$pathway_blocks<-NULL
   #rm(pathway_blocks)
 
   chrom_gwas_list <- lapply( split(gwas_data, f = gwas_data$chrom), function(gwas) {
@@ -115,9 +116,9 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   rm(chrom_gwas_list)
-
+  rm(chrom_ld)
+  message("*** Start to store the variables: Pathway_ld_gwas_data")
   SOAR::Store(Pathway_ld_gwas_data)
-
   gc()
   return(Pagwas)
 }

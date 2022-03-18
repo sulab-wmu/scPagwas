@@ -95,28 +95,17 @@ scPagwas_main <- function(Pagwas = NULL,
   class(Pagwas) <- 'Pagwas'
   }
   #1.gwas summary data input
-  message("*** Start to store the variables:")
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  message("*1)gwas_data")
-  SOAR::Store(gwas_data)
-  message("*2)block_annotation")
+  message("*** Start to store the variables:block_annotation")
   SOAR::Store(block_annotation)
-  message("*3)Single_data")
-  SOAR::Store(Single_data)
-  message("*4)chrom_ld")
-  SOAR::Store(chrom_ld)
-
-  message(paste(utils::timestamp(quiet = T), ' ******* 1st: GWAS_summary_input function start! ********',sep = ''))
-
-  if (!is.null(gwas_data)){
-
-    Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
-                                 gwas_data=gwas_data,
-                                 maf_filter=maf_filter)
-    }
-  message('done!')
+  #message("*2)chrom_ld")
+  #SOAR::Store(chrom_ld)
+  #message("*3)gwas_data")
+  #SOAR::Store(gwas_data)
+  #message("*4)Single_data,it takes some time")
+  #SOAR::Store(Single_data)
   #2.single data input
-  message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Single_data_input function start! ********',sep = ''))
+  message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
 
@@ -136,7 +125,7 @@ scPagwas_main <- function(Pagwas = NULL,
   message('done!')
 
   #3.calculated pca score
-  message(paste(utils::timestamp(quiet = T), ' ******* 3rd: Pathway_pcascore_run function start!! ********',sep = ''))
+  message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Pathway_pcascore_run function start!! ********',sep = ''))
 
 
   if (!is.null(Pathway_list)){
@@ -148,6 +137,17 @@ scPagwas_main <- function(Pagwas = NULL,
                                  max.pathway.size=max.pathway.size
                                  )
 
+   }
+   message('done!')
+
+
+   message(paste(utils::timestamp(quiet = T), ' ******* 3rd: GWAS_summary_input function start! ********',sep = ''))
+
+   if (!is.null(gwas_data)){
+
+     Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
+                                  gwas_data=gwas_data,
+                                  maf_filter=maf_filter)
    }
    message('done!')
 
@@ -176,12 +176,13 @@ scPagwas_main <- function(Pagwas = NULL,
     }else{
 
        #SOAR::Store(block_annotation)
-       snp_gene_df<-Snp2Gene(snp=gwas_data,refGene=block_annotation,marg=marg)
+       snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,refGene=block_annotation,marg=marg)
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
        snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
        #SOAR::Store(gwas_data)
+       Pagwas$gwas_data<-NULL
        SOAR::Store(snp_gene_df)
-       SOAR::Store(block_annotation)
+       #SOAR::Store(block_annotation)
     }
   }
 
@@ -206,6 +207,9 @@ scPagwas_main <- function(Pagwas = NULL,
                                        n.cores=n.cores)
   message('done!')
   }
+  #Pagwas$rawPathway_list<-NULL
+  #Pagwas$Pathway_list<-NULL
+  #Pagwas$Pathway_list<-NULL
 
   return(Pagwas)
 }
