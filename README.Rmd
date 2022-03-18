@@ -44,12 +44,8 @@ devtools::install_github("dengchunyu/scPagwas")
  ## basic example code
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
- #Input GWAS summry data(data.frame).
- data(GWAS_summ_example)
  #gene annotation files.
- data(gtf_df)
- #Single cell example data.
- data(scRNAexample)
+ data(block_annotation)
  #LD data
  data(chrom_ld)
  ##create a session for internal storage
@@ -57,10 +53,10 @@ devtools::install_github("dengchunyu/scPagwas")
 
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data = GWAS_summ_example,
+                     gwas_data = "E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
                      add_eqtls="OnlyTSS",
-                     block_annotation = gtf_df,
-                     Single_data = scRNAexample,
+                     block_annotation = block_annotation,
+                     Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
                      FilterSingleCell=TRUE,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
@@ -159,8 +155,7 @@ plot_network(
 ```{r scPagwas_perform_regression}
     message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
     Pagwas <- scPagwas_perform_regression(Pagwas)
-    
-Remove(Objects())
+
 ```
 
 

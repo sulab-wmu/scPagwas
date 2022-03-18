@@ -16,6 +16,86 @@ knitr::opts_chunk$set(
 
 ## 1.Adult-healthy-MDD
 ```{r setup, eval = FALSE}
+
+#' scRNAexample
+#'
+#' @description
+#' A single cell example data from \code{
+#' liver_data<-readRDS("/share/pub/qiuf/COVID/liver/Rpoly.rds")
+#' #set Idents
+#' liver_data@meta.data$annotation <- liver_data@meta.data$anno
+#' Idents(liver_data) <- liver_data@meta.data$anno
+#' #normalization
+#' liver_data <- NormalizeData(liver_data, normalization.method = "LogNormalize", scale.factor = 10000)
+#' #correct the cell names, need no specific signal
+#' anno <- liver_data@meta.data$annotation
+#'  anno<-str_replace_all(anno,"-",".")
+#'  anno<-str_replace_all(anno," ",".")
+#' anno[which(anno=="Inflammatory.monocyte/macrophages")]<-"Inflammatory.monocyte.macrophages"
+#' Celltype_anno$annotation<-str_replace_all(anno,"\\+",".")
+#' Idents(liver_data) <- as.factor(anno)
+#' liver_data<-subset(liver_data,idents = c("Stellate.cell","unknow","γδ.T.cell"), invert = TRUE)
+#' scRNAexample<-liver_data[,sample(ncol(liver_data),1000)]
+#'
+#'  for (x in 1:length(unique(scRNAexample@meta.data$anno))){
+#'  newnames <- paste0("Celltype",x)
+#'  oldnames<-unique(scRNAexample@meta.data$anno)[x]
+#'  scRNAexample@meta.data$anno[which(scRNAexample@meta.data$anno==oldnames)]<-newnames
+#'  }
+#'  Idents(scRNAexample)<-scRNAexample@meta.data$anno
+#'  scRNAexample@meta.data<-scRNAexample@meta.data[,1:15]
+#'
+#'  save(scRNAexample,file = "E:/RPakage/scPagwas/data/scRNAexample.RData")
+#'
+#' }
+#'
+#' @docType data
+#' @name scRNAexample
+#' @usage data(scRNAexample)
+#' @format a Seruat.
+#' @source Generated from PBC
+#' @keywords datasets
+#' @examples
+#' data(scRNAexample)
+#' str(scRNAexample)
+NULL
+
+
+
+
+#' GWAS_summ_example
+#'
+#' @description
+#' A GWAS summary data from \code{
+#' library(readr)
+#' library(dplyr)
+#' GWAS_liver<-read_delim("/share/pub/mayl/Sherlock/XiangbingYu_Primary_biliary_cholangitis/PBC_GWAS_UKBiobank_summary_final",delim="\t")
+#' #select the specific coloumn names: chrom，pos，rsid，beta，se，maf
+#' GWAS_liver<-GWAS_liver[,c("CHR","POS","SNP","p","SE")]
+#' colnames(GWAS_liver)<-c("chrom","pos","rsid","p","se")
+#' COVOD19<-read_delim("/share/pub/mayl/01_COVID19_GWAS_round4/COVID19_HGI_B2_ALL_leave_23andme_20201020.b37.txt",delim="\t")
+#' COVOD19<-COVOD19[,c("all_meta_AF","rsid")]
+#' colnames(COVOD19)<-c("maf","rsid")
+#' ##get beta
+#' GWAS_liver$beta<-GWAS_liver$se*qchisq(GWAS_liver$p,1,lower.tail=F)
+#' GWAS_liver_inner <- inner_join(GWAS_liver,COVOD19,by="rsid")
+#' GWAS_liver_inner <- as.data.frame(GWAS_liver_inner)
+#' GWAS_summ_example <- as.data.frame(GWAS_liver_inner[sample(nrow(GWAS_liver_inner),10000),])
+#' save(GWAS_summ_example,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/GWAS_summ_example.RData")
+#' }
+#'
+#' @docType data
+#' @name GWAS_summ_example
+#' @usage data(GWAS_summ_example)
+#' @format a data.frame.
+#' @source Generated from PBC_GWAS_UKBiobank_summary_final
+#' @keywords datasets
+#' @examples
+#' data(GWAS_summ_example)
+#' str(GWAS_summ_example)
+NULL
+
+
 library("Seurat")
 library("stringr") 
 library(ggplot2)

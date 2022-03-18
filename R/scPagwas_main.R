@@ -17,6 +17,7 @@
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom SOAR Store
+#' @importFrom readr read_table2
 
 
 #' @title Main wrapper functions for scPagwas
@@ -108,8 +109,19 @@ scPagwas_main <- function(Pagwas = NULL,
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
+  if(class(Single_data)=="character"){
+    if(grepl(".rds",Single_data)){
+      message("** Start to read the single cell data!")
+      Single_data=readRDS(Single_data)
+    }else{
+      stop("There is need a data in `.rds` format ")
+    }
 
-  if (!is.null(Single_data)){
+  }else{
+    stop("There is need a filename and address for single data")
+  }
+
+
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 nfeatures =nfeatures,
                                 Single_data=Single_data,
@@ -118,10 +130,9 @@ scPagwas_main <- function(Pagwas = NULL,
                                 min.reads =min.reads,
                                 min.detected =min.detected,
                                 min_clustercells=min_clustercells)
+   rm(Single_data)
 
-
-  }
-  message(ncol(Single_data)," cells are remain!" )
+  message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
 
   #3.calculated pca score
@@ -143,12 +154,17 @@ scPagwas_main <- function(Pagwas = NULL,
 
    message(paste(utils::timestamp(quiet = T), ' ******* 3rd: GWAS_summary_input function start! ********',sep = ''))
 
-   if (!is.null(gwas_data)){
+   if(class(gwas_data)=="character"){
+     message("** Start to read the gwas_data!")
+     suppressMessages(a <- as.data.frame(readr::read_table2(gwas_data)))
+   }else{
+     stop("There is need a filename and address for gwas_data")
+   }
 
      Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
-                                  gwas_data=gwas_data,
+                                  gwas_data=a,
                                   maf_filter=maf_filter)
-   }
+     rm(a)
    message('done!')
 
    #4.calculated Snp2Gene
@@ -210,6 +226,6 @@ scPagwas_main <- function(Pagwas = NULL,
   #Pagwas$rawPathway_list<-NULL
   #Pagwas$Pathway_list<-NULL
   #Pagwas$Pathway_list<-NULL
-
+  gc()
   return(Pagwas)
 }
