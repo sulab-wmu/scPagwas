@@ -27,12 +27,13 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   Pagwas$pathway_blocks<-NULL
   #rm(pathway_blocks)
 
-  chrom_gwas_list <- lapply( split(gwas_data, f = gwas_data$chrom), function(gwas) {
+  chrom_gwas_list <- lapply( split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
       data.table::setkey(gwas, pos)
       return(gwas)
     }
   )
+  Pagwas$gwas_data<-NULL
   #rm(gwas_data)
   # prevent naming issues and indexing issues
 
@@ -117,10 +118,11 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   rm(chrom_gwas_list)
   rm(chrom_ld)
-  message("*** Start to store the variables: Pathway_ld_gwas_data")
   SOAR::Store(Pathway_ld_gwas_data)
-  gc()
+  #message("*** Start to store the variables: Pathway_ld_gwas_data")
+  #SOAR::Store(Pathway_ld_gwas_data)
   return(Pagwas)
+
 }
 
 

@@ -63,13 +63,13 @@ devtools::install_github("dengchunyu/scPagwas")
                      scPagwasSession="scPagwasSession")
 
 
-rm(block_annotation)
+#rm(block_annotation)
 ```
  
 ### 2. Cell types functions  
  
 ```{r link_pwpca_block}
-  Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
+  #Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
 #8th: Pagwas_perform_regression function start!!
@@ -90,24 +90,24 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```{r Bootstrap_estimate_Plot}
 
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
-Bootstrap_estimate_Plot(Pagwas=Pagwas2,figurenames = NULL)
+#Bootstrap_estimate_Plot(Pagwas=Pagwas2,figurenames = NULL)
 
 ```
 
 #### pathway network
 
 ```{r plot_network}
-library()
-plot_network(
-  mat_datExpr=pca_cell_df,
-  vec_geneImportance=Pagwas$Pathway_block_heritability,
-  vec_genes_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-  n_max_genes=20,
-  igraph_algorithm = "drl",
-  fontface_labels="bold.italic",
-  color_edge = "grey70",
-  edge_thickness = 1
-  )
+#library()
+#plot_network(
+#  mat_datExpr=pca_cell_df,
+ # vec_geneImportance=Pagwas$Pathway_block_heritability,
+ # vec_genes_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
+ # n_max_genes=20,
+ # igraph_algorithm = "drl",
+ # fontface_labels="bold.italic",
+ # color_edge = "grey70",
+#  edge_thickness = 1
+ # )
 
 ```
 #######
@@ -155,6 +155,12 @@ plot_network(
 
 
 ```{r Pagwas2}
+ data(Genes_by_pathway_kegg)
+ #gene annotation files.
+ data(block_annotation)
+ #LD data
+ data(chrom_ld)
+ 
    Pagwas2<-scPagwas_main(Pagwas = NULL,
                      gwas_data = "E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
                      add_eqtls="OnlyTSS",
@@ -173,7 +179,7 @@ plot_network(
   Pagwas2 <- link_scCell_pwpca_block(Pagwas2)
   Pagwas2 <- scPagwas_perform_score(Pagwas2)
   
-  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
+  scPagwas_Visualization(scPagwas_score = Pagwas2$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
                         assay = "SCT",

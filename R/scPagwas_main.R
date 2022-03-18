@@ -191,17 +191,12 @@ scPagwas_main <- function(Pagwas = NULL,
        }
     }else{
 
-       #SOAR::Store(block_annotation)
        snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,refGene=block_annotation,marg=marg)
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
        snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-       #SOAR::Store(gwas_data)
-       Pagwas$gwas_data<-NULL
        SOAR::Store(snp_gene_df)
-       #SOAR::Store(block_annotation)
     }
   }
-
   #3.pathway block data
   message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
 
@@ -221,11 +216,11 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
                                        chrom_ld=chrom_ld,
                                        n.cores=n.cores)
+
     rm(chrom_ld)
   message('done!')
   }
-  #Pagwas$rawPathway_list<-NULL
-  #Pagwas$Pathway_list<-NULL
+
   #Pagwas$Pathway_list<-NULL
   gc()
   return(Pagwas)
