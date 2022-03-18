@@ -63,31 +63,34 @@ devtools::install_github("dengchunyu/scPagwas")
                      scPagwasSession="scPagwasSession")
 
 
-
+rm(block_annotation)
 ```
  
 ### 2. Cell types functions  
  
 ```{r link_pwpca_block}
- 
-   message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_pwpca_block function start!! ********',sep = ''))
+  Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
+# 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
-  
-  message(paste(utils::timestamp(quiet = T), ' ******* 8th: Pagwas_perform_regression function start!! ********',sep = ''))
+#8th: Pagwas_perform_regression function start!!
   Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200,n.cores=1)
-  
+
+
 ``` 
 #### Visualize the celltypes results.
 
  1.barplot
 ```{r Bootstrap_P_Barplot}
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
+
+
 ```
 
  2.Forestplot for estimate values
 ```{r Bootstrap_estimate_Plot}
 
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
+Bootstrap_estimate_Plot(Pagwas=Pagwas2,figurenames = NULL)
 
 ```
 
@@ -107,6 +110,8 @@ plot_network(
   )
 
 ```
+#######
+
 
 ### 3.Single cell function 
 ```{r link_scCell_pwpca_block}
@@ -114,10 +119,12 @@ plot_network(
  #as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
   message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_scCell_pwpca_block function start!! ********',sep = ''))
   Pagwas <- link_scCell_pwpca_block(Pagwas)
+ 
 
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
   Pagwas <- scPagwas_perform_score(Pagwas)
   
+
 ```
 
 
@@ -145,6 +152,41 @@ plot_network(
 
 ```
 
+
+
+```{r Pagwas2}
+   Pagwas2<-scPagwas_main(Pagwas = NULL,
+                     gwas_data = "E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
+                     add_eqtls="OnlyTSS",
+                     nfeatures = 5000,
+                     block_annotation = block_annotation,
+                     Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
+                     FilterSingleCell=TRUE,
+                     Pathway_list=Genes_by_pathway_kegg,
+                     chrom_ld = chrom_ld,
+                     scPagwasSession="scPagwasSession2")
+  rm(chrom_ld)
+  #Sys.setenv(R_LOCAL_CACHE="scPagwasSession2")
+  Pagwas2 <- link_pwpca_block(Pagwas2)
+  Pagwas2 <- Pagwas_perform_regression(Pagwas2, iters = 200,n.cores=1)
+  Bootstrap_P_Barplot(Pagwas=Pagwas2,title = "5000 Test scPagwas")
+  Pagwas2 <- link_scCell_pwpca_block(Pagwas2)
+  Pagwas2 <- scPagwas_perform_score(Pagwas2)
+  
+  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
+                        Single_data = scRNAexample,
+                        Reduction = TRUE,
+                        assay = "SCT",
+                        cellpercent = 0.1,
+                        filename = "scPagwas2_testFigure",
+                        FigureType = "tsne",
+                        width = 7,
+                        height = 7,
+                        lowColor = "#FFBC80", highColor = "#FC4F4F",
+                        size = 1,
+                        title = "scPagwas_score_5000")
+  
+```
 
 ```{r removeCathe}
 # empty the cache
