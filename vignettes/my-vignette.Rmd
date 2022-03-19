@@ -96,6 +96,8 @@ NULL
 NULL
 
 
+
+
 library("Seurat")
 library("stringr") 
 library(ggplot2)
@@ -113,3 +115,11 @@ object.size(data)
  data(Genes_by_pathway_kegg)
 
 ```
+
+##R_LOCAL_CACHE
+1.不同的函数如果同时运行要有不用的session命名，如果是连续运行则可以用同一个session文件
+2.运行完代码之后如果需要删除当前环境中的变量，以免占用内存
+查看当前session中的变量
+Objects()
+删除当前环境中的变量：
+Remove(Objects())

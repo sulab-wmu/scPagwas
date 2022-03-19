@@ -13,6 +13,9 @@ corSparse(X, Y)
 
 }
 \description{
+Pearson correlation matrix between columns of X, Y
+modification the code from:
+http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-over-a-sparse-matrix-in-r
 https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
 }
 \note{

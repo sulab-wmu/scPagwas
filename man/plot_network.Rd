@@ -6,18 +6,54 @@
 \usage{
 plot_network(
   mat_datExpr,
-  vec_geneImportance,
-  vec_genes_highlight = c(),
-  n_max_genes = 50,
+  vec_pathwaycontribution,
+  vec_pathways_highlight = c(),
+  n_max_pathways = 50,
   igraph_algorithm = "drl",
   fontface_labels = "bold.italic",
-  color_edge = "grey70",
+  color_edge = "#9D9D9D",
   fontSize_label_lg = 1,
   fontSize_legend_lg = 1,
   fontSize_legend_xlg = 1,
-  edge_thickness = 1,
-  do_plot = TRUE
+  edge_thickness = 1
 )
+}
+\arguments{
+\item{mat_datExpr}{data matrix for single cell data}
+
+\item{vec_pathwaycontribution}{vector of pathway contribution score from pagwas}
+
+\item{vec_pathways_highlight}{vector of pathway highlight from your choose.}
+
+\item{n_max_pathways}{number of max pathways for showing.}
+
+\item{igraph_algorithm}{defalt is drl,method for igragh,details see igraph packages.}
+
+\item{fontface_labels}{fontface for labels}
+
+\item{color_edge}{edge color.}
+
+\item{fontSize_label_lg}{fontSize for lg label}
+
+\item{fontSize_legend_lg}{fontSize for lg legend}
+
+\item{fontSize_legend_xlg}{fontSize for xlg legend}
+
+\item{edge_thickness}{thickness of edge
+
+plot_network(
+mat_datExpr=pca_cell_df,
+vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
+vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)\link{1:5}),
+n_max_pathways=20,
+igraph_algorithm = "drl",
+fontface_labels="bold.italic",
+color_edge = "#9D9D9D",
+fontSize_label_lg=4,
+fontSize_legend_lg=4,
+fontSize_legend_xlg=4,
+edge_thickness = 1
+)}
 }
 \description{
 Thanks to the SCOPfunctions package "https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions"

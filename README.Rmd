@@ -36,10 +36,10 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ```{r Pagwas_main}
  
- library(Seurat)
+# library(Seurat)
  library(scPagwas)
- library(SOAR)
- library("dplyr")
+# library(SOAR)
+# library("dplyr")
 
  ## basic example code
  #Input pathway gene list, you can construct with youself.
@@ -98,16 +98,27 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ```{r plot_network}
 #library()
-#plot_network(
-#  mat_datExpr=pca_cell_df,
- # vec_geneImportance=Pagwas$Pathway_block_heritability,
- # vec_genes_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
- # n_max_genes=20,
- # igraph_algorithm = "drl",
- # fontface_labels="bold.italic",
- # color_edge = "grey70",
-#  edge_thickness = 1
- # )
+
+  # require("WGCNA")
+  # require("dplyr")
+  # require("tidygraph")
+  # require("ggraph")
+  # require("igraph")
+#pdf("E:\OneDrive\GWAS_Multiomics\Validation/plot_network.pdf")
+plot_network(
+  mat_datExpr=pca_cell_df,
+  vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
+ vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
+  n_max_pathways=20,
+  igraph_algorithm = "drl",
+  fontface_labels="bold.italic",
+  color_edge = "#9D9D9D",
+    fontSize_label_lg=4,
+  fontSize_legend_lg=4,
+  fontSize_legend_xlg=4,
+  edge_thickness = 1
+  )
+#dev.off()
 
 ```
 #######
@@ -123,8 +134,6 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
   Pagwas <- scPagwas_perform_score(Pagwas)
-  
-  scPagwas_score
 
 ```
 
@@ -143,6 +152,18 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
                         lowColor = "#FFBC80", highColor = "#FC4F4F",
                         size = 1,
                         title = "scPagwas_score")
+
+top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
+library("RColorBrewer")
+library("ggplot2")
+
+plot_vlnGrid(seurat_obj=scRNAexample,
+             assay="RNA", slot="data",
+             var_group="anno",# 细胞cluster注释列
+             vec_features=top5genes,
+             vec_group_colors= pal_d3(alpha =0.5)(10)
+             )
+                  
 
 ```
 #### Single cell regression
@@ -197,7 +218,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ```{r removeCathe}
 # empty the cache
-#Objects()
+Objects()
 Remove(Objects())
 
 ```
