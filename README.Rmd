@@ -141,6 +141,9 @@ plot_pathway_contribution_network(
 #### Visualize the scPagwas_main results.
 ```{r scPagwas_Visualization}
 require("RColorBrewer")
+require("Seurat")
+require("SeuratObject")
+
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
