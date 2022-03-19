@@ -198,7 +198,8 @@ umap_theme <- function() {
 #' @return
 
 fortify.Seurat.umap <- function(x) {
-  xy1 <- as.data.frame(Embeddings(x, reduction = "umap"))
+  xy1 <- as.data.frame(
+    Seurat::Embeddings(x, reduction = "umap"))
   colnames(xy1) <- c("UMAP_1", "UMAP_2")
   xy1$UMAP_1 <- as.numeric(xy1$UMAP_1)
   xy1$UMAP_2 <- as.numeric(xy1$UMAP_2)
@@ -214,7 +215,8 @@ fortify.Seurat.umap <- function(x) {
 #' @return
 
 fortify.Seurat.tsne <- function(x) {
-  xy2 <- as.data.frame(Embeddings(x, reduction = "tsne"))
+  xy2 <- as.data.frame(
+    Seurat::Embeddings(x, reduction = "tsne"))
   colnames(xy2) <- c("TSNE_1", "TSNE_2")
   xy2$TSNE_1 <- as.numeric(xy2$TSNE_1)
   xy2$TSNE_2 <- as.numeric(xy2$TSNE_2)
