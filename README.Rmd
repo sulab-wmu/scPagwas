@@ -124,6 +124,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
   Pagwas <- scPagwas_perform_score(Pagwas)
   
+  scPagwas_score
 
 ```
 

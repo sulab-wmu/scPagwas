@@ -195,7 +195,10 @@ utils_big_as.matrix <- function(
 
 #' various association measures between sparse matrices
 #'
-#' @description https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
+#' @description Pearson correlation matrix between columns of X, Y
+#' modification the code from:
+#' http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-over-a-sparse-matrix-in-r
+#' https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
 #' @note Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
 #'
 #' covmat uses E[(X-muX)'(Y-muY)] = E[X'Y] - muX'muY
@@ -211,20 +214,19 @@ utils_big_as.matrix <- function(
 #' @return
 #'
 corSparse <- function(X, Y) {
-
-  X <- as(X,"dgCMatrix")
+  X <-utils_big_as.matrix(X)
   n <- nrow(X)
   muX <- colMeans(X)
 
-  #if (!is.null(Y)) {
     stopifnot( nrow(X) == nrow(Y) )
-    Y <- as(Y,"dgCMatrix")
+
     muY <- colMeans(Y)
-    covmat <- ( as.matrix(crossprod(X,Y)) - n*tcrossprod(muX,muY) ) / (n-1)
+    covmat <- (as.matrix(crossprod(X,Y)) - n*tcrossprod(muX,muY) ) / (n-1)
     sdvecX <- sqrt( (colSums(X^2) - n*muX^2) / (n-1) )
     sdvecY <- sqrt( (colSums(Y^2) - n*muY^2) / (n-1) )
     cormat <- covmat/tcrossprod(sdvecX,sdvecY)
-
+    cormat[is.nan(cormat),1]<-0
+return(cormat)
 }
 
 

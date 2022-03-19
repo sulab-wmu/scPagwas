@@ -159,21 +159,28 @@ scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 
 
 #' scGet_gene_heritability_contributions
 #'
-#' @param scPagwas_score
-#' @param data_mat
+#' @param scPagwas_score result of scPagwas
+#' @param data_mat the data matrix from single cell data
 #'
 #' @return
+#' @example
+#' Single_data<-readRDS("E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds")
+Pagwas$sparse_cor<-scGet_gene_heritability_contributions(
+scPagwas_score=Pagwas$scPagwas_score,
+data_mat=Seurat::GetAssayData(object = Single_data[,names(Pagwas$scPagwas_score)], slot = "data"))
 
 scGet_gene_heritability_contributions <- function(scPagwas_score,data_mat){
 
- if(all(names(scPagwas_score))==(colnames(data_mat))){
+ if(all(names(scPagwas_score)==colnames(data_mat))){
    scPagwas_score<-data.matrix(scPagwas_score)
-   corSparse(X, Y)
+   data_mat<-t(data_mat)
+   sparse_cor<-corSparse(X=data_mat, Y=scPagwas_score)
  }else{
    data_mat<-data_mat[,names(scPagwas_score)]
-
+   scPagwas_score<-data.matrix(scPagwas_score)
+   sparse_cor<-corSparse(X=data_mat, Y=scPagwas_score)
  }
-
+return(sparse_cor)
 }
 #' scPagwas_score_filter
 #' @description filter the cPagwas_score for outliers.
