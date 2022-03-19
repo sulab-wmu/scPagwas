@@ -36,10 +36,10 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ```{r Pagwas_main}
  
-# library(Seurat)
+ library(Seurat)
  library(scPagwas)
-# library(SOAR)
-# library("dplyr")
+library(SOAR)
+ library("dplyr")
 
  ## basic example code
  #Input pathway gene list, you can construct with youself.
@@ -143,6 +143,7 @@ plot_pathway_contribution_network(
 require("RColorBrewer")
 require("Seurat")
 require("SeuratObject")
+require("ggsci")
 
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
