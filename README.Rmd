@@ -105,7 +105,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
   # require("ggraph")
   # require("igraph")
 #pdf("E:\OneDrive\GWAS_Multiomics\Validation/plot_network.pdf")
-plot_network(
+plot_pathway_contribution_network(
   mat_datExpr=pca_cell_df,
   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
  vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
@@ -157,13 +157,33 @@ top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heri
 library("RColorBrewer")
 library("ggplot2")
 
-plot_vlnGrid(seurat_obj=scRNAexample,
+plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
              var_group="anno",# 细胞cluster注释列
              vec_features=top5genes,
              vec_group_colors= pal_d3(alpha =0.5)(10)
              )
-                  
+
+scPagwas_score <- Pagwas$scPagwas_score[intersect(colnames(scRNAexample),names(Pagwas$scPagwas_score))]
+scRNAexample$scPagwas_score <- scPagwas_score
+thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
+  
+scRNAexample$positiveCells<-rep(0,ncol(scRNAexample))
+scRNAexample$positiveCells[scRNAexample$scPagwas_score>=thre]<-1
+
+plot_bar_positie_nagtive(seurat_obj=scRNAexample,
+                              var_ident="positiveCells",
+                              var_group="anno",
+                              vec_group_colors=NULL,
+                              f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
+                              do_plot = F)
+
+plot_bar_positie_nagtive(seurat_obj=scRNAexample,
+                              var_ident="anno",
+                              var_group="positiveCells",
+                              vec_group_colors=c("#E8D0B3","#7EB5A6"),
+                              #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
+                              do_plot = F)
 
 ```
 #### Single cell regression
@@ -193,7 +213,7 @@ plot_vlnGrid(seurat_obj=scRNAexample,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession2")
-  rm(chrom_ld)
+ # rm(chrom_ld)
   #Sys.setenv(R_LOCAL_CACHE="scPagwasSession2")
   Pagwas2 <- link_pwpca_block(Pagwas2)
   Pagwas2 <- Pagwas_perform_regression(Pagwas2, iters = 200,n.cores=1)

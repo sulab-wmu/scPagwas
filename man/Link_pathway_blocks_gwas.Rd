@@ -13,8 +13,12 @@ Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, n.cores = 1)
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores()
 to check the cores in computer.}
+
+\item{chrom}{}
 }
 \value{
+
+
 
 }
 \description{
@@ -26,4 +30,6 @@ or gene blocks,
 library(scPagwas)
 data(chrom_ld)
 Pagwas <- Link_pathway_blocks_gwas(Pagwas = Pagwas, chrom_ld = chrom_ld)
+Title
+
 }

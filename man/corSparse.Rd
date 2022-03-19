@@ -7,7 +7,9 @@
 corSparse(X, Y)
 }
 \arguments{
-\item{Y}{}
+\item{X}{matrix}
+
+\item{Y}{matrix or vector}
 }
 \value{
 

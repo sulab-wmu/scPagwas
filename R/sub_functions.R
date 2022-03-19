@@ -208,8 +208,8 @@ utils_big_as.matrix <- function(
 #' with sample correction n/(n-1) this leads to sd^2 = ( X^2 - n*mu^2 ) / (n-1)
 #'
 #'
-#' @param X
-#' @param Y
+#' @param X matrix
+#' @param Y matrix or vector
 #'
 #' @return
 #'

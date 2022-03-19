@@ -27,7 +27,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   Pagwas$pathway_blocks<-NULL
   #rm(pathway_blocks)
 
-  chrom_gwas_list <- lapply( split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
+  chrom_gwas_list <- lapply(split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
       data.table::setkey(gwas, pos)
       return(gwas)
@@ -46,6 +46,14 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     # message(paste(' - starting blocks on pathway: ', pa, sep = ''))
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
+#' Title
+#'
+#' @param chrom
+#'
+#' @return
+#' @export
+#'
+#' @examples
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
       chrom_block <- Pa_chrom_block[[chrom]]
       ld_data <- chrom_ld[[chrom]]
