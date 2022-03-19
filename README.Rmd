@@ -99,11 +99,11 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 ```{r plot_network}
 #library()
 
-  # require("WGCNA")
-  # require("dplyr")
-  # require("tidygraph")
-  # require("ggraph")
-  # require("igraph")
+   require("WGCNA")
+   require("patchwork")
+   require("tidygraph")
+   require("ggraph")
+   require("igraph")
 #pdf("E:\OneDrive\GWAS_Multiomics\Validation/plot_network.pdf")
 plot_pathway_contribution_network(
   mat_datExpr=pca_cell_df,
@@ -140,6 +140,7 @@ plot_pathway_contribution_network(
 
 #### Visualize the scPagwas_main results.
 ```{r scPagwas_Visualization}
+require("RColorBrewer")
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
