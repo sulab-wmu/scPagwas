@@ -87,11 +87,12 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 #### pathway network
 
 ```{r message=FALSE}
-   require("WGCNA")
-   require("patchwork")
-   require("tidygraph")
-   require("ggraph")
-   require("igraph")
+suppressMessages(require("WGCNA"))
+suppressMessages(require("patchwork"))
+suppressMessages(require("tidygraph"))
+suppressMessages(require("ggraph"))
+suppressMessages(require("igraph"))
+
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,

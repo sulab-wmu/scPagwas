@@ -26,12 +26,15 @@ reference:
       - '`scPagwas_main`'
       - '`scPagwas_perform_regression`'
       - '`scPagwas_perform_score`'
+      - '`plot_bar_positie_nagtive`'
+      - '`plot_pathway_contribution_network`'
+      - '`plot_vln_Corgenes`'
 
 
   - title: Internals
     desc: Internal functions and helpers
     contents:
-      - '`as_matrix`'
+      - '`utils_big_as.matrix`'
       - '`bh.adjust`'
       - '`Boot_evaluate`'
       - '`cv_regularized_parameter_estimator`'
@@ -40,17 +43,19 @@ reference:
       - '`Get_bootresults_df`'
       - '`Get_Pathway_heritability_contributions`'
       - '`make_ld_matrix`'
-      - '`mean_expr`'
       - '`papply`'
       - '`para_names_adjust`'
       - '`PathwayPCAtest`'
       - '`scBoot_evaluate`'
       - '`scGet_Pathway_heritability_contributions`'
+      - '`scGet_gene_heritability_correlation`'
       - '`scPagwas_score_filter`'
       - '`scParameter_regression`'
+      - '`colnorm_sub`'
       - '`Snp2Gene`'
       - '`umap_theme`'
       - '`xy2vector`'
+      - '`corSparse`'
 
   - title: Internals dataset
     desc: Internal dataset
@@ -59,9 +64,6 @@ reference:
       - '`Genes_by_pathway_kegg`'
       - '`Genes_by_pathway_hallmark`'
       - '`Genes_by_pathway_reactome`'
-      - '`gtf_df`'
-      - '`scRNAexample`'
-      - '`GWAS_summ_example`'
       - '`gtf_df`'
 
 navbar:
