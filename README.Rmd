@@ -146,7 +146,7 @@ require("ggsci")
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
-```{r message=FALSE}
+```{r message=FALSE,fig.height=6, fig.width=6}
 library("RColorBrewer")
 library("ggplot2")
 

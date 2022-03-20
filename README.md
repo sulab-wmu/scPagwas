@@ -25,7 +25,7 @@ devtools::install_github("dengchunyu/scPagwas")
  
  library(Seurat)
  library(scPagwas)
- library(SOAR)
+ suppressMessages(library(SOAR))
 #> Warning: 程辑包'SOAR'是用R版本4.1.1 来建造的
  library("dplyr")
  #Input pathway gene list, you can construct with youself.
