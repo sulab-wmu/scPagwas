@@ -74,19 +74,19 @@ devtools::install_github("dengchunyu/scPagwas")
 #### Visualize the celltypes results.
 
  1.barplot
-```{r message=FALSE}
+```{r Bootstrap_P_Barplot, message=FALSE}
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```
 
  2.Forestplot for estimate values
-```{r message=FALSE}
+```{r Bootstrap_estimate_Plot,message=FALSE}
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ```
 
 #### pathway network
 
-```{r message=FALSE,warning = FALSE}
+```{r pathway_contribution_network,message=FALSE,warning = FALSE}
 suppressMessages(require("WGCNA"))
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
@@ -125,7 +125,7 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 #### Visualize the scPagwas_main results.
 ##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
 
-```{r message=FALSE,warning = FALSE}
+```{r scPagwas_Visualization,message=FALSE,warning = FALSE}
 require("RColorBrewer")
 require("Seurat")
 require("SeuratObject")
@@ -147,7 +147,7 @@ require("ggsci")
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
-```{r message=FALSE,fig.height=6, fig.width=6}
+```{r bar_positie_nagtive,message=FALSE,fig.height=6, fig.width=6}
 library("RColorBrewer")
 library("ggplot2")
 
@@ -167,7 +167,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell 
 
-```{r message=FALSE}
+```{r bar_positie_nagtive2,message=FALSE}
 plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
@@ -178,7 +178,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
-```{r message=FALSE,fig.height=6, fig.width=8}
+```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8}
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",

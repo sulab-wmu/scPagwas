@@ -63,7 +63,7 @@ devtools::install_github("dengchunyu/scPagwas")
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
 
 2.Forestplot for estimate values
 
@@ -71,7 +71,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
 
     #> TableGrob (1 x 13) "arrange": 2 grobs
     #>   z         cells    name           grob
@@ -102,7 +102,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="100%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -140,7 +140,7 @@ require("ggsci")
                         title = "scPagwas_score")
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" /><img src="man/figures/README-unnamed-chunk-8-2.png" width="100%" />
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
 
     #> png 
     #>   2
@@ -165,7 +165,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = F)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
@@ -179,7 +179,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 #> Warning in order(.): 强制改变过程中产生了NA
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="100%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -193,7 +193,7 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-<img src="man/figures/README-unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="100%" />
 
 #### Single cell regression
 
