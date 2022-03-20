@@ -1,8 +1,12 @@
 ---
-output: github_document
+title: "scPagwas"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  md_document:
+    variant: markdown_github
+editor_options:
+  chunk_output_type: console
 ---
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -15,11 +19,12 @@ knitr::opts_chunk$set(
 
 # scPagwas
 
-<!-- badges: start -->
-<!-- badges: end -->
+**scPagwas**, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.
+**scPagwas** is able to prioritize disease-associated individual cells by integrating the scRNA-seq data with polygenic signals from GWAS.
 
-scPagwas, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.
-scPagwas is able to prioritize disease-associated individual cells by integrating the scRNA-seq data with polygenic signals from GWAS.
+(Please see the [drat documentation](https://dirk.eddelbuettel.com/code/drat.html) for more comprehensive explanations and vignettes.)
+
+![Graphical abstract](img/workflow_20220222.png)
 
 ## Installation
 
@@ -34,26 +39,22 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ### 1.Preprogress and create internal storage
 
-```{r Pagwas_main}
+```{r message=FALSE}
  
  library(Seurat)
  library(scPagwas)
-library(SOAR)
+ library(SOAR)
  library("dplyr")
-
- ## basic example code
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
  #gene annotation files.
  data(block_annotation)
  #LD data
  data(chrom_ld)
- ##create a session for internal storage
-# Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data = "E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
+                     gwas_data ="E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
@@ -61,85 +62,70 @@ library(SOAR)
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
-
-
-#rm(block_annotation)
 ```
  
 ### 2. Cell types functions  
  
-```{r link_pwpca_block}
-  #Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
+```{r message=FALSE}
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
 #8th: Pagwas_perform_regression function start!!
   Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200,n.cores=1)
-
-
 ``` 
 #### Visualize the celltypes results.
 
  1.barplot
-```{r Bootstrap_P_Barplot}
+```{r message=FALSE}
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
-
-
 ```
 
  2.Forestplot for estimate values
-```{r Bootstrap_estimate_Plot}
-
+```{r message=FALSE}
 Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
-#Bootstrap_estimate_Plot(Pagwas=Pagwas2,figurenames = NULL)
 
 ```
 
 #### pathway network
 
-```{r plot_network}
-#library()
-
+```{r message=FALSE}
    require("WGCNA")
    require("patchwork")
    require("tidygraph")
    require("ggraph")
    require("igraph")
-#pdf("E:\OneDrive\GWAS_Multiomics\Validation/plot_network.pdf")
 plot_pathway_contribution_network(
-  mat_datExpr=pca_cell_df,
-  vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
- vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-  n_max_pathways=20,
-  igraph_algorithm = "drl",
-  fontface_labels="bold.italic",
-  color_edge = "#9D9D9D",
-    fontSize_label_lg=4,
-  fontSize_legend_lg=4,
-  fontSize_legend_xlg=4,
-  edge_thickness = 1
+                  mat_datExpr=pca_cell_df,
+                  vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
+                  vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
+                  n_max_pathways=20,
+                  igraph_algorithm = "drl",
+                  fontface_labels="bold.italic",
+                  color_edge = "#9D9D9D",
+                  fontSize_label_lg=4,
+                  fontSize_legend_lg=4,
+                  fontSize_legend_xlg=4,
+                  edge_thickness = 1
   )
-#dev.off()
 
 ```
 #######
 
 
 ### 3.Single cell function 
-```{r link_scCell_pwpca_block}
- #scPagwas_main is a function wrapper other process codes
- #as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
-  message(paste(utils::timestamp(quiet = T), ' ******* 7th: link_scCell_pwpca_block function start!! ********',sep = ''))
-  Pagwas <- link_scCell_pwpca_block(Pagwas)
- 
+scPagwas_main is a function wrapper other process codes.
+as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
 
-  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start!! ********',sep = ''))
+```{r message=FALSE}
+  Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
 
 ```
 
 
 #### Visualize the scPagwas_main results.
-```{r scPagwas_Visualization}
+##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
+
+```{r message=FALSE, fig.height=6, fig.width=8}
 require("RColorBrewer")
 require("Seurat")
 require("SeuratObject")
@@ -157,12 +143,17 @@ require("ggsci")
                         lowColor = "#FFBC80", highColor = "#FC4F4F",
                         size = 1,
                         title = "scPagwas_score")
+```
 
+##### Plot the barplot of the proportion of positive Cells in celltypes
+
+```{r message=FALSE, fig.height=6, fig.width=4}
+library("RColorBrewer")
+library("ggplot2")
 
 scPagwas_score <- Pagwas$scPagwas_score[intersect(colnames(scRNAexample),names(Pagwas$scPagwas_score))]
 scRNAexample$scPagwas_score <- scPagwas_score
 thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
-  
 scRNAexample$positiveCells<-rep(0,ncol(scRNAexample))
 scRNAexample$positiveCells[scRNAexample$scPagwas_score>=thre]<-1
 
@@ -172,36 +163,39 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               vec_group_colors=NULL,
                               f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
                               do_plot = F)
+```
 
+##### Plot the barplot of the proportion of celltypes in positive Cell 
+
+```{r message=FALSE, fig.height=6, fig.width=4}
 plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
                               do_plot = F)
+```
 
+##### Plot the top5 heritability correlation genes in celltypes
+
+```{r message=FALSE, fig.height=6, fig.width=8}
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
-library("RColorBrewer")
-library("ggplot2")
-
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
              var_group="anno",# 细胞cluster注释列
              vec_features=top5genes,
              vec_group_colors= pal_d3(alpha =0.5)(10)
              )
-
-
 ```
+
 #### Single cell regression
 
-```{r scPagwas_perform_regression}
-    message(paste(utils::timestamp(quiet = T), ' ******* 9th:scPagwas_perform_regression function start!! ********',sep = ''))
+```{r message=FALSE}
     Pagwas <- scPagwas_perform_regression(Pagwas)
 
 ```
 
-
+#### Change the parameter of nfeatures 
 
 ```{r, include = FALSE}
  data(Genes_by_pathway_kegg)
@@ -242,6 +236,8 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
                         title = "scPagwas_score_5000")
   
 ```
+
+#### remove the Objects in session. 
 
 ```{r removeCathe}
 # empty the cache
