@@ -38,7 +38,7 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ### 1.Preprogress and create internal storage
 
-```{r message=FALSE,results = "hide"}
+```{r message=FALSE,results = "hide",warning = FALSE}
  
  library(Seurat)
  library(scPagwas)
@@ -86,7 +86,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 #### pathway network
 
-```{r message=FALSE}
+```{r message=FALSE,warning = FALSE}
 suppressMessages(require("WGCNA"))
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
@@ -125,7 +125,7 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 #### Visualize the scPagwas_main results.
 ##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
 
-```{r message=FALSE}
+```{r message=FALSE,warning = FALSE}
 require("RColorBrewer")
 require("Seurat")
 require("SeuratObject")

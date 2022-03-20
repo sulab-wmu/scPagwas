@@ -26,7 +26,6 @@ devtools::install_github("dengchunyu/scPagwas")
  library(Seurat)
  library(scPagwas)
  suppressMessages(library(SOAR))
-#> Warning: 程辑包'SOAR'是用R版本4.1.1 来建造的
  library("dplyr")
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
@@ -83,13 +82,9 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 
 ``` r
 suppressMessages(require("WGCNA"))
-#> Warning: 程辑包'WGCNA'是用R版本4.1.3 来建造的
-#> Warning: 程辑包'dynamicTreeCut'是用R版本4.1.1 来建造的
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
-#> Warning: 程辑包'tidygraph'是用R版本4.1.2 来建造的
 suppressMessages(require("ggraph"))
-#> Warning: 程辑包'ggraph'是用R版本4.1.2 来建造的
 suppressMessages(require("igraph"))
 
 plot_pathway_contribution_network(
