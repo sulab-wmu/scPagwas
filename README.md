@@ -82,15 +82,16 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
 #### pathway network
 
 ``` r
-   require("WGCNA")
+suppressMessages(require("WGCNA"))
 #> Warning: 程辑包'WGCNA'是用R版本4.1.3 来建造的
 #> Warning: 程辑包'dynamicTreeCut'是用R版本4.1.1 来建造的
-   require("patchwork")
-   require("tidygraph")
+suppressMessages(require("patchwork"))
+suppressMessages(require("tidygraph"))
 #> Warning: 程辑包'tidygraph'是用R版本4.1.2 来建造的
-   require("ggraph")
+suppressMessages(require("ggraph"))
 #> Warning: 程辑包'ggraph'是用R版本4.1.2 来建造的
-   require("igraph")
+suppressMessages(require("igraph"))
+
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
