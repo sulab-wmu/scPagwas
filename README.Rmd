@@ -38,7 +38,7 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ### 1.Preprogress and create internal storage
 
-```{r message=FALSE}
+```{r message=FALSE,results = "hide"}
  
  library(Seurat)
  library(scPagwas)
@@ -65,7 +65,7 @@ devtools::install_github("dengchunyu/scPagwas")
  
 ### 2. Cell types functions  
  
-```{r message=FALSE}
+```{r message=FALSE,results = "hide"}
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
 #8th: Pagwas_perform_regression function start!!
@@ -114,7 +114,7 @@ plot_pathway_contribution_network(
 scPagwas_main is a function wrapper other process codes.
 as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
 
-```{r message=FALSE}
+```{r message=FALSE,results = "hide"}
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
 
@@ -146,7 +146,7 @@ require("ggsci")
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
-```{r message=FALSE, fig.height=6, fig.width=4}
+```{r message=FALSE,fig.height=6, fig.width=4}
 library("RColorBrewer")
 library("ggplot2")
 
@@ -166,7 +166,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell 
 
-```{r message=FALSE, fig.height=6, fig.width=4}
+```{r message=FALSE,fig.height=6, fig.width=4}
 plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
@@ -177,7 +177,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
-```{r message=FALSE, fig.height=6, fig.width=8}
+```{r message=FALSE,fig.height=6, fig.width=8}
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
@@ -189,7 +189,7 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
 
 #### Single cell regression
 
-```{r message=FALSE}
+```{r message=FALSE,results = "hide"}
     Pagwas <- scPagwas_perform_regression(Pagwas)
 
 ```
