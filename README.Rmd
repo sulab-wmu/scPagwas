@@ -22,7 +22,6 @@ knitr::opts_chunk$set(
 **scPagwas**, a polygenic principal component-scoring method that links scRNA-seq data with large-scale GWAS summary statistics to prioritize genetics-modulated cells associated with complex diseases.
 **scPagwas** is able to prioritize disease-associated individual cells by integrating the scRNA-seq data with polygenic signals from GWAS.
 
-(Please see the [drat documentation](https://dirk.eddelbuettel.com/code/drat.html) for more comprehensive explanations and vignettes.)
 
 ![Graphical abstract](img/workflow_20220222.png)
 
