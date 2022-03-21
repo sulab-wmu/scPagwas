@@ -183,7 +183,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_group="anno",
                               vec_group_colors=NULL,
                               f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
-                              do_plot = F)
+                              do_plot = T)
 ```
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell 
@@ -194,7 +194,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
-                              do_plot = F)
+                              do_plot = T)
 ```
 
 ##### Plot the top5 heritability correlation genes in celltypes
@@ -205,7 +205,8 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
              var_group="anno",# 细胞cluster注释列
              vec_features=top5genes,
-             vec_group_colors= pal_d3(alpha =0.5)(10)
+             vec_group_colors= pal_d3(alpha =0.5)(10),
+             do_plot = T
              )
 ```
 

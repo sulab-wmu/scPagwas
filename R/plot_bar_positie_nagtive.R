@@ -93,7 +93,7 @@ plot_bar_positie_nagtive <- function(seurat_obj,
 
     labs(x=var_ident, y="proportion", fill = var_group)
 
-  if (do_plot) p
+  if (do_plot) print(p)
   if(!is.null(figurenames)){
     pdf(file = figurenames, width = width, height = height)
     print(p)

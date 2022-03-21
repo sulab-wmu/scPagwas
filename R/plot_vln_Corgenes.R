@@ -126,7 +126,7 @@ plot_vln_Corgenes <- function(seurat_obj,
                              ncol = length(list_plot_flip)
   )
 
-  if (do_plot) p
+  if (do_plot) print(p)
   ## save the pdf figure
   if(!is.null(figurenames)){
     pdf(file = figurenames, width = width, height = height)

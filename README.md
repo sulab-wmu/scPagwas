@@ -23,26 +23,27 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ``` r
  library(scPagwas)
- library(Seurat)
- suppressMessages(library(SOAR))
- library("dplyr")
+ suppressMessages(library(Seurat))
+ suppressWarnings(library(SOAR))
+ suppressMessages(library("dplyr"))
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
  #gene annotation files.
  data(block_annotation)
  #LD data
  data(chrom_ld)
-
+ 
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data ="E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
-                     Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
+                     Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      FilterSingleCell=TRUE,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
+ 
 ```
 
 ### 2. Cell types functions
@@ -64,7 +65,12 @@ Objects()
 #> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
 #> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
 #> [7] "pca_scCell_mat"       "snp_gene_df"
-Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
+Bootstrap_P_Barplot(Pagwas=Pagwas,
+                    figurenames = NULL,
+                    width = 5,
+                    height = 7,
+                    do_plot=T,
+                    title = "Test scPagwas")
 ```
 
 <img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
@@ -76,7 +82,11 @@ Objects()
 #> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
 #> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
 #> [7] "pca_scCell_mat"       "snp_gene_df"
-suppressMessages(Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL))
+Bootstrap_estimate_Plot(Pagwas=Pagwas,
+                        figurenames = NULL,
+                        width = 9,
+                        height = 7,
+                        do_plot=T)
 ```
 
 <img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
@@ -110,7 +120,9 @@ plot_pathway_contribution_network(
                   fontSize_label_lg=4,
                   fontSize_legend_lg=4,
                   fontSize_legend_xlg=4,
-                  edge_thickness = 1
+                  edge_thickness = 1,
+                  do_plot=T
+                  
   )
 ```
 
@@ -144,24 +156,23 @@ for save time.
 #> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
 #> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
 #> [7] "pca_scCell_mat"       "snp_gene_df"
+ scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
                         assay = "SCT",
                         cellpercent = 0.1,
-                        filename = "scPagwas_testFigure",
+                        filename = NULL,
                         FigureType = "tsne",
                         width = 7,
                         height = 7,
                         lowColor = "#FFBC80", highColor = "#FC4F4F",
                         size = 1,
-                        title = "scPagwas_score")
+                        title = "scPagwas_score",
+                        do_plot = T)
 ```
 
 <img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
-
-    #> png 
-    #>   2
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
@@ -180,7 +191,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_group="anno",
                               vec_group_colors=NULL,
                               f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
-                              do_plot = F)
+                              do_plot = T)
 ```
 
 <img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
@@ -193,7 +204,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
-                              do_plot = F)
+                              do_plot = T)
 #> Warning in order(.): 强制改变过程中产生了NA
 ```
 
@@ -207,7 +218,8 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
              var_group="anno",# 细胞cluster注释列
              vec_features=top5genes,
-             vec_group_colors= pal_d3(alpha =0.5)(10)
+             vec_group_colors= pal_d3(alpha =0.5)(10),
+             do_plot = T
              )
 ```
 
