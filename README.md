@@ -22,9 +22,8 @@ devtools::install_github("dengchunyu/scPagwas")
 ### 1.Preprogress and create internal storage
 
 ``` r
- 
- library(Seurat)
  library(scPagwas)
+ library(Seurat)
  suppressMessages(library(SOAR))
  library("dplyr")
  #Input pathway gene list, you can construct with youself.
@@ -49,6 +48,7 @@ devtools::install_github("dengchunyu/scPagwas")
 ### 2. Cell types functions
 
 ``` r
+  Objects()
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
 #8th: Pagwas_perform_regression function start!!
@@ -60,18 +60,26 @@ devtools::install_github("dengchunyu/scPagwas")
 1.barplot
 
 ``` r
+Objects()
+#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
+#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [7] "pca_scCell_mat"       "snp_gene_df"
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```
 
-<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="60%" />
+<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
 
 2.Forestplot for estimate values
 
 ``` r
-Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
+Objects()
+#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
+#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [7] "pca_scCell_mat"       "snp_gene_df"
+suppressMessages(Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL))
 ```
 
-<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="60%" />
+<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
 
     #> TableGrob (1 x 13) "arrange": 2 grobs
     #>   z         cells    name           grob
@@ -86,7 +94,11 @@ suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
 suppressMessages(require("ggraph"))
 suppressMessages(require("igraph"))
-
+#check the objects
+Objects()
+#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
+#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [7] "pca_scCell_mat"       "snp_gene_df"
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
@@ -102,7 +114,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-pathway_contribution_network-1.png" width="60%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="100%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -112,6 +124,8 @@ parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt
 for save time.
 
 ``` r
+  #check the objects
+  Objects()
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
 ```
@@ -121,11 +135,15 @@ for save time.
 ##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot.
 
 ``` r
-require("RColorBrewer")
-require("Seurat")
-require("SeuratObject")
-require("ggsci")
-
+ require("RColorBrewer")
+ require("Seurat")
+ require("SeuratObject")
+ require("ggsci")
+ #check the objects
+ Objects()
+#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
+#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [7] "pca_scCell_mat"       "snp_gene_df"
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
@@ -140,7 +158,7 @@ require("ggsci")
                         title = "scPagwas_score")
 ```
 
-<img src="man/figures/README-scPagwas_Visualization-1.png" width="60%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" />
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
 
     #> png 
     #>   2
@@ -165,7 +183,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = F)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive-1.png" width="50%" />
+<img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
@@ -179,7 +197,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 #> Warning in order(.): 强制改变过程中产生了NA
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="80%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="100%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -193,7 +211,7 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-<img src="man/figures/README-vln_Corgenes-1.png" width="70%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="100%" />
 
 #### Single cell regression
 

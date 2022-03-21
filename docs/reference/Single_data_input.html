@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
       </span>
     </div>
 
@@ -68,6 +68,7 @@
   <span class="va">Single_data</span>,
   nfeatures <span class="op">=</span> <span class="cn">NULL</span>,
   FilterSingleCell <span class="op">=</span> <span class="cn">FALSE</span>,
+  Pathway_list <span class="op">=</span> <span class="cn">NULL</span>,
   min.lib.size <span class="op">=</span> <span class="fl">1000</span>,
   min.reads <span class="op">=</span> <span class="fl">10</span>,
   min.detected <span class="op">=</span> <span class="fl">5</span>,
@@ -88,6 +89,8 @@ NULL means select all genes</p></dd>
 <dt>FilterSingleCell</dt>
 <dd><p>whther to filter the single cell data,if you
 filter it before,choose FALSE, otherwise set TRUE.</p></dd>
+<dt>Pathway_list</dt>
+<dd><p>(list,character) pathway gene sets list</p></dd>
 <dt>min.lib.size</dt>
 <dd><p>Threshold for single data library.</p></dd>
 <dt>min.reads</dt>
