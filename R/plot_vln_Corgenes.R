@@ -15,7 +15,9 @@
 #' @param flip  if TRUE (default), groups are rows and features are columns, and vice-verso for FALSE
 #' @param do_plot  Whether to plot, logical
 #' @param pt.size size of jitter in the violin plots. Set to 0 (default) to omit
-#'
+#' @param figurenames The filename and address of the output plot,
+#' @param width figure width
+#' @param height figure height
 #' @return ggplot2 object
 #' @export
 #'
@@ -44,7 +46,10 @@ plot_vln_Corgenes <- function(seurat_obj,
                          feature_fontface = "bold.italic",
                          fontsize_axistext_x=12,
                          fontsize_axistext_y=12,
-                         aspect.ratio =NULL
+                         aspect.ratio =NULL,
+                         figurenames = NULL,
+                         width = 7,
+                         height = 7
 ) {
 
   #=============prepare group and colors==================
@@ -122,8 +127,13 @@ plot_vln_Corgenes <- function(seurat_obj,
   )
 
   if (do_plot) p
-
-  return(p)
+  ## save the pdf figure
+  if(!is.null(figurenames)){
+    pdf(file = figurenames, width = width, height = height)
+    print(p)
+    dev.off()
+  }
+  #return(p)
 }
 
 

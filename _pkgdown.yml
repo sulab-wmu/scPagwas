@@ -34,7 +34,7 @@ reference:
   - title: Internals
     desc: Internal functions and helpers
     contents:
-      - '`utils_big_as.matrix`'
+      - '`as_matrix`'
       - '`bh.adjust`'
       - '`Boot_evaluate`'
       - '`cv_regularized_parameter_estimator`'

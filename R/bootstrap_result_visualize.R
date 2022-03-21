@@ -10,6 +10,7 @@
 #' and have not pdf figure.
 #' @param width figure width, default is 5
 #' @param height figure height,default is 7
+#' @param do_plot whether to plot the plot.
 #'
 #' @return A figure of barplot in pdf format, red color is significant.
 #' @export
@@ -24,7 +25,9 @@
 Bootstrap_P_Barplot <- function(Pagwas,
                                 title = "Test scPagwas",
                                 figurenames = NULL,
-                                width = 5, height = 7) {
+                                width = 5,
+                                height = 7,
+                                do_plot=TRUE) {
   cell_severe <- Pagwas$bootstrap_results[-1, ]
   cell_severe$logp <- -log2(cell_severe$bp_value)
   cell_severe$sig <- rep("b", nrow(cell_severe))
@@ -56,7 +59,8 @@ Bootstrap_P_Barplot <- function(Pagwas,
     # scale_fill_discrete()+
     # geom_hline(aes(yintercept=4.321), colour="#990000", linetype="dashed")+
   }
-  print(p1)
+  if( do_plot) print(p1)
+
   if(!is.null(figurenames)){
     pdf(figurenames, width = width, height = height)
     print(p1)
@@ -75,6 +79,7 @@ Bootstrap_P_Barplot <- function(Pagwas,
 #' only plot the figure and have not pdf figure.
 #' @param width figure width
 #' @param height figure height
+#' @param do_plot whether to plot the plot.
 #'
 #' @return A forest plot with the table of p values
 #' @export
@@ -88,7 +93,8 @@ Bootstrap_P_Barplot <- function(Pagwas,
 Bootstrap_estimate_Plot <- function(Pagwas,
                                     figurenames = NULL,
                                     width = 9,
-                                    height = 7) {
+                                    height = 7,
+                                    do_plot=F) {
   bootstrap_results <- Pagwas$bootstrap_results[-1, c("bp_value",
                                                       "bias_corrected_estimate",
                                                       "CI_lo",
@@ -167,7 +173,7 @@ Bootstrap_estimate_Plot <- function(Pagwas,
 
   lay <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3), nrow = 1)
   plot2 <- gridExtra::grid.arrange(plot1, tab1, layout_matrix = lay)
-  print(plot2)
+  if(do_plot) print(plot2)
   ## save the pdf figure
   if(!is.null(figurenames)){
   pdf(file = figurenames, width = width, height = height)

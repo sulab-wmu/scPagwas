@@ -15,7 +15,11 @@ plot_pathway_contribution_network(
   fontSize_label_lg = 1,
   fontSize_legend_lg = 1,
   fontSize_legend_xlg = 1,
-  edge_thickness = 1
+  edge_thickness = 1,
+  do_plot = F,
+  figurenames = NULL,
+  width = 7,
+  height = 7
 )
 }
 \arguments{
@@ -40,6 +44,14 @@ plot_pathway_contribution_network(
 \item{fontSize_legend_xlg}{fontSize for xlg legend}
 
 \item{edge_thickness}{thickness of edge}
+
+\item{do_plot}{Whether to plot, logical}
+
+\item{figurenames}{The filename and address of the output plot}
+
+\item{width}{figure width}
+
+\item{height}{figure height}
 }
 \description{
 plot the network based on pathway contribution

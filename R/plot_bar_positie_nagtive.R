@@ -21,7 +21,9 @@
 #' @param fontsize_axistext_y NULL to leave out
 #' @param fontsize_legendtitle NULL to leave out
 #' @param fontsize_legendtext NULL to leave out
-#'
+#' @param figurenames The filename and address of the output plot,
+#' @param width figure width
+#' @param height figure height
 #' @return a ggplot2 object
 #' @export
 #'
@@ -41,7 +43,11 @@ plot_bar_positie_nagtive <- function(seurat_obj,
                               fontsize_axistext_y = 12,
                               fontsize_legendtitle = 12,
                               fontsize_legendtext = 10,
-                              aspect.ratio=1.2) {
+                              aspect.ratio=1.2,
+                              figurenames = NULL,
+                              width = 7,
+                              height = 7
+                              ) {
 
   #===============data.table with sums==================
   dt = data.table("ident" = as.character(seurat_obj@meta.data[[var_ident]]),
@@ -88,8 +94,12 @@ plot_bar_positie_nagtive <- function(seurat_obj,
     labs(x=var_ident, y="proportion", fill = var_group)
 
   if (do_plot) p
-
-  return(p)
+  if(!is.null(figurenames)){
+    pdf(file = figurenames, width = width, height = height)
+    print(p)
+    dev.off()
+  }
+  #return(p)
 }
 
 

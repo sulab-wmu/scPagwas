@@ -17,6 +17,10 @@
 #' @param fontSize_legend_lg fontSize for lg legend
 #' @param fontSize_legend_xlg fontSize for xlg legend
 #' @param edge_thickness thickness of edge
+#' @param do_plot Whether to plot, logical
+#' @param figurenames The filename and address of the output plot
+#' @param width figure width
+#' @param height figure height
 #'
 #' @export
 #' @examples
@@ -35,18 +39,22 @@
 #' )
 
 plot_pathway_contribution_network <- function(
-  mat_datExpr,
-  vec_pathwaycontribution,
-  vec_pathways_highlight=c(),
-  n_max_pathways=50,
-  igraph_algorithm = "drl",
-  fontface_labels="bold.italic",
-  color_edge = "#9D9D9D",
-  fontSize_label_lg=1,
-  fontSize_legend_lg=1,
-  fontSize_legend_xlg=1,
-  edge_thickness = 1
-) {
+                                        mat_datExpr,
+                                        vec_pathwaycontribution,
+                                        vec_pathways_highlight=c(),
+                                        n_max_pathways=50,
+                                        igraph_algorithm = "drl",
+                                        fontface_labels="bold.italic",
+                                        color_edge = "#9D9D9D",
+                                        fontSize_label_lg=1,
+                                        fontSize_legend_lg=1,
+                                        fontSize_legend_xlg=1,
+                                        edge_thickness = 1,
+                                        do_plot=F ,
+                                        figurenames=NULL,
+                                        width=7,
+                                        height=7
+                                        ) {
 
   # sort
   vec_pathwaycontribution = sort(vec_pathwaycontribution, decreasing = T)
@@ -131,7 +139,12 @@ plot_pathway_contribution_network <- function(
 
     #coord_cartesian(clip="off")
 
-  #if (do_plot) print(module.plot)
-  return(module.plot)
+  if (do_plot) print(module.plot)
+
+    if(!is.null(figurenames)){
+      pdf(file = figurenames, width = width, height = height)
+      print(module.plot)
+      dev.off()
+    }
 
 }

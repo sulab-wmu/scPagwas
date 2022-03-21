@@ -4,7 +4,13 @@
 \alias{Bootstrap_estimate_Plot}
 \title{Bootstrap_estimate_Plot}
 \usage{
-Bootstrap_estimate_Plot(Pagwas, figurenames = NULL, width = 9, height = 7)
+Bootstrap_estimate_Plot(
+  Pagwas,
+  figurenames = NULL,
+  width = 9,
+  height = 7,
+  do_plot = F
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas format of result from Pagwas_main()}
@@ -16,6 +22,8 @@ only plot the figure and have not pdf figure.}
 \item{width}{figure width}
 
 \item{height}{figure height}
+
+\item{do_plot}{whether to plot the plot.}
 }
 \value{
 A forest plot with the table of p values

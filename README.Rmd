@@ -40,26 +40,27 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
  library(scPagwas)
- library(Seurat)
- suppressMessages(library(SOAR))
- library("dplyr")
+ suppressMessages(library(Seurat))
+ suppressWarnings(library(SOAR))
+ suppressMessages(library("dplyr"))
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
  #gene annotation files.
  data(block_annotation)
  #LD data
  data(chrom_ld)
-
+ 
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data ="E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
-                     Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
+                     Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      FilterSingleCell=TRUE,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
+ 
 ```
  
 ### 2. Cell types functions  
@@ -76,13 +77,22 @@ devtools::install_github("dengchunyu/scPagwas")
  1.barplot
 ```{r Bootstrap_P_Barplot, message=FALSE}
 Objects()
-Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
+Bootstrap_P_Barplot(Pagwas=Pagwas,
+                    figurenames = NULL,
+                    width = 5,
+                    height = 7,
+                    do_plot=T,
+                    title = "Test scPagwas")
 ```
 
  2.Forestplot for estimate values
 ```{r Bootstrap_estimate_Plot,message=FALSE}
 Objects()
-suppressMessages(Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL))
+Bootstrap_estimate_Plot(Pagwas=Pagwas,
+                        figurenames = NULL,
+                        width = 9,
+                        height = 7,
+                        do_plot=T)
 
 ```
 
@@ -108,7 +118,9 @@ plot_pathway_contribution_network(
                   fontSize_label_lg=4,
                   fontSize_legend_lg=4,
                   fontSize_legend_xlg=4,
-                  edge_thickness = 1
+                  edge_thickness = 1,
+                  do_plot=T
+                  
   )
 
 ```
@@ -138,18 +150,20 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
  require("ggsci")
  #check the objects
  Objects()
+ scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,
                         assay = "SCT",
                         cellpercent = 0.1,
-                        filename = "scPagwas_testFigure",
+                        filename = NULL,
                         FigureType = "tsne",
                         width = 7,
                         height = 7,
                         lowColor = "#FFBC80", highColor = "#FC4F4F",
                         size = 1,
-                        title = "scPagwas_score")
+                        title = "scPagwas_score",
+                        do_plot = T)
 ```
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes

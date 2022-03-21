@@ -9,7 +9,8 @@ Bootstrap_P_Barplot(
   title = "Test scPagwas",
   figurenames = NULL,
   width = 5,
-  height = 7
+  height = 7,
+  do_plot = TRUE
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ and have not pdf figure.}
 \item{width}{figure width, default is 5}
 
 \item{height}{figure height,default is 7}
+
+\item{do_plot}{whether to plot the plot.}
 }
 \value{
 A figure of barplot in pdf format, red color is significant.

@@ -6,7 +6,7 @@
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
 #' @param Reduction (logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.
 #' @param assay (character)"RNA" or "SCT", It depens on the Single_data.
-#' @param filename (character)default is NULL.the file folder name for save the figures.NULL means no folder is created, print the figure to current environment, check setwd().
+#' @param filename (character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.
 #' @param FigureType (character)"tsne" or "umap
 #' @param cellpercent (numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.
 #' @param width (numeric)Figure width
@@ -16,6 +16,7 @@
 #' @param title (character)Figure title
 #' @param lowColor (character)Color for low scPagwas score
 #' @param highColor (character)Color for high scPagwas score
+#' @param do_plot  Whether to plot, logical
 #'
 #' @return
 #' @export
@@ -49,7 +50,8 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
                                    npcs=50,
-                                   title = "scPagwas_score") {
+                                   title = "scPagwas_score",
+                                   do_plot = F) {
   #suppressMessages(require(ggnewscale))
   #suppressMessages(require(ggtext))
   #suppressMessages(require(ggrepel))
@@ -102,10 +104,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1)
-    print(plot_scPagwas_score)
+
+    if(do_plot) print(plot_scPagwas_score)
+    if(!is.null(filename)){
     pdf(file = paste0("./", filename, "/scPagwas_score_umap.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
+    }
 
     plots_sigp1 <- ggplot() +
       geom_point(
@@ -122,10 +127,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
       #new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
-    print(plots_sigp1)
+
+    if(do_plot) print(plots_sigp1)
+    if(!is.null(filename)){
     pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_umap.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
+    }
   }
 
 
@@ -141,10 +149,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
       scale_color_gradient(low = lowColor, high = highColor) +
       ggtitle("scPagwas_score") + theme(aspect.ratio = 1)
 
-    print(plot_scPagwas_score)
+
+    if(do_plot) print(plot_scPagwas_score)
+    if(!is.null(filename)){
     pdf(file = paste0("./", filename, "/scPagwas_score_tsne.pdf"), height = height, width = width)
     print(plot_scPagwas_score)
     dev.off()
+    }
 
     plots_sigp1 <- ggplot() +
       geom_point(
@@ -161,10 +172,13 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
       #new_scale_color() +
       ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
 
-    print(plots_sigp1)
+    if (do_plot) print(plots_sigp1)
+
+    if(!is.null(filename)){
     pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_tsne.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
+    }
   }
   # return(all_fortify_can)
 }

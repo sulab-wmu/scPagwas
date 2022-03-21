@@ -18,7 +18,8 @@ scPagwas_Visualization(
   highColor = "#EBE645",
   size = 0.5,
   npcs = 50,
-  title = "scPagwas_score"
+  title = "scPagwas_score",
+  do_plot = F
 )
 }
 \arguments{
@@ -32,7 +33,7 @@ scPagwas_Visualization(
 
 \item{cellpercent}{(numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.}
 
-\item{filename}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, print the figure to current environment, check setwd().}
+\item{filename}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.}
 
 \item{FigureType}{(character)"tsne" or "umap}
 
@@ -49,6 +50,8 @@ scPagwas_Visualization(
 \item{npcs}{(integr) the parameter of Seurat::RunPCA.}
 
 \item{title}{(character)Figure title}
+
+\item{do_plot}{Whether to plot, logical}
 }
 \value{
 

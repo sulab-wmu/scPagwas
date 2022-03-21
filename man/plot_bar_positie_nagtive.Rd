@@ -19,7 +19,10 @@ plot_bar_positie_nagtive(
   fontsize_axistext_y = 12,
   fontsize_legendtitle = 12,
   fontsize_legendtext = 10,
-  aspect.ratio = 1.2
+  aspect.ratio = 1.2,
+  figurenames = NULL,
+  width = 7,
+  height = 7
 )
 }
 \arguments{
@@ -50,6 +53,12 @@ plot_bar_positie_nagtive(
 \item{fontsize_legendtitle}{NULL to leave out}
 
 \item{fontsize_legendtext}{NULL to leave out}
+
+\item{figurenames}{The filename and address of the output plot,}
+
+\item{width}{figure width}
+
+\item{height}{figure height}
 }
 \value{
 a ggplot2 object

@@ -18,7 +18,10 @@ plot_vln_Corgenes(
   feature_fontface = "bold.italic",
   fontsize_axistext_x = 12,
   fontsize_axistext_y = 12,
-  aspect.ratio = NULL
+  aspect.ratio = NULL,
+  figurenames = NULL,
+  width = 7,
+  height = 7
 )
 }
 \arguments{
@@ -41,6 +44,12 @@ plot_vln_Corgenes(
 \item{do_plot}{Whether to plot, logical}
 
 \item{pt.size}{size of jitter in the violin plots. Set to 0 (default) to omit}
+
+\item{figurenames}{The filename and address of the output plot,}
+
+\item{width}{figure width}
+
+\item{height}{figure height}
 }
 \value{
 ggplot2 object
