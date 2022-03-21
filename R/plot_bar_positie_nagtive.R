@@ -1,11 +1,9 @@
 
+#' plot_bar_positie_nagtive
+#'
+#' @description Generate barplot of identity group composition
 #' Thanks to the SCOPfunctions package
 #' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
-NULL
-
-#' plot_bar_positie_nagtive
-#' @description Generate barplot of identity group composition
-#'
 #' Generate a percentage barplot that shows the composition of each identity
 #' (e.g. sample)in terms of groups (e.g. positive and negative cells for scPagwas)
 #'

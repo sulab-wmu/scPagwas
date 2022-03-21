@@ -1,13 +1,10 @@
 
-#' Thanks to the SCOPfunctions package
-#' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
-#'
-NULL
-
-
 #' plot_pathway_contribution_network
 #'
 #' @description plot the network based on pathway contribution
+#'
+#' Thanks to the SCOPfunctions package
+#' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 #'
 #' @param mat_datExpr data matrix for single cell data
 #' @param vec_pathwaycontribution vector of pathway contribution score from pagwas

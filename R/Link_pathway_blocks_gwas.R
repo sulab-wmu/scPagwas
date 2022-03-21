@@ -46,14 +46,6 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     # message(paste(' - starting blocks on pathway: ', pa, sep = ''))
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
-#' Title
-#'
-#' @param chrom
-#'
-#' @return
-#' @export
-#'
-#' @examples
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
       chrom_block <- Pa_chrom_block[[chrom]]
       ld_data <- chrom_ld[[chrom]]

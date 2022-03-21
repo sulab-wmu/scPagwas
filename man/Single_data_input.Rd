@@ -9,6 +9,7 @@ Single_data_input(
   Single_data,
   nfeatures = NULL,
   FilterSingleCell = FALSE,
+  Pathway_list = NULL,
   min.lib.size = 1000,
   min.reads = 10,
   min.detected = 5,
@@ -26,6 +27,8 @@ NULL means select all genes}
 
 \item{FilterSingleCell}{whther to filter the single cell data,if you
 filter it before,choose FALSE, otherwise set TRUE.}
+
+\item{Pathway_list}{(list,character) pathway gene sets list}
 
 \item{min.lib.size}{Threshold for single data library.}
 

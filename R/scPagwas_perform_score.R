@@ -79,7 +79,6 @@ scPagwas_perform_score <- function(Pagwas,
   })
   close(pb)
 
-
   names(Pathway_sclm_results) <- Pathway_names
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_names <- names(Pathway_sclm_results)
@@ -199,7 +198,7 @@ scPagwas_score_filter <- function(scPagwas_score) {
 #' @param data_mat the data matrix from single cell data
 #'
 #' @return
-#' @example
+#' @examples
 #' Single_data<-readRDS("E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds")
 #' Pagwas$sparse_cor<-scGet_gene_heritability_contributions(
 #' scPagwas_score=Pagwas$scPagwas_score,
@@ -209,12 +208,11 @@ scGet_gene_heritability_correlation <- function(scPagwas_score,data_mat){
 
   if(all(names(scPagwas_score)==colnames(data_mat))){
     scPagwas_score<-data.matrix(scPagwas_score)
-    data_mat<-t(data_mat)
-    sparse_cor<-corSparse(X=data_mat, Y=scPagwas_score)
+    sparse_cor<-corSparse(X=t(data_mat), Y=scPagwas_score)
   }else{
     data_mat<-data_mat[,names(scPagwas_score)]
     scPagwas_score<-data.matrix(scPagwas_score)
-    sparse_cor<-corSparse(X=data_mat, Y=scPagwas_score)
+    sparse_cor<-corSparse(X=t(data_mat), Y=scPagwas_score)
   }
   return(sparse_cor)
 }

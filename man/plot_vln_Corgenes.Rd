@@ -47,6 +47,8 @@ ggplot2 object
 }
 \description{
 Make grid of violin plots
+Thanks to the SCOPfunctions package
+https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 
 produce a n_celltype * n_genes grid of violin plots
 }

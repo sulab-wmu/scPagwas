@@ -39,9 +39,8 @@ devtools::install_github("dengchunyu/scPagwas")
 ### 1.Preprogress and create internal storage
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
- 
- library(Seurat)
  library(scPagwas)
+ library(Seurat)
  suppressMessages(library(SOAR))
  library("dplyr")
  #Input pathway gene list, you can construct with youself.
@@ -66,6 +65,7 @@ devtools::install_github("dengchunyu/scPagwas")
 ### 2. Cell types functions  
  
 ```{r message=FALSE,results = "hide"}
+  Objects()
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
 #8th: Pagwas_perform_regression function start!!
@@ -75,24 +75,28 @@ devtools::install_github("dengchunyu/scPagwas")
 
  1.barplot
 ```{r Bootstrap_P_Barplot, message=FALSE}
+Objects()
 Bootstrap_P_Barplot(Pagwas=Pagwas,title = "Test scPagwas")
 ```
 
  2.Forestplot for estimate values
 ```{r Bootstrap_estimate_Plot,message=FALSE}
-Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL)
+Objects()
+suppressMessages(Bootstrap_estimate_Plot(Pagwas=Pagwas,figurenames = NULL))
 
 ```
 
 #### pathway network
 
 ```{r pathway_contribution_network,message=FALSE,warning = FALSE}
+
 suppressMessages(require("WGCNA"))
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
 suppressMessages(require("ggraph"))
 suppressMessages(require("igraph"))
-
+#check the objects
+Objects()
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
@@ -116,6 +120,8 @@ scPagwas_main is a function wrapper other process codes.
 as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
 
 ```{r message=FALSE,results = "hide"}
+  #check the objects
+  Objects()
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
 
@@ -126,11 +132,12 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 ##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
 
 ```{r scPagwas_Visualization,message=FALSE,warning = FALSE}
-require("RColorBrewer")
-require("Seurat")
-require("SeuratObject")
-require("ggsci")
-
+ require("RColorBrewer")
+ require("Seurat")
+ require("SeuratObject")
+ require("ggsci")
+ #check the objects
+ Objects()
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
                         Reduction = TRUE,

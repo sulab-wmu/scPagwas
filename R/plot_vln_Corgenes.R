@@ -1,12 +1,8 @@
 
-#' Thanks to the SCOPfunctions package
-#' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
-#'
-NULL
-
 #' plot_vln_Corgenes
 #' @description Make grid of violin plots
-#'
+#' Thanks to the SCOPfunctions package
+#' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 #' @description produce a n_celltype * n_genes grid of violin plots
 #'
 #' @param seurat_obj Seurat object (Seurat ^3.0)

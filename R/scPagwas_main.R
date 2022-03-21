@@ -47,7 +47,6 @@
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #' @param scPagwasSession (character)The file names for scPagwas Session.
-#' @param ...
 #'
 #' @return
 #' @export
@@ -89,8 +88,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         min.pathway.size=5,
                         max.pathway.size=300,
                         n.cores=1,
-                        scPagwasSession="scPagwasSession",
-                           ...) {
+                        scPagwasSession="scPagwasSession") {
   if (is.null(Pagwas)) {
   Pagwas <- list();
   class(Pagwas) <- 'Pagwas'
@@ -99,13 +97,7 @@ scPagwas_main <- function(Pagwas = NULL,
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
   message("*** Start to store the variables:block_annotation")
   SOAR::Store(block_annotation)
-  #message("*2)chrom_ld")
-  #SOAR::Store(chrom_ld)
-  #message("*3)gwas_data")
-  #SOAR::Store(gwas_data)
-  #message("*4)Single_data,it takes some time")
-  #SOAR::Store(Single_data)
-  #2.single data input
+
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
@@ -126,6 +118,7 @@ scPagwas_main <- function(Pagwas = NULL,
                                 nfeatures =nfeatures,
                                 Single_data=Single_data,
                                 FilterSingleCell=FilterSingleCell,
+                                Pathway_list=Pathway_list,
                                 min.lib.size = min.lib.size,
                                 min.reads =min.reads,
                                 min.detected =min.detected,

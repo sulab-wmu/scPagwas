@@ -43,6 +43,9 @@ plot_pathway_contribution_network(
 }
 \description{
 plot the network based on pathway contribution
+
+Thanks to the SCOPfunctions package
+https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 }
 \examples{
 plot_pathway_contribution_network(

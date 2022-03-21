@@ -54,7 +54,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   pana_list <- lapply(celltypes, function(celltype) {
     scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
-    scCounts<-suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
+    scCounts<-as_matrix(scCounts)
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
     pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, proper.gene.names)))) > 2)]
@@ -70,7 +70,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
     scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
-    scCounts <- suppressMessages(utils_big_as.matrix(scCounts,n_slices_init=1,verbose=T))
+    scCounts <- as_matrix(scCounts)
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
       scCounts = scCounts,

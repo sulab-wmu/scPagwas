@@ -26,8 +26,7 @@ scPagwas_main(
   min.pathway.size = 5,
   max.pathway.size = 300,
   n.cores = 1,
-  scPagwasSession = "scPagwasSession",
-  ...
+  scPagwasSession = "scPagwasSession"
 )
 }
 \arguments{
@@ -73,8 +72,6 @@ filter it before,choose FALSE, otherwise set TRUE.}
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 
 \item{scPagwasSession}{(character)The file names for scPagwas Session.}
-
-\item{...}{}
 }
 \value{
 

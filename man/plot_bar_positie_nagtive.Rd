@@ -56,7 +56,8 @@ a ggplot2 object
 }
 \description{
 Generate barplot of identity group composition
-
+Thanks to the SCOPfunctions package
+https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 Generate a percentage barplot that shows the composition of each identity
 (e.g. sample)in terms of groups (e.g. positive and negative cells for scPagwas)
 }

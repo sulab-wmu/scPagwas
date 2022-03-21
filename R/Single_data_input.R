@@ -2,11 +2,13 @@
 
 #' Single_data_input
 #' @description Input the Single data in seruat format
+#'
 #' @param Pagwas Pagwas format
 #' @param Single_data Input the Single data in seruat format, Idents should be
 #' the celltypes annotation.
 #' @param FilterSingleCell whther to filter the single cell data,if you
 #' filter it before,choose FALSE, otherwise set TRUE.
+#' @param Pathway_list (list,character) pathway gene sets list
 #' @param nfeatures The parameter for FindVariableFeatures,
 #' NULL means select all genes
 #' @param min.lib.size Threshold for single data library.
@@ -26,6 +28,7 @@ Single_data_input <- function(Pagwas,
                               Single_data,
                               nfeatures = NULL,
                               FilterSingleCell=FALSE,
+                              Pathway_list=NULL,
                               min.lib.size = 1000,
                               min.reads = 10,
                               min.detected = 5,
@@ -64,27 +67,21 @@ Single_data_input <- function(Pagwas,
   if(FilterSingleCell){
 
   count <- Seurat::GetAssayData(object = Single_data, slot = "count")
-  count <- suppressMessages(utils_big_as.matrix(count))
+  count <- as_matrix(count)
   # remove cells that don't have enough counts
   count <- count[, colSums(count > 0) > min.lib.size]
-
   # remove genes that don't have many reads
   count <- count[rowSums(count) > min.reads, ]
-
   # remove genes that are not seen in a sufficient number of cells
   count <- count[rowSums(count > 0) > min.detected, ]
-
   # identify for Celltype_anno
   Celltype_anno <- Celltype_anno[colnames(count), ]
-
   # remove celltypes that don't have enough cell
 
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
   Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
   message(length(Afterre_cell_types), "cell types are remain, after filter!")
-
   Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
-
   count <- count[, Celltype_anno$annotation %in% Afterre_cell_types]
 
   #Pagwas$Celltype_anno <- Celltype_anno
@@ -92,17 +89,19 @@ Single_data_input <- function(Pagwas,
   rm(count)
   }
 
+  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Single_data))
+  if(length(pagene)<100){
+    stop("There are little match between rownames of Single_data and pathway genes!")
+  }
   merge_scexpr <- Seurat::AverageExpression(Single_data)
-  merge_scexpr<-merge_scexpr[["RNA"]]
+  merge_scexpr <- merge_scexpr[["RNA"]][pagene,]
   data_mat <- Seurat::GetAssayData(object = Single_data, slot = "data")
-  data_mat <- suppressMessages(utils_big_as.matrix(data_mat,n_slices_init=1,
-                                  verbose=T))
+  data_mat <- as_matrix(data_mat)
+  data_mat <- data_mat[pagene,]
   #merge_scexpr <- mean_expr(Single_data)
   message("*** Start to store the variables: ")
   message("*1)merge_scexpr")
   SOAR::Store(merge_scexpr)
-  #message("*2)Single_data,it may take some time!")
-  #SOAR::Store(Single_data)
   message("*2)data_mat")
   SOAR::Store(data_mat)
   Pagwas$Single_data<-Single_data
