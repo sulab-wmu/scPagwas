@@ -83,7 +83,10 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
   feature_fontface <span class="op">=</span> <span class="st">"bold.italic"</span>,
   fontsize_axistext_x <span class="op">=</span> <span class="fl">12</span>,
   fontsize_axistext_y <span class="op">=</span> <span class="fl">12</span>,
-  aspect.ratio <span class="op">=</span> <span class="cn">NULL</span>
+  aspect.ratio <span class="op">=</span> <span class="cn">NULL</span>,
+  figurenames <span class="op">=</span> <span class="cn">NULL</span>,
+  width <span class="op">=</span> <span class="fl">7</span>,
+  height <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -109,6 +112,12 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 <dd><p>Whether to plot, logical</p></dd>
 <dt>pt.size</dt>
 <dd><p>size of jitter in the violin plots. Set to 0 (default) to omit</p></dd>
+<dt>figurenames</dt>
+<dd><p>The filename and address of the output plot,</p></dd>
+<dt>width</dt>
+<dd><p>figure width</p></dd>
+<dt>height</dt>
+<dd><p>figure height</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -124,9 +133,9 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 <span class="r-in"><span class="fu">plot_vln_Corgenes</span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">scRNAexample</span>,</span>
 <span class="r-in">             assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,</span>
 <span class="r-in">             var_group<span class="op">=</span><span class="st">"anno"</span>,<span class="co"># 缂佸棜鍎猚luster濞夈劑鍣撮崚悚笺阜</span>NA<span class="op">=</span><span class="va">top5genes</span>,</span>
-<span class="r-in">             vec_group_colors<span class="op">=</span> <span class="fu"><a href="https://nanx.me/ggsci/reference/pal_d3.html" class="external-link">pal_d3</a></span><span class="op">(</span>alpha <span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
+<span class="r-in">             vec_group_colors<span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ggsci/man/pal_d3.html" class="external-link">pal_d3</a></span><span class="op">(</span>alpha <span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Idents(seurat_obj_tmp) &lt;- var_group:</span> could not find function "Idents&lt;-"</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot_vln_Corgenes(seurat_obj = scRNAexample, assay = "RNA", slot = "data",     var_group = "anno", vec_features = top5genes, vec_group_colors = pal_d3(alpha = 0.5)(10)):</span> object 'scRNAexample' not found</span>
 </code></pre></div>
     </div>
   </div>

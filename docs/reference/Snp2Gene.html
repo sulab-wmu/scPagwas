@@ -90,6 +90,7 @@ given unknown strand assignment for SNP array-based genotyping info</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gtf_df</span><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'gtf_df' not found</span>
 <span class="r-in"><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu">Snp2Gene</span><span class="op">(</span>snp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span><span class="op">)</span>, refGene <span class="op">=</span> <span class="va">gtf_df</span>, marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.data.frame(Pagwas$gwas_data):</span> object 'Pagwas' not found</span>
 </code></pre></div>
