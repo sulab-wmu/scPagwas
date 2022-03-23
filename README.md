@@ -6,7 +6,7 @@ genetics-modulated cells associated with complex diseases. **scPagwas**
 is able to prioritize disease-associated individual cells by integrating
 the scRNA-seq data with polygenic signals from GWAS.
 
-![Graphical abstract](img/workflow_20220222.png)
+![Graphical abstract](./docs/reference/figures/workflow_20220222.png)
 
 ## Installation
 
@@ -32,18 +32,17 @@ devtools::install_github("dengchunyu/scPagwas")
  data(block_annotation)
  #LD data
  data(chrom_ld)
- 
+
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     FilterSingleCell=TRUE,
+                     FilterSingleCell=F,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
- 
 ```
 
 ### 2. Cell types functions
@@ -62,9 +61,11 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ``` r
 Objects()
-#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
-#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
-#> [7] "pca_scCell_mat"       "snp_gene_df"
+#>  [1] "block_annotation"     "chrom_ld"             "data_mat"            
+#>  [4] "ff.data_mat"          "ff.pca_scCell_mat"    "merge_scexpr"        
+#>  [7] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [10] "pca_scCell_mat"       "raw_data_mat"         "scCounts"            
+#> [13] "snp_gene_df"
 Bootstrap_P_Barplot(Pagwas=Pagwas,
                     figurenames = NULL,
                     width = 5,
@@ -73,15 +74,17 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
                     title = "Test scPagwas")
 ```
 
-<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="60%" />
+<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
 
 2.Forestplot for estimate values
 
 ``` r
 Objects()
-#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
-#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
-#> [7] "pca_scCell_mat"       "snp_gene_df"
+#>  [1] "block_annotation"     "chrom_ld"             "data_mat"            
+#>  [4] "ff.data_mat"          "ff.pca_scCell_mat"    "merge_scexpr"        
+#>  [7] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [10] "pca_scCell_mat"       "raw_data_mat"         "scCounts"            
+#> [13] "snp_gene_df"
 Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         figurenames = NULL,
                         width = 9,
@@ -89,7 +92,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         do_plot=T)
 ```
 
-<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="60%" />
+<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
 
     #> TableGrob (1 x 13) "arrange": 2 grobs
     #>   z         cells    name           grob
@@ -106,9 +109,11 @@ suppressMessages(require("ggraph"))
 suppressMessages(require("igraph"))
 #check the objects
 Objects()
-#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
-#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
-#> [7] "pca_scCell_mat"       "snp_gene_df"
+#>  [1] "block_annotation"     "chrom_ld"             "data_mat"            
+#>  [4] "ff.data_mat"          "ff.pca_scCell_mat"    "merge_scexpr"        
+#>  [7] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [10] "pca_scCell_mat"       "raw_data_mat"         "scCounts"            
+#> [13] "snp_gene_df"
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
@@ -126,7 +131,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-pathway_contribution_network-1.png" width="60%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="100%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -137,9 +142,10 @@ for save time.
 
 ``` r
   #check the objects
-  Objects()
+  #Objects()
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
+  #check the objects in Pagwas,if you don't need rerun, remove some objects
 ```
 
 #### Visualize the scPagwas_main results.
@@ -153,9 +159,11 @@ for save time.
  require("ggsci")
  #check the objects
  Objects()
-#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
-#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
-#> [7] "pca_scCell_mat"       "snp_gene_df"
+#>  [1] "block_annotation"     "chrom_ld"             "data_mat"            
+#>  [4] "ff.data_mat"          "ff.pca_scCell_mat"    "merge_scexpr"        
+#>  [7] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#> [10] "pca_scCell_mat"       "raw_data_mat"         "scCounts"            
+#> [13] "snp_gene_df"
  scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
@@ -172,7 +180,7 @@ for save time.
                         do_plot = T)
 ```
 
-<img src="man/figures/README-scPagwas_Visualization-1.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" />
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
@@ -194,7 +202,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive-1.png" width="60%" />
+<img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
@@ -205,10 +213,9 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
                               do_plot = T)
-#> Warning in order(.): 强制改变过程中产生了NA
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="90%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="100%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -223,12 +230,14 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-<img src="man/figures/README-vln_Corgenes-1.png" width="70%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="100%" />
 
 #### Single cell regression
 
 ``` r
     Pagwas <- scPagwas_perform_regression(Pagwas)
+#> Warning in scPagwas_perform_regression(Pagwas): data has not been precomputed,
+#> returning without results
 ```
 
 #### Change the parameter of nfeatures
@@ -238,9 +247,10 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
 ``` r
 # empty the cache
 Objects()
-#> [1] "block_annotation"     "data_mat"             "merge_scexpr"        
-#> [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
-#> [7] "pca_scCell_mat"       "snp_gene_df"
+#>  [1] "block_annotation"     "data_mat"             "merge_scexpr"        
+#>  [4] "Pathway_ld_gwas_data" "Pathway_sclm_results" "pca_cell_df"         
+#>  [7] "pca_scCell_mat"       "raw_data_mat"         "scCounts"            
+#> [10] "snp_gene_df"
 Remove(Objects())
 ```
 
