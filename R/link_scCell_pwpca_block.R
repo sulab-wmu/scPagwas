@@ -21,23 +21,25 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     return(Pagwas)
   }
 
-  if (dim(data_mat)[2] == dim(pca_scCell_mat)[2]) {
-    colnames(data_mat) <- colnames(pca_scCell_mat)
+  if (dim(Pagwas$ff.data_mat)[2] == dim(Pagwas$ff.pca_scCell_mat)[2]) {
+    colnames(Pagwas$ff.data_mat) <- colnames(Pagwas$ff.pca_scCell_mat)
+    data_mat <- Pagwas$ff.data_mat
+    pca_scCell_mat <- Pagwas$ff.pca_scCell_mat
   } else {
-    a <- intersect(colnames(data_mat), colnames(pca_scCell_mat))
+    a <- intersect(colnames(Pagwas$ff.data_mat), colnames(Pagwas$ff.pca_scCell_mat))
     if (length(a) == 0) {
       stop("* please check the colnames of Singlecell data.There should have no specific symbol")
     }
-    data_mat <- data_mat[, a]
-    pca_scCell_mat <- pca_scCell_mat[, a]
-  }
-  #rm(a)
 
+    data_mat <- Pagwas$ff.data_mat[, a]
+    pca_scCell_mat <- Pagwas$ff.pca_scCell_mat[, a]
+  }
 
   message("* Merging pathway score and expression information about blocks in ", length(Pathway_ld_gwas_data), " pathways")
   pb <- txtProgressBar(style = 3)
 
   Pathway_ld_gwas_data <- papply(Pathway_ld_gwas_data, function(pa_block) {
+
     pathway <- unique(pa_block$block_info$pathway)
 
     x <- pca_scCell_mat[pathway, ]
@@ -59,13 +61,9 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
       return(NULL)
     }
 
-        x_FBM <- bigstatsr::as_FBM(data_mat[mg, ])
-
-
     if (length(mg) > 1) {
 
-      x2 <- bigstatsr::big_apply(x_FBM, a.FUN = colnorm_sub, a.combine = "cbind")
-      #rm(x_FBM)
+      x2 <- bigstatsr::big_apply(bigstatsr::as_FBM(data_mat[mg, ]), a.FUN = colnorm_sub, a.combine = "cbind")
       rownames(x2) <- mg
       #colnames(x2) <- colnames(x)
     }
@@ -76,37 +74,48 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
 
       x <- x[rep(1, pa_block$n_snps), ]
       rownames(x) <- pa_block$snps$rsid
-      #snp_gene_df <- snp_gene_df
       rownames(snp_gene_df) <- snp_gene_df$rsid
 
-
       x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      x <- as(x, "dgCMatrix")
+      x2 <- as(x2, "dgCMatrix")
       x3 <- x2 * x
     } else {
       x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
       rownames(x2) <- pa_block$snps$label
-
+      x2 <- as(x2, "dgCMatrix")
       pa_block$n_snps <- nrow(pa_block$snps)
 
       x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
       rownames(x) <- pa_block$snps$rsid
-
       #snp_gene_df <- snp_gene_df
       rownames(snp_gene_df) <- snp_gene_df$rsid
-
       x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+      x <- as(x, "dgCMatrix")
       x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+
     }
     rm(x)
     rm(x2)
-    #gc()
-
     ## add the slope of eqtls for x
     rownames(x3) <- pa_block$snps$rsid
-    pa_block$x <- Matrix::crossprod(t(pa_block$ld_matrix_squared), x3)
+    #x3 <- as(x3, "dgCMatrix")
+    #pa_block$ld_matrix_squared <- as(pa_block$ld_matrix_squared, "dgCMatrix")
+
+    x3 <- Matrix::crossprod( pa_block$ld_matrix_squared,x3)
+
+    ff.x3 <- ff::ff(vmode="double", dim=c(dim(x3)[1], dim(x3)[2]))
+    ff.x3[1:dim(x3)[1],1:dim(x3)[2]] <- x3[1:dim(x3)[1],1:dim(x3)[2]]
+    rownames(ff.x3)<-rownames(x3)
+    colnames(ff.x3)<-colnames(x3)
     rm(x3)
-    #gc()
+    pa_block$x<-ff.x3
     pa_block$include_in_inference <- T
+
+    ff.ld_matrix_squared <- ff::ff(vmode="double", dim=c(dim(pa_block$ld_matrix_squared)[1], dim(pa_block$ld_matrix_squared)[2]))
+    ff.ld_matrix_squared[1:dim(pa_block$ld_matrix_squared)[1],1:dim(pa_block$ld_matrix_squared)[2]] <- pa_block$ld_matrix_squared[1:dim(pa_block$ld_matrix_squared)[1],1:dim(pa_block$ld_matrix_squared)[2]]
+
+    pa_block$ld_matrix_squared<-ff.ld_matrix_squared
 
     setTxtProgressBar(pb, which(names(Pathway_ld_gwas_data) == pathway) / length(Pathway_ld_gwas_data))
 
@@ -115,15 +124,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
   close(pb)
 
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-
-  message("*** Start to store the variables: ")
-  message("*1)Pathway_ld_gwas_data")
-  SOAR::Store(Pathway_ld_gwas_data)
-  message("*2)pca_scCell_mat")
-  SOAR::Store(pca_scCell_mat)
-  message("*3)data_mat")
-  SOAR::Store(data_mat)
-
+  Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
 
   return(Pagwas)
 }

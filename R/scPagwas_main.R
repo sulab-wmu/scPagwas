@@ -18,7 +18,7 @@
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom SOAR Store
 #' @importFrom readr read_table2
-
+#' @importFrom ff ff
 
 #' @title Main wrapper functions for scPagwas
 #' @name scPagwas_main
@@ -95,9 +95,10 @@ scPagwas_main <- function(Pagwas = NULL,
   }
   #1.gwas summary data input
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  message("*** Start to store the variables:block_annotation")
+  #message("*** Start to store the variables:block_annotation")
+  #Create data frame with some added parameters.
   SOAR::Store(block_annotation)
-
+  #SOAR::Store(chrom_ld)
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
@@ -157,7 +158,7 @@ scPagwas_main <- function(Pagwas = NULL,
      Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
                                   gwas_data=a,
                                   maf_filter=maf_filter)
-     rm(a)
+   rm(a)
    message('done!')
 
    #4.calculated Snp2Gene
@@ -198,6 +199,7 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,n.cores=n.cores)
   }
 
+  SOAR::Store(block_annotation)
   message('done!')
 
   #4.ld data folder,which is preprogress
@@ -211,7 +213,7 @@ scPagwas_main <- function(Pagwas = NULL,
                                        n.cores=n.cores)
 
     rm(chrom_ld)
-  message('done!')
+   message('done!')
   }
 
   #Pagwas$Pathway_list<-NULL

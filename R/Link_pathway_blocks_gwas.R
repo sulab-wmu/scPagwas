@@ -118,13 +118,12 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   rm(chrom_gwas_list)
   rm(chrom_ld)
-  SOAR::Store(Pathway_ld_gwas_data)
-  #message("*** Start to store the variables: Pathway_ld_gwas_data")
   #SOAR::Store(Pathway_ld_gwas_data)
+  message("*** Start to store the variables: Pathway_ld_gwas_data")
+  SOAR::Store(Pathway_ld_gwas_data)
   return(Pagwas)
 
 }
-
 
 #' make_ld_matrix
 #' @description construct the final matrix for regression in blocks
@@ -136,6 +135,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
   mat_dim <- length(all_snps)
   ld_matrix <- diag(mat_dim)
+  ld_matrix <- as(ld_matrix, "dgCMatrix")
 
   if (mat_dim == 1) {
     return(data.matrix(1))
@@ -149,6 +149,7 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
       ld_matrix[n_x[2], n_x[1]] <- as.numeric(n_x[3])
     }
   }
+
   #storage.mode(ld_matrix)<-"integer"
   return(ld_matrix)
 }

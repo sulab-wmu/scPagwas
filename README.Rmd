@@ -49,7 +49,7 @@ devtools::install_github("dengchunyu/scPagwas")
  data(block_annotation)
  #LD data
  data(chrom_ld)
- 
+
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
@@ -60,12 +60,12 @@ devtools::install_github("dengchunyu/scPagwas")
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
- 
+
 ```
  
 ### 2. Cell types functions  
  
-```{r message=FALSE,results = "hide"}
+```{r message=FALSE,results = "hide",warning = FALSE}
   Objects()
 # 7th: link_pwpca_block function start!! 
   Pagwas <- link_pwpca_block(Pagwas)
@@ -75,7 +75,7 @@ devtools::install_github("dengchunyu/scPagwas")
 #### Visualize the celltypes results.
 
  1.barplot
-```{r Bootstrap_P_Barplot, message=FALSE}
+```{r Bootstrap_P_Barplot, message=FALSE,warning = FALSE}
 Objects()
 Bootstrap_P_Barplot(Pagwas=Pagwas,
                     figurenames = NULL,
@@ -86,7 +86,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
 ```
 
  2.Forestplot for estimate values
-```{r Bootstrap_estimate_Plot,message=FALSE}
+```{r Bootstrap_estimate_Plot,message=FALSE,warning = FALSE}
 Objects()
 Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         figurenames = NULL,
@@ -131,12 +131,14 @@ plot_pathway_contribution_network(
 scPagwas_main is a function wrapper other process codes.
 as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
 
-```{r message=FALSE,results = "hide"}
+```{r message=FALSE,results = "hide",warning = FALSE}
   #check the objects
   Objects()
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
-
+  #check the objects in Pagwas,if you don't need rerun, remove some objects
+  names(Pagwas)
+  Pagwas$
 ```
 
 
@@ -168,7 +170,7 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
-```{r bar_positie_nagtive,message=FALSE,fig.height=6, fig.width=6}
+```{r bar_positie_nagtive,message=FALSE,,warning = FALSE,fig.height=6, fig.width=6}
 library("RColorBrewer")
 library("ggplot2")
 
@@ -188,7 +190,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell 
 
-```{r bar_positie_nagtive2,message=FALSE}
+```{r bar_positie_nagtive2,message=FALSE,warning = FALSE}
 plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
@@ -199,7 +201,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
-```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8}
+```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8,warning = FALSE}
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",

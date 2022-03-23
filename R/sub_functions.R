@@ -198,7 +198,7 @@ corSparse <- function(X, Y) {
     sdvecX <- sqrt( (colSums(X^2) - n*muX^2) / (n-1) )
     sdvecY <- sqrt( (colSums(Y^2) - n*muY^2) / (n-1) )
     cormat <- covmat/tcrossprod(sdvecX,sdvecY)
-    cormat[is.nan(cormat),1]<-0
+    #cormat[is.nan(cormat),1]<-0
 return(cormat)
 }
 

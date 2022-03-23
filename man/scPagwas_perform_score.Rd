@@ -4,19 +4,12 @@
 \alias{scPagwas_perform_score}
 \title{scPagwas_perform_score}
 \usage{
-scPagwas_perform_score(
-  Pagwas,
-  n.cores = 1,
-  split_n = NULL,
-  remove_outlier = TRUE
-)
+scPagwas_perform_score(Pagwas, n.cores = 1, remove_outlier = TRUE)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list}
 
 \item{n.cores}{cores}
-
-\item{split_n}{(integr)default NULL, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.}
 }

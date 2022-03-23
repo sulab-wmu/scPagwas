@@ -40,6 +40,12 @@ Single_data_input <- function(Pagwas,
     return(Pagwas)
   }
   ## get the Variable genes for cells
+  #raw_data_mat <-
+  Pagwas$ff.raw_data_mat <- ff::ff(vmode="double", dim=c(dim(Single_data@assays$RNA@data)[1], dim(Single_data@assays$RNA@data)[2]))
+  Pagwas$ff.raw_data_mat[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]] <- Single_data@assays$RNA@data[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]]
+  rownames(Pagwas$ff.raw_data_mat)<-rownames(Single_data@assays$RNA@data)
+  colnames(Pagwas$ff.raw_data_mat)<-colnames(Single_data@assays$RNA@data)
+
 
   Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
                               annotation = as.vector(SeuratObject::Idents(Single_data)))
@@ -98,12 +104,16 @@ Single_data_input <- function(Pagwas,
   data_mat <- Seurat::GetAssayData(object = Single_data, slot = "data")
   data_mat <- as_matrix(data_mat)
   data_mat <- data_mat[pagene,]
-  #merge_scexpr <- mean_expr(Single_data)
-  message("*** Start to store the variables: ")
+
+  ff.data_mat <- ff::ff(vmode="double", dim=c(dim(data_mat)[1], dim(data_mat)[2]))
+  ff.data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]] <- data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]]
+  rownames(ff.data_mat)<-rownames(data_mat)
+  colnames(ff.data_mat)<-colnames(data_mat)
+
   message("*1)merge_scexpr")
   SOAR::Store(merge_scexpr)
-  message("*2)data_mat")
-  SOAR::Store(data_mat)
+
   Pagwas$Single_data<-Single_data
+  Pagwas$ff.data_mat<-ff.data_mat
   return(Pagwas)
 }
