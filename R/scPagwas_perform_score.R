@@ -13,28 +13,29 @@
 scPagwas_perform_score <- function(Pagwas,
                                    n.cores = 1,
                                    remove_outlier=TRUE) {
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  if (is.null(Pathway_ld_gwas_data)) {
     stop("data has not been precomputed, returning without results")
     # return(Pagwas)
   }
   # fit model
-  Pathway_names <- names(Pagwas$Pathway_ld_gwas_data)
+  Pathway_names <- names(Pathway_ld_gwas_data)
   message("Run regression for ", length(Pathway_names), " pathways")
   pb <- txtProgressBar(style = 3)
 
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
 
-    Pathway_block <- Pagwas$Pathway_ld_gwas_data[[Pathway]]
+    Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
     noise_per_snp <- Pathway_block$snps$se**2
 
     if (!is.null(Pathway_block$x)) {
       if (nrow(Pathway_block$x) > 2) {
-        x <- Pathway_block$x[1:nrow(Pathway_block$x),]
-        na_elements <- is.na(Pathway_block$y) | apply(x, 1, function(x) {
+
+        na_elements <- is.na(Pathway_block$y) | apply(Pathway_block$x, 1, function(x) {
           any(is.na(x))
         }) | is.na(noise_per_snp)
 
-        #x <- Pathway_block$x
+
+        x <-as(Pathway_block$x, "matrix")
         rownames(x) <- Pathway_block$snps$rsid
         results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
         results[is.na(results)] <- 0
@@ -55,9 +56,9 @@ scPagwas_perform_score <- function(Pagwas,
   Pathway_sclm_results <- as.data.frame(Pathway_sclm_results)
   Pathway_sclm_results<-as(data.matrix(Pathway_sclm_results), "dgCMatrix")
 
-  pca_scCell_mat<-as(Pagwas$ff.pca_scCell_mat[Pathway_names, ],"dgCMatrix")
+  #pca_scCell_mat<-as(pca_scCell_mat[Pathway_names, ],"dgCMatrix")
 
-  data_mat<-as(Pagwas$ff.data_mat[1:nrow(Pagwas$ff.data_mat),1:ncol(Pagwas$ff.data_mat)],"dgCMatrix")
+  data_mat<-as(data_mat,"dgCMatrix")
 
   pathway_expr <- lapply(Pathway_names, function(pa) {
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(data_mat))
@@ -72,11 +73,11 @@ scPagwas_perform_score <- function(Pagwas,
       return(b)
     }
   })
-  rm(data_mat)
+  #rm(data_mat)
   pathway_expr <- as.data.frame(pathway_expr)
   colnames(pathway_expr) <- Pathway_names
-  pathway_expr <- as(data.matrix(pathway_expr[colnames(pca_scCell_mat), rownames(pca_scCell_mat)]), "dgCMatrix")
-  pa_exp_mat <- as(t(Pagwas$ff.pca_scCell_mat[Pathway_names, ]), "dgCMatrix") * pathway_expr
+  pathway_expr <- as(data.matrix(pathway_expr), "dgCMatrix")
+  pa_exp_mat <- as(t(as(pca_scCell_mat[Pathway_names, ],"matrix")), "dgCMatrix") * pathway_expr
 
   scPagwas_mat <- Pathway_sclm_results * pa_exp_mat
 
@@ -92,18 +93,18 @@ scPagwas_perform_score <- function(Pagwas,
   df <- data.frame(cellid = colnames(pca_scCell_mat), scPagwas_score = scs)
   rownames(df) <- df$cellid
   rm(scs)
-  rm(pca_scCell_mat)
-
+  #rm(pca_scCell_mat)
+  gc()
   if (remove_outlier) {
     Pagwas$scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
   names(Pagwas$scPagwas_score)<-df$cellid
   Pagwas$gene_heritability_correlation<-scGet_gene_heritability_correlation(
     scPagwas_score=Pagwas$scPagwas_score,
-    data_mat=Pagwas$ff.raw_data_mat[1:nrow(Pagwas$ff.raw_data_mat),names(Pagwas$scPagwas_score)])
+    data_mat=raw_data_mat[,names(Pagwas$scPagwas_score)])
 
   rm(df)
-  gc()
+
   return(Pagwas)
 }
 
@@ -182,11 +183,11 @@ scGet_gene_heritability_correlation <- function(scPagwas_score,data_mat){
 
   if(all(names(scPagwas_score)==colnames(data_mat))){
     scPagwas_score<-data.matrix(scPagwas_score)
-    sparse_cor<-corSparse(X=t(data_mat), Y=scPagwas_score)
+    sparse_cor<-corSparse(X=t(as(data_mat,"matrix")), Y=scPagwas_score)
   }else{
     data_mat<-data_mat[,names(scPagwas_score)]
     scPagwas_score<-data.matrix(scPagwas_score)
-    sparse_cor<-corSparse(X=t(data_mat), Y=scPagwas_score)
+    sparse_cor<-corSparse(X=t(as(data_mat,"matrix")), Y=scPagwas_score)
   }
   return(sparse_cor)
 }

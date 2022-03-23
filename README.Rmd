@@ -56,7 +56,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     FilterSingleCell=TRUE,
+                     FilterSingleCell=F,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      scPagwasSession="scPagwasSession")
@@ -133,12 +133,10 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
   #check the objects
-  Objects()
+  #Objects()
   Pagwas <- link_scCell_pwpca_block(Pagwas)
   Pagwas <- scPagwas_perform_score(Pagwas)
   #check the objects in Pagwas,if you don't need rerun, remove some objects
-  names(Pagwas)
-  Pagwas$
 ```
 
 

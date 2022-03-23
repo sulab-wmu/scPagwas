@@ -33,18 +33,25 @@ Single_data_input <- function(Pagwas,
                               min.reads = 10,
                               min.detected = 5,
                               min_clustercells = 50) {
-  message("Input single cell count data and cell annotation data!")
+  message("Input single cell data!")
 
   if (!("Seurat" %in% class(Single_data))) {
     message("Single_data is not of class Seurat!")
     return(Pagwas)
   }
   ## get the Variable genes for cells
-  #raw_data_mat <-
-  Pagwas$ff.raw_data_mat <- ff::ff(vmode="double", dim=c(dim(Single_data@assays$RNA@data)[1], dim(Single_data@assays$RNA@data)[2]))
-  Pagwas$ff.raw_data_mat[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]] <- Single_data@assays$RNA@data[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]]
-  rownames(Pagwas$ff.raw_data_mat)<-rownames(Single_data@assays$RNA@data)
-  colnames(Pagwas$ff.raw_data_mat)<-colnames(Single_data@assays$RNA@data)
+  #raw_data_mat <-  Seurat::GetAssayData(object = Single_data, slot = "data")
+ # if(){
+ #   Pagwas$ff.raw_data_mat <- ff::ff(vmode="double", dim=c(dim(Single_data@assays$RNA@data)[1], dim(Single_data@assays$RNA@data)[2]))
+ #   Pagwas$ff.raw_data_mat[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]] <- Single_data@assays$RNA@data[1:dim(Single_data@assays$RNA@data)[1],1:dim(Single_data@assays$RNA@data)[2]]
+  #  rownames(Pagwas$ff.raw_data_mat)<-rownames(Single_data@assays$RNA@data)
+  #  colnames(Pagwas$ff.raw_data_mat)<-colnames(Single_data@assays$RNA@data)
+
+  #}else{
+    raw_data_mat <-  Seurat::GetAssayData(object = Single_data, slot = "data")
+    #raw_data_mat <- big_copy(raw_data_mat)
+    SOAR::Store(raw_data_mat)
+  #}
 
 
   Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
@@ -105,15 +112,17 @@ Single_data_input <- function(Pagwas,
   data_mat <- as_matrix(data_mat)
   data_mat <- data_mat[pagene,]
 
-  ff.data_mat <- ff::ff(vmode="double", dim=c(dim(data_mat)[1], dim(data_mat)[2]))
-  ff.data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]] <- data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]]
-  rownames(ff.data_mat)<-rownames(data_mat)
-  colnames(ff.data_mat)<-colnames(data_mat)
+  #ff.data_mat <- ff::ff(vmode="double", dim=c(dim(data_mat)[1], dim(data_mat)[2]))
+  #ff.data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]] <- data_mat[1:dim(data_mat)[1],1:dim(data_mat)[2]]
+  #rownames(ff.data_mat)<-rownames(data_mat)
+  #colnames(ff.data_mat)<-colnames(data_mat)
 
   message("*1)merge_scexpr")
   SOAR::Store(merge_scexpr)
+  SOAR::Store(data_mat)
 
   Pagwas$Single_data<-Single_data
-  Pagwas$ff.data_mat<-ff.data_mat
+
+  #Pagwas$ff.data_mat<-ff.data_mat
   return(Pagwas)
 }

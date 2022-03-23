@@ -18,7 +18,6 @@
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom SOAR Store
 #' @importFrom readr read_table2
-#' @importFrom ff ff
 
 #' @title Main wrapper functions for scPagwas
 #' @name scPagwas_main
@@ -95,7 +94,7 @@ scPagwas_main <- function(Pagwas = NULL,
   }
   #1.gwas summary data input
   Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  #message("*** Start to store the variables:block_annotation")
+  message("*** Start to store the variables:block_annotation")
   #Create data frame with some added parameters.
   SOAR::Store(block_annotation)
   #SOAR::Store(chrom_ld)

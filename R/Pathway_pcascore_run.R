@@ -70,7 +70,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
     scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
-    #scCounts <- as_matrix(scCounts)
+    scCounts <- as_matrix(scCounts)
     #
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
@@ -111,24 +111,20 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   rm(scPCAscore_list)
   # keep cellnames the same as Single_data
   colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
-  pca_scCell_mat<-data.matrix(pca_scCell_mat, rownames.force = NA)
+  pca_scCell_mat<-as(data.matrix(pca_scCell_mat, rownames.force = NA),"dgCMatrix")
+  message("*pca_scCell_mat")
+  SOAR::Store(pca_scCell_mat)
 
   colnames(merge_scexpr)<-colnames(pca_cell_df)
   Pagwas$VariableFeatures<-rownames(Pagwas$Single_data)
   Pagwas$Single_data<-NULL
 
-  ff.pca_scCell_mat <- ff::ff(vmode="double", dim=c(dim(pca_scCell_mat)[1], dim(pca_scCell_mat)[2]))
-  ff.pca_scCell_mat[1:dim(pca_scCell_mat)[1],1:dim(pca_scCell_mat)[2]] <- pca_scCell_mat[1:dim(pca_scCell_mat)[1],1:dim(pca_scCell_mat)[2]]
-  rownames(ff.pca_scCell_mat)<-rownames(pca_scCell_mat)
-  colnames(ff.pca_scCell_mat)<-colnames(pca_scCell_mat)
-  rm(pca_scCell_mat)
-
-  Pagwas$ff.pca_scCell_mat<-ff.pca_scCell_mat
   message("*** Start to store the variables: ")
   message("*1)pca_cell_df")
   SOAR::Store(pca_cell_df)
   message("*2)merge_scexpr")
   SOAR::Store(merge_scexpr)
+
 
   gc()
   #SOAR::Store(Single_data)
@@ -163,41 +159,31 @@ PathwayPCAtest <- function(Pathway_list,
 
   ## filter pathway
   nPcs <- 1
-
-  ff.tscCounts <- ff::ff(vmode="double", dim=c(dim(scCounts)[2], dim(scCounts)[1]))
-  ff.tscCounts[1:dim(scCounts)[2],1:dim(scCounts)[1]] <-t(data.matrix(scCounts))[1:dim(scCounts)[2],1:dim(scCounts)[1]]
-  rownames(ff.tscCounts)<-colnames(scCounts)
-  colnames(ff.tscCounts)<-rownames(scCounts)
-
-  scCounts <- as(scCounts, "dgCMatrix")
-  cm <- Matrix::rowMeans(scCounts)
-
-  ff.scCounts <- ff::ff(vmode="double", dim=c(dim(scCounts)[1], dim(scCounts)[2]))
-  ff.scCounts[1:dim(scCounts)[1],1:dim(scCounts)[2]] <-scCounts[1:dim(scCounts)[1],1:dim(scCounts)[2]]
-  rownames(ff.scCounts)<-rownames(scCounts)
-  colnames(ff.scCounts)<-colnames(scCounts)
-  #SOAR::Store(scCounts)
-  #rm(scCounts)
-  proper.gene.names <- rownames(ff.scCounts)
+  scCounts <- t(scCounts)
+  #scCounts <- as(scCounts, "dgCMatrix")
+  cm <- Matrix::colMeans(scCounts)
+  proper.gene.names<-colnames(scCounts)
+  SOAR::Store(scCounts)
   ###### calculate the pca for each pathway terms.
   papca <- papply(Pathway_list, function(Pa_id) {
 
     lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
+    mat <- scCounts[,lab]
+    #rm(scCounts)
+    pcs <- irlba::irlba(as(mat,"dgCMatrix"), nv = nPcs, nu = 0, center = cm[lab])
 
-    pcs <- irlba::irlba(as(ff.tscCounts[, lab], "dgCMatrix"), nv = nPcs, nu = 0, center = cm[lab])
-
-    pcs$d <- pcs$d / sqrt(nrow(ff.tscCounts))
+    pcs$d <- pcs$d/sqrt(nrow(mat))
     pcs$rotation <- pcs$v
     pcs$v <- NULL
     #pcs$scores <- t(ff.tscCounts[, lab] %*% pcs$rotation) - as.numeric((cm[lab] %*% pcs$rotation))
 
-    pcs$scores <- Matrix::crossprod(pcs$rotation,as(ff.scCounts[lab,], "dgCMatrix")) - as.numeric((cm[lab] %*% pcs$rotation))
+    pcs$scores <- Matrix::crossprod(pcs$rotation,t(mat)) - as.numeric((cm[lab] %*% pcs$rotation))
 
-    cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(cor(pcs$scores[i,], colMeans(ff.scCounts[lab, ]*abs(pcs$rotation[, i]))))))
+    cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(cor(pcs$scores[i,], colMeans(t(mat)*abs(pcs$rotation[, i]))))))
 
     pcs$scores <- pcs$scores * cs
     pcs$rotation <- pcs$rotation * cs
-    rownames(pcs$rotation) <- rownames(ff.scCounts)[lab]
+    rownames(pcs$rotation) <- colnames(mat)
 
     return(list(xp = pcs))
   }, n.cores = n.cores)
@@ -219,14 +205,14 @@ PathwayPCAtest <- function(Pathway_list,
     papca[[i]]$xp$scores
   })))
 
-  n.cells <- nrow(ff.tscCounts)
+  n.cells <- nrow(scCounts)
 
   vdf$exp <- RMTstat::qWishartMax(0.5, n.cells, vdf$n, var = 1, lower.tail = FALSE)
   vdf$var <- (vdf$var) / (vdf$exp)
   df <- data.frame(name = names(papca)[vdf$i], score = vdf$var, stringsAsFactors = FALSE)
 
   rownames(vscore) <- names(papca)[vdf$i]
-  colnames(vscore) <- rownames(ff.tscCounts)
+  colnames(vscore) <- rownames(scCounts)
 
   return(list(df, vscore))
 }
