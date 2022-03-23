@@ -74,7 +74,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
                     title = "Test scPagwas")
 ```
 
-<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="50%" />
 
 2.Forestplot for estimate values
 
@@ -92,7 +92,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         do_plot=T)
 ```
 
-<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="60%" />
 
     #> TableGrob (1 x 13) "arrange": 2 grobs
     #>   z         cells    name           grob
@@ -131,7 +131,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-pathway_contribution_network-1.png" width="100%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="60%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -180,7 +180,7 @@ for save time.
                         do_plot = T)
 ```
 
-<img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" />
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
@@ -202,7 +202,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive-1.png" width="50%" />
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
@@ -211,11 +211,10 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
-                              #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="70%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -223,14 +222,14 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
-             var_group="anno",# 细胞cluster注释列
+             var_group="anno",
              vec_features=top5genes,
              vec_group_colors= pal_d3(alpha =0.5)(10),
              do_plot = T
              )
 ```
 
-<img src="man/figures/README-vln_Corgenes-1.png" width="100%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="60%" />
 
 #### Single cell regression
 

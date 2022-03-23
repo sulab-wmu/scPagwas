@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.0</span>
       </span>
     </div>
 
@@ -63,12 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scPagwas_perform_score</span><span class="op">(</span>
-  <span class="va">Pagwas</span>,
-  n.cores <span class="op">=</span> <span class="fl">1</span>,
-  split_n <span class="op">=</span> <span class="cn">NULL</span>,
-  remove_outlier <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scPagwas_perform_score</span><span class="op">(</span><span class="va">Pagwas</span>, n.cores <span class="op">=</span> <span class="fl">1</span>, remove_outlier <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -77,8 +72,6 @@
 <dd><p>Pagwas data list</p></dd>
 <dt>n.cores</dt>
 <dd><p>cores</p></dd>
-<dt>split_n</dt>
-<dd><p>(integr)default NULL, When the cell number is too big, there may have memory errors, set split_n=10000 or other number can split the cell data.</p></dd>
 <dt>remove_outlier</dt>
 <dd><p>Whether to remove the outlier for scPagwas score.</p></dd>
 </dl></div>
