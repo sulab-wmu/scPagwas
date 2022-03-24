@@ -36,7 +36,15 @@ scPagwas_perform_regression <- function(Pagwas, n.cores = 1,scPagwasSession="scP
       pca_scCell_mat,
       Pagwas$sclm_results
     )
-
+  if("Pathway_list" %in% names(Pagwas)){
+    Pagwas$Pathway_list<-NULL
+  }
+  if("rawPathway_list" %in% names(Pagwas)){
+    Pagwas$rawPathway_list<-NULL
+  }
+  if("VariableFeatures" %in% names(Pagwas)){
+    Pagwas$VariableFeatures<-NULL
+  }
   return(Pagwas)
 }
 

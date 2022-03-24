@@ -6,7 +6,7 @@ genetics-modulated cells associated with complex diseases. **scPagwas**
 is able to prioritize disease-associated individual cells by integrating
 the scRNA-seq data with polygenic signals from GWAS.
 
-<img src="man/figures/workflow_20220222.png" width="90%" />
+<img src="img/workflow_20220222.png" width="90%" />
 
 ## Installation
 
