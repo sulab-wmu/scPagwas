@@ -68,9 +68,12 @@ devtools::install_github("dengchunyu/scPagwas")
 ```{r message=FALSE,results = "hide",warning = FALSE}
   Objects()
 # 7th: link_pwpca_block function start!! 
-  Pagwas <- link_pwpca_block(Pagwas)
+  Pagwas <- link_pwpca_block(Pagwas,scPagwasSession="scPagwasSession")
 #8th: Pagwas_perform_regression function start!!
-  Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200,n.cores=1)
+  Pagwas <- Pagwas_perform_regression(Pagwas, 
+                                      iters = 200,
+                                      n.cores=1,
+                                      scPagwasSession="scPagwasSession")
 ``` 
 #### Visualize the celltypes results.
 
@@ -107,6 +110,7 @@ suppressMessages(require("ggraph"))
 suppressMessages(require("igraph"))
 #check the objects
 Objects()
+Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 plot_pathway_contribution_network(
                   mat_datExpr=pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
@@ -134,8 +138,8 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 ```{r message=FALSE,results = "hide",warning = FALSE}
   #check the objects
   #Objects()
-  Pagwas <- link_scCell_pwpca_block(Pagwas)
-  Pagwas <- scPagwas_perform_score(Pagwas)
+  Pagwas <- link_scCell_pwpca_block(Pagwas,scPagwasSession="scPagwasSession")
+  Pagwas <- scPagwas_perform_score(Pagwas,scPagwasSession="scPagwasSession")
   #check the objects in Pagwas,if you don't need rerun, remove some objects
 ```
 
@@ -213,7 +217,7 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
 #### Single cell regression
 
 ```{r message=FALSE,results = "hide"}
-    Pagwas <- scPagwas_perform_regression(Pagwas)
+    Pagwas <- scPagwas_perform_regression(Pagwas,scPagwasSession="scPagwasSession")
 
 ```
 

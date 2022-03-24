@@ -4,7 +4,13 @@
 \alias{Pagwas_perform_regression}
 \title{Pagwas_perform_regression}
 \usage{
-Pagwas_perform_regression(Pagwas, iters = 200, part = 0.5, n.cores = 1)
+Pagwas_perform_regression(
+  Pagwas,
+  iters = 200,
+  part = 0.5,
+  n.cores = 1,
+  scPagwasSession = "scPagwasSession"
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
@@ -14,6 +20,8 @@ Pagwas_perform_regression(Pagwas, iters = 200, part = 0.5, n.cores = 1)
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+
+\item{scPagwasSession}{"scPagwasSession"}
 }
 \value{
 

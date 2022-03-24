@@ -4,10 +4,12 @@
 \alias{link_pwpca_block}
 \title{link_pwpca_block}
 \usage{
-link_pwpca_block(Pagwas)
+link_pwpca_block(Pagwas, scPagwasSession = "scPagwasSession")
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
+
+\item{scPagwasSession}{"scPagwasSession"}
 }
 \value{
 

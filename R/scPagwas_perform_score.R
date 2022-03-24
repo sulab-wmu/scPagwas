@@ -4,6 +4,7 @@
 #' @param Pagwas Pagwas data list
 #' @param n.cores cores
 #' @param remove_outlier Whether to remove the outlier for scPagwas score.
+#' @param scPagwasSession "scPagwasSession"
 #' @return
 #' @export
 #'
@@ -12,19 +13,21 @@
 #' scPagwas_perform_score(Pagwas)
 scPagwas_perform_score <- function(Pagwas,
                                    n.cores = 1,
-                                   remove_outlier=TRUE) {
-  if (is.null(Pathway_ld_gwas_data)) {
+                                   remove_outlier=TRUE,
+                                   scPagwasSession="scPagwasSession") {
+  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  if (is.null(SC_Pathway_ld_gwas_data)) {
     stop("data has not been precomputed, returning without results")
     # return(Pagwas)
   }
   # fit model
-  Pathway_names <- names(Pathway_ld_gwas_data)
+  Pathway_names <- names(SC_Pathway_ld_gwas_data)
   message("Run regression for ", length(Pathway_names), " pathways")
   pb <- txtProgressBar(style = 3)
 
   Pathway_sclm_results <- lapply(Pathway_names, function(Pathway) {
 
-    Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
+    Pathway_block <- SC_Pathway_ld_gwas_data[[Pathway]]
     noise_per_snp <- Pathway_block$snps$se**2
 
     if (!is.null(Pathway_block$x)) {

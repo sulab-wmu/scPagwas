@@ -4,12 +4,18 @@
 \alias{scPagwas_perform_regression}
 \title{scPagwas_perform_regression}
 \usage{
-scPagwas_perform_regression(Pagwas, n.cores = 1)
+scPagwas_perform_regression(
+  Pagwas,
+  n.cores = 1,
+  scPagwasSession = "scPagwasSession"
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list, default is "NULL"}
 
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+
+\item{scPagwasSession}{"scPagwasSession"}
 }
 \value{
 

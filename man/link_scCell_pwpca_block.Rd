@@ -4,13 +4,19 @@
 \alias{link_scCell_pwpca_block}
 \title{link_scCell_pwpca_block}
 \usage{
-link_scCell_pwpca_block(Pagwas, n.cores = 1)
+link_scCell_pwpca_block(
+  Pagwas,
+  n.cores = 1,
+  scPagwasSession = "scPagwasSession"
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to
 check the cores in computer.}
+
+\item{scPagwasSession}{"scPagwasSession"}
 }
 \value{
 
@@ -22,6 +28,4 @@ construct the final matrix for regression in blocks
 }
 \examples{
 library(scPagwas)
-# Pagwas should have inhibit data
-Pagwas <- link_pwpca_block(Pagwas)
 }

@@ -13,5 +13,5 @@ xy2vector(Pathway_ld_gwas_data = NULL)
 
 }
 \description{
-Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
+Take a list of Pagwas - CT_Pathway_ld_gwas_data and vectorize it.
 }

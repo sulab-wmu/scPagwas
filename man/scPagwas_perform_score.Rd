@@ -4,7 +4,12 @@
 \alias{scPagwas_perform_score}
 \title{scPagwas_perform_score}
 \usage{
-scPagwas_perform_score(Pagwas, n.cores = 1, remove_outlier = TRUE)
+scPagwas_perform_score(
+  Pagwas,
+  n.cores = 1,
+  remove_outlier = TRUE,
+  scPagwasSession = "scPagwasSession"
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list}
@@ -12,6 +17,8 @@ scPagwas_perform_score(Pagwas, n.cores = 1, remove_outlier = TRUE)
 \item{n.cores}{cores}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.}
+
+\item{scPagwasSession}{"scPagwasSession"}
 }
 \value{
 

@@ -5,6 +5,7 @@
 #' @param iters number of bootstrap iterations to perform
 #' @param part number of bootstrap iterations to perform,default is 0.5
 #' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param scPagwasSession "scPagwasSession"
 #'
 #' @return
 #' @export
@@ -15,15 +16,16 @@
 Pagwas_perform_regression <- function(Pagwas,
                                       iters = 200,
                                       part = 0.5,
-                                      n.cores = 1) {
-
-  if (is.null(Pathway_ld_gwas_data)) {
+                                      n.cores = 1,
+                                      scPagwasSession="scPagwasSession") {
+  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  if (is.null(CT_Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
     }
   message("** Start inference")
   # fit model
-  vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
+  vectorized_Pagwas_data <- xy2vector(CT_Pathway_ld_gwas_data)
 
   Pagwas$lm_results <- Parameter_regression(vectorized_Pagwas_data)
 
@@ -94,8 +96,8 @@ Boot_evaluate <- function(Pagwas,
     papply(1:bootstrap_iters, function(i) {
 
       boot_results <- Parameter_regression(
-        xy2vector(Pathway_ld_gwas_data[
-          sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
+        xy2vector(CT_Pathway_ld_gwas_data[
+          sample(seq_len(length(CT_Pathway_ld_gwas_data)), floor(length(CT_Pathway_ld_gwas_data) * part))
         ])
       )
 
@@ -152,7 +154,7 @@ para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
 
 
 #' xy2vector
-#' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
+#' @description Take a list of Pagwas - CT_Pathway_ld_gwas_data and vectorize it.
 #' @param Pathway_ld_gwas_data the list of block information from Pagwas object
 #'
 #' @return
@@ -268,7 +270,7 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
   message("performing cross validation")
   Pagwas$cv_regularized_lm_results <- cv_regularized_parameter_estimator(
-    xy2vector(Pathway_ld_gwas_data),
+    xy2vector(),
     n_folds = n_folds
   )
 

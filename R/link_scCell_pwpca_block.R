@@ -6,15 +6,18 @@
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param n.cores Parallel cores,default is 1. use detectCores() to
 #' check the cores in computer.
+#' @param scPagwasSession "scPagwasSession"
 #'
 #' @return
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
-#' # Pagwas should have inhibit data
-#' Pagwas <- link_pwpca_block(Pagwas)
-link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
+
+
+link_scCell_pwpca_block <- function(Pagwas, n.cores = 1,scPagwasSession="scPagwasSession") {
+
+  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
 
   if (is.null(Pathway_ld_gwas_data)) {
     message("* no loaded Pathway_ld_gwas data")
@@ -109,9 +112,9 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
   }, n.cores = n.cores)
   close(pb)
 
-  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-  message("*** Start to store the Pathway_ld_gwas_data")
-  SOAR::Store(Pathway_ld_gwas_data)
+  SC_Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
+  message("*** Start to store the SC_CPathway_ld_gwas_data")
+  SOAR::Store(SC_Pathway_ld_gwas_data)
 
   return(Pagwas)
 }

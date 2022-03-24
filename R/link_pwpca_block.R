@@ -4,6 +4,7 @@
 #' for each block
 #' Requires rownames that are identitcal to block labels loaded previously.
 #' @param Pagwas Pagwas format, deault is NULL.
+#' @param scPagwasSession "scPagwasSession"
 #'
 #' @return
 #' @export
@@ -12,8 +13,8 @@
 #' # Pagwas should have inhibit data
 #' Pagwas <- link_pwpca_block(Pagwas)
 
-link_pwpca_block <- function(Pagwas) {
-
+link_pwpca_block <- function(Pagwas,scPagwasSession="scPagwasSession") {
+  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
   cell_names <- intersect(colnames(merge_scexpr), colnames(pca_cell_df))
 
   merge_scexpr <- merge_scexpr[, cell_names]
@@ -87,11 +88,11 @@ link_pwpca_block <- function(Pagwas) {
     return(pa_block)
   })
   close(pb)
-  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
+  CT_Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
 
   message("*** Start to store the variables: ")
-  message("*1)Pathway_ld_gwas_data")
-  SOAR::Store(Pathway_ld_gwas_data)
+  message("*1)CT_Pathway_ld_gwas_data")
+  SOAR::Store(CT_Pathway_ld_gwas_data)
   message("*2)merge_scexpr")
   SOAR::Store(merge_scexpr)
   message("*3)pca_cell_df")

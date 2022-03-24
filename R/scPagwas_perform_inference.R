@@ -2,24 +2,25 @@
 #' @description Functions for inferring relevant annotations using the polyTest model.
 #' @param Pagwas Pagwas data list, default is "NULL"
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#'
+#' @param scPagwasSession "scPagwasSession"
 #' @return
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
 #' scPagwas_perform_regression(Pagwas, n.cores = n.cores)
-scPagwas_perform_regression <- function(Pagwas, n.cores = 1) {
-
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+scPagwas_perform_regression <- function(Pagwas, n.cores = 1,scPagwasSession="scPagwasSession") {
+  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  if (is.null(SC_Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
   }
   message("Start inference")
   # fit model
-  vectorized_Pagwas_data <- xy2vector(Pagwas$Pathway_ld_gwas_data)
-  #rm(Pathway_ld_gwas_data)
-  sclm_results <- scParameter_regression(Pagwas_x=vectorized_Pagwas_data[[2]],
+  vectorized_Pagwas_data <- xy2vector(SC_Pathway_ld_gwas_data)
+
+
+  sclm_results <- scParameter_regression(Pagwas_x=as(vectorized_Pagwas_data[[2]],"matrix"),
                                                 Pagwas_y=vectorized_Pagwas_data[[1]],
                                                 noise_per_snp=vectorized_Pagwas_data[[3]],
                                                 n.cores = 1)
@@ -32,7 +33,7 @@ scPagwas_perform_regression <- function(Pagwas, n.cores = 1) {
 
   Pagwas$scPathway_heritability_contributions <-
     scGet_Pathway_heritability_contributions(
-      Pagwas$ff.pca_scCell_mat,
+      pca_scCell_mat,
       Pagwas$sclm_results
     )
 
@@ -53,10 +54,11 @@ scBoot_evaluate <- function(Pagwas, bootstrap_iters = bootstrap_iters, n.cores =
 
   scBoot_evaluate <- papply(1:bootstrap_iters, function(i) {
 
-    part_vector <- xy2vector(Pathway_ld_gwas_data[
-      sample(seq_len(length(Pathway_ld_gwas_data)),
-             floor(length(Pathway_ld_gwas_data) * 0.25))
+    part_vector <- xy2vector(SC_Pathway_ld_gwas_data[
+      sample(seq_len(length(SC_Pathway_ld_gwas_data)),
+             floor(length(SC_Pathway_ld_gwas_data) * 0.25))
     ])
+    part_vector$x<-as(part_vector$x,"matrix")
     boot_results <- scParameter_regression(part_vector)
 
     return(boot_results$parameters)
