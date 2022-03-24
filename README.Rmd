@@ -197,7 +197,6 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_ident="anno",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
-                              #f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
                               do_plot = T)
 ```
 
@@ -207,7 +206,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=scRNAexample,
              assay="RNA", slot="data",
-             var_group="anno",# 细胞cluster注释列
+             var_group="anno",
              vec_features=top5genes,
              vec_group_colors= pal_d3(alpha =0.5)(10),
              do_plot = T
@@ -242,11 +241,12 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
                      scPagwasSession="scPagwasSession2")
  # rm(chrom_ld)
   #Sys.setenv(R_LOCAL_CACHE="scPagwasSession2")
-  Pagwas2 <- link_pwpca_block(Pagwas2)
-  Pagwas2 <- Pagwas_perform_regression(Pagwas2, iters = 200,n.cores=1)
+  Pagwas2 <- link_pwpca_block(Pagwas2,scPagwasSession="scPagwasSession2")
+  Pagwas2 <- Pagwas_perform_regression(Pagwas2, scPagwasSession="scPagwasSession2",
+                                       iters = 200,n.cores=1)
   Bootstrap_P_Barplot(Pagwas=Pagwas2,title = "5000 Test scPagwas")
-  Pagwas2 <- link_scCell_pwpca_block(Pagwas2)
-  Pagwas2 <- scPagwas_perform_score(Pagwas2)
+  Pagwas2 <- link_scCell_pwpca_block(Pagwas2,scPagwasSession="scPagwasSession2")
+  Pagwas2 <- scPagwas_perform_score(Pagwas2,scPagwasSession="scPagwasSession2")
   
   scPagwas_Visualization(scPagwas_score = Pagwas2$scPagwas_score,
                         Single_data = scRNAexample,
