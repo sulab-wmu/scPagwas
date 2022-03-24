@@ -124,16 +124,6 @@ Boot_evaluate <- function(Pagwas,
     names(Pagwas$lm_results$parameters),
     Pagwas$lm_results$parameters
   )
-  if("Pathway_list" %in% names(Pagwas)){
-    Pagwas$Pathway_list<-NULL
-  }
-  if("rawPathway_list" %in% names(Pagwas)){
-    Pagwas$rawPathway_list<-NULL
-  }
-  if("VariableFeatures" %in% names(Pagwas)){
-    Pagwas$VariableFeatures<-NULL
-  }
-
   return(Pagwas)
 }
 
