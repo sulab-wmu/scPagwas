@@ -32,7 +32,6 @@ devtools::install_github("dengchunyu/scPagwas")
  data(block_annotation)
  #LD data
  data(chrom_ld)
-
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
@@ -134,16 +133,6 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
  require("Seurat")
  require("SeuratObject")
  require("ggsci")
- #check the objects
- Objects()
-#>  [1] "block_annotation"        "CT_Pathway_ld_gwas_data"
-#>  [3] "data_mat"                "dim_data_mat"           
-#>  [5] "dim_pca_scCell_mat"      "dim_raw_data_mat"       
-#>  [7] "FBM_raw_data_mat"        "merge_scexpr"           
-#>  [9] "Pagwas"                  "Pathway_ld_gwas_data"   
-#> [11] "pca_cell_df"             "pca_scCell_mat"         
-#> [13] "raw_data_mat"            "scCounts"               
-#> [15] "snp_gene_df"
  scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,
@@ -167,7 +156,6 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
 ``` r
 library("RColorBrewer")
 library("ggplot2")
-
 scPagwas_score <- Pagwas$scPagwas_score[intersect(colnames(scRNAexample),names(Pagwas$scPagwas_score))]
 scRNAexample$scPagwas_score <- scPagwas_score
 thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
