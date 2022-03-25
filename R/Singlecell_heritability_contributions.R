@@ -143,7 +143,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared %*% x3)
     pa_block$include_in_inference <- T
 
-    gc()
+   # gc()
     setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
 
     return(pa_block)
@@ -151,7 +151,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
   close(pb)
 
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-
+  gc()
   return(Pathway_ld_gwas_data)
 }
 
