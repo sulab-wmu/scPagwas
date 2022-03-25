@@ -21,8 +21,7 @@ scPagwas_main(
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
-  n.cores = 1,
-  scPagwasSession = "scPagwasSession"
+  n.cores = 1
 )
 }
 \arguments{
@@ -57,8 +56,6 @@ scPagwas_main(
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
-
-\item{scPagwasSession}{(character)The file names for scPagwas Session.}
 
 \item{FilterSingleCell}{(logical)whether to filter the single cell data.if you
 filter it before,choose FALSE, otherwise set TRUE.}
