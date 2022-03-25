@@ -70,12 +70,9 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     Pagwas$dim_data_mat$col <- Pagwas$dim_pca_scCell_mat$col
 
     } else {
-    #a <- intersect(colnames(Pagwas$dim_raw_data_mat$col), colnames(Pagwas$dim_pca_scCell_mat$col))
     #if (length(a) == 0) {
       stop("* please check the colnames of Singlecell data.There may have specific symbol")
-   # }
-    #Pagwas$data_mat <- Pagwas$data_mat[, a]
-    #Pagwas$pca_scCell_mat <- Pagwas$pca_scCell_mat[, a]
+
   }
 
   message("* Merging pathway score and expression information about blocks in ", length(Pagwas$Pathway_ld_gwas_data), " pathways")
@@ -125,7 +122,9 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
       rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
 
       x <- x * Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]
-      x3 <- bigstatsr::as_FBM(x2 * x)
+
+      x3 <- x2 * x
+      #x3 <- bigstatsr::as_FBM(x3)
     } else {
       x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
       rownames(x2) <- pa_block$snps$label
@@ -141,7 +140,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     }
     rm(x)
     rm(x2)
-    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared[] %*% x3[])
+    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared[] %*% x3)
     pa_block$include_in_inference <- T
 
 
