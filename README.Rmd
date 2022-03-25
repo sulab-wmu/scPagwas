@@ -241,6 +241,12 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              vec_group_colors= pal_d3(alpha =0.5)(10),
              do_plot = T
              )
+
 ```
 
+remove the object
+```{r remove,message=FALSE,warning = FALSE}
+Pagwas[c("raw_data_mat","VariableFeatures","merge_scexpr","data_mat","dim_data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","dim_pca_scCell_mat","pca_cell_df","dim_raw_data_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
+
+``
 The workfile is ongoing...
