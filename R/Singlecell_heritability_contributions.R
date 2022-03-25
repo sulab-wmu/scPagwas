@@ -135,7 +135,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
 
       rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
       x <- matrix(as.numeric(x) * as.numeric(Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
-      x3 <-bigstatsr::as_FBM( matrix(as.numeric(x2) * as.numeric(x), nrow = 1))
+      x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
 
     }
     rm(x)
