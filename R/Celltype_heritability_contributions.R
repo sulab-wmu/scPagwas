@@ -31,7 +31,9 @@ Celltype_heritability_contributions<-function(Pagwas,
   # Bootstrap error and 95% confidence interval estimates
 
   if (iters > 0) {
-    Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, n.cores = n.cores, part = part)
+    Pagwas <- Boot_evaluate(Pagwas,
+                            Pathway_ld_gwas_data=Pathway_ld_gwas_data,
+                            bootstrap_iters = iters, n.cores = n.cores, part = part)
     Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
   }
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
@@ -153,9 +155,8 @@ link_pwpca_block <- function(Pagwas) {
 Pagwas_perform_regression <- function(Pathway_ld_gwas_data,
                                       iters = 200,
                                       part = 0.5,
-                                      n.cores = 1,
-                                      scPagwasSession="scPagwasSession") {
-  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+                                      n.cores = 1) {
+  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
   if (is.null(Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
     return(Pagwas)
@@ -203,6 +204,7 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
 #' @return
 
 Boot_evaluate <- function(Pagwas,
+                          Pathway_ld_gwas_data,
                           bootstrap_iters = 200,
                           part = 0.5,
                           n.cores = 1) {
@@ -215,8 +217,8 @@ Boot_evaluate <- function(Pagwas,
     papply(1:bootstrap_iters, function(i) {
 
       boot_results <- Parameter_regression(
-        xy2vector(CT_Pathway_ld_gwas_data[
-          sample(seq_len(length(CT_Pathway_ld_gwas_data)), floor(length(CT_Pathway_ld_gwas_data) * part))
+        xy2vector(Pathway_ld_gwas_data[
+          sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
         ])
       )
 
@@ -229,7 +231,7 @@ Boot_evaluate <- function(Pagwas,
         list(
           boot_parameters = boot_results$parameters,
           block_heritability = Get_Pathway_heritability_contributions(
-            pca_cell_df, boot_results$parameters
+            Pagwas$pca_cell_df, boot_results$parameters
           )
         )
       )
@@ -256,14 +258,14 @@ Boot_evaluate <- function(Pagwas,
 
 para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
   #pca_cell_df <- Pagwas$pca_cell_df
-  if (sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)) {
+  if (sum(names(lm_results$parameters) %in% colnames(Pagwas$pca_cell_df)) < ncol(Pagwas$pca_cell_df)) {
     # message("There is blank or '+' within cell names!")
     names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), " ", ".")
     names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "\\+", ".")
     names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "-", ".")
   }
 
-  if (sum(names(lm_results$parameters) %in% colnames(pca_cell_df)) < ncol(pca_cell_df)) {
+  if (sum(names(lm_results$parameters) %in% colnames(Pagwas$pca_cell_df)) < ncol(Pagwas$pca_cell_df)) {
     stop("unidentified signal within cell names, please remove it!")
   }
   return(lm_results)
@@ -273,7 +275,7 @@ para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
 
 
 #' xy2vector
-#' @description Take a list of Pagwas - CT_Pathway_ld_gwas_data and vectorize it.
+#' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
 #' @param Pathway_ld_gwas_data the list of block information from Pagwas object
 #'
 #' @return
@@ -395,7 +397,7 @@ Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
 
   # add on block values
   Pagwas$regularized_Pathway_heritability_contributions <- Get_Pathway_heritability_contributions(
-    pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
+    Pagwas$pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
   )
 
   return(Pagwas)

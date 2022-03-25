@@ -378,7 +378,7 @@ scPagwas_perform_regression <- function(Pagwas,
   }
   message("Start inference")
   # fit model
-  vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
+  vectorized_Pagwas_data <- SCxy2vector(Pathway_ld_gwas_data)
 
 
   sclm_results <- scParameter_regression(Pagwas_x=as(vectorized_Pagwas_data[[2]],"matrix"),
@@ -461,4 +461,43 @@ scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, parameters)
 
   return(Pathway_block_info)
 }
+
+#' SCxy2vector
+#' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
+#' @param Pathway_ld_gwas_data the list of block information from Pagwas object
+#'
+#' @return
+#'
+SCxy2vector <- function(Pathway_ld_gwas_data = NULL) {
+  # use only blocks flagged for inference inclusion
+  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(Pathway_ld_gwas_data, function(block) {
+    block$include_in_inference
+  })]
+
+  # unpack Pathway_ld_gwas_data
+  y <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$y
+  }))
+  x <- do.call("rbind", lapply(Pathway_ld_gwas_data, function(block) {
+    block$x[]
+  }))
+
+  rownames(x) <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$snps$rsid
+  }))
+  noise_per_snp <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
+    block$snps$se**2
+  }))
+
+  # exclude na elements
+  na_elements <- is.na(y) | apply(x, 1, function(x) {
+    any(is.na(x))
+  }) | is.na(noise_per_snp)
+  return(list(
+    y = y[!na_elements], x = x[!na_elements, ],
+    noise_per_snp = noise_per_snp[!na_elements]
+  ))
+}
+
+
 
