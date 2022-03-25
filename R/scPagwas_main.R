@@ -16,7 +16,6 @@
 #' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
-#' @importFrom SOAR Store
 #' @importFrom readr read_table2
 
 #' @title Main wrapper functions for scPagwas
