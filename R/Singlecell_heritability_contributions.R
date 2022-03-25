@@ -138,8 +138,8 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
       x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
 
     }
-    rm(x)
-    rm(x2)
+    #rm(x)
+    #rm(x2)
     pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared %*% x3)
     pa_block$include_in_inference <- T
 
@@ -191,11 +191,8 @@ scPagwas_perform_score <- function(Pagwas,
         na_elements <- is.na(Pathway_block$y) | apply(Pathway_block$x[], 1, function(x) {
           any(is.na(x))
         }) | is.na(noise_per_snp)
-
-
-        x <-Pathway_block$x[]
-        #rownames(x) <- Pathway_block$snps$rsid
-        results <- scParameter_regression(Pagwas_x = x[!na_elements, ], Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
+        Pathway_block$x<- bigstatsr::as_FBM(Pathway_block$x[!na_elements, ])
+        results <- scParameter_regression(Pagwas_x = Pathway_block$x, Pagwas_y = Pathway_block$y[!na_elements], noise_per_snp = noise_per_snp[!na_elements], n.cores = n.cores)
 
         results[is.na(results)] <- 0
       }else{
@@ -273,10 +270,10 @@ scPagwas_perform_score <- function(Pagwas,
 
 scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 1) {
 
-  x_df <- bigstatsr::as_FBM(Pagwas_x, type = "double")
+  #x_df <- bigstatsr::as_FBM(Pagwas_x, type = "double")
 
   liear_m <- bigstatsr::big_univLinReg(
-    X = x_df,
+    X = Pagwas_x,
     y.train = Pagwas_y,
     covar.train = bigstatsr::covar_from_df(data.frame(offset(noise_per_snp))),
     ncores = n.cores
