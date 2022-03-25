@@ -99,14 +99,20 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
 
     }
 
-    mg <- intersect(Pagwas$rawPathway_list[[pathway]],Pagwas$VariableFeatures)
+    mg <- intersect(Pagwas$rawPathway_list[[pathway]],Pagwas$dim_data_mat$row)
     if (length(mg) < 2) {
       return(NULL)
     }
 
     if (length(mg) > 1) {
-
-      x2 <- bigstatsr::big_apply(bigstatsr::as_FBM(Pagwas$data_mat[match(mg,Pagwas$dim_data_mat$row), ]), a.FUN = colnorm_sub, a.combine = "cbind")
+      colnorm_sub <- function(X, ind) {
+        if (sum(X[, ind]) == 0) {
+          return(NA)
+        } else {
+          return(X[, ind] / sum(X[, ind]))
+        }
+      }
+      x2 <- bigstatsr::big_apply(Pagwas$data_mat[match(mg,Pagwas$dim_data_mat$row), ], a.FUN = colnorm_sub, a.combine = "cbind")
       rownames(x2) <- mg
     }
 
@@ -148,21 +154,6 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
 
   return(Pathway_ld_gwas_data)
-}
-
-#' colnorm_sub
-#'
-#' @param X  data
-#' @param ind index
-#'
-#' @return
-#'
-colnorm_sub <- function(X, ind) {
-  if (sum(X[, ind]) == 0) {
-    return(y)
-  } else {
-    return(X[, ind] / sum(X[, ind]))
-  }
 }
 
 #' scPagwas_perform_score
