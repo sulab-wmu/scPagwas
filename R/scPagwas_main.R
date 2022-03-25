@@ -12,7 +12,7 @@
 #' @importFrom utils timestamp
 #' @import ggplot2
 #' @importFrom ggpubr ggscatter
-#' @importFrom bigstatsr big_apply as_FBM big_univLinReg covar_from_df
+#' @importFrom bigstatsr big_apply FBM as_FBM big_univLinReg covar_from_df
 #' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
@@ -74,15 +74,11 @@ scPagwas_main <- function(Pagwas = NULL,
                         eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta"),
                         block_annotation = NULL,
                         Single_data = NULL,
-                        FilterSingleCell=FALSE,
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
                         marg=10000,
                         maf_filter = 0.01,
-                        min.reads = 5,
-                        min.detected = 1,
-                        min.lib.size = 200,
                         min_clustercells=10,
                         min.pathway.size=5,
                         max.pathway.size=300,
@@ -93,10 +89,12 @@ scPagwas_main <- function(Pagwas = NULL,
   class(Pagwas) <- 'Pagwas'
   }
   #1.gwas summary data input
-  Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  message("*** Start to store the variables:block_annotation")
+  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  #message("*** Start to store the variables:block_annotation")
   #Create data frame with some added parameters.
-  SOAR::Store(block_annotation)
+  #SOAR::Store(block_annotation)
+  #Pagwas$block_annotation<-block_annotation
+  #rm(block_annotation)
   #SOAR::Store(chrom_ld)
   message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
@@ -117,11 +115,7 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 nfeatures =nfeatures,
                                 Single_data=Single_data,
-                                FilterSingleCell=FilterSingleCell,
                                 Pathway_list=Pathway_list,
-                                min.lib.size = min.lib.size,
-                                min.reads =min.reads,
-                                min.detected =min.detected,
                                 min_clustercells=min_clustercells)
    rm(Single_data)
 
@@ -149,15 +143,15 @@ scPagwas_main <- function(Pagwas = NULL,
 
    if(class(gwas_data)=="character"){
      message("** Start to read the gwas_data!")
-     suppressMessages(a <- as.data.frame(readr::read_table2(gwas_data)))
+     suppressMessages(gwas_data <- as.data.frame(readr::read_table2(gwas_data)))
    }else{
      stop("There is need a filename and address for gwas_data")
    }
 
      Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
-                                  gwas_data=a,
+                                  gwas_data=gwas_data,
                                   maf_filter=maf_filter)
-   rm(a)
+   rm(gwas_data)
    message('done!')
 
    #4.calculated Snp2Gene
@@ -187,18 +181,20 @@ scPagwas_main <- function(Pagwas = NULL,
        snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,refGene=block_annotation,marg=marg)
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
        snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-       SOAR::Store(snp_gene_df)
+       #SOAR::Store(snp_gene_df)
+       Pagwas$snp_gene_df
     }
   }
   #3.pathway block data
   message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
 
   if (!is.null(block_annotation)){
-
-    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,n.cores=n.cores)
+    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,
+                                       block_annotation=block_annotation,
+                                       n.cores=n.cores)
   }
 
-  SOAR::Store(block_annotation)
+  #SOAR::Store(block_annotation)
   message('done!')
 
   #4.ld data folder,which is preprogress
@@ -214,7 +210,7 @@ scPagwas_main <- function(Pagwas = NULL,
     rm(chrom_ld)
    message('done!')
   }
-
+  #Pagwas$VariableFeatures<-NULL
   #Pagwas$Pathway_list<-NULL
   gc()
   return(Pagwas)

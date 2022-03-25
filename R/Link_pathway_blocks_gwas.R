@@ -60,7 +60,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
         return(NULL)
       }
 
-      rsids <- snp_gene_df[which(snp_gene_df$label %in%
+      rsids <- Pagwas$snp_gene_df[which(Pagwas$snp_gene_df$label %in%
                                           chrom_block$label), c("rsid", "label")]
 
       c2 <- chrom_gwas_list[[chrom]]
@@ -107,7 +107,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       snps = snp_data,
       ld_data = sub_ld,
       n_snps = nrow(snp_data),
-      ld_matrix_squared = ld_matrix * ld_matrix,
+      ld_matrix_squared = bigstatsr::as_FBM(ld_matrix * ld_matrix),
       y = unlist(lapply(seq_len(length(Pa_chrom_data)),
                         function(i) Pa_chrom_data[[i]][[2]]))
     ))
@@ -119,8 +119,9 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   rm(chrom_gwas_list)
   rm(chrom_ld)
   #SOAR::Store(Pathway_ld_gwas_data)
-  message("*** Start to store the variables: Pathway_ld_gwas_data")
-  SOAR::Store(Pathway_ld_gwas_data)
+  #message("*** Start to store the variables: Pathway_ld_gwas_data")
+  #SOAR::Store(Pathway_ld_gwas_data)
+  Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
   return(Pagwas)
 
 }

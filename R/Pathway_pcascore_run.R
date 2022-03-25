@@ -23,12 +23,10 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   if (is.null(Pathway_list)) {
     stop("not loaded Pathway_list data")
-    # return(Pagwas)
   }
 
   if (!("list" %in% class(Pathway_list))) {
     stop("not loaded the list format of Pathway_list data")
-    # return(Pagwas)
   }
 
   # filter the pathway length
@@ -111,23 +109,17 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   rm(scPCAscore_list)
   # keep cellnames the same as Single_data
   colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
-  pca_scCell_mat<-as(data.matrix(pca_scCell_mat, rownames.force = NA),"dgCMatrix")
-  message("*pca_scCell_mat")
-  SOAR::Store(pca_scCell_mat)
+  dim_pca_scCell_mat<-list(row=rownames(pca_scCell_mat),col=colnames(pca_scCell_mat))
+  pca_scCell_mat <- as_FBM(as(pca_scCell_mat,"matrix"))
 
-  colnames(merge_scexpr)<-colnames(pca_cell_df)
+  Pagwas$pca_scCell_mat<-pca_scCell_mat
+  Pagwas$dim_pca_scCell_mat<-dim_pca_scCell_mat
+
+  colnames(Pagwas$merge_scexpr)<-colnames(pca_cell_df)
   Pagwas$VariableFeatures<-rownames(Pagwas$Single_data)
   Pagwas$Single_data<-NULL
 
-  message("*** Start to store the variables: ")
-  message("*1)pca_cell_df")
-  SOAR::Store(pca_cell_df)
-  message("*2)merge_scexpr")
-  SOAR::Store(merge_scexpr)
-
-
-  gc()
-  #SOAR::Store(Single_data)
+  Pagwas$pca_cell_df<-pca_cell_df
 
   return(Pagwas)
 }
@@ -163,7 +155,7 @@ PathwayPCAtest <- function(Pathway_list,
   #scCounts <- as(scCounts, "dgCMatrix")
   cm <- Matrix::colMeans(scCounts)
   proper.gene.names<-colnames(scCounts)
-  SOAR::Store(scCounts)
+  #SOAR::Store(scCounts)
   ###### calculate the pca for each pathway terms.
   papca <- papply(Pathway_list, function(Pa_id) {
 

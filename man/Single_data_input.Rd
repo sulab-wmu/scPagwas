@@ -13,7 +13,7 @@ Single_data_input(
   min.lib.size = 1000,
   min.reads = 10,
   min.detected = 5,
-  min_clustercells = 50
+  min_clustercells = 5
 )
 }
 \arguments{

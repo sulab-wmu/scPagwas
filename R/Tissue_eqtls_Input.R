@@ -47,7 +47,7 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
   colnames(eqtls_sig) <- c("rsid", "pos", "Disstance", "gene_chr", "gene_start", "geng_end", "gene_name", "slope")
 
   eqtls_sig <- unique(eqtls_sig)
-  inter_snps <- unique(intersect(gwas_data$rsid, eqtls_sig$rsid))
+  inter_snps <- unique(intersect(Pagwas$gwas_data$rsid, eqtls_sig$rsid))
 
   message("There are ", length(inter_snps), " snps for significant eqtls!")
 
@@ -76,9 +76,10 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
 
     rm(snp_gene_df1,snp_gene_df2)
   }
+  Pagwas$snp_gene_df<-snp_gene_df
   #SOAR::Store(gwas_data)
-  Pagwas$gwas_data<-NULL
-  SOAR::Store(snp_gene_df)
+ # Pagwas$gwas_data<-NULL
+ # SOAR::Store(snp_gene_df)
   #SOAR::Store(block_annotation)
   return(Pagwas)
 }
