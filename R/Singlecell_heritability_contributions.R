@@ -140,7 +140,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     }
     rm(x)
     rm(x2)
-    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared[] %*% x3)
+    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared %*% x3)
     pa_block$include_in_inference <- T
 
     gc()

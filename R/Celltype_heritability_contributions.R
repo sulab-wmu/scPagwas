@@ -120,7 +120,7 @@ link_pwpca_block <- function(Pagwas) {
     rm(x)
     rm(x2)
 
-    pa_block$x <-t(pa_block$ld_matrix_squared[]) %*% x3
+    pa_block$x <-t(pa_block$ld_matrix_squared) %*% x3
     rownames(pa_block$x) <- pa_block$snps$rsid
     colnames(pa_block$x) <- colnames(Pagwas$merge_scexpr)
     rm(x3)
