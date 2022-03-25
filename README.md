@@ -42,44 +42,6 @@ devtools::install_github("dengchunyu/scPagwas")
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
  
-###########
-if(F){
-  Pagwas <- list();
-  class(Pagwas) <- 'Pagwas'
-
-        Single_data=readRDS(Single_data)
-   
-    Pagwas <- Single_data_input(Pagwas=Pagwas,
-                                Single_data=Single_data,
-                                Pathway_list=Pathway_list)
-
-      Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,#n.cores=n.cores,
-                                 Pathway_list=Pathway_list
-                                 )
-      suppressMessages(gwas_data <- as.data.frame(readr::read_table2(gwas_data)))
-
-     Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
-                                  gwas_data=gwas_data
-                                  )
-
-       snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,
-                             refGene=block_annotation
-                             )
-       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-       Pagwas$snp_gene_df<-snp_gene_df
-
-  #3.pathway block data
-  message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
-
-    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,
-                                       block_annotation=block_annotation,
-                                       n.cores=n.cores)
-    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
-                                       chrom_ld=chrom_ld,
-                                       n.cores=n.cores)
-
-}
 ```
 
 ### 2.Get the heritability_contributions for Cell types
@@ -102,7 +64,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
                     title = "Test scPagwas")
 ```
 
-<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="50%" />
 
 2.Forestplot for estimate values
 
@@ -114,7 +76,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         do_plot=T)
 ```
 
-<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="100%" />
+<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="50%" />
 
     #> TableGrob (1 x 13) "arrange": 2 grobs
     #>   z         cells    name           grob
@@ -147,7 +109,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-pathway_contribution_network-1.png" width="100%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="70%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -198,7 +160,7 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
                         do_plot = T)
 ```
 
-<img src="man/figures/README-scPagwas_Visualization-1.png" width="100%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="100%" />
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" />
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
@@ -220,7 +182,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive-1.png" width="50%" />
 
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
@@ -232,7 +194,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="100%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="80%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -247,6 +209,17 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-<img src="man/figures/README-vln_Corgenes-1.png" width="100%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="70%" />
+
+remove the object
+
+``` r
+Pagwas[c("raw_data_mat","VariableFeatures","merge_scexpr","data_mat","dim_data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","dim_pca_scCell_mat","pca_cell_df","dim_raw_data_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
+#result is:
+names(Pagwas)
+#> [1] "lm_results"                    "Pathway_block_heritability"   
+#> [3] "bootstrap_results"             "scPagwas_score"               
+#> [5] "gene_heritability_correlation"
+```
 
 The workfile is ongoing…
