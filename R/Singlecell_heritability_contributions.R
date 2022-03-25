@@ -51,7 +51,6 @@ Singlecell_heritability_contributions<-function(Pagwas,
 #' @param scPagwasSession "scPagwasSession"
 #'
 #' @return
-#' @export
 #'
 #' @examples
 #' library(scPagwas)
@@ -77,7 +76,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
 
   message("* Merging pathway score and expression information about blocks in ", length(Pagwas$Pathway_ld_gwas_data), " pathways")
   pb <- txtProgressBar(style = 3)
-
+  paths<-names(Pagwas$Pathway_ld_gwas_data)
   Pathway_ld_gwas_data <- papply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
 
     pathway <- unique(pa_block$block_info$pathway)
@@ -140,11 +139,11 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     }
     #rm(x)
     #rm(x2)
-    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared %*% x3)
+    pa_block$x<- bigstatsr::as_FBM(pa_block$ld_matrix_squared %*% x3)
     pa_block$include_in_inference <- T
 
    # gc()
-    setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
+    setTxtProgressBar(pb, which(paths == pathway) / length(paths))
 
     return(pa_block)
   }, n.cores = n.cores)

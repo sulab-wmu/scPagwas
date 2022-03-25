@@ -41,7 +41,7 @@ Single_data_input <- function(Pagwas,
   }
 
   raw_data_mat <- FBM(nrow(Single_data), ncol(Single_data))
-  raw_data_mat[] <- as(Seurat::GetAssayData(object = Single_data, slot = "data"),"matrix")
+  raw_data_mat[] <- as_matrix(Seurat::GetAssayData(object = Single_data, slot = "data"))
   dim_raw_data_mat<-list(row=rownames(Single_data),col=colnames(Single_data))
 
   Pagwas$raw_data_mat<-raw_data_mat
