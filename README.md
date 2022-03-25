@@ -108,7 +108,7 @@ plot_pathway_contribution_network(
   )
 ```
 
-<img src="man/figures/README-pathway_contribution_network-1.png" width="70%" />
+<img src="man/figures/README-pathway_contribution_network-1.png" width="60%" />
 \#\#\#\#\#\#\#
 
 ### 3.Single cell function
@@ -182,7 +182,7 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="80%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="50%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
