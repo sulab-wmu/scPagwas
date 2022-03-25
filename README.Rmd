@@ -208,7 +208,7 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
 
 remove the object
 ```{r remove,message=FALSE,warning = FALSE}
-Pagwas[c("raw_data_mat","VariableFeatures","merge_scexpr","data_mat","dim_data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","dim_pca_scCell_mat","pca_cell_df","dim_raw_data_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
+#Pagwas[c("raw_data_mat","VariableFeatures","merge_scexpr","data_mat","dim_data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","dim_pca_scCell_mat","pca_cell_df","dim_raw_data_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
 #result is:
 names(Pagwas)
 ``

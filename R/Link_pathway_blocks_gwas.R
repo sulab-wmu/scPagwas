@@ -136,7 +136,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
   mat_dim <- length(all_snps)
   ld_matrix <- diag(mat_dim)
-  ld_matrix <- as(ld_matrix, "dgCMatrix")
+  #ld_matrix <- as(ld_matrix, "dgCMatrix")
 
   if (mat_dim == 1) {
     return(data.matrix(1))
