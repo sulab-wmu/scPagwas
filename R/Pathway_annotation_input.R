@@ -1,8 +1,10 @@
 
 #' Pathway_annotation_input
 #' @description Deal with the pathway genes with snp blocks
+#'
 #' @param Pagwas Pagwas format data list inherit from other functions.
 #' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param block_annotation
 #'
 #' @return
 #' @export
@@ -13,6 +15,7 @@
 #' # the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
 #' Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
 Pathway_annotation_input <- function(Pagwas,
+                                     block_annotation,
                                      n.cores = 1) {
   #message("adding block annotations")
 
@@ -32,7 +35,7 @@ Pathway_annotation_input <- function(Pagwas,
     block_annotation <- block_annotation[!duplicated(block_annotation$label), ]
   }
 
-  proper.gene.names <- intersect(Pagwas$VariableFeatures,snp_gene_df$label)
+  proper.gene.names <- intersect(Pagwas$VariableFeatures,Pagwas$snp_gene_df$label)
 
   if (length(intersect(unlist(Pagwas$Pathway_list), proper.gene.names)) < 1) {
     stop("no match for Pathway gene and VariableFeatures")
@@ -41,7 +44,7 @@ Pathway_annotation_input <- function(Pagwas,
   # sort and add a random partition label for bootstrap
   Pathway_list <- lapply(Pagwas$Pathway_list, function(Pa) intersect(Pa, proper.gene.names))
 
-  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(pca_cell_df))
+  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(Pagwas$pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
 
@@ -63,7 +66,6 @@ Pathway_annotation_input <- function(Pagwas,
 
   Pagwas$Pathway_list <- Pathway_list
 
-  #SOAR::Store(pathway_blocks)
   Pagwas$pathway_blocks<-pathway_blocks
   return(Pagwas)
 }

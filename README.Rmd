@@ -56,30 +56,61 @@ devtools::install_github("dengchunyu/scPagwas")
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     FilterSingleCell=F,
                      Pathway_list=Genes_by_pathway_kegg,
-                     chrom_ld = chrom_ld,
-                     scPagwasSession="scPagwasSession")
+                     chrom_ld = chrom_ld)
+ 
+###########
+if(F){
+  Pagwas <- list();
+  class(Pagwas) <- 'Pagwas'
 
+        Single_data=readRDS(Single_data)
+   
+    Pagwas <- Single_data_input(Pagwas=Pagwas,
+                                Single_data=Single_data,
+                                Pathway_list=Pathway_list)
+
+      Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,#n.cores=n.cores,
+                                 Pathway_list=Pathway_list
+                                 )
+      suppressMessages(gwas_data <- as.data.frame(readr::read_table2(gwas_data)))
+
+     Pagwas <- GWAS_summary_input(Pagwas=Pagwas,
+                                  gwas_data=gwas_data
+                                  )
+
+       snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,
+                             refGene=block_annotation
+                             )
+       snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
+       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
+       Pagwas$snp_gene_df<-snp_gene_df
+
+  #3.pathway block data
+  message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
+
+    Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,
+                                       block_annotation=block_annotation,
+                                       n.cores=n.cores)
+    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                       chrom_ld=chrom_ld,
+                                       n.cores=n.cores)
+
+}
 ```
  
-### 2. Cell types functions  
+### 2.Get the heritability_contributions for Cell types   
  
 ```{r message=FALSE,results = "hide",warning = FALSE}
-  Objects()
-# 7th: link_pwpca_block function start!! 
-  Pagwas <- link_pwpca_block(Pagwas,scPagwasSession="scPagwasSession")
-#8th: Pagwas_perform_regression function start!!
-  Pagwas <- Pagwas_perform_regression(Pagwas, 
-                                      iters = 200,
-                                      n.cores=1,
-                                      scPagwasSession="scPagwasSession")
+
+ Pagwas<-Celltype_heritability_contributions(Pagwas,iters = 200)
+ names(Pagwas)
 ``` 
 #### Visualize the celltypes results.
 
  1.barplot
 ```{r Bootstrap_P_Barplot, message=FALSE,warning = FALSE}
-Objects()
+
 Bootstrap_P_Barplot(Pagwas=Pagwas,
                     figurenames = NULL,
                     width = 5,
@@ -90,7 +121,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
 
  2.Forestplot for estimate values
 ```{r Bootstrap_estimate_Plot,message=FALSE,warning = FALSE}
-Objects()
+
 Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         figurenames = NULL,
                         width = 9,
@@ -109,10 +140,8 @@ suppressMessages(require("tidygraph"))
 suppressMessages(require("ggraph"))
 suppressMessages(require("igraph"))
 #check the objects
-Objects()
-Sys.setenv(R_LOCAL_CACHE="scPagwasSession")
 plot_pathway_contribution_network(
-                  mat_datExpr=pca_cell_df,
+                  mat_datExpr=Pagwas$pca_cell_df,
                   vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
                   vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
                   n_max_pathways=20,
@@ -136,11 +165,12 @@ scPagwas_main is a function wrapper other process codes.
 as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt for save time.
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
-  #check the objects
-  #Objects()
-  Pagwas <- link_scCell_pwpca_block(Pagwas,scPagwasSession="scPagwasSession")
-  Pagwas <- scPagwas_perform_score(Pagwas,scPagwasSession="scPagwasSession")
-  #check the objects in Pagwas,if you don't need rerun, remove some objects
+
+Pagwas<-Singlecell_heritability_contributions(Pagwas,
+                                              iters = 200,
+                                              n.cores=1,
+                                              part = 0.5)
+
 ```
 
 
@@ -213,62 +243,4 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-#### Single cell regression
-
-```{r message=FALSE,results = "hide"}
-    Pagwas <- scPagwas_perform_regression(Pagwas,scPagwasSession="scPagwasSession")
-
-```
-
-#### Change the parameter of nfeatures 
-
-```{r, include = FALSE}
- data(Genes_by_pathway_kegg)
- #gene annotation files.
- data(block_annotation)
- #LD data
- data(chrom_ld)
- 
-   Pagwas2<-scPagwas_main(Pagwas = NULL,
-                     gwas_data = "E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt",
-                     add_eqtls="OnlyTSS",
-                     nfeatures = 5000,
-                     block_annotation = block_annotation,
-                     Single_data = "E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds",
-                     FilterSingleCell=TRUE,
-                     Pathway_list=Genes_by_pathway_kegg,
-                     chrom_ld = chrom_ld,
-                     scPagwasSession="scPagwasSession2")
- # rm(chrom_ld)
-  #Sys.setenv(R_LOCAL_CACHE="scPagwasSession2")
-  Pagwas2 <- link_pwpca_block(Pagwas2,scPagwasSession="scPagwasSession2")
-  Pagwas2 <- Pagwas_perform_regression(Pagwas2, scPagwasSession="scPagwasSession2",
-                                       iters = 200,n.cores=1)
-  Bootstrap_P_Barplot(Pagwas=Pagwas2,title = "5000 Test scPagwas")
-  Pagwas2 <- link_scCell_pwpca_block(Pagwas2,scPagwasSession="scPagwasSession2")
-  Pagwas2 <- scPagwas_perform_score(Pagwas2,scPagwasSession="scPagwasSession2")
-  
-  scPagwas_Visualization(scPagwas_score = Pagwas2$scPagwas_score,
-                        Single_data = scRNAexample,
-                        Reduction = TRUE,
-                        assay = "SCT",
-                        cellpercent = 0.1,
-                        filename = "scPagwas2_testFigure",
-                        FigureType = "tsne",
-                        width = 7,
-                        height = 7,
-                        lowColor = "#FFBC80", highColor = "#FC4F4F",
-                        size = 1,
-                        title = "scPagwas_score_5000")
-  
-```
-
-#### remove the Objects in session. 
-
-```{r removeCathe}
-# empty the cache
-Objects()
-Remove(Objects())
-
-```
 The workfile is ongoing...

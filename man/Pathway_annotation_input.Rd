@@ -4,10 +4,12 @@
 \alias{Pathway_annotation_input}
 \title{Pathway_annotation_input}
 \usage{
-Pathway_annotation_input(Pagwas, n.cores = 1)
+Pathway_annotation_input(Pagwas, block_annotation, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format data list inherit from other functions.}
+
+\item{block_annotation}{}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
