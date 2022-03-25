@@ -197,7 +197,7 @@ scPagwas_main <- function(Pagwas = NULL,
                                        chrom_ld=chrom_ld,
                                        n.cores=n.cores)
 
-    rm(chrom_ld)
+    #rm(chrom_ld)
    message('done!')
   }
   #Pagwas$VariableFeatures<-NULL

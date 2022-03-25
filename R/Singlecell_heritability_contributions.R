@@ -135,7 +135,7 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
     }
     rm(x)
     rm(x2)
-    pa_block$x<- bigstatsr::as_FBM(Matrix::crossprod( pa_block$ld_matrix_squared[],x3[]))
+    pa_block$x<- bigstatsr::as_FBM( pa_block$ld_matrix_squared[] %*% x3[])
     pa_block$include_in_inference <- T
 
 
@@ -381,7 +381,7 @@ scPagwas_perform_regression <- function(Pagwas,
   vectorized_Pagwas_data <- SCxy2vector(Pathway_ld_gwas_data)
 
 
-  sclm_results <- scParameter_regression(Pagwas_x=as(vectorized_Pagwas_data[[2]],"matrix"),
+  sclm_results <- scParameter_regression(Pagwas_x=data.matrix(vectorized_Pagwas_data[[2]]),
                                          Pagwas_y=vectorized_Pagwas_data[[1]],
                                          noise_per_snp=vectorized_Pagwas_data[[3]],
                                          n.cores = 1)
