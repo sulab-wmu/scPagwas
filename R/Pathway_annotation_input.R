@@ -44,7 +44,7 @@ Pathway_annotation_input <- function(Pagwas,
   # sort and add a random partition label for bootstrap
   Pathway_list <- lapply(Pagwas$Pathway_list, function(Pa) intersect(Pa, proper.gene.names))
 
-  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(pca_cell_df))
+  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(Pagwas$pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
 

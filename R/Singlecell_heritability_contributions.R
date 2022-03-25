@@ -116,37 +116,30 @@ link_scCell_pwpca_block <- function(Pagwas, n.cores = 1) {
 
       x <- x[rep(1, pa_block$n_snps), ]
       rownames(x) <- pa_block$snps$rsid
-      rownames(snp_gene_df) <- snp_gene_df$rsid
+      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
 
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-      #x <- as(x, "dgCMatrix")
-      #x2 <- as(x2, "dgCMatrix")
+      x <- x * Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- bigstatsr::as_FBM(x2 * x)
     } else {
       x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
       rownames(x2) <- pa_block$snps$label
-      x2 <- as(x2, "dgCMatrix")
       pa_block$n_snps <- nrow(pa_block$snps)
 
       x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
       rownames(x) <- pa_block$snps$rsid
-      #snp_gene_df <- snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
-      x <- as(x, "dgCMatrix")
+
+      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
+      x <- matrix(as.numeric(x) * as.numeric(Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
       x3 <-bigstatsr::as_FBM( matrix(as.numeric(x2) * as.numeric(x), nrow = 1))
 
     }
     rm(x)
     rm(x2)
-    ## add the slope of eqtls for x
-    #rownames(x3) <- pa_block$snps$rsid
-
     pa_block$x<- bigstatsr::as_FBM(Matrix::crossprod( pa_block$ld_matrix_squared[],x3[]))
     pa_block$include_in_inference <- T
 
 
-    setTxtProgressBar(pb, which(names(Pathway_ld_gwas_data) == pathway) / length(Pathway_ld_gwas_data))
+    setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
 
     return(pa_block)
   }, n.cores = n.cores)

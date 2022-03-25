@@ -45,7 +45,6 @@
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#' @param scPagwasSession (character)The file names for scPagwas Session.
 #'
 #' @return
 #' @export
@@ -82,21 +81,12 @@ scPagwas_main <- function(Pagwas = NULL,
                         min_clustercells=10,
                         min.pathway.size=5,
                         max.pathway.size=300,
-                        n.cores=1,
-                        scPagwasSession="scPagwasSession") {
+                        n.cores=1) {
   if (is.null(Pagwas)) {
   Pagwas <- list();
   class(Pagwas) <- 'Pagwas'
   }
-  #1.gwas summary data input
-  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  #message("*** Start to store the variables:block_annotation")
-  #Create data frame with some added parameters.
-  #SOAR::Store(block_annotation)
-  #Pagwas$block_annotation<-block_annotation
-  #rm(block_annotation)
-  #SOAR::Store(chrom_ld)
-  message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
+   message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
   if(class(Single_data)=="character"){
@@ -182,7 +172,7 @@ scPagwas_main <- function(Pagwas = NULL,
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
        snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
        #SOAR::Store(snp_gene_df)
-       Pagwas$snp_gene_df
+       Pagwas$snp_gene_df<-snp_gene_df
     }
   }
   #3.pathway block data

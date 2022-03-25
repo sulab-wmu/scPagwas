@@ -97,8 +97,8 @@ link_pwpca_block <- function(Pagwas) {
       rownames(x) <- pa_block$snps$rsid
 
       #snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
+      x <- x * Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
 
     } else {
@@ -109,9 +109,9 @@ link_pwpca_block <- function(Pagwas) {
 
       rownames(x) <- pa_block$snps$rsid
       #snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
+      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
 
-      x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+      x <- matrix(as.numeric(x) * as.numeric(Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
       x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
     }
 
@@ -120,25 +120,18 @@ link_pwpca_block <- function(Pagwas) {
 
     pa_block$x <-Matrix::crossprod(t(as(pa_block$ld_matrix_squared[],"matrix")), x3)
     rownames(pa_block$x) <- pa_block$snps$rsid
-    colnames(pa_block$x) <- colnames(merge_scexpr)
+    colnames(pa_block$x) <- colnames(Pagwas$merge_scexpr)
     rm(x3)
 
     pa_block$include_in_inference <- T
 
-    setTxtProgressBar(pb, which(names(Pathway_ld_gwas_data) == pathway) / length(Pathway_ld_gwas_data))
+    setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
 
     return(pa_block)
   })
   close(pb)
   Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
 
-  #message("*** Start to store the variables: ")
-  #message("*1)CT_Pathway_ld_gwas_data")
-  #SOAR::Store(CT_Pathway_ld_gwas_data)
-  #message("*2)merge_scexpr")
-  #SOAR::Store(merge_scexpr)
-  #message("*3)pca_cell_df")
-  #SOAR::Store(pca_cell_df)
   gc()
   return(Pathway_ld_gwas_data)
 }
