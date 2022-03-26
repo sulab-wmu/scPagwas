@@ -55,7 +55,9 @@ devtools::install_github("dengchunyu/scPagwas")
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
+                     assay="RNA",
                      Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
  
@@ -79,6 +81,7 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
                     height = 7,
                     do_plot=T,
                     title = "Test scPagwas")
+
 ```
 
  2.Forestplot for estimate values
@@ -129,9 +132,10 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 ```{r message=FALSE,results = "hide",warning = FALSE}
 
 Pagwas<-Singlecell_heritability_contributions(Pagwas,
-                                              iters = 200,
                                               n.cores=1,
-                                              part = 0.5)
+                                              part = 0.5,
+                                              bignumber=10000,
+                                              iters = 200)
 
 ```
 
@@ -145,7 +149,6 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
  require("SeuratObject")
  require("ggsci")
  #check the objects
- Objects()
  scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                         Single_data = scRNAexample,

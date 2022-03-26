@@ -4,13 +4,16 @@
 \alias{link_scCell_pwpca_block}
 \title{link_scCell_pwpca_block}
 \usage{
-link_scCell_pwpca_block(Pagwas, n.cores = 1)
+link_scCell_pwpca_block(Pagwas, n.cores = 1, bignumber = 10000)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to
 check the cores in computer.}
+
+\item{bignumber}{the threshold of number of cells to change matrix to bigmemory data format, if you have enough
+storage, you can set a large number to save time.}
 
 \item{scPagwasSession}{"scPagwasSession"}
 }

@@ -6,22 +6,27 @@
 \usage{
 Singlecell_heritability_contributions(
   Pagwas,
-  iters = 200,
   n.cores = 1,
   part = 0.5,
-  SCregression = FALSE
+  remove_outlier = TRUE,
+  SCregression = FALSE,
+  iters = 200,
+  bignumber = 10000
 )
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
-
-\item{iters}{number of bootstrap iterations to perform}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
 
 \item{SCregression}{whether to run regression funcitons, which takes a lot of time and memmory.}
+
+\item{iters}{number of bootstrap iterations to perform}
+
+\item{bignumber}{the threshold of number of cells to change matrix to bigmemory data format, if you have enough
+storage, you can set a large number to save time.}
 }
 \value{
 

@@ -22,10 +22,4 @@ https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
 }
 \note{
 Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
-
-covmat uses E\link{(X-muX)'(Y-muY)} = E\link{X'Y} - muX'muY
-with sample correction n/(n-1) this leads to cov = ( X'Y - n*muX'muY ) / (n-1)
-
-the sd in the case Y!=NULL uses E\link{X-mu}^2 = E\link{X^2}-mu^2
-with sample correction n/(n-1) this leads to sd^2 = ( X^2 - n*mu^2 ) / (n-1)
 }

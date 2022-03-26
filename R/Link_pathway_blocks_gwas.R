@@ -20,12 +20,11 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
                                      n.cores = 1) {
 
-  # nested lists of chrom and then individual pathway_blocks
+
   Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
   names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
   Pagwas$pathway_blocks<-NULL
-  #rm(pathway_blocks)
 
   chrom_gwas_list <- lapply(split(Pagwas$gwas_data, f = Pagwas$gwas_data$chrom), function(gwas) {
       gwas <- data.table::data.table(gwas)
@@ -39,6 +38,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
   message(paste0("* Start to link gwas and pathway block annotations for ",
                  length(Pachrom_block_list), " pathways!"))
+  options(bigmemory.allow.dimnames=TRUE)
   pb <- txtProgressBar(style = 3)
 
   Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pathway) {
@@ -74,15 +74,13 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
       return(list(rsids_gwas, beta_squared, sub_ld, chrom_block))
     })
-
-    snp_data <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
-                       lapply(seq_len(length(Pa_chrom_data)),
+    #cbind_df代替 rbind_df(list_df)
+    snp_data <- bigreadr::rbind_df(lapply(seq_len(length(Pa_chrom_data)),
                               function(i) Pa_chrom_data[[i]][[1]]))
 
     # message(paste0("snp is ",nrow(snp_data)))
-    sub_ld <- as.data.frame(Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
-                                   lapply(seq_len(length(Pa_chrom_data)),
-                                          function(i) Pa_chrom_data[[i]][[3]])))
+    sub_ld <- bigreadr::rbind_df(lapply(seq_len(length(Pa_chrom_data)),
+                                          function(i) Pa_chrom_data[[i]][[3]]))
 
     rsid_x <- intersect(snp_data$rsid, unique(unlist(sub_ld[, 1:2])))
 
@@ -96,14 +94,13 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     } else {
       ld_matrix <- make_ld_matrix(all_snps = snp_data$rsid, ld_data = sub_ld)
     }
-
+    block_info<- bigreadr::rbind_df(lapply(seq_len(length(Pa_chrom_data)),
+                           function(i) Pa_chrom_data[[i]][[4]]))
 
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
     return(list(
-      block_info = Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),
-                          lapply(seq_len(length(Pa_chrom_data)),
-                                 function(i) Pa_chrom_data[[i]][[4]])),
+      block_info = block_info,
       snps = snp_data,
       ld_data = sub_ld,
       n_snps = nrow(snp_data),
@@ -118,10 +115,8 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   rm(chrom_gwas_list)
   rm(chrom_ld)
-  #SOAR::Store(Pathway_ld_gwas_data)
-  #message("*** Start to store the variables: Pathway_ld_gwas_data")
-  #SOAR::Store(Pathway_ld_gwas_data)
   Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
+  gc()
   return(Pagwas)
 
 }
@@ -136,7 +131,6 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
   mat_dim <- length(all_snps)
   ld_matrix <- diag(mat_dim)
-  #ld_matrix <- as(ld_matrix, "dgCMatrix")
 
   if (mat_dim == 1) {
     return(data.matrix(1))
@@ -150,7 +144,5 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
       ld_matrix[n_x[2], n_x[1]] <- as.numeric(n_x[3])
     }
   }
-
-  #storage.mode(ld_matrix)<-"integer"
   return(ld_matrix)
 }

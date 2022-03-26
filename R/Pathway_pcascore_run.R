@@ -48,10 +48,10 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   Pagwas$rawPathway_list <- Pathway_list
 
   # filter the gene for no expression in single cells in pathway
-  celltypes<-as.vector(unique(Seurat::Idents(Pagwas$Single_data)))
+  celltypes<-as.vector(unique(Pagwas$Celltype_anno$annotation))
 
   pana_list <- lapply(celltypes, function(celltype) {
-    scCounts <- Seurat::GetAssayData(object = Pagwas$Single_data[, Seurat::Idents(Pagwas$Single_data) %in% celltype], slot = "data")
+    scCounts <-Pagwas$data_mat[,Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation==celltype]]
     #scCounts<- as_matrix(scCounts)
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
@@ -67,8 +67,8 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   message("* Start to get Pathway SVD socre!")
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
-    scCounts <- GetAssayData(object = Pagwas$Single_data[, Idents(Pagwas$Single_data) %in% celltype], slot = "data")
-    scCounts <- as_matrix(scCounts)
+    scCounts <-Pagwas$data_mat[,Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation==celltype]]
+    #scCounts <- as_matrix(scCounts)
     #
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
@@ -88,8 +88,16 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     return(df)
   }))
 
+  pca_df <- lapply(seq_len(length(scPCAscore_list)), function(i) {
+    df <- scPCAscore_list[[i]][[1]]
+    df$celltype <- rep(celltypes[i], nrow(df))
+    # print(i)
+    return(df)
+  })
+  pca_df <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),pca_df)
   pca_scoremat <- reshape2::dcast(pca_df[, c("name", "celltype", "score")], name ~ celltype)
   rm(pca_df)
+
   rownames(pca_scoremat) <- pca_scoremat$name
   pca_cell_df <- pca_scoremat[, -1]
   rownames(pca_cell_df) <- pca_scoremat$name
@@ -103,21 +111,19 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     pca_cell_df <- pca_cell_df[, index]
   }
 
-  pca_scCell_mat <- do.call(cbind, (lapply(seq_len(length(scPCAscore_list)), function(i) {
+  pca_scCell_mat <- bigreadr::cbind_df(lapply(seq_len(length(scPCAscore_list)), function(i) {
     scPCAscore_list[[i]][[2]]
-  })))
+  }))
   rm(scPCAscore_list)
-  # keep cellnames the same as Single_data
-  colnames(pca_scCell_mat) <- colnames(Pagwas$Single_data)
-  dim_pca_scCell_mat<-list(row=rownames(pca_scCell_mat),col=colnames(pca_scCell_mat))
-  pca_scCell_mat <- as_FBM(as(pca_scCell_mat,"matrix"))
+  colnames(pca_scCell_mat) <- colnames(Pagwas$data_mat)
 
-  Pagwas$pca_scCell_mat<-pca_scCell_mat
-  Pagwas$dim_pca_scCell_mat<-dim_pca_scCell_mat
+  options(bigmemory.allow.dimnames=TRUE)
+  Pagwas$pca_scCell_mat<- bigmemory::as.big.matrix(data.matrix(pca_scCell_mat))
 
   colnames(Pagwas$merge_scexpr)<-colnames(pca_cell_df)
-  Pagwas$VariableFeatures<-rownames(Pagwas$Single_data)
-  Pagwas$Single_data<-NULL
+
+  Pagwas$VariableFeatures<-rownames(Pagwas$data_mat)
+  #Pagwas$Single_data<-NULL
 
   Pagwas$pca_cell_df<-pca_cell_df
 

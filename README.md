@@ -21,7 +21,7 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ### 1.Preprogress and create internal storage
 
-``` r
+``` R
  library(scPagwas)
  suppressMessages(library(Seurat))
  suppressWarnings(library(SOAR))

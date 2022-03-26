@@ -4,7 +4,13 @@
 \alias{scBoot_evaluate}
 \title{scBoot_evaluate}
 \usage{
-scBoot_evaluate(Pagwas, bootstrap_iters = bootstrap_iters, n.cores = n.cores)
+scBoot_evaluate(
+  Pagwas,
+  Pathway_ld_gwas_data,
+  bootstrap_iters,
+  n.cores = 1,
+  part = 0.5
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas object}
@@ -12,6 +18,8 @@ scBoot_evaluate(Pagwas, bootstrap_iters = bootstrap_iters, n.cores = n.cores)
 \item{bootstrap_iters}{number of bootstrap iterations to run}
 
 \item{n.cores}{cores}
+
+\item{part}{number of bootstrap iterations to perform,default is 0.5}
 }
 \value{
 

@@ -174,32 +174,28 @@ as_matrix <- function(mat){
 #' https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
 #' @note Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
 #'
-#' covmat uses E[(X-muX)'(Y-muY)] = E[X'Y] - muX'muY
-#' with sample correction n/(n-1) this leads to cov = ( X'Y - n*muX'muY ) / (n-1)
-#'
-#' the sd in the case Y!=NULL uses E[X-mu]^2 = E[X^2]-mu^2
-#' with sample correction n/(n-1) this leads to sd^2 = ( X^2 - n*mu^2 ) / (n-1)
-#'
-#'
 #' @param X matrix
 #' @param Y matrix or vector
 #'
 #' @return
 #'
+
 corSparse <- function(X, Y) {
   #X <-as_matrix(X)
   n <- nrow(X)
   muX <- colMeans(X)
 
-    stopifnot( nrow(X) == nrow(Y) )
+  stopifnot( nrow(X) == nrow(Y) )
 
-    muY <- colMeans(Y)
-    covmat <- (as.matrix(crossprod(X,Y)) - n*tcrossprod(muX,muY) ) / (n-1)
-    sdvecX <- sqrt( (colSums(X^2) - n*muX^2) / (n-1) )
-    sdvecY <- sqrt( (colSums(Y^2) - n*muY^2) / (n-1) )
-    cormat <- covmat/tcrossprod(sdvecX,sdvecY)
-    #cormat[is.nan(cormat),1]<-0
-return(cormat)
+  muY <- colMeans(Y)
+  covmat <- (as.matrix(crossprod(X,Y)) - n*tcrossprod(muX,muY) ) / (n-1)
+  sdvecX <- sqrt( (colSums(X^2) - n*muX^2) / (n-1) )
+  sdvecY <- sqrt( (colSums(Y^2) - n*muY^2) / (n-1) )
+  cormat <- covmat/tcrossprod(sdvecX,sdvecY)
+  #cormat[is.nan(cormat),1]<-0
+  return(cormat)
 }
+
+
 
 

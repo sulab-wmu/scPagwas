@@ -5,15 +5,10 @@
 #'
 #' @param Pagwas Pagwas format
 #' @param Single_data Input the Single data in seruat format, Idents should be
-#' the celltypes annotation.
-#' @param FilterSingleCell whther to filter the single cell data,if you
-#' filter it before,choose FALSE, otherwise set TRUE.
+#' the celltypes annotation. mainly used the Single_data@assays$RNA@data
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param nfeatures The parameter for FindVariableFeatures,
 #' NULL means select all genes
-#' @param min.lib.size Threshold for single data library.
-#' @param min.reads Threshold for total reads fo each cells.
-#' @param min.detected Threshold for total cells fo each gene.
 #' @param min_clustercells Threshold for total cells fo each cluster.
 #'
 #' @return Pagwas
@@ -27,11 +22,8 @@
 Single_data_input <- function(Pagwas,
                               Single_data,
                               nfeatures = NULL,
-                              FilterSingleCell=FALSE,
                               Pathway_list=NULL,
-                              min.lib.size = 1000,
-                              min.reads = 10,
-                              min.detected = 5,
+                              assay="RNA",
                               min_clustercells = 5) {
   message("Input single cell data!")
 
@@ -39,61 +31,58 @@ Single_data_input <- function(Pagwas,
     message("Single_data is not of class Seurat!")
     return(Pagwas)
   }
-
-  raw_data_mat <- FBM(nrow(Single_data), ncol(Single_data))
-  raw_data_mat[] <- as_matrix(Seurat::GetAssayData(object = Single_data, slot = "data"))
-  dim_raw_data_mat<-list(row=rownames(Single_data),col=colnames(Single_data))
-
-  Pagwas$raw_data_mat<-raw_data_mat
-  Pagwas$dim_raw_data_mat<-dim_raw_data_mat
+  #1.Celltype_anno
   Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
                               annotation = as.vector(SeuratObject::Idents(Single_data)))
-
   rownames(Celltype_anno) <- Celltype_anno$cellnames
+  #2.filter cell_types
+  Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
+  Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
+  message(length(Afterre_cell_types), " cell types are remain, after filter!")
 
+  Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
+  Single_data <-Single_data[,Celltype_anno$cellnames]
+
+  Pagwas$Celltype_anno<-Celltype_anno
+  #3.raw_data_mat
+  options(bigmemory.allow.dimnames=TRUE)
+
+  Pagwas$raw_data_mat<- bigmemory::as.big.matrix(data.matrix(GetAssayData(Single_data, slot = "data", assay =assay)),shared = FALSE)
+
+  #4.merge_scexpr
+  merge_scexpr <- Seurat::AverageExpression(Single_data,assays=assay)[[assay]]
+
+  Pagwas$merge_scexpr <- bigmemory::as.big.matrix(merge_scexpr,shared = FALSE)
+  rm(merge_scexpr)
+
+  #5.VariableFeatures
   if (!is.null(nfeatures)) {
-    if (nfeatures < nrow(Single_data)) {
+    if (nfeatures < nrow(Pagwas$raw_data_mat)) {
       Single_data <- Seurat::FindVariableFeatures(Single_data,
-        selection.method = "vst",
-        nfeatures = nfeatures
-      )
+                                                    assay =assay,
+                                                    selection.method = "vst",
+                                                    nfeatures = nfeatures
+                                                    )
       Pagwas$VariableFeatures <- Seurat::VariableFeatures(Single_data)
       # Single_data <- Single_data[,]
-    } else if (nfeatures == nrow(Single_data)) {
-      Pagwas$VariableFeatures <- rownames(Single_data)
+    } else if (nfeatures == nrow(Pagwas$raw_data_mat)) {
+      Pagwas$VariableFeatures <- rownames(Pagwas$raw_data_mat)
     } else {
       stop("Error: nfeatures is too big")
     }
   } else {
-    Pagwas$VariableFeatures <- rownames(Single_data)
+    Pagwas$VariableFeatures <- rownames(Pagwas$raw_data_mat)
   }
-
-  Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
-  Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
-  message(length(Afterre_cell_types), " cell types are remain, after filter!")
-  Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
-  Single_data <-Single_data[,Idents(Single_data) %in% Afterre_cell_types]
-
-
-  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Single_data))
+  rm(Single_data)
+  #6.get data_mat
+  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Pagwas$raw_data_mat))
   if(length(pagene)<100){
     stop("There are little match between rownames of Single_data and pathway genes!")
   }
-  merge_scexpr <- Seurat::AverageExpression(Single_data)
-  merge_scexpr <- merge_scexpr[["RNA"]][pagene,]
 
   Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures,pagene)
-
-  data_mat <- as_FBM(as(Seurat::GetAssayData(object = Single_data[pagene,], slot = "data"),"matrix"))
-  dim_data_mat<-list(row=pagene,col=colnames(Single_data))
-
-  #message("*merge_scexpr")
-  Pagwas$merge_scexpr<-merge_scexpr
-  #dim_raw_data_mat<-list(row=rownames(Single_data),col=colnames(Single_data))
-
-  Pagwas$data_mat<-data_mat
-  Pagwas$dim_data_mat<-dim_data_mat
-  Pagwas$Single_data<-Single_data
+  #a<-data.matrix(Seurat::GetAssayData(object = Single_data[pagene,], slot = "data"))
+  Pagwas$data_mat <- bigmemory::as.big.matrix(Pagwas$raw_data_mat[Pagwas$VariableFeatures,],shared = FALSE)
 
   return(Pagwas)
 }

@@ -12,11 +12,14 @@
 #' @importFrom utils timestamp
 #' @import ggplot2
 #' @importFrom ggpubr ggscatter
-#' @importFrom bigstatsr big_apply FBM as_FBM big_univLinReg covar_from_df
+#' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
 #' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
-#' @importFrom readr read_table2
+#' @importFrom bigreadr fread2 rbind_df
+#' @importFrom reshape2 dcast
+#' @importFrom bigmemory as.big.matrix is.big.matrix
+#' @importFrom biganalytics apply
 
 #' @title Main wrapper functions for scPagwas
 #' @name scPagwas_main
@@ -31,15 +34,11 @@
 #' @param eqtls_cols (character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")
 #' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
 #' @param Single_data (Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.
-#' @param FilterSingleCell (logical)whether to filter the single cell data.if you
-#' filter it before,choose FALSE, otherwise set TRUE.
+#' @param assay (character)assay data of your single cell data to use,default is "RNA"
 #' @param nfeatures (integr) The parameter for FindVariableFeatures, NULL means select all genes
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
-#' @param min.reads (integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5
-#' @param min.detected (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1
-#' @param min.lib.size (integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
@@ -72,6 +71,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta"),
                         block_annotation = NULL,
                         Single_data = NULL,
+                        assay="RNA",
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
@@ -88,27 +88,26 @@ scPagwas_main <- function(Pagwas = NULL,
    message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
-  if(class(Single_data)=="character"){
-    if(grepl(".rds",Single_data)){
-      message("** Start to read the single cell data!")
-      Single_data=readRDS(Single_data)
-    }else{
-      stop("There is need a data in `.rds` format ")
-    }
-
+  #if(class(Single_data)=="character"){
+  if(grepl(".rds",Single_data)){
+    message("** Start to read the single cell data!")
+    Single_data=readRDS(Single_data)
   }else{
-    stop("There is need a filename and address for single data")
+    stop("There is need a data in `.rds` format ")
   }
 
-
+  if(!assay %in% Assays(Single_data)){
+    stop("There is no need assays in your Single_data")
+  }
     Pagwas <- Single_data_input(Pagwas=Pagwas,
+                                assay=assay,
                                 nfeatures =nfeatures,
                                 Single_data=Single_data,
                                 Pathway_list=Pathway_list,
                                 min_clustercells=min_clustercells)
-   rm(Single_data)
+  rm(Single_data)
 
-  message(ncol(Pagwas$Single_data)," cells are remain!" )
+  #message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
 
   #3.calculated pca score
@@ -132,7 +131,9 @@ scPagwas_main <- function(Pagwas = NULL,
 
    if(class(gwas_data)=="character"){
      message("** Start to read the gwas_data!")
-     suppressMessages(gwas_data <- as.data.frame(readr::read_table2(gwas_data)))
+
+     suppressMessages(gwas_data <- bigreadr::fread2(gwas_data))
+
    }else{
      stop("There is need a filename and address for gwas_data")
    }
@@ -159,7 +160,6 @@ scPagwas_main <- function(Pagwas = NULL,
                                      eqtl_p=0.05,
                                      eqtls_cols=eqtls_cols,
                                      marg=marg)
-        #message(nrow(gwas_data)," snps for significant eqtls! Please set 'add_eqtls=F' if the amount of snps were too little!")
 
        }else{
 
@@ -169,9 +169,7 @@ scPagwas_main <- function(Pagwas = NULL,
 
        snp_gene_df<-Snp2Gene(snp=Pagwas$gwas_data,refGene=block_annotation,marg=marg)
        snp_gene_df$slope <- rep(1,nrow(snp_gene_df))
-       snp_gene_df <- snp_gene_df[snp_gene_df$Disstance=="0",]
-       #SOAR::Store(snp_gene_df)
-       Pagwas$snp_gene_df<-snp_gene_df
+       Pagwas$snp_gene_df<-snp_gene_df[snp_gene_df$Disstance=="0",]
     }
   }
   #3.pathway block data
@@ -183,7 +181,6 @@ scPagwas_main <- function(Pagwas = NULL,
                                        n.cores=n.cores)
   }
 
-  #SOAR::Store(block_annotation)
   message('done!')
 
   #4.ld data folder,which is preprogress
@@ -196,11 +193,9 @@ scPagwas_main <- function(Pagwas = NULL,
                                        chrom_ld=chrom_ld,
                                        n.cores=n.cores)
 
-    #rm(chrom_ld)
    message('done!')
   }
-  #Pagwas$VariableFeatures<-NULL
-  #Pagwas$Pathway_list<-NULL
+
   gc()
   return(Pagwas)
 }

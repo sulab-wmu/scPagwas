@@ -13,6 +13,7 @@ scPagwas_main(
     "gene_start", "gene_end", "gene_name", "pval_beta"),
   block_annotation = NULL,
   Single_data = NULL,
+  assay = "RNA",
   nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
@@ -39,6 +40,8 @@ scPagwas_main(
 
 \item{Single_data}{(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
+\item{assay}{(character)assay data of your single cell data to use,default is "RNA"}
+
 \item{nfeatures}{(integr) The parameter for FindVariableFeatures, NULL means select all genes}
 
 \item{Pathway_list}{(list,character) pathway gene sets list}
@@ -56,15 +59,6 @@ scPagwas_main(
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
-
-\item{FilterSingleCell}{(logical)whether to filter the single cell data.if you
-filter it before,choose FALSE, otherwise set TRUE.}
-
-\item{min.reads}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5}
-
-\item{min.detected}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1}
-
-\item{min.lib.size}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200}
 }
 \value{
 

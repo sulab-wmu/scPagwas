@@ -8,11 +8,8 @@ Single_data_input(
   Pagwas,
   Single_data,
   nfeatures = NULL,
-  FilterSingleCell = FALSE,
   Pathway_list = NULL,
-  min.lib.size = 1000,
-  min.reads = 10,
-  min.detected = 5,
+  assay = "RNA",
   min_clustercells = 5
 )
 }
@@ -20,21 +17,12 @@ Single_data_input(
 \item{Pagwas}{Pagwas format}
 
 \item{Single_data}{Input the Single data in seruat format, Idents should be
-the celltypes annotation.}
+the celltypes annotation. mainly used the Single_data@assays$RNA@data}
 
 \item{nfeatures}{The parameter for FindVariableFeatures,
 NULL means select all genes}
 
-\item{FilterSingleCell}{whther to filter the single cell data,if you
-filter it before,choose FALSE, otherwise set TRUE.}
-
 \item{Pathway_list}{(list,character) pathway gene sets list}
-
-\item{min.lib.size}{Threshold for single data library.}
-
-\item{min.reads}{Threshold for total reads fo each cells.}
-
-\item{min.detected}{Threshold for total cells fo each gene.}
 
 \item{min_clustercells}{Threshold for total cells fo each cluster.}
 }

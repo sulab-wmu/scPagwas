@@ -8,7 +8,8 @@ scPagwas_perform_score(
   Pagwas,
   Pathway_ld_gwas_data,
   n.cores = 1,
-  remove_outlier = TRUE
+  remove_outlier = TRUE,
+  bignumber = 10000
 )
 }
 \arguments{
@@ -19,6 +20,9 @@ scPagwas_perform_score(
 \item{n.cores}{cores}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.}
+
+\item{bignumber}{the threshold of number of cells to change matrix to bigmemory data format, if you have enough
+storage, you can set a large number to save time.}
 }
 \value{
 
