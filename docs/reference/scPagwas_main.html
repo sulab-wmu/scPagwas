@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
       </span>
     </div>
 
@@ -72,20 +72,16 @@
     <span class="st">"gene_start"</span>, <span class="st">"gene_end"</span>, <span class="st">"gene_name"</span>, <span class="st">"pval_beta"</span><span class="op">)</span>,
   block_annotation <span class="op">=</span> <span class="cn">NULL</span>,
   Single_data <span class="op">=</span> <span class="cn">NULL</span>,
-  FilterSingleCell <span class="op">=</span> <span class="cn">FALSE</span>,
+  assay <span class="op">=</span> <span class="st">"RNA"</span>,
   nfeatures <span class="op">=</span> <span class="cn">NULL</span>,
   Pathway_list <span class="op">=</span> <span class="cn">NULL</span>,
   chrom_ld <span class="op">=</span> <span class="cn">NULL</span>,
   marg <span class="op">=</span> <span class="fl">10000</span>,
   maf_filter <span class="op">=</span> <span class="fl">0.01</span>,
-  min.reads <span class="op">=</span> <span class="fl">5</span>,
-  min.detected <span class="op">=</span> <span class="fl">1</span>,
-  min.lib.size <span class="op">=</span> <span class="fl">200</span>,
   min_clustercells <span class="op">=</span> <span class="fl">10</span>,
   min.pathway.size <span class="op">=</span> <span class="fl">5</span>,
   max.pathway.size <span class="op">=</span> <span class="fl">300</span>,
-  n.cores <span class="op">=</span> <span class="fl">1</span>,
-  scPagwasSession <span class="op">=</span> <span class="st">"scPagwasSession"</span>
+  n.cores <span class="op">=</span> <span class="fl">1</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -105,9 +101,8 @@
 <dd><p>(data.frame) Start and end points for block traits, usually genes.</p></dd>
 <dt>Single_data</dt>
 <dd><p>(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.</p></dd>
-<dt>FilterSingleCell</dt>
-<dd><p>(logical)whether to filter the single cell data.if you
-filter it before,choose FALSE, otherwise set TRUE.</p></dd>
+<dt>assay</dt>
+<dd><p>(character)assay data of your single cell data to use,default is "RNA"</p></dd>
 <dt>nfeatures</dt>
 <dd><p>(integr) The parameter for FindVariableFeatures, NULL means select all genes</p></dd>
 <dt>Pathway_list</dt>
@@ -118,12 +113,6 @@ filter it before,choose FALSE, otherwise set TRUE.</p></dd>
 <dd><p>(integr)gene-TSS-window size</p></dd>
 <dt>maf_filter</dt>
 <dd><p>(numeric)Filter the maf, default is 0.01</p></dd>
-<dt>min.reads</dt>
-<dd><p>(integr)Only use is when FilterSingleCell is TRUE.Threshold for total reads fo each cells. default is 5</p></dd>
-<dt>min.detected</dt>
-<dd><p>(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each gene. default is 1</p></dd>
-<dt>min.lib.size</dt>
-<dd><p>(integr)Only use is when FilterSingleCell is TRUE.Threshold for single data library. default is 200</p></dd>
 <dt>min_clustercells</dt>
 <dd><p>(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10</p></dd>
 <dt>min.pathway.size</dt>
@@ -132,8 +121,6 @@ filter it before,choose FALSE, otherwise set TRUE.</p></dd>
 <dd><p>(integr)Threshold for max pathway gene size. default is 300</p></dd>
 <dt>n.cores</dt>
 <dd><p>(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.</p></dd>
-<dt>scPagwasSession</dt>
-<dd><p>(character)The file names for scPagwas Session.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -164,8 +151,8 @@ filter it before,choose FALSE, otherwise set TRUE.</p></dd>
 <span class="r-in">                    Single_data <span class="op">=</span> <span class="va">scRNAexample</span>,</span>
 <span class="r-in">                    Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
 <span class="r-in">                    chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> *** Start to store the variables:block_annotation</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in save(list = "block_annotation", file = "./scPagwasSession/block_annotation@.RData"):</span> object 'gtf_df' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ##------ Sun Mar 27 17:19:56 2022 ------## ******* 1st: Single_data_input function start! ********</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in is.factor(x):</span> object 'scRNAexample' not found</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

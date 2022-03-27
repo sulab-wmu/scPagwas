@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
       </span>
     </div>
 
@@ -63,7 +63,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scBoot_evaluate</span><span class="op">(</span><span class="va">Pagwas</span>, bootstrap_iters <span class="op">=</span> <span class="va">bootstrap_iters</span>, n.cores <span class="op">=</span> <span class="va">n.cores</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scBoot_evaluate</span><span class="op">(</span>
+  <span class="va">Pagwas</span>,
+  <span class="va">Pathway_ld_gwas_data</span>,
+  <span class="va">bootstrap_iters</span>,
+  n.cores <span class="op">=</span> <span class="fl">1</span>,
+  part <span class="op">=</span> <span class="fl">0.5</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -74,6 +80,8 @@
 <dd><p>number of bootstrap iterations to run</p></dd>
 <dt>n.cores</dt>
 <dd><p>cores</p></dd>
+<dt>part</dt>
+<dd><p>number of bootstrap iterations to perform,default is 0.5</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>

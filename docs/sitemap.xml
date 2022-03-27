@@ -43,6 +43,9 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/Boot_evaluate.html</loc>
   </url>
   <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/Celltype_heritability_contributions.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/chrom_ld.html</loc>
   </url>
   <url>
@@ -167,6 +170,12 @@
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/scRNAexample.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/SCxy2vector.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/Singlecell_heritability_contributions.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Single_data_input.html</loc>

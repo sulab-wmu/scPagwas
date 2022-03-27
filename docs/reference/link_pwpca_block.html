@@ -25,7 +25,7 @@ Requires rownames that are identitcal to block labels loaded previously."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
       </span>
     </div>
 
@@ -67,15 +67,13 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span>, scPagwasSession <span class="op">=</span> <span class="st">"scPagwasSession"</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>Pagwas</dt>
 <dd><p>Pagwas format, deault is NULL.</p></dd>
-<dt>scPagwasSession</dt>
-<dd><p>"scPagwasSession"</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -87,7 +85,7 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Pagwas should have inhibit data</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in colnames(pca_cell_df):</span> object 'pca_cell_df' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in link_pwpca_block(Pagwas):</span> could not find function "link_pwpca_block"</span>
 </code></pre></div>
     </div>
   </div>
