@@ -52,8 +52,6 @@ Single_data_input <- function(Pagwas,
   #4.merge_scexpr
   merge_scexpr <- Seurat::AverageExpression(Single_data,assays=assay)[[assay]]
 
-  Pagwas$merge_scexpr <- bigmemory::as.big.matrix(merge_scexpr,shared = FALSE)
-  rm(merge_scexpr)
 
   #5.VariableFeatures
   if (!is.null(nfeatures)) {
@@ -83,6 +81,6 @@ Single_data_input <- function(Pagwas,
   Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures,pagene)
   #a<-data.matrix(Seurat::GetAssayData(object = Single_data[pagene,], slot = "data"))
   Pagwas$data_mat <- bigmemory::as.big.matrix(Pagwas$raw_data_mat[Pagwas$VariableFeatures,],shared = FALSE)
-
+  Pagwas$merge_scexpr <-bigmemory::as.big.matrix(merge_scexpr[Pagwas$VariableFeatures,],shared = FALSE)
   return(Pagwas)
 }

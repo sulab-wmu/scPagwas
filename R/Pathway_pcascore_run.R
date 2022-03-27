@@ -118,7 +118,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   colnames(pca_scCell_mat) <- colnames(Pagwas$data_mat)
 
   options(bigmemory.allow.dimnames=TRUE)
-  Pagwas$pca_scCell_mat<- bigmemory::as.big.matrix(data.matrix(pca_scCell_mat))
+  Pagwas$pca_scCell_mat<- bigmemory::as.big.matrix(data.matrix(pca_scCell_mat),shared = FALSE)
 
   colnames(Pagwas$merge_scexpr)<-colnames(pca_cell_df)
 

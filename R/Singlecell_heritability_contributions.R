@@ -152,7 +152,7 @@ link_scCell_pwpca_block <- function(Pagwas,
     #rm(x2)
     #message(6)
     if(ncol(x2)>bignumber){
-    pa_block$x<- bigmemory::as.big.matrix(data.matrix(pa_block$ld_matrix_squared %*% x2))
+    pa_block$x<- bigmemory::as.big.matrix(data.matrix(pa_block$ld_matrix_squared %*% x2),shared = FALSE)
     }else{
     pa_block$x<- pa_block$ld_matrix_squared %*% x2
 
@@ -213,8 +213,8 @@ scPagwas_perform_score <- function(Pagwas,
 
         results <- scParameter_regression(Pagwas_x = Pathway_block$x[!na_elements,],
                                           Pagwas_y = Pathway_block$y[!na_elements],
-                                          noise_per_snp = noise_per_snp[!na_elements]
-                                          #n.cores = n.cores
+                                          noise_per_snp = noise_per_snp[!na_elements],
+                                          n.cores = n.cores
                                           )
 
 
@@ -238,7 +238,7 @@ scPagwas_perform_score <- function(Pagwas,
   Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
   ncells<- nrow(Pathway_sclm_results)
   if(ncells>bignumber){
-  Pathway_sclm_results <- bigmemory::as.big.matrix(Pathway_sclm_results)
+  Pathway_sclm_results <- bigmemory::as.big.matrix(Pathway_sclm_results,shared = FALSE)
   }else{
   Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
   }
@@ -249,9 +249,11 @@ scPagwas_perform_score <- function(Pagwas,
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
 
     if (length(a) == 0) {
-      return(rep(0, ncol(Pagwas$data_mat)))
+      #return(rep(0, ncol(Pagwas$data_mat)))
+      return(NULL)
     } else if (length(a) == 1) {
-      return(Pagwas$data_mat[a, ])
+      #return(Pagwas$data_mat[a, ])
+      return(NULL)
     } else {
       b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
       return(b)
@@ -261,9 +263,9 @@ scPagwas_perform_score <- function(Pagwas,
   pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 
   if(ncells>bignumber){
-    pathway_expr <- bigmemory::as.big.matrix(pathway_expr)
+    pathway_expr <- bigmemory::as.big.matrix(pathway_expr,shared = FALSE)
     colnames(pathway_expr) <- Pathway_names
-    pa_exp_mat <-bigmemory::as.big.matrix(t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr[])
+    pa_exp_mat <-bigmemory::as.big.matrix(t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr[],shared = FALSE)
     rm(pathway_expr)
     message("* Get scPgwas score for each single cell")
     scs <- rowSums(Pathway_sclm_results[] * pa_exp_mat[])
@@ -299,10 +301,14 @@ scPagwas_perform_score <- function(Pagwas,
 #' @param Pagwas_x x parameter for lm
 #' @param Pagwas_y y parameter for lm
 #' @param noise_per_snp noise
+#' @param n.cores 1
 #'
 #' @return
 
-scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp) {
+scParameter_regression <- function(Pagwas_x,
+                                   Pagwas_y,
+                                   noise_per_snp,
+                                   n.cores = 1) {
 
   #x_df <-Pagwas_x
 
@@ -317,9 +323,13 @@ scParameter_regression <- function(Pagwas_x, Pagwas_y, noise_per_snp) {
   parameters<-  liear_m$estim
   }else{
     Pagwas_x<-data.matrix(Pagwas_x)
-    liear_m <- lm(Pagwas_y ~ offset(noise_per_snp) + Pagwas_x)
-    parameters<-  coef(liear_m)[-1]
-    names(parameters)<-colnames(Pagwas_x)
+    liear_m <- bigstatsr::big_univLinReg(
+      X = as_FBM(Pagwas_x),
+      y.train = Pagwas_y,
+      covar.train = bigstatsr::covar_from_df(data.frame(offset(noise_per_snp))),
+      ncores = n.cores
+    )
+    parameters<-  liear_m$estim
   }
 
   return(parameters)
@@ -413,7 +423,8 @@ scPagwas_perform_regression <- function(Pagwas,
 
   Pagwas$sclm_results <- scParameter_regression(Pagwas_x=data.matrix(vectorized_Pagwas_data[[2]]),
                                          Pagwas_y=vectorized_Pagwas_data[[1]],
-                                         noise_per_snp=vectorized_Pagwas_data[[3]])
+                                         noise_per_snp=vectorized_Pagwas_data[[3]],
+                                         n.cores = n.cores)
 
   Pagwas$sclm_results[is.na(Pagwas$sclm_results)] <- 0
   names(Pagwas$sclm_results)<-colnames(vectorized_Pagwas_data[[2]])
@@ -463,7 +474,8 @@ scBoot_evaluate <- function(Pagwas,
 
     results <- scParameter_regression(Pagwas_x = part_vector$x,
                                       Pagwas_y = part_vector$y,
-                                      noise_per_snp = part_vector$noise_per_snp
+                                      noise_per_snp = part_vector$noise_per_snp,
+                                      n.cores=n.cores
                                       )
 
     setTxtProgressBar(pb, i / bootstrap_iters)
