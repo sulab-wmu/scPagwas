@@ -391,7 +391,7 @@ scGet_gene_heritability_correlation <- function(Pagwas){
     sparse_cor<-corSparse(X=t(Pagwas$raw_data_mat[]), Y=scPagwas_score)
   }
   Pagwas$gene_heritability_correlation<-sparse_cor
-  rownames(Pagwas$gene_heritability_correlation)<-Pagwas$dim_raw_data_mat$row
+  rownames(Pagwas$gene_heritability_correlation)<-rownames(Pagwas$raw_data_mat)
   return(Pagwas)
 }
 

@@ -4,7 +4,7 @@
 \alias{scParameter_regression}
 \title{scParameter_regression}
 \usage{
-scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp)
+scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp, n.cores = 1)
 }
 \arguments{
 \item{Pagwas_x}{x parameter for lm}
@@ -12,6 +12,8 @@ scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp)
 \item{Pagwas_y}{y parameter for lm}
 
 \item{noise_per_snp}{noise}
+
+\item{n.cores}{1}
 }
 \value{
 
