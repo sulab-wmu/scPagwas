@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
       </span>
     </div>
 
@@ -186,9 +186,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Pagwas</span><span class="op">&lt;-</span><span class="fu"><a href="reference/Singlecell_heritability_contributions.html">Singlecell_heritability_contributions</a></span><span class="op">(</span><span class="va">Pagwas</span>,
                                               n.cores<span class="op">=</span><span class="fl">1</span>,
-                                              part <span class="op">=</span> <span class="fl">0.5</span>,
-                                              bignumber<span class="op">=</span><span class="fl">10000</span>,
-                                              iters <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></code></pre></div>
+                                              part <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></code></pre></div>
 <div class="section level4">
 <h4 id="visualize-the-scpagwas_main-results">Visualize the scPagwas_main results.<a class="anchor" aria-label="anchor" href="#visualize-the-scpagwas_main-results"></a>
 </h4>
@@ -263,14 +261,6 @@
              do_plot <span class="op">=</span> <span class="cn">T</span>
              <span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-vln_Corgenes-1.png" width="60%"></p>
-<p>remove the object</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"raw_data_mat"</span>,<span class="st">"VariableFeatures"</span>,<span class="st">"merge_scexpr"</span>,<span class="st">"data_mat"</span>,<span class="st">"rawPathway_list"</span>,<span class="st">"Pathway_list"</span>,<span class="st">"pca_scCell_mat"</span>,<span class="st">"pca_cell_df"</span>,<span class="st">"snp_gene_df"</span>,<span class="st">"Pathway_ld_gwas_data"</span><span class="op">)</span><span class="op">]</span><span class="op">&lt;-</span><span class="cn">NULL</span>
-<span class="co">#result is:</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Celltype_anno"                 "lm_results"                   </span>
-<span class="co">#&gt; [3] "Pathway_block_heritability"    "bootstrap_results"            </span>
-<span class="co">#&gt; [5] "scPagwas_score"                "gene_heritability_correlation"</span></code></pre></div>
 <p>The workfile is ongoing…</p>
 </div>
 </div>
