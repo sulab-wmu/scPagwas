@@ -1,6 +1,6 @@
 Package: scPagwas
 Title: A pathway-based polygenic integration method for inferring disease-associated individual cells in single cell sequencing data
-Version: 1.4.1
+Version: 1.5.0
 Authors@R: 
     person(given = "Chunyu",
            family = "Deng",

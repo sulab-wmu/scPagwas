@@ -52,7 +52,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   pana_list <- lapply(celltypes, function(celltype) {
     scCounts <-Pagwas$data_mat[,Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation==celltype]]
-    #scCounts<- as_matrix(scCounts)
+    scCounts<- as_matrix(scCounts)
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
     pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, proper.gene.names)))) > 2)]
@@ -68,7 +68,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
     scCounts <-Pagwas$data_mat[,Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation==celltype]]
-    #scCounts <- as_matrix(scCounts)
+    scCounts <- as_matrix(scCounts)
     #
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
@@ -118,7 +118,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   colnames(pca_scCell_mat) <- colnames(Pagwas$data_mat)
 
   options(bigmemory.allow.dimnames=TRUE)
-  Pagwas$pca_scCell_mat<- bigmemory::as.big.matrix(data.matrix(pca_scCell_mat),shared = FALSE)
+  Pagwas$pca_scCell_mat<- data.matrix(pca_scCell_mat)
 
   colnames(Pagwas$merge_scexpr)<-colnames(pca_cell_df)
 

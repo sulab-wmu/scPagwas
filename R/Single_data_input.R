@@ -39,23 +39,27 @@ Single_data_input <- function(Pagwas,
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
   Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
   message(length(Afterre_cell_types), " cell types are remain, after filter!")
-
+  #message(1)
   Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
   Single_data <-Single_data[,Celltype_anno$cellnames]
-
+  #message(2)
   Pagwas$Celltype_anno<-Celltype_anno
   #3.raw_data_mat
-  options(bigmemory.allow.dimnames=TRUE)
+  #options(bigmemory.allow.dimnames=TRUE)
 
-  Pagwas$raw_data_mat<- bigmemory::as.big.matrix(data.matrix(GetAssayData(Single_data, slot = "data", assay =assay)),shared = FALSE)
-
+  #a <- GetAssayData(Single_data, slot = "data", assay =assay)
+  #Pagwas$raw_data_mat <- bigmemory::big.matrix(nrow(a),ncol(a),shared = FALSE)
+  Pagwas$data_mat<- GetAssayData(Single_data, slot = "data", assay =assay)
+  #rownames(Pagwas$raw_data_mat) <- rownames(a)
+  #rm(a)
+  #message(3)
   #4.merge_scexpr
   merge_scexpr <- Seurat::AverageExpression(Single_data,assays=assay)[[assay]]
 
-
+  #message(4)
   #5.VariableFeatures
   if (!is.null(nfeatures)) {
-    if (nfeatures < nrow(Pagwas$raw_data_mat)) {
+    if (nfeatures < nrow(Pagwas$data_mat)) {
       Single_data <- Seurat::FindVariableFeatures(Single_data,
                                                     assay =assay,
                                                     selection.method = "vst",
@@ -63,24 +67,27 @@ Single_data_input <- function(Pagwas,
                                                     )
       Pagwas$VariableFeatures <- Seurat::VariableFeatures(Single_data)
       # Single_data <- Single_data[,]
-    } else if (nfeatures == nrow(Pagwas$raw_data_mat)) {
-      Pagwas$VariableFeatures <- rownames(Pagwas$raw_data_mat)
+    } else if (nfeatures == nrow(Pagwas$data_mat)) {
+      Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
     } else {
       stop("Error: nfeatures is too big")
     }
   } else {
-    Pagwas$VariableFeatures <- rownames(Pagwas$raw_data_mat)
+    Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
   }
   rm(Single_data)
   #6.get data_mat
-  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Pagwas$raw_data_mat))
+  #message(5)
+  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Pagwas$data_mat))
   if(length(pagene)<100){
     stop("There are little match between rownames of Single_data and pathway genes!")
   }
 
   Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures,pagene)
   #a<-data.matrix(Seurat::GetAssayData(object = Single_data[pagene,], slot = "data"))
-  Pagwas$data_mat <- bigmemory::as.big.matrix(Pagwas$raw_data_mat[Pagwas$VariableFeatures,],shared = FALSE)
-  Pagwas$merge_scexpr <-bigmemory::as.big.matrix(merge_scexpr[Pagwas$VariableFeatures,],shared = FALSE)
+  #message(6)
+  #Pagwas$data_mat <- Pagwas$raw_data_mat[Pagwas$VariableFeatures,]
+  #message(7)
+  Pagwas$merge_scexpr <-merge_scexpr[Pagwas$VariableFeatures,]
   return(Pagwas)
 }

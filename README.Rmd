@@ -133,9 +133,7 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 
 Pagwas<-Singlecell_heritability_contributions(Pagwas,
                                               n.cores=1,
-                                              part = 0.5,
-                                              bignumber=10000,
-                                              iters = 200)
+                                              part = 0.5)
 
 ```
 

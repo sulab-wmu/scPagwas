@@ -9,9 +9,7 @@ Singlecell_heritability_contributions(
   n.cores = 1,
   part = 0.5,
   remove_outlier = TRUE,
-  SCregression = FALSE,
-  iters = 200,
-  bignumber = 10000
+  SimpleResult = TRUE
 )
 }
 \arguments{
@@ -21,12 +19,7 @@ Singlecell_heritability_contributions(
 
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
 
-\item{SCregression}{whether to run regression funcitons, which takes a lot of time and memmory.}
-
-\item{iters}{number of bootstrap iterations to perform}
-
-\item{bignumber}{the threshold of number of cells to change matrix to bigmemory data format, if you have enough
-storage, you can set a large number to save time.}
+\item{SimpleResult}{TRUE}
 }
 \value{
 

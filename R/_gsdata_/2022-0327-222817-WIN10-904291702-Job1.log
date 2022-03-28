@@ -1,0 +1,4 @@
+2022-03-27 22:28:18: -- Analysis Started by User Command
+2022-03-27 22:28:18: R: On disk sftp://172.16.253.32 space required for sync is 0.00, free space is unknown
+2022-03-27 22:28:18: Changes: 0, Conflicts: 0, CopyTime: 0, FixState: 0, Errors: 0, All: 22
+2022-03-27 22:28:18: -- Analysis Complete. Time 00:00:01, Speed: 17 files/s

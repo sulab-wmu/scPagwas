@@ -1,0 +1,9 @@
+2022-03-27 20:27:35: File Monitoring: started on file:///E:/RPakage/scPagwas/R
+2022-03-27 20:27:36: R: File Monitoring: Not Available on: sftp://172.16.253.32/share/pub/dengcy/GWAS_Multiomics/pagwas/R3.25
+2022-03-27 20:27:36: On Folder Connect Monitoring started on sftp://172.16.253.32/share/pub/dengcy/GWAS_Multiomics/pagwas/R3.25
+2022-03-27 20:27:36: -- Analysis Started by User Command
+2022-03-27 20:27:36: L: State file does not exist: E:/RPakage/scPagwas/R/_gsdata_/_file_state_v4._gs
+2022-03-27 20:27:37: R: On disk sftp://172.16.253.32 space required for sync is -1.02 KB, free space is unknown
+2022-03-27 20:27:37: Changes: 5, Conflicts: 0, CopyTime: 0, FixState: 16, Errors: 0, All: 22
+2022-03-27 20:27:37: Left to Right: Copy File: 5 
+2022-03-27 20:27:37: -- Analysis Complete. Time 00:00:02, Speed: 8 files/s
