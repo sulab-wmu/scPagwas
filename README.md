@@ -123,9 +123,7 @@ for save time.
 ``` r
 Pagwas<-Singlecell_heritability_contributions(Pagwas,
                                               n.cores=1,
-                                              part = 0.5,
-                                              bignumber=10000,
-                                              iters = 200)
+                                              part = 0.5)
 ```
 
 #### Visualize the scPagwas_main results.
@@ -205,16 +203,5 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
 ```
 
 <img src="man/figures/README-vln_Corgenes-1.png" width="60%" />
-
-remove the object
-
-``` r
-Pagwas[c("raw_data_mat","VariableFeatures","merge_scexpr","data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","pca_cell_df","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
-#result is:
-names(Pagwas)
-#> [1] "Celltype_anno"                 "lm_results"                   
-#> [3] "Pathway_block_heritability"    "bootstrap_results"            
-#> [5] "scPagwas_score"                "gene_heritability_correlation"
-```
 
 The workfile is ongoing…
