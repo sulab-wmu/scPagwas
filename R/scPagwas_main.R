@@ -88,7 +88,7 @@ scPagwas_main <- function(Pagwas = NULL,
    message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
-  #if(class(Single_data)=="character"){
+  if(Single_data!=NULL){
   if(grepl(".rds",Single_data)){
     message("** Start to read the single cell data!")
     Single_data=readRDS(Single_data)
@@ -109,7 +109,7 @@ scPagwas_main <- function(Pagwas = NULL,
 
   #message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
-
+  }
   #3.calculated pca score
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Pathway_pcascore_run function start!! ********',sep = ''))
 
