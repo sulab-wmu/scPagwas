@@ -218,6 +218,10 @@ link_scCell_pwpca_block <- function(Pagwas,
     }
   })
   #rm(data_mat)
+  paths<-paths[!unlist(lapply(pathway_expr,is.null))]
+  #pa_exp_mat<-pa_exp_mat[,paths]
+  Pathway_sclm_results<-Pathway_sclm_results[,paths]
+  pathway_expr<-pathway_expr[!unlist(lapply(pathway_expr,is.null))]
   pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 
   #if(ncells>bignumber){
