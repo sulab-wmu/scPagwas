@@ -88,7 +88,7 @@ scPagwas_main <- function(Pagwas = NULL,
    message(paste(utils::timestamp(quiet = T), ' ******* 1st: Single_data_input function start! ********',sep = ''))
 
   #suppressMessages(require(SeuratObject))
-  if(Single_data!=NULL){
+  if(!is.null(Single_data)){
   if(grepl(".rds",Single_data)){
     message("** Start to read the single cell data!")
     Single_data=readRDS(Single_data)
