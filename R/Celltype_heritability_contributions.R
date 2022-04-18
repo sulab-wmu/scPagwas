@@ -91,6 +91,7 @@ link_pwpca_block <- function(Pagwas) {
     }
 
     if (pa_block$n_snps > 1) {
+
       x2 <- x2[pa_block$snps$label, ]
       pa_block$n_snps <- nrow(pa_block$snps)
 

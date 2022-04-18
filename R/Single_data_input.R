@@ -59,7 +59,7 @@ Single_data_input <- function(Pagwas,
   #message(4)
   #5.VariableFeatures
   if (!is.null(nfeatures)) {
-    if (nfeatures < nrow(Pagwas$data_mat)) {
+    if (nfeatures < nrow(Single_data)) {
       Single_data <- Seurat::FindVariableFeatures(Single_data,
                                                     assay =assay,
                                                     selection.method = "vst",
@@ -67,7 +67,7 @@ Single_data_input <- function(Pagwas,
                                                     )
       Pagwas$VariableFeatures <- Seurat::VariableFeatures(Single_data)
       # Single_data <- Single_data[,]
-    } else if (nfeatures == nrow(Pagwas$data_mat)) {
+    } else if (nfeatures == nrow(Single_data)) {
       Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
     } else {
       stop("Error: nfeatures is too big")

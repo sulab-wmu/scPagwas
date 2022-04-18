@@ -15,31 +15,21 @@ Singlecell_heritability_contributions<-function(Pagwas,
                                               n.cores=1,
                                               part = 0.5,
                                               remove_outlier=TRUE,
-                                              SimpleResult=TRUE
+                                              SimpleResult=F
                                               ){
   message("** link single cell and gwas snp and Get scPagwas_score!")
-
-  Pagwas$scPagwas_score  <- link_scCell_pwpca_block(Pagwas,
-                                                  n.cores = n.cores,
-                                                  remove_outlier=TRUE)
+  Pagwas  <- link_scCell_pwpca_block(Pagwas,
+                                     n.cores = n.cores,
+                                     remove_outlier=TRUE)
   message("done")
 
-  #message("** Get scPagwas_score!")
-  #Pagwas$scPagwas_score <- scPagwas_perform_score(Pagwas=Pagwas,
-  #                                                Pathway_ld_gwas_data=Pathway_ld_gwas_data,
-  #                                                n.cores=n.cores,
-  #                                                remove_outlier=remove_outlier,
-  #                                                bignumber=bignumber)
-  #message("done")
   message("** Get gene heritability contributions!")
-  Pagwas<-scGet_gene_heritability_correlation(Pagwas=Pagwas)
+  Pagwas <- scGet_gene_heritability_correlation(Pagwas=Pagwas)
   message("done")
-  # add on heritability values
- # if(SCregression){
-  #  Pagwas<-scPagwas_perform_regression(Pagwas,
-  #                              Pathway_ld_gwas_data=Pathway_ld_gwas_data,
-  #                              n.cores = 1)
-  #}
+
+  message("** Get Pathway heritability contributions!")
+  #Pagwas <- scGet_Pathway_heritability_correlation(Pagwas=Pagwas)
+
   if(SimpleResult){
     Pagwas[c("VariableFeatures","merge_scexpr","data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
   }
@@ -198,7 +188,9 @@ link_scCell_pwpca_block <- function(Pagwas,
   #if(ncells>bignumber){
   #  Pathway_sclm_results <- bigmemory::as.big.matrix(Pathway_sclm_results,shared = FALSE)
   #}else{
-    Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
+  Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
+  Pagwas$Pathway_sclm_results<-Pathway_sclm_results
+  colnames(Pagwas$Pathway_sclm_results)<-paths
  # }
 
   message("* Get pathways mean expression in single cell")
@@ -252,12 +244,9 @@ link_scCell_pwpca_block <- function(Pagwas,
     scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
   }
   names(scPagwas_score)<-df$cellid
+  Pagwas$scPagwas_score<-scPagwas_score
 
-##########################################
-
-  #Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-  #gc()
-  return(scPagwas_score)
+  return(Pagwas)
 }
 
 #' scPagwas_perform_score
@@ -496,7 +485,6 @@ scGet_gene_heritability_correlation <- function(Pagwas){
 
 
 
-
 #' scPagwas_perform_regression
 #' @description Functions for inferring relevant annotations using the polyTest model.
 #' @param Pagwas Pagwas data list, default is "NULL"
@@ -529,11 +517,7 @@ scPagwas_perform_regression <- function(Pagwas,
   names(Pagwas$sclm_results)<-colnames(vectorized_Pagwas_data[[2]])
   rm(vectorized_Pagwas_data)
 
-  Pagwas$scPathway_heritability_contributions <-
-    scGet_Pathway_heritability_contributions(
-      Pagwas$pca_scCell_mat[],
-      Pagwas$sclm_results
-    )
+
   if (iters > 0) {
     Pagwas <- scBoot_evaluate(Pagwas,
                             Pathway_ld_gwas_data=Pathway_ld_gwas_data,
@@ -603,7 +587,7 @@ scBoot_evaluate <- function(Pagwas,
 #'
 #' @return
 
-scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, parameters) {
+scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, Pathway_sclm_results) {
   if (any(is.na(parameters))) {
     warning("NA pameters found!")
     parameters[is.na(parameters)] <- 0

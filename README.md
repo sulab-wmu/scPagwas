@@ -43,6 +43,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
+
  
 ```
 

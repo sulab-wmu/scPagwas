@@ -123,3 +123,39 @@ object.size(data)
 Objects()
 删除当前环境中的变量：
 Remove(Objects())
+
+```{r realexample, eval = FALSE}
+ library(scPagwas)
+ suppressMessages(library(Seurat))
+ suppressMessages(library("dplyr"))
+ data(Genes_by_pathway_kegg)
+ #gene annotation files.
+ data(block_annotation)
+ #LD data
+ data(chrom_ld)
+ ##############真实例子：
+  Pagwas<-scPagwas_main(Pagwas = NULL,
+                     gwas_data ="E:/OneDrive/GWAS_Multiomics/ad_test/ad_Pagwas_gwas.txt",
+                     add_eqtls="OnlyTSS",
+                     block_annotation = block_annotation,
+                     assay="RNA",
+                     Single_data = "E:/OneDrive/GWAS_Multiomics/ad_test/AD_final.rds",
+                     nfeatures =2000,
+                     Pathway_list=Genes_by_pathway_kegg,
+                     chrom_ld = chrom_ld)
+  
+  #######################分步骤查看结果
+  Pagwas<-Celltype_heritability_contributions(Pagwas,iters = 200)
+
+  
+ Bootstrap_P_Barplot(Pagwas=Pagwas,
+                    figurenames = NULL,
+                    width = 5,
+                    height = 7,
+                    do_plot=T,
+                    title = "AD scPagwas")
+Pagwas<-Singlecell_heritability_contributions(Pagwas,
+                                              n.cores=1,
+                                              part = 0.5,
+                                              SimpleResult=F)
+```

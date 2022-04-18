@@ -122,7 +122,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   colnames(Pagwas$merge_scexpr)<-colnames(pca_cell_df)
 
-  Pagwas$VariableFeatures<-rownames(Pagwas$data_mat)
+  Pagwas$VariableFeatures<-intersect(rownames(Pagwas$data_mat),Pagwas$VariableFeatures)
   #Pagwas$Single_data<-NULL
 
   Pagwas$pca_cell_df<-pca_cell_df

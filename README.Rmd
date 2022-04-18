@@ -41,7 +41,6 @@ devtools::install_github("dengchunyu/scPagwas")
 ```{r message=FALSE,results = "hide",warning = FALSE}
  library(scPagwas)
  suppressMessages(library(Seurat))
- suppressWarnings(library(SOAR))
  suppressMessages(library("dplyr"))
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
@@ -60,7 +59,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld)
- 
+
 ```
  
 ### 2.Get the heritability_contributions for Cell types   
@@ -133,7 +132,8 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 
 Pagwas<-Singlecell_heritability_contributions(Pagwas,
                                               n.cores=1,
-                                              part = 0.5)
+                                              part = 0.5,
+                                              SimpleResult=F)
 
 ```
 
@@ -192,6 +192,100 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               do_plot = T)
+```
+
+##### Plot the dotplot of the pathway for celltypes 
+
+```{r plot_sc_pa_contri_dot,message=FALSE,warning = FALSE}
+
+library(ggplot2)
+library(grDevices)
+library(stats)
+library(FactoMineR)
+library(scales)
+library(reshape2)
+library(ggdendro)
+library(grImport2)
+library(gridExtra)
+library(grid)
+library(sisal)
+load("E:/OneDrive/GWAS_Multiomics/dox/FlexDotPlot-master/FlexDotPlot-master/data/PBMC3K_example_data.rda")
+
+Pagwas$pca_scCell_mat<- apply(Pagwas$pca_scCell_mat,2, function(x) (x - min(x)) / (max(x) - min(x)))
+
+pca_scCell_mat<-Pagwas$pca_scCell_mat[colnames(Pagwas$Pathway_sclm_results),]
+
+Pagwas$Pathway_sclm_mat<-Pagwas$Pathway_sclm_results * t(pca_scCell_mat)
+
+rownames(Pagwas$Pathway_sclm_mat)<-colnames(Pagwas$pca_scCell_mat)
+Pagwas$Celltype_anno$annotation<-as.factor(Pagwas$Celltype_anno$annotation)
+
+celltype_pathway_scproportion<-tapply(Pagwas$Celltype_anno$cellnames,Pagwas$Celltype_anno$annotation,function(x){
+  colMeans(Pagwas$Pathway_sclm_mat[x,])
+})
+
+celltype_pathway_scproportion<-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),celltype_pathway_scproportion)
+
+celltype_pathway_scproportion<-as.data.frame(apply(celltype_pathway_scproportion,2, function(x) (x - min(x)) / (max(x) - min(x))))
+
+rownames(celltype_pathway_scproportion)<-levels(Pagwas$Celltype_anno$annotation)
+
+Pathway_sclm_mat<-t(as(Pagwas$Pathway_sclm_mat,"matrix"))
+
+
+ls_scCell<-CreateSeuratObject(
+  Pathway_sclm_mat,
+  project = "CreateSeuratObject",
+  assay = "RNA",
+  names.field = 1,
+  names.delim = "_",
+  meta.data = Pagwas$Celltype_anno
+)
+
+Idents(ls_scCell)<-Pagwas$Celltype_anno$annotation
+ls_scCell_markerpa <- FindAllMarkers(object = ls_scCell)
+
+pa_cellytpes<-lapply(unique(ls_scCell_markerpa$cluster),function(x){
+  ls_scCell_markerpa[ls_scCell_markerpa$cluster==x,"gene"][1:3]
+})
+
+pca_scCell<-CreateSeuratObject(
+  pca_scCell_mat,
+  project = "CreateSeuratObject",
+  assay = "RNA",
+  names.field = 1,
+  names.delim = "_",
+  meta.data = Pagwas$Celltype_anno
+)
+
+Idents(pca_scCell)<-Pagwas$Celltype_anno$annotation
+pca_scCell <- FindVariableFeatures(object = pca_scCell,nfeatures = dim(pca_scCell)[1]*0.1)
+pca_scCell_markerpa <- FindAllMarkers(object = pca_scCell,min.pct = 0,logfc.threshold = 0,return.thresh = 0.1)
+
+#pas<-VariableFeatures(object = pca_scCell)
+pas<-VariableFeatures(object = pca_scCell)
+#pas<-VariableFeatures(object = pca_scCell)
+
+a1<-celltype_pathway_scproportion[,pas]
+a2<-as.data.frame(t(Pagwas$pca_cell_df))[,pas]
+
+a1$celltype<-rownames(a1)
+a2$celltype<-rownames(a2)
+
+gg_pa<-reshape2::melt(a1,id.vars="celltype",variable.name = "pathway",value.name = "heritability_proporion")
+
+gg_pa2<-reshape2::melt(a2,id.vars="celltype",variable.name = "pathway",value.name = "pca")
+gg_pa<-merge(gg_pa,gg_pa2)
+gg_pa<-gg_pa[,c("pathway","celltype","heritability_proporion","pca")]
+plot_sc_pa_contri_dot(data.to.plot = gg_pa, 
+         size_var = "heritability_proporion", 
+         col_var="heritability_proporion",
+         shape.scale = 8,
+         dend_x_var = c("heritability_proporion"),
+         dist_method="euclidean", 
+         hclust_method="ward.D"
+         )
+
 ```
 
 ##### Plot the top5 heritability correlation genes in celltypes
