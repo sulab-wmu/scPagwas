@@ -1,9 +1,9 @@
 
-library(gtools)
-library(verification)
-library(doParallel)
-library(foreach)
-library(magrittr)
+#library(gtools)
+#library(verification)
+#library(doParallel)
+#library(foreach)
+#library(magrittr)
 
 scPagwas_celltype_enrichment<- function(Pagwas){
 
