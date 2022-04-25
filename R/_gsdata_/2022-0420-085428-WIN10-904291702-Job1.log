@@ -1,0 +1,4 @@
+2022-04-20 08:54:29: -- Analysis Started by On File Change First Full Analyze Upon Folder Connect
+2022-04-20 08:54:30: R: On disk sftp://172.16.253.32 space required for sync is 0.00, free space is unknown
+2022-04-20 08:54:30: Changes: 0, Conflicts: 0, CopyTime: 0, FixState: 0, Errors: 0, All: 23
+2022-04-20 08:54:30: -- Analysis Complete. Time 00:00:01, Speed: 18 files/s

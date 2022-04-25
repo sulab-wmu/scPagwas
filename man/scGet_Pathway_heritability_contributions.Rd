@@ -4,7 +4,7 @@
 \alias{scGet_Pathway_heritability_contributions}
 \title{scGet_Pathway_heritability_contributions}
 \usage{
-scGet_Pathway_heritability_contributions(pca_scCell_mat, parameters)
+scGet_Pathway_heritability_contributions(pca_scCell_mat, Pathway_sclm_results)
 }
 \arguments{
 \item{pca_scCell_mat}{pca score matrix}

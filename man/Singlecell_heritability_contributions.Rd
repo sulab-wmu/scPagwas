@@ -7,15 +7,18 @@
 Singlecell_heritability_contributions(
   Pagwas,
   n.cores = 1,
+  split_n = 1,
   part = 0.5,
   remove_outlier = TRUE,
-  SimpleResult = TRUE
+  SimpleResult = F
 )
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+
+\item{split_n}{number of times to compute the singlecell result}
 
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
 

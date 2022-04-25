@@ -1,0 +1,8 @@
+2022-04-25 15:21:02: -- Analysis Started by On File Change, After Delay
+2022-04-25 15:21:02: R: On disk sftp://172.16.253.32 space required for sync is 0.00, free space is unknown
+2022-04-25 15:21:02: Changes: 1, Conflicts: 0, CopyTime: 0, FixState: 0, Errors: 0, All: 24
+2022-04-25 15:21:02: Left to Right: Copy File: 1 
+2022-04-25 15:21:02: == Sync Started by On File Change, After Delay
+2022-04-25 15:21:02: Start only 1 threads, limited by tasks to run
+2022-04-25 15:21:02: Copy Over 'E:/RPakage/scPagwas/R/scPagwas_score_celltypes_enrichment.r' -> 'sftp://172.16.253.32/share/pub/dengcy/GWAS_Multiomics/pagwas/R3.25/scPagwas_score_celltypes_enrichment.r' (13,932)
+2022-04-25 15:21:02: == Sync Complete. Time: 00:00:03, Speed: 4.64 KB/s, OK: 1, Errors: 0

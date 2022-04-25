@@ -132,6 +132,7 @@ as the parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt f
 
 Pagwas<-Singlecell_heritability_contributions(Pagwas,
                                               n.cores=1,
+                                              split_n=1,
                                               part = 0.5,
                                               SimpleResult=F)
 
@@ -166,7 +167,7 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
-```{r bar_positie_nagtive,message=FALSE,,warning = FALSE,fig.height=6, fig.width=6}
+```{r bar_positie_nagtive,message=FALSE,warning = FALSE,fig.height=6, fig.width=6}
 library("RColorBrewer")
 library("ggplot2")
 

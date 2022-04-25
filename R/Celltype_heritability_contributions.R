@@ -50,6 +50,7 @@ return(Pagwas)
 #' @param Pagwas Pagwas format, deault is NULL.
 #'
 #' @return
+#' @export
 #' @examples
 #' library(scPagwas)
 #' # Pagwas should have inhibit data

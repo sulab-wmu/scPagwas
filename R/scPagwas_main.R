@@ -42,6 +42,7 @@
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
+#' @param param.file (logical)whether save parameters used for scPagwas.
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
@@ -66,12 +67,13 @@
 #'
 scPagwas_main <- function(Pagwas = NULL,
                         gwas_data = NULL,
-                        add_eqtls="OnlyTSS",
+                        output.prefix,
+                        add_eqtls=c("OnlyTSS","OnlyEqtls","Both"),
                         eqtls_files=NULL,
                         eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta"),
                         block_annotation = NULL,
                         Single_data = NULL,
-                        assay="RNA",
+                        assay=c("RNA","SCT"),
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
@@ -80,7 +82,46 @@ scPagwas_main <- function(Pagwas = NULL,
                         min_clustercells=10,
                         min.pathway.size=5,
                         max.pathway.size=300,
+                        param.file=T,
+                        runlog='scPagwas.run.log',
                         n.cores=1) {
+  #######
+  ## initialize log-file
+  cat('##', format(Sys.time()), '\n', file=log.file)
+
+  ## miximal file path lenght;
+  ## Windows OS support max. 259 characters
+  max.nchar.file.path <- 259
+
+  ## arguments
+  add_eqtls <- match.arg( add_eqtls)
+  assay <- match.arg(assay)
+
+  if(param.file){
+    ## save parameters used for ssGSEA
+    param.str = c(
+      paste('##', Sys.time()),
+      paste('input gwas data:', gwas_data, sep='\t'),
+      paste('add_eqtls:', gene.set.databases, sep='\t'),
+      paste('eqtls_files:', sample.norm.type, sep='\t'),
+      paste('eqtls_cols:', weight, sep='\t'),
+      paste('block_annotation:', statistic, sep='\t'),
+      paste('Single_data', output.score.type, sep='\t'),
+      paste('assay:', nperm, sep='\t'),
+      paste('nfeatures:', global.fdr, sep='\t'),
+      paste('Pathway_list:', min.overlap, sep='\t'),
+      paste('chrom_ld:', correl.type, sep='\t'),
+      paste('marg:', export.signat.gct, sep='\t'),
+      paste('maf_filter:', par, sep='\t'),
+      paste('min_clustercells:', par, sep='\t'),
+      paste('min.pathway.size:', par, sep='\t'),
+      paste('max.pathway.size:', par, sep='\t'),
+      paste('n.cores:', par, sep='\t')
+    )
+    writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
+  }
+
+  tt <- Sys.time()
   if (is.null(Pagwas)) {
   Pagwas <- list();
   class(Pagwas) <- 'Pagwas'
@@ -110,10 +151,14 @@ scPagwas_main <- function(Pagwas = NULL,
   #message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
   }
+
+  cat('Single_data import: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
+
   #3.calculated pca score
   message(paste(utils::timestamp(quiet = T), ' ******* 2nd: Pathway_pcascore_run function start!! ********',sep = ''))
 
-
+  tt <- Sys.time()
   if (!is.null(Pathway_list)){
 
 
@@ -125,10 +170,13 @@ scPagwas_main <- function(Pagwas = NULL,
 
    }
    message('done!')
+   cat('Pathway_pcascore_run: ',  file=log.file, append=T)
+   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
 
    message(paste(utils::timestamp(quiet = T), ' ******* 3rd: GWAS_summary_input function start! ********',sep = ''))
 
+   tt <- Sys.time()
    if(class(gwas_data)=="character"){
      message("** Start to read the gwas_data!")
 
@@ -143,10 +191,13 @@ scPagwas_main <- function(Pagwas = NULL,
                                   maf_filter=maf_filter)
    rm(gwas_data)
    message('done!')
+   cat('GWAS_summary_input: ',  file=log.file, append=T)
+   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
    #4.calculated Snp2Gene
   message(paste(utils::timestamp(quiet = T), ' ******* 4th: Snp2Gene start!! ********',sep = ''))
 
+  tt <- Sys.time()
   if(!is.null(block_annotation)){
 
     if(add_eqtls!="OnlyTSS"){
@@ -172,9 +223,13 @@ scPagwas_main <- function(Pagwas = NULL,
        Pagwas$snp_gene_df<-snp_gene_df[snp_gene_df$Disstance=="0",]
     }
   }
+  cat('Snp2Gene: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
+
   #3.pathway block data
   message(paste(utils::timestamp(quiet = T), ' ******* 5th: Pathway_annotation_input function start! ********',sep = ''))
 
+  tt <- Sys.time()
   if (!is.null(block_annotation)){
     Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,
                                        block_annotation=block_annotation,
@@ -182,11 +237,14 @@ scPagwas_main <- function(Pagwas = NULL,
   }
 
   message('done!')
+  cat('Pathway_annotation_input: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
   #4.ld data folder,which is preprogress
 
   message(paste(utils::timestamp(quiet = T), ' ******* 6th: Link_pathway_blocks_gwas function start! ********',sep = ''))
 
+  tt <- Sys.time()
   if (!is.null(chrom_ld)){
 
     Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
@@ -195,6 +253,9 @@ scPagwas_main <- function(Pagwas = NULL,
 
    message('done!')
   }
+  cat('Link_pathway_blocks_gwas: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
+
 
   gc()
   return(Pagwas)

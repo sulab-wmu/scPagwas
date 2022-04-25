@@ -3,6 +3,7 @@
 #'
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param part number of bootstrap iterations to perform,default is 0.5
+#' @param split_n number of times to compute the singlecell result
 #' @param remove_outlier
 #' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #' @param SimpleResult TRUE
@@ -13,6 +14,7 @@
 
 Singlecell_heritability_contributions<-function(Pagwas,
                                               n.cores=1,
+                                              split_n=1,
                                               part = 0.5,
                                               remove_outlier=TRUE,
                                               SimpleResult=F
@@ -20,6 +22,7 @@ Singlecell_heritability_contributions<-function(Pagwas,
   message("** link single cell and gwas snp and Get scPagwas_score!")
   Pagwas  <- link_scCell_pwpca_block(Pagwas,
                                      n.cores = n.cores,
+                                     split_n=split_n,
                                      remove_outlier=TRUE)
   message("done")
 
@@ -44,6 +47,7 @@ Singlecell_heritability_contributions<-function(Pagwas,
 #' @param n.cores Parallel cores,default is 1. use detectCores() to
 #' check the cores in computer.
 #' @param remove_outlier Whether to remove the outlier for scPagwas score.
+#' @param split_n number of times to compute the singlecell result
 #' @return
 #' @export
 #'
@@ -52,10 +56,8 @@ Singlecell_heritability_contributions<-function(Pagwas,
 
 link_scCell_pwpca_block <- function(Pagwas,
                                     n.cores = 1,
-                                    remove_outlier=T) {
-  #options(bigmemory.allow.dimnames=TRUE)
-  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-
+                                    remove_outlier=T,
+                                    split_n=1) {
   if (is.null(Pagwas$Pathway_ld_gwas_data)) {
     message("* no loaded Pathway_ld_gwas data")
     return(Pagwas)
@@ -66,17 +68,119 @@ link_scCell_pwpca_block <- function(Pagwas,
   }
 
   message("* Merging pathway score and expression information about blocks in ", length(Pagwas$Pathway_ld_gwas_data), " pathways")
+
+  #if(class(split_n)!=numeric){warning("split_n is not a numeric class!")}
+  if(!is.null(split_n) & split_n>1 & class(split_n)== "numeric"){
+
+    a<-ncol(Pagwas$pca_scCell_mat)
+
+    la<-gl(split_n,a/split_n,length=a)
+    Pathway_sclm_results <- tapply(1:a, la, function(i){
+      Pathway_sclm_result <- get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
+                                              pca_scCell_mat=Pagwas$pca_scCell_mat[,i],
+                                              data_mat=Pagwas$data_mat[,i],
+                                              rawPathway_list=Pagwas$rawPathway_list,
+                                              snp_gene_df=Pagwas$snp_gene_df,
+                                              n.cores=n.cores )
+
+      return(Pathway_sclm_result)
+      })
+    Pathway_sclm_results <-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),Pathway_sclm_results)
+
+    }else{
+      Pathway_sclm_results<-get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
+                       pca_scCell_mat=Pagwas$pca_scCell_mat,
+                       data_mat=Pagwas$data_mat,
+                       rawPathway_list=Pagwas$rawPathway_list,
+                       snp_gene_df=Pagwas$snp_gene_df)
+
+  }
+
+  ###############################################
+
+  paths <- colnames(Pathway_sclm_results)
+  ncells<- nrow(Pathway_sclm_results)
+
+  Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
+  Pagwas$Pathway_sclm_results<-Pathway_sclm_results
+  #colnames(Pagwas$Pathway_sclm_results)<-paths
+
+  message("* Get pathways mean expression in single cell")
+
+  pathway_expr <- lapply(paths, function(pa) {
+    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
+
+    if (length(a) == 0) {
+      #return(rep(0, ncol(Pagwas$data_mat)))
+      return(NULL)
+    } else if (length(a) == 1) {
+      #return(Pagwas$data_mat[a, ])
+      return(NULL)
+    } else {
+      b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
+      return(b)
+    }
+  })
+  #rm(data_mat)
+  paths<-paths[!unlist(lapply(pathway_expr,is.null))]
+  #pa_exp_mat<-pa_exp_mat[,paths]
+  Pathway_sclm_results<-Pathway_sclm_results[,paths]
+  pathway_expr<-pathway_expr[!unlist(lapply(pathway_expr,is.null))]
+  pathway_expr <- data.matrix(as.data.frame(pathway_expr))
+
+   pathway_expr<-as(pathway_expr,"dgCMatrix")
+  colnames(pathway_expr) <- paths
+  pa_exp_mat <-t(Pagwas$pca_scCell_mat[paths, ]) * pathway_expr
+  rm(pathway_expr)
+
+  pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
+  message("* Get scPgwas score for each single cell")
+  scs <- rowSums(Pathway_sclm_results * pa_exp_mat)
+
+  rm(pa_exp_mat)
+
+  df <- data.frame(cellid = colnames(Pagwas$pca_scCell_mat), scPagwas_score = sign(scs) * log10(abs(scs) + 0.0001))
+  rownames(df) <- df$cellid
+  #rm(pca_scCell_mat)
+  gc()
+  if (remove_outlier) {
+    scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
+  }
+  names(scPagwas_score)<-df$cellid
+  Pagwas$scPagwas_score<-scPagwas_score
+
+  return(Pagwas)
+}
+
+
+
+#' get_Pathway_sclm
+#'
+#' @param Pathway_ld_gwas_data Element in Pagwas
+#' @param pca_scCell_mat Element in Pagwas
+#' @param data_mat Element in Pagwas
+#' @param rawPathway_list Element in Pagwas
+#' @param snp_gene_df Element in Pagwas
+#' @param split_n number of times to compute the singlecell result
+#' @param n.cores n.cores
+#'
+#' @return
+#'
+#' @examples
+get_Pathway_sclm<-function(Pathway_ld_gwas_data,pca_scCell_mat,
+                           data_mat,rawPathway_list,
+                           snp_gene_df,
+                           n.cores=1 ){
   pb <- txtProgressBar(style = 3)
 
-  paths<-names(Pagwas$Pathway_ld_gwas_data)
-  Pathway_sclm_results <- papply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
+  paths<-names(Pathway_ld_gwas_data)
+
+  Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(pa_block) {
 
     pathway <- unique(pa_block$block_info$pathway)
-    #message(pathway)
-    x <- matrix(Pagwas$pca_scCell_mat[pathway, ],nrow = 1)
+    x <- matrix(pca_scCell_mat[pathway, ],nrow = 1)
     rownames(x)<-pathway
-    #message(1)
-    #}
+
 
     if (pa_block$n_snps == 0) {
       pa_block$include_in_inference <- F
@@ -84,41 +188,33 @@ link_scCell_pwpca_block <- function(Pagwas,
       return(pa_block)
     }
 
-    mg <- intersect(Pagwas$rawPathway_list[[pathway]],rownames(Pagwas$data_mat))
+    mg <- intersect(rawPathway_list[[pathway]],rownames(data_mat))
     if (length(mg) == 1) {
-      x2<-matrix(Pagwas$data_mat[mg, ],nrow=1)
+      x2<-matrix(data_mat[mg, ],nrow=1)
       x2<- x2/(x2+0.0001)
       rownames(x2)<-mg
     }else{
-      x2 <-  biganalytics::apply(Pagwas$data_mat[mg, ],2,function(ge){
-          if (sum(ge) == 0) {
-            return(rep(0,length(ge)))
-          }else{
-            return(ge / sum(ge))
-          }
+      x2 <-  biganalytics::apply(data_mat[mg, ],2,function(ge){
+        if (sum(ge) == 0) {
+          return(rep(0,length(ge)))
+        }else{
+          return(ge / sum(ge))
+        }
       })
-     rownames(x2)<-mg
+      rownames(x2)<-mg
     }
-    #message(2)
-    #if(ncol(x2)>10000){
-      x2 <- as(x2,"dgCMatrix")
-      #message(3)
-    #}
+
+    x2 <- as(x2,"dgCMatrix")
+
     if (pa_block$n_snps > 1) {
       x2 <-x2[pa_block$snps$label, ]
       pa_block$n_snps <- nrow(pa_block$snps)
 
       x <- x[rep(1, pa_block$n_snps), ]
       rownames(x) <- pa_block$snps$rsid
-      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
-      #message(4)
-      x <- x * Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]
-      #if(ncol(x2)>10000){
-      #x <- as(x,"dgCMatrix")
-      #}
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x2 <- x2 * x
-      #message(5)
-      #x3 <- bigstatsr::as_FBM(x3)
     } else {
       x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
       rownames(x2) <- pa_block$snps$label
@@ -127,25 +223,14 @@ link_scCell_pwpca_block <- function(Pagwas,
       x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
       rownames(x) <- pa_block$snps$rsid
 
-      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
-      x <- matrix(as.numeric(x) * as.numeric(Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
       x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
-      #if(ncol(x2)>10000){
       x2 <- as(x2,"dgCMatrix")
-      #}
     }
-    #rm(x)
-    #rm(x2)
-    #message(6)
-    #if(ncol(x2)>bignumber){
     pa_block$x<- as(pa_block$ld_matrix_squared %*% x2,"dgCMatrix")
-    #}else{
-    #pa_block$x<- pa_block$ld_matrix_squared %*% x2
 
-   # }
-    #message(7)
     pa_block$include_in_inference <- T
-    #Pathway_block <- Pathway_ld_gwas_data[[Pathway]]
     noise_per_snp <- pa_block$snps$se**2
 
     if (!is.null(pa_block$x)) {
@@ -178,75 +263,11 @@ link_scCell_pwpca_block <- function(Pagwas,
   }, n.cores = n.cores)
   close(pb)
 
-###############################################
-
   names(Pathway_sclm_results) <- paths
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
-  paths <- names(Pathway_sclm_results)
   Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
-  ncells<- nrow(Pathway_sclm_results)
-  #if(ncells>bignumber){
-  #  Pathway_sclm_results <- bigmemory::as.big.matrix(Pathway_sclm_results,shared = FALSE)
-  #}else{
-  Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
-  Pagwas$Pathway_sclm_results<-Pathway_sclm_results
-  colnames(Pagwas$Pathway_sclm_results)<-paths
- # }
-
-  message("* Get pathways mean expression in single cell")
-
-  pathway_expr <- lapply(paths, function(pa) {
-    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
-
-    if (length(a) == 0) {
-      #return(rep(0, ncol(Pagwas$data_mat)))
-      return(NULL)
-    } else if (length(a) == 1) {
-      #return(Pagwas$data_mat[a, ])
-      return(NULL)
-    } else {
-      b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
-      return(b)
-    }
-  })
-  #rm(data_mat)
-  paths<-paths[!unlist(lapply(pathway_expr,is.null))]
-  #pa_exp_mat<-pa_exp_mat[,paths]
-  Pathway_sclm_results<-Pathway_sclm_results[,paths]
-  pathway_expr<-pathway_expr[!unlist(lapply(pathway_expr,is.null))]
-  pathway_expr <- data.matrix(as.data.frame(pathway_expr))
-
-  #if(ncells>bignumber){
-  #  pathway_expr <- bigmemory::as.big.matrix(pathway_expr,shared = FALSE)
-  # colnames(pathway_expr) <- paths
-  # pa_exp_mat <-bigmemory::as.big.matrix(t(Pagwas$pca_scCell_mat[paths, ]) * pathway_expr[],shared = FALSE)
-  # rm(pathway_expr)
-  # message("* Get scPgwas score for each single cell")
-  # scs <- rowSums(Pathway_sclm_results[] * pa_exp_mat[])
-  #}else{
-  pathway_expr<-as(pathway_expr,"dgCMatrix")
-  colnames(pathway_expr) <- paths
-  pa_exp_mat <-t(Pagwas$pca_scCell_mat[paths, ]) * pathway_expr
-  rm(pathway_expr)
-
-  pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
-  message("* Get scPgwas score for each single cell")
-  scs <- rowSums(Pathway_sclm_results * pa_exp_mat)
-  #}
-
-  rm(pa_exp_mat)
-
-  df <- data.frame(cellid = colnames(Pagwas$pca_scCell_mat), scPagwas_score = sign(scs) * log10(abs(scs) + 0.0001))
-  rownames(df) <- df$cellid
-  #rm(pca_scCell_mat)
-  gc()
-  if (remove_outlier) {
-    scPagwas_score <- scPagwas_score_filter(scPagwas_score = df$scPagwas_score)
-  }
-  names(scPagwas_score)<-df$cellid
-  Pagwas$scPagwas_score<-scPagwas_score
-
-  return(Pagwas)
+  rownames(Pathway_sclm_results)<-colnames(pca_scCell_mat)
+return(Pathway_sclm_results)
 }
 
 #' scPagwas_perform_score
@@ -380,7 +401,7 @@ scPagwas_perform_score <- function(Pagwas,
 #' @param Pagwas_y y parameter for lm
 #' @param noise_per_snp noise
 #' @param n.cores 1
-#'
+#' @export
 #' @return
 
 scParameter_regression <- function(Pagwas_x,
@@ -461,6 +482,7 @@ scPagwas_score_filter <- function(scPagwas_score) {
 #' @param Pagwas result of scPagwas
 #'
 #' @return
+#' @export
 #' @examples
 #' Single_data<-readRDS("E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds")
 #' Pagwas$sparse_cor<-scGet_gene_heritability_contributions(
@@ -492,6 +514,7 @@ scGet_gene_heritability_correlation <- function(Pagwas){
 #' @param Pathway_ld_gwas_data Pathway_ld_gwas_data
 #' @return
 #'
+#' @export
 #' @examples
 #' library(scPagwas)
 #' scPagwas_perform_regression(Pagwas, n.cores = n.cores)
@@ -536,6 +559,7 @@ scPagwas_perform_regression <- function(Pagwas,
 #' @param bootstrap_iters number of bootstrap iterations to run
 #' @param n.cores cores
 #' @param part number of bootstrap iterations to perform,default is 0.5
+#'
 #'
 #' @return
 
@@ -585,6 +609,7 @@ scBoot_evaluate <- function(Pagwas,
 #' @param pca_scCell_mat pca score matrix
 #' @param parameters parameter fit
 #'
+#' @export
 #' @return
 
 scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, Pathway_sclm_results) {

@@ -4,7 +4,7 @@
 \alias{link_scCell_pwpca_block}
 \title{link_scCell_pwpca_block}
 \usage{
-link_scCell_pwpca_block(Pagwas, n.cores = 1, remove_outlier = T)
+link_scCell_pwpca_block(Pagwas, n.cores = 1, remove_outlier = T, split_n = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
@@ -13,6 +13,8 @@ link_scCell_pwpca_block(Pagwas, n.cores = 1, remove_outlier = T)
 check the cores in computer.}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.}
+
+\item{split_n}{number of times to compute the singlecell result}
 }
 \value{
 

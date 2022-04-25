@@ -135,7 +135,7 @@ Remove(Objects())
  data(chrom_ld)
  ##############真实例子：
   Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data ="E:/OneDrive/GWAS_Multiomics/ad_test/ad_Pagwas_gwas.txt",
+                     gwas_data ="E:/OneDrive/GWAS_Multiomics/ad_test/AD_prune_gwas_data.txt",
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      assay="RNA",
@@ -158,4 +158,113 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
                                               n.cores=1,
                                               part = 0.5,
                                               SimpleResult=F)
+################################
+library(ggplot2)
+library(grDevices)
+library(stats)
+library(FactoMineR)
+library(scales)
+library(reshape2)
+library(ggdendro)
+library(grImport2)
+library(gridExtra)
+library(grid)
+library(sisal)
+
+#load("E:/OneDrive/GWAS_Multiomics/dox/FlexDotPlot-master/FlexDotPlot-master/data/PBMC3K_example_data.rda")
+setwd("E:/OneDrive/GWAS_Multiomics/ad_test")
+load("pagwas_ad_test.RData")
+Pagwas<-pagwas
+rm(pagwas)
+Pagwas$pca_scCell_mat<- apply(Pagwas$pca_scCell_mat,1, function(x) (x - min(x)) / (max(x) - min(x)))
+
+pca_scCell_mat<-Pagwas$pca_scCell_mat[,colnames(Pagwas$Pathway_sclm_results)]
+
+Pagwas$Pathway_sclm_mat<-Pagwas$Pathway_sclm_results * pca_scCell_mat
+rownames(Pagwas$Pathway_sclm_mat)<-rownames(pca_scCell_mat)
+colnames(Pagwas$Pathway_sclm_mat)<-colnames(Pagwas$pca_scCell_mat)
+
+Pagwas$Celltype_anno$annotation<-as.factor(Pagwas$Celltype_anno$annotation)
+
+celltype_pathway_scproportion<-tapply(Pagwas$Celltype_anno$cellnames,Pagwas$Celltype_anno$annotation,function(x){
+  #x[1:3]
+  return(colMeans(Pagwas$Pathway_sclm_mat[x,]))
+})
+
+celltype_pathway_scproportion<-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),celltype_pathway_scproportion)
+
+#celltype_pathway_scproportion<-as.data.frame(apply(celltype_pathway_scproportion,2, function(x) (x - min(x)) / (max(x) - min(x))))
+
+rownames(celltype_pathway_scproportion)<-levels(Pagwas$Celltype_anno$annotation)
+
+Pathway_sclm_mat<-as(Pagwas$Pathway_sclm_mat,"matrix")
+
+
+ls_scCell<-CreateSeuratObject(
+  t(Pathway_sclm_mat),
+  project = "CreateSeuratObject",
+  assay = "RNA",
+  names.field = 1,
+  names.delim = "_",
+  meta.data = Pagwas$Celltype_anno
+)
+
+Idents(ls_scCell)<-Pagwas$Celltype_anno$annotation
+#ls_scCell_markerpa <- FindAllMarkers(object = ls_scCell)
+ls_scCell <- FindVariableFeatures(object = ls_scCell,nfeatures = dim(ls_scCell)[1]*0.1)
+
+#pa_cellytpes<-lapply(unique(ls_scCell_markerpa$cluster),function(x){
+#  ls_scCell_markerpa[ls_scCell_markerpa$cluster==x,"gene"][1:3]
+#})
+
+pca_scCell<-CreateSeuratObject(
+  t(pca_scCell_mat),
+  project = "CreateSeuratObject",
+  assay = "RNA",
+  names.field = 1,
+  names.delim = "_",
+  meta.data = Pagwas$Celltype_anno
+)
+
+Idents(pca_scCell)<-Pagwas$Celltype_anno$annotation
+pca_scCell <- FindVariableFeatures(object = pca_scCell,nfeatures = dim(pca_scCell)[1]*0.1)
+#pca_scCell_markerpa <- FindAllMarkers(object = pca_scCell,min.pct = 0,logfc.threshold = 0,return.thresh = 0.1)
+
+#pas<-VariableFeatures(object = pca_scCell)
+pas1<-VariableFeatures(object = pca_scCell)
+pas2<-VariableFeatures(object = ls_scCell)
+
+#pas<-VariableFeatures(object = pca_scCell)
+
+pas<-names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:35])
+a1<-as.data.frame(celltype_pathway_scproportion[,pas])
+a2<-as.data.frame(t(Pagwas$pca_cell_df))[,pas]
+
+a1$celltype<-rownames(a1)
+a2$celltype<-rownames(a2)
+
+gg_pa<-reshape2::melt(a1,id.vars="celltype",variable.name = "pathway",value.name = "heritability_proporion")
+
+gg_pa2<-reshape2::melt(a2,id.vars="celltype",variable.name = "pathway",value.name = "pca")
+gg_pa<-merge(gg_pa,gg_pa2)
+gg_pa<-gg_pa[,c("pathway","celltype","heritability_proporion","pca")]
+
+pdf("E:/OneDrive/GWAS_Multiomics/ad_test/AD_plot_sc_pathway.pdf",width = 13)
+plot_sc_pa_contri_dot(data.to.plot = gg_pa, 
+                      size_var = "pca", 
+                      col_var="heritability_proporion",
+                      shape.scale = 8,
+                      #cols.use="#E45826",
+                      dend_x_var = c("heritability_proporion"),
+                      dist_method="euclidean", 
+                      hclust_method="ward.D"
+)
+dev.off()
+lapply(names(sort(Pagwas$Pathway_block_heritability,decreasing = T))[c(32,33,35)],function(pa){
+  print(pa)
+  intersect(Genes_by_pathway_kegg[[pa]],c("CREB1","GSK3B"))
+
+})
+#intersect(Genes_by_pathway_kegg$hsa05322,c("CREB1","GSK3B"))
+
 ```
