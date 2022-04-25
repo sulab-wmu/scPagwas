@@ -28,6 +28,7 @@
 #'
 #' @param Pagwas (list)Pagwas data list, default is "NULL"
 #' @param gwas_data (data.frame)GWAS summary data
+#' @param output.prefix output.prefix,prefix used for output tables
 #' @param add_eqtls (character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;
 #' @param marg (integr)gene-TSS-window size
 #' @param eqtls_files (character)eqtls files names,frome GTEx.
@@ -43,6 +44,7 @@
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
 #' @param param.file (logical)whether save parameters used for scPagwas.
+#' @param log.file (character)log.file
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
@@ -83,7 +85,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         min.pathway.size=5,
                         max.pathway.size=300,
                         param.file=T,
-                        runlog='scPagwas.run.log',
+                        log.file='scPagwas.run.log',
                         n.cores=1) {
   #######
   ## initialize log-file
@@ -102,21 +104,21 @@ scPagwas_main <- function(Pagwas = NULL,
     param.str = c(
       paste('##', Sys.time()),
       paste('input gwas data:', gwas_data, sep='\t'),
-      paste('add_eqtls:', gene.set.databases, sep='\t'),
-      paste('eqtls_files:', sample.norm.type, sep='\t'),
-      paste('eqtls_cols:', weight, sep='\t'),
-      paste('block_annotation:', statistic, sep='\t'),
-      paste('Single_data', output.score.type, sep='\t'),
-      paste('assay:', nperm, sep='\t'),
-      paste('nfeatures:', global.fdr, sep='\t'),
-      paste('Pathway_list:', min.overlap, sep='\t'),
-      paste('chrom_ld:', correl.type, sep='\t'),
-      paste('marg:', export.signat.gct, sep='\t'),
-      paste('maf_filter:', par, sep='\t'),
-      paste('min_clustercells:', par, sep='\t'),
-      paste('min.pathway.size:', par, sep='\t'),
-      paste('max.pathway.size:', par, sep='\t'),
-      paste('n.cores:', par, sep='\t')
+      paste('add_eqtls:', add_eqtls, sep='\t'),
+      paste('eqtls_files:', eqtls_files, sep='\t'),
+      paste('eqtls_cols:', eqtls_cols, sep='\t'),
+      paste('block_annotation:', block_annotation, sep='\t'),
+      paste('Single_data', Single_data, sep='\t'),
+      paste('assay:', assay, sep='\t'),
+      paste('nfeatures:', nfeatures, sep='\t'),
+      paste('Pathway_list:', Pathway_list, sep='\t'),
+      paste('chrom_ld:', chrom_ld, sep='\t'),
+      paste('marg:', marg, sep='\t'),
+      paste('maf_filter:', maf_filter, sep='\t'),
+      paste('min_clustercells:', min_clustercells, sep='\t'),
+      paste('min.pathway.size:', min.pathway.size, sep='\t'),
+      paste('max.pathway.size:', max.pathway.size, sep='\t'),
+      paste('n.cores:', n.cores, sep='\t')
     )
     writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
   }

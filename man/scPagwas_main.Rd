@@ -7,13 +7,14 @@
 scPagwas_main(
   Pagwas = NULL,
   gwas_data = NULL,
-  add_eqtls = "OnlyTSS",
+  output.prefix,
+  add_eqtls = c("OnlyTSS", "OnlyEqtls", "Both"),
   eqtls_files = NULL,
   eqtls_cols = c("rs_id_dbSNP151_GRCh38p7", "variant_pos", "tss_distance", "gene_chr",
     "gene_start", "gene_end", "gene_name", "pval_beta"),
   block_annotation = NULL,
   Single_data = NULL,
-  assay = "RNA",
+  assay = c("RNA", "SCT"),
   nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
@@ -22,6 +23,8 @@ scPagwas_main(
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
+  param.file = T,
+  log.file = "scPagwas.run.log",
   n.cores = 1
 )
 }
@@ -29,6 +32,8 @@ scPagwas_main(
 \item{Pagwas}{(list)Pagwas data list, default is "NULL"}
 
 \item{gwas_data}{(data.frame)GWAS summary data}
+
+\item{output.prefix}{output.prefix,prefix used for output tables}
 
 \item{add_eqtls}{(character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;}
 
@@ -57,6 +62,10 @@ scPagwas_main(
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
+
+\item{param.file}{(logical)whether save parameters used for scPagwas.}
+
+\item{log.file}{(character)log.file}
 
 \item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
