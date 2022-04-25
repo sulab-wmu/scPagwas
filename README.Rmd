@@ -52,6 +52,7 @@ devtools::install_github("dengchunyu/scPagwas")
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     output.prefix="test",
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      assay="RNA",

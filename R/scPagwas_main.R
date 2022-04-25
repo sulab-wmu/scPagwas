@@ -96,29 +96,29 @@ scPagwas_main <- function(Pagwas = NULL,
   max.nchar.file.path <- 259
 
   ## arguments
-  add_eqtls <- match.arg( add_eqtls)
-  assay <- match.arg(assay)
+  #add_eqtls <- match.arg( add_eqtls)
+  #assay <- match.arg(assay)
 
   if(param.file){
     ## save parameters used for ssGSEA
     param.str = c(
       paste('##', Sys.time()),
-      paste('input gwas data:', gwas_data, sep='\t'),
-      paste('add_eqtls:', add_eqtls, sep='\t'),
-      paste('eqtls_files:', eqtls_files, sep='\t'),
-      paste('eqtls_cols:', eqtls_cols, sep='\t'),
-      paste('block_annotation:', block_annotation, sep='\t'),
-      paste('Single_data', Single_data, sep='\t'),
-      paste('assay:', assay, sep='\t'),
-      paste('nfeatures:', nfeatures, sep='\t'),
-      paste('Pathway_list:', Pathway_list, sep='\t'),
-      paste('chrom_ld:', chrom_ld, sep='\t'),
-      paste('marg:', marg, sep='\t'),
-      paste('maf_filter:', maf_filter, sep='\t'),
-      paste('min_clustercells:', min_clustercells, sep='\t'),
-      paste('min.pathway.size:', min.pathway.size, sep='\t'),
-      paste('max.pathway.size:', max.pathway.size, sep='\t'),
-      paste('n.cores:', n.cores, sep='\t')
+      paste('input gwas data: ', gwas_data, sep='\t'),
+      paste('add_eqtls: ', add_eqtls, sep='\t'),
+      paste('eqtls_files: ', eqtls_files, sep='\t'),
+      #paste('eqtls_cols:', eqtls_cols, sep='\t'),
+      #paste('block_annotation:', block_annotation, sep='\t'),
+      paste('Single_data: ', Single_data, sep='\t'),
+      paste('assay: ', assay, sep='\t'),
+      paste('nfeatures: ', nfeatures, sep='\t'),
+      paste('Pathway_list: ', names(Pathway_list),collapse = " ", sep='\t'),
+      #paste('chrom_ld:', chrom_ld, sep='\t'),
+      paste('marg: ', marg, sep='\t'),
+      paste('maf_filter: ', maf_filter, sep='\t'),
+      paste('min_clustercells: ', min_clustercells, sep='\t'),
+      paste('min.pathway.size: ', min.pathway.size, sep='\t'),
+      paste('max.pathway.size: ', max.pathway.size, sep='\t'),
+      paste('n.cores: ', n.cores, sep='\t')
     )
     writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
   }
