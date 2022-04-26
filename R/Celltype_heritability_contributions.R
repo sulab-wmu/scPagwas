@@ -432,3 +432,7 @@ cv_regularized_parameter_estimator <- function(vectorized_Pagwas_data,
   lm_results$model <- m
   return(lm_results)
 }
+
+
+
+

@@ -71,20 +71,17 @@ link_scCell_pwpca_block <- function(Pagwas,
 
   #if(class(split_n)!=numeric){warning("split_n is not a numeric class!")}
   if(!is.null(split_n) & split_n>1 & class(split_n)== "numeric"){
-
-    a<-ncol(Pagwas$pca_scCell_mat)
-
-    la<-gl(split_n,a/split_n,length=a)
-    Pathway_sclm_results <- tapply(1:a, la, function(i){
-      Pathway_sclm_result <- get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
-                                              pca_scCell_mat=Pagwas$pca_scCell_mat[,i],
-                                              data_mat=Pagwas$data_mat[,i],
+    Pathway_sclm_results<-list()
+    for(i in 1:split_n){
+      Pathway_sclm_results[[i]]<-get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
+                                              pca_scCell_mat=Pagwas$pca_scCell_mat[,which(la==i)],
+                                              data_mat=Pagwas$data_mat[,which(la==i)],
                                               rawPathway_list=Pagwas$rawPathway_list,
                                               snp_gene_df=Pagwas$snp_gene_df,
                                               n.cores=n.cores )
+        }
 
-      return(Pathway_sclm_result)
-      })
+
     Pathway_sclm_results <-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),Pathway_sclm_results)
 
     }else{
