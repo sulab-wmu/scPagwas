@@ -41,7 +41,7 @@ Singlecell_heritability_contributions<-function(Pagwas,
              "snp_gene_df","Pathway_ld_gwas_data")]<-NULL
   }
   return(Pagwas)
-}
+ }
 
 #' link_scCell_pwpca_block
 #' @description link the single cell pca score and expression for each
@@ -51,76 +51,31 @@ Singlecell_heritability_contributions<-function(Pagwas,
 #' @param n.cores Parallel cores,default is 1. use detectCores() to
 #' check the cores in computer.
 #' @param remove_outlier Whether to remove the outlier for scPagwas score.
-#' @param split_n number of times to compute the singlecell result
 #' @return
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
 
-link_scCell_pwpca_block <- function(Pagwas,
+Pathway_singlecell_rankp<- function(Pagwas,
                                     n.cores = 1,
-                                    remove_outlier=T,
-                                    split_n=1) {
-  if (is.null(Pagwas$Pathway_ld_gwas_data)) {
-    message("* no loaded Pathway_ld_gwas data")
-    return(Pagwas)
-  }
+                                    remove_outlier=T) {
+  #if (is.null(Pagwas$Pathway_ld_gwas_data)) {
+  #  message("* no loaded Pathway_ld_gwas data")
+  #  return(Pagwas)
+  #}
 
   if (dim(Pagwas$data_mat)[2] != dim(Pagwas$pca_scCell_mat)[2]) {
     stop("* please check the colnames of Singlecell data.There may have specific symbol")
   }
-
-  message("* Merging pathway score and expression information about blocks in ", length(Pagwas$Pathway_ld_gwas_data), " pathways")
-
-  #if(class(split_n)!=numeric){warning("split_n is not a numeric class!")}
-  if(!is.null(split_n) & split_n>1 & class(split_n)== "numeric"){
-
-    a<-ncol(Pagwas$pca_scCell_mat)
-
-    for (ai in 1:10) {
-      #print(ai)
-      if(a%%split_n==0) break;
-      split_n <- split_n+1
-    }
-
-    la<-gl(split_n,a/split_n,length=a)
-    Pathway_sclm_results<-list()
-    for(i in 1:split_n){
-      Pathway_sclm_results[[i]] <- get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
-                                                    pca_scCell_mat=Pagwas$pca_scCell_mat[,which(la==i)],
-                                                    data_mat=Pagwas$data_mat[,which(la==i)],
-                                                    rawPathway_list=Pagwas$rawPathway_list,
-                                                    snp_gene_df=Pagwas$snp_gene_df,
-                                                    n.cores=n.cores )
-    }
-
-
-    Pathway_sclm_results <-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),Pathway_sclm_results)
-
-  }else{
-    Pathway_sclm_results<-get_Pathway_sclm(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data,
-                                           pca_scCell_mat=Pagwas$pca_scCell_mat,
-                                           data_mat=Pagwas$data_mat,
-                                           rawPathway_list=Pagwas$rawPathway_list,
-                                           snp_gene_df=Pagwas$snp_gene_df)
-
-  }
-
-  ###############################################
-
-  paths <- colnames(Pathway_sclm_results)
-  ncells<- nrow(Pathway_sclm_results)
-
-  #Pathway_sclm_results<-
-  Pagwas$Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
-  #colnames(Pagwas$Pathway_sclm_results)<-paths
+  paths <- colnames(Pagwas$Pathway_sclm_results)
+  ncells<- nrow(Pagwas$Pathway_sclm_results)
 
   message("* Get pathways mean expression in single cell")
 
-  Pathway_sc_results <- Pathway_sclm_results * t(Pagwas$pca_scCell_mat[paths, ])
+  Pathway_sc_results <- Pagwas$Pathway_sclm_results * t(Pagwas$pca_scCell_mat[paths, ])
   rownames(Pathway_sc_results)<-colnames(Pagwas$pca_scCell_mat)
-
+  Pathway_sc_results<-data.matrix(Pathway_sc_results)
   message("* Get rankPvalue for each single cell")
   CellsrankPvalue<-rankPvalue(Pathway_sc_results, columnweights = NULL,
                               na.last = "keep", ties.method = "average",
@@ -139,7 +94,7 @@ link_scCell_pwpca_block <- function(Pagwas,
   #Pathways_rankPvalue <- as.data.frame(Pathways_rankPvalue)
   Pagwas$Pathways_rankPvalue <- Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),Pathways_rankPvalue)
   colnames(Pagwas$Pathways_rankPvalue)<-cl
-  rownames(Pagwas$Pathways_rankPvalue)<-colnames(Pathway_sclm_results)
+  rownames(Pagwas$Pathways_rankPvalue)<-colnames(Pagwas$Pathway_sclm_results)
 
   message("* Get scPgwas score for each single cell")
   scs <- rowSums(Pathway_sc_results)
@@ -186,20 +141,22 @@ link_scCell_pwpca_block <- function(Pagwas,
 #' @return
 #'
 #' @examples
-get_Pathway_sclm<-function(Pathway_ld_gwas_data,pca_scCell_mat,
-                           data_mat,rawPathway_list,
+get_Pathway_sclm<-function(pa_block,
+                           pca_scCell_mat,
+                           data_mat,
+                           rawPathway_list,
                            snp_gene_df,
                            n.cores=1 ){
-  pb <- txtProgressBar(style = 3)
+  #pb <- txtProgressBar(style = 3)
 
-  paths<-names(Pathway_ld_gwas_data)
+  #paths<-names(Pathway_ld_gwas_data)
 
-  Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(pa_block) {
-
+  #for (pa_block in Pathway_ld_gwas_data) {
+ # }
+  #Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(pa_block) {
     pathway <- unique(pa_block$block_info$pathway)
     x <- matrix(pca_scCell_mat[pathway, ],nrow = 1)
     rownames(x)<-pathway
-
 
     if (pa_block$n_snps == 0) {
       pa_block$include_in_inference <- F
@@ -276,17 +233,17 @@ get_Pathway_sclm<-function(Pathway_ld_gwas_data,pca_scCell_mat,
       results<-NULL
     }
 
-    setTxtProgressBar(pb, which(paths == pathway) / length(paths))
+    #setTxtProgressBar(pb, which(paths == pathway) / length(paths))
 
-    return(results)
-  }, n.cores = n.cores)
-  close(pb)
+    #return(results)
+  #}, n.cores = n.cores)
+  #close(pb)
 
-  names(Pathway_sclm_results) <- paths
-  Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
-  Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
-  rownames(Pathway_sclm_results)<-colnames(pca_scCell_mat)
-  return(Pathway_sclm_results)
+ # names(Pathway_sclm_results) <- paths
+ # Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
+ # Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
+ # rownames(Pathway_sclm_results)<-colnames(pca_scCell_mat)
+  return(results)
 }
 
 #' scPagwas_perform_score

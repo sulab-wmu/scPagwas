@@ -5,7 +5,7 @@
 \title{get_Pathway_sclm}
 \usage{
 get_Pathway_sclm(
-  Pathway_ld_gwas_data,
+  pa_block,
   pca_scCell_mat,
   data_mat,
   rawPathway_list,
@@ -14,8 +14,6 @@ get_Pathway_sclm(
 )
 }
 \arguments{
-\item{Pathway_ld_gwas_data}{Element in Pagwas}
-
 \item{pca_scCell_mat}{Element in Pagwas}
 
 \item{data_mat}{Element in Pagwas}
@@ -25,6 +23,8 @@ get_Pathway_sclm(
 \item{snp_gene_df}{Element in Pagwas}
 
 \item{n.cores}{n.cores}
+
+\item{Pathway_ld_gwas_data}{Element in Pagwas}
 
 \item{split_n}{number of times to compute the singlecell result}
 }

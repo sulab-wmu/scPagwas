@@ -4,12 +4,14 @@
 \alias{Link_pathway_blocks_gwas}
 \title{Link_pathway_blocks_gwas}
 \usage{
-Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, n.cores = 1)
+Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, split_n = 1, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
 \item{chrom_ld}{LD data for 22 chromosome.}
+
+\item{split_n}{number of times to compute the singlecell result}
 
 \item{n.cores}{Parallel cores,default is 1. use detectCores()
 to check the cores in computer.}

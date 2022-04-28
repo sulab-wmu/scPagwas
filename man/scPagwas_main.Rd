@@ -18,12 +18,15 @@ scPagwas_main(
   nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
+  split_n = 1,
   marg = 10000,
   maf_filter = 0.01,
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
   param.file = T,
+  remove_outlier = T,
+  SimpleResult = F,
   log.file = "scPagwas.run.log",
   n.cores = 1
 )
@@ -53,6 +56,8 @@ scPagwas_main(
 
 \item{chrom_ld}{(list,numeric)LD data for 22 chromosome.}
 
+\item{split_n}{number of times to compute the singlecell result}
+
 \item{marg}{(integr)gene-TSS-window size}
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
@@ -64,6 +69,10 @@ scPagwas_main(
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
 \item{param.file}{(logical)whether save parameters used for scPagwas.}
+
+\item{remove_outlier}{(logical)Whether to remove the outlier for scPagwas score.}
+
+\item{SimpleResult}{(logical)whether simplify the scPagwas result.}
 
 \item{log.file}{(character)log.file}
 

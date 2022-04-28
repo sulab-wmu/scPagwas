@@ -39,11 +39,14 @@
 #' @param nfeatures (integr) The parameter for FindVariableFeatures, NULL means select all genes
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
+#' @param split_n number of times to compute the singlecell result
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
+#' @param remove_outlier (logical)Whether to remove the outlier for scPagwas score.
 #' @param param.file (logical)whether save parameters used for scPagwas.
+#' @param SimpleResult (logical)whether simplify the scPagwas result.
 #' @param log.file (character)log.file
 #' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
@@ -79,12 +82,15 @@ scPagwas_main <- function(Pagwas = NULL,
                         nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
+                        split_n=1,
                         marg=10000,
                         maf_filter = 0.01,
                         min_clustercells=10,
                         min.pathway.size=5,
                         max.pathway.size=300,
                         param.file=T,
+                        remove_outlier=T,
+                        SimpleResult=T,
                         log.file='scPagwas.run.log',
                         n.cores=1) {
   #######
@@ -106,18 +112,17 @@ scPagwas_main <- function(Pagwas = NULL,
       paste('input gwas data: ', gwas_data, sep='\t'),
       paste('add_eqtls: ', add_eqtls, sep='\t'),
       paste('eqtls_files: ', eqtls_files, sep='\t'),
-      #paste('eqtls_cols:', eqtls_cols, sep='\t'),
-      #paste('block_annotation:', block_annotation, sep='\t'),
       paste('Single_data: ', Single_data, sep='\t'),
       paste('assay: ', assay, sep='\t'),
       paste('nfeatures: ', nfeatures, sep='\t'),
       paste('Pathway_list: ', names(Pathway_list),collapse = " ", sep='\t'),
-      #paste('chrom_ld:', chrom_ld, sep='\t'),
+      paste('split_n: ', split_n, sep='\t'),
       paste('marg: ', marg, sep='\t'),
       paste('maf_filter: ', maf_filter, sep='\t'),
       paste('min_clustercells: ', min_clustercells, sep='\t'),
       paste('min.pathway.size: ', min.pathway.size, sep='\t'),
       paste('max.pathway.size: ', max.pathway.size, sep='\t'),
+      paste('remove_outlier: ', remove_outlier, sep='\t'),
       paste('n.cores: ', n.cores, sep='\t')
     )
     writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
@@ -249,16 +254,39 @@ scPagwas_main <- function(Pagwas = NULL,
   tt <- Sys.time()
   if (!is.null(chrom_ld)){
 
-    Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
-                                       chrom_ld=chrom_ld,
-                                       n.cores=n.cores)
+  Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
+                                     chrom_ld=chrom_ld,
+                                     split_n=split_n,
+                                     n.cores=n.cores)
 
    message('done!')
   }
   cat('Link_pathway_blocks_gwas: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
+  message(paste(utils::timestamp(quiet = T), ' ******* 7th: Pathway_singlecell_rankp function start! ********',sep = ''))
+  tt <- Sys.time()
+  Pagwas <- Pathway_singlecell_rankp(Pagwas=Pagwas,
+                                      n.cores =n.cores,
+                                      remove_outlier=remove_outlier)
+  cat('link_scCell_pwpca_block: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
+  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scGet_gene_heritability_correlation function start! ********',sep = ''))
+
+  message("** Get gene heritability contributions!")
+  Pagwas <- scGet_gene_heritability_correlation(Pagwas=Pagwas)
+  message("done")
+
+  #message("** Get Pathway heritability contributions!")
+  #Pagwas <- scGet_Pathway_heritability_correlation(Pagwas=Pagwas)
+
+  if(SimpleResult){
+    Pagwas[c("VariableFeatures","merge_scexpr",
+             "data_mat","rawPathway_list",
+             "Pathway_list",
+             "snp_gene_df")]<-NULL
+  }
   gc()
   return(Pagwas)
 }

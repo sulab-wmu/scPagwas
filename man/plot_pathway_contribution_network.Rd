@@ -7,15 +7,20 @@
 plot_pathway_contribution_network(
   mat_datExpr,
   vec_pathwaycontribution,
-  vec_pathways_highlight = c(),
-  n_max_pathways = 50,
+  Celltype_anno,
+  pathways_thre = 0.05,
+  adjacency.power = 4,
+  adjacency.thre = 0.1,
+  n_max_pathways = 10,
   igraph_algorithm = "drl",
   fontface_labels = "bold.italic",
+  color_point = pal_d3(alpha = 0.5)(10),
   color_edge = "#9D9D9D",
-  fontSize_label_lg = 1,
+  fontSize_label_lg = 3,
   fontSize_legend_lg = 1,
   fontSize_legend_xlg = 1,
-  edge_thickness = 1,
+  limits = c(0, 10),
+  edge_thickness = 2,
   do_plot = F,
   figurenames = NULL,
   width = 7,
@@ -26,8 +31,6 @@ plot_pathway_contribution_network(
 \item{mat_datExpr}{data matrix for single cell data}
 
 \item{vec_pathwaycontribution}{vector of pathway contribution score from pagwas}
-
-\item{vec_pathways_highlight}{vector of pathway highlight from your choose.}
 
 \item{n_max_pathways}{number of max pathways for showing.}
 
@@ -52,9 +55,12 @@ plot_pathway_contribution_network(
 \item{width}{figure width}
 
 \item{height}{figure height}
+
+\item{vec_pathways_highlight}{vector of pathway highlight from your choose.}
 }
 \description{
 plot the network based on pathway contribution
+oaqc
 
 Thanks to the SCOPfunctions package
 https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R

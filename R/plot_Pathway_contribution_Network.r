@@ -2,6 +2,7 @@
 #' plot_pathway_contribution_network
 #'
 #' @description plot the network based on pathway contribution
+#' oaqc
 #'
 #' Thanks to the SCOPfunctions package
 #' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
@@ -41,15 +42,20 @@
 plot_pathway_contribution_network <- function(
                                         mat_datExpr,
                                         vec_pathwaycontribution,
-                                        vec_pathways_highlight=c(),
-                                        n_max_pathways=50,
+                                        Celltype_anno,
+                                        pathways_thre=0.05,
+                                        adjacency.power=4,
+                                        adjacency.thre=0.1,
+                                        n_max_pathways=10,
                                         igraph_algorithm = "drl",
                                         fontface_labels="bold.italic",
+                                        color_point= pal_d3(alpha =0.5)(10),
                                         color_edge = "#9D9D9D",
-                                        fontSize_label_lg=1,
+                                        fontSize_label_lg=3,
                                         fontSize_legend_lg=1,
                                         fontSize_legend_xlg=1,
-                                        edge_thickness = 1,
+                                        limits=c(0,10),
+                                        edge_thickness = 2,
                                         do_plot=F ,
                                         figurenames=NULL,
                                         width=7,
@@ -57,86 +63,104 @@ plot_pathway_contribution_network <- function(
                                         ) {
 
   # sort
-  vec_pathwaycontribution = sort(vec_pathwaycontribution, decreasing = T)
-  # take take hub pathways and pathways to highlight (if any)
-  vec_logical = names(vec_pathwaycontribution) %in% c(names(vec_pathwaycontribution)[1:min(n_max_pathways, length(vec_pathwaycontribution))],  vec_pathways_highlight)
-  vec_pathwaycontribution = vec_pathwaycontribution[vec_logical]
+  #mat_datExpr
+  cl<-unique((Celltype_anno$annotation))
 
-  mat_datExpr <- mat_datExpr[names(vec_pathwaycontribution),]
+  lapply(cl, function(ss){
+    tt<-Celltype_anno$annotation==ss
+    mat_datExpr_cell<-mat_datExpr[tt,]
+    pathwaycontribution<-vec_pathwaycontribution[,ss]
+    #pathwayhighlight = pathwaycontribution[pathwaycontribution<pathways_thre]
+    #pathwayhighlight = sort(pathwayhighlight, decreasing = F)
+    #if(length(pathwayhighlight)>n_max_pathways){
+     # pathwayhighlight<-pathwayhighlight[1:10]
+    pathwaycontribution<- -log10(pathwaycontribution)
+    #}
+    #pathwaycontribution = sort(pathwaycontribution, decreasing = F)
+  # take take hub pathways and pathways to highlight (if any)
+  #vec_logical = names(vec_pathwaycontribution) %in% c(names(vec_pathwaycontribution)[1:min(n_max_pathways, length(vec_pathwaycontribution))],  vec_pathways_highlight)
+  #vec_pathwaycontribution = vec_pathwaycontribution[vec_logical]
+
+    mat_datExpr_cell <- mat_datExpr_cell[,names(pathwaycontribution)]
 
   # Compute network adjacency
-  mat_adj <- WGCNA::adjacency(t(mat_datExpr),
-                              power = 1,
+  mat_adj <- WGCNA::adjacency(mat_datExpr_cell,
+                              power =adjacency.power,
                               corFnc = "cor",
                               corOptions = list(use = "p"),
                               type = "signed hybrid")
 
-  df_hub.data <- cbind.data.frame(pathway = names(vec_pathwaycontribution), contribution = vec_pathwaycontribution)
+  df_hub.data <- cbind.data.frame(pathway = names(pathwaycontribution), contribution = pathwaycontribution)
   df_hub.data$color<-rep("none",nrow(df_hub.data))
-  df_hub.data$color[which(df_hub.data$pathway %in% vec_pathways_highlight)]<-"Highlight"
+  #df_hub.data$color<-color_point
+  #df_hub.data$color[which(df_hub.data$pathway %in% vec_pathways_highlight)]<-"Highlight"
+  #df_hub.data$contribution[df_hub.data$contribution>limits[2]]<-10
+
+
+  mat_adj[which(mat_adj< adjacency.thre)]<-0
+  mat_adj<-mat_adj[rowSums(mat_adj,na.rm = TRUE)!=0,colSums(mat_adj,na.rm = TRUE)!=0]
+
+
+  df_hub.data<-df_hub.data[rownames(mat_adj),]
+  a<-df_hub.data$contribution*edge_thickness
+  a[a>limits[2]]<-limits[2]
 
   mat_adj %>%
     igraph::graph.adjacency(mode = "undirected", weighted = T, diag = FALSE) %>%
     tidygraph::as_tbl_graph() %>% igraph::upgrade_graph() %>% tidygraph::activate(nodes) %>%
-    dplyr::mutate(contribution = df_hub.data$contribution*edge_thickness,color=df_hub.data$color) %>%
+    dplyr::mutate(contribution = a,color=df_hub.data$color) %>%
     tidygraph::activate(edges) %>%
     tidygraph::activate(nodes) %>%
     dplyr::filter(!tidygraph::node_is_isolated())-> hub.plot
+ # library(graphlayouts)
+ # library("oaqc")
+ # library(ggforce)
+ # library("concaveman")
 
+  #set.seed(665)
+  #create network with a group structure
+  #hub.plot <- sample_islands(9, 40, 0.4, 15)
+  hub.plot <- igraph::simplify(hub.plot)
+  V(hub.plot)$grp <- as.character(rep(1,length(V(hub.plot))))
+  bb <- layout_as_backbone(hub.plot, keep = 0.4)
+  E(hub.plot)$col <- F
+  E(hub.plot)$col[bb$backbone] <- T
 
-  ##plot the netword
-    module.plot <- ggraph::ggraph(hub.plot,
-                        layout = "igraph",
-                        algorithm = igraph_algorithm,
-                        #layout = "stress"
-  ) +
-    ggraph::geom_edge_link(color=color_edge, show.legend=T, aes(alpha=weight)) +
-      scale_fill_manual(values=c("#FF4848","#64C9CF"))+
-    ggraph::geom_node_point(aes(size = contribution,fill=color), shape=21, alpha=0.8) +
-    # scale_size(breaks = c(1,2,3),
-    #            limits = c(0,4),
-    #            range = c(0, 8),
-    #            labels = c(" \U00B1 1", " \U00B1 2", " \U00B1 3")
-    #            ) +
-    ggraph::geom_node_text(
-      aes(label = as.character(name)),
-      #fontface="bold.italic",
-      size=fontSize_label_lg,
-      repel = T,
-      colour = "black") +
+  #bb <- graphlayouts::layout_as_backbone(hub.plot, keep = 0.4)
+  #E(hub.plot)$col <- FALSE
+  #E(hub.plot)$col[bb$backbone] <- TRUE
 
-    #guides(
-    #  size = guide_legend(override.aes = list(
-     #   #size=c(2,4,6)),
-     # ),
-     # keywidth = 0.8,
-     # keyheight = 0.8, order = 1)) +
-    #title = expression(bold(paste("Log"[2],~
-    #"fold-change"))))) +
-    #ggraph::theme_graph(base_family = 'Arial Narrow') +
-    theme(
-      legend.title.align=0.5,
-      legend.position = "top",
-      #legend.margin = margin(0,0,0,0, unit="cm"),
-      legend.title = element_text(size=fontSize_legend_xlg, face="bold"),
-      legend.text = element_text(size=fontSize_legend_lg, face="bold"),
-      #legend.spacing.x = unit(0, "cm"),
+  #layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]
+#cent = graph.strength(hub.plot)
+ # ggraph::ggraph(hub.plot, layout = "stress") +
+  cell_p<-  ggraph::ggraph(hub.plot, layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2])+
+    ggraph::geom_edge_link0(aes(edge_width = weight), edge_colour = "grey66") +
+    ggraph::geom_node_point(aes(fill = grp, size = contribution), shape = 21) +
+    ggraph::geom_node_text(aes(filter = contribution >=7,
+                               size=fontSize_label_lg,
+                               label = name)) +
+    #scale_fill_manual(values = df_hub.data$color) +
+    scale_edge_width(range = c(0, 0.7)) +
+    scale_size(#breaks = c(1,2,3,4,5,6,7,8,9,10),
+               limits = limits,
+               range = limits
+               #labels = c(" \U00B1 1", " \U00B1 2", " \U00B1 3")
+    )+
+    geom_mark_hull(
+        aes(x, y, group = grp, fill = grp),
+        concavity = 4,
+        expand = unit(2, "mm"),
+        alpha = 0.25
+      )+
+    theme_graph() +
+      scale_color_brewer(values="") +
+      scale_fill_brewer(values="")+
+    #theme(legend.position = "none")
+  theme(legend.position = "bottom")
 
-      axis.text =element_blank(),
-      axis.ticks = element_blank(),
-      axis.line=element_blank(),
-      axis.title = element_blank(),
-      # margin: top, right, bottom, and left
-     # plot.margin = unit(c(0, 0, 0, 0), "cm"),
+  return(cell_p)
 
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      panel.background = element_blank(),
-
-      plot.background = element_blank(),
-      panel.grid = element_blank()
-    ) #+
-
+  })
     #coord_cartesian(clip="off")
 
   if (do_plot) print(module.plot)
