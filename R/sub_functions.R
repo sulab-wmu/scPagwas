@@ -1,4 +1,131 @@
 
+#' rankPvalue
+#'
+#' @param datS matrix or data.frame
+#' @param columnweights NULL
+#' @param na.last "keep"
+#' @param ties.method "average"
+#' @param calculateQvalue TRUE
+#' @param pValueMethod "all"
+#'
+#' @return
+#'
+#' @examples
+rankPvalue<-function(datS, columnweights = NULL,
+                     na.last = "keep",
+                     ties.method = "average",
+                    calculateQvalue = TRUE,
+                    pValueMethod = "all")
+{
+  no.rows = dim(datS)[[1]]
+  no.cols = dim(datS)[[2]]
+  if (!is.null(columnweights) & no.cols != length(columnweights))
+    stop("The number of components of the vector columnweights is unequal to the number of columns of datS. Hint: consider transposing datS. ")
+
+  if (!is.null(columnweights) ) {
+    if ( min(columnweights,na.rm=TRUE)<0 )  stop("At least one component of columnweights is negative, which makes no sense. The entries should be positive numbers")
+    if ( sum(is.na(columnweights))>0 )  stop("At least one component of columnweights is missing, which makes no sense. The entries should be positive numbers")
+    if ( sum( columnweights)!= 1 ) {
+      # warning("The entries of columnweights do not sum to 1. Therefore, they will divided by the sum. Then the resulting weights sum to 1.");
+      columnweights= columnweights/sum( columnweights)
+    }
+  }
+
+  if (pValueMethod != "scale") {
+    percentilerank1 = function(x) {
+      R1 = rank(x, ties.method = ties.method, na.last = na.last)
+      (R1-.5)/max(R1, na.rm = TRUE)
+    }
+
+    datrankslow = apply(datS, 2, percentilerank1)
+    if (!is.null(columnweights)) {
+      datrankslow = t(t(datrankslow) * columnweights)
+    }
+    datSpresent = !is.na(datS) + 0
+    if (!is.null(columnweights)) {
+      datSpresent = t(t(datSpresent) * columnweights)
+    }
+    expectedsum = rowSums(datSpresent, na.rm = TRUE) *
+      0.5
+    varsum = rowSums(datSpresent^2, na.rm = TRUE) * 1/12
+    observed.sumPercentileslow = as.numeric(rowSums(datrankslow, na.rm = TRUE))
+    Zstatisticlow = (observed.sumPercentileslow - expectedsum)/sqrt(varsum)
+    datrankshigh = apply(-datS, 2, percentilerank1)
+    if (!is.null(columnweights)) {
+      datrankshigh = t(t(datrankshigh) * columnweights)
+    }
+    observed.sumPercentileshigh = as.numeric(rowSums(datrankshigh, na.rm = TRUE))
+    Zstatistichigh = (observed.sumPercentileshigh - expectedsum)/sqrt(varsum)
+    pValueLow = pnorm((Zstatisticlow))
+    pValueHigh = pnorm((Zstatistichigh))
+    pValueExtreme = pmin(pValueLow, pValueHigh)
+    datoutrank = data.frame(pValueExtreme, pValueLow, pValueHigh)
+    if (calculateQvalue) {
+      qValueLow = rep(NA, dim(datS)[[1]])
+      qValueHigh = rep(NA, dim(datS)[[1]])
+      qValueExtreme = rep(NA, dim(datS)[[1]])
+      rest1 = !is.na(pValueLow)
+      qValueLow[rest1] = qvalue(pValueLow[rest1])$qvalues
+      rest1 = !is.na(pValueHigh)
+      qValueHigh[rest1] = qvalue(pValueHigh[rest1])$qvalues
+      rest1 = !is.na(pValueExtreme)
+      qValueExtreme = pmin(qValueLow, qValueHigh)
+      datq = data.frame(qValueExtreme, qValueLow, qValueHigh)
+      datoutrank = data.frame(datoutrank, datq)
+      names(datoutrank) = paste(names(datoutrank), "Rank",
+                                sep = "")
+    }
+  }
+  if (pValueMethod != "rank") {
+    datSpresent = !is.na(datS) + 0
+    scaled.datS = scale(datS)
+    if (!is.null(columnweights)) {
+      scaled.datS = t(t(scaled.datS) * columnweights)
+      datSpresent = t(t(datSpresent) * columnweights)
+    }
+    expected.value = rep(0, no.rows)
+    varsum = rowSums(datSpresent^2) * 1
+    observed.sumScaleddatS = as.numeric(rowSums(scaled.datS, na.rm = TRUE))
+    Zstatisticlow = (observed.sumScaleddatS - expected.value)/sqrt(varsum)
+    scaled.minusdatS = scale(-datS)
+    if (!is.null(columnweights)) {
+      scaled.minusdatS = t(t(scaled.minusdatS) * columnweights)
+    }
+    observed.sumScaledminusdatS = as.numeric(rowSums(scaled.minusdatS, na.rm = TRUE))
+    Zstatistichigh = (observed.sumScaledminusdatS - expected.value)/sqrt(varsum)
+    pValueLow = pnorm((Zstatisticlow))
+    pValueHigh = pnorm((Zstatistichigh))
+    pValueExtreme = 2 * pnorm(-abs(Zstatisticlow))
+    datoutscale = data.frame(pValueExtreme, pValueLow, pValueHigh)
+    if (calculateQvalue) {
+      qValueLow = rep(NA, dim(datS)[[1]])
+      qValueHigh = rep(NA, dim(datS)[[1]])
+      qValueExtreme = rep(NA, dim(datS)[[1]])
+      rest1 = !is.na(pValueLow)
+      qValueLow[rest1] = qvalue(pValueLow[rest1])$qvalues
+      rest1 = !is.na(pValueHigh)
+      qValueHigh[rest1] = qvalue(pValueHigh[rest1])$qvalues
+      rest1 = !is.na(pValueExtreme)
+      qValueExtreme[rest1] = qvalue(pValueExtreme[rest1])$qvalues
+      datq = data.frame(qValueExtreme, qValueLow, qValueHigh)
+      datoutscale = data.frame(datoutscale, datq)
+    }
+    names(datoutscale) = paste(names(datoutscale), "Scale",
+                               sep = "")
+  }
+  if (pValueMethod == "rank") {
+    datout = datoutrank
+  }
+  if (pValueMethod == "scale") {
+    datout = datoutscale
+  }
+  if (pValueMethod != "rank" & pValueMethod != "scale")
+    datout = data.frame(datoutrank, datoutscale)
+  datout
+} # End of function
+
+
+
 #' papply
 #' @description wrapper around different mclapply mechanisms
 #' Abstracts out mclapply implementation, and defaults to lapply when only one core is requested (helps with debugging)

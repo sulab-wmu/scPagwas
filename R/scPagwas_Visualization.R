@@ -3,12 +3,11 @@
 #' @description Visualize the scPagwas score in Umap and Tsne.
 #'
 #' @param scPagwas_score scPagwas_score for scPagwas_main result
+#' @param scPagwas_p
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
-#' @param Reduction (logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.
-#' @param assay (character)"RNA" or "SCT", It depens on the Single_data.
 #' @param filename (character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.
 #' @param FigureType (character)"tsne" or "umap
-#' @param cellpercent (numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.
+#' @param p_thre (numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.
 #' @param width (numeric)Figure width
 #' @param height (numeric)Figure height
 #' @param size (numeric)size for scatters
@@ -27,8 +26,6 @@
 #' #scPagwas_Visualization(
 #' #  scPagwas = Pagwas,
 #' #  Single_data = scRNAexample,
-#' #  Reduction = FALSE,
-#' #  assay = "SCT",
 #' #  cellpercent = 0.1,
 #' #  filename = "scpagwas_pbc_False",
 #' #  FigureType = "tsne",
@@ -39,17 +36,15 @@
 #' #  title = "scPagwas_score"
 #' #)
 scPagwas_Visualization <- function(scPagwas_score = NULL,
+                                   scPagwas_p=NULL,
                                    Single_data=NULL,
-                                   Reduction = FALSE,
-                                   assay = "SCT",
-                                   cellpercent = 0.1,
+                                   p_thre = 0.05,
                                    filename = NULL,
                                    FigureType = "tsne",
                                    width = 7,
                                    height = 7,
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
-                                   npcs=50,
                                    title = "scPagwas_score",
                                    do_plot = F) {
   #suppressMessages(require(ggnewscale))
@@ -61,7 +56,9 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
   if (is.null(scPagwas_score)) {
     stop("ERROR: scPagwas_score is NULL. scPagwas_score can be calsulated by scPagwas_perform_score function!")
   }
-
+  if (is.null(scPagwas_p)) {
+    stop("ERROR: scPagwas_p is NULL.")
+  }
   if (sum(colnames(Single_data) %in% names(scPagwas_score)) != length(names(scPagwas_score))) {
     message("There is blank , '-' or '+' within cell names!")
     colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), " ", ".")
@@ -71,19 +68,9 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
 
   Single_data <- Single_data[, intersect(colnames(Single_data),names(scPagwas_score))]
   scPagwas_score <- scPagwas_score[intersect(colnames(Single_data),names(scPagwas_score))]
+  scPagwas_p <- scPagwas_p[intersect(colnames(Single_data),names(scPagwas_p))]
   Single_data$scPagwas_score <- scPagwas_score
-
-  if (Reduction) {
-    Single_data <- suppressMessages(Seurat::RunPCA(object = Single_data, assay = assay, npcs = npcs))
-    if (FigureType == "tsne") {
-      Single_data <- suppressMessages(Seurat::RunTSNE(object = Single_data, assay = assay, reduction = "pca", dims = 1:npcs))
-    } else if (FigureType == "umap") {
-      Single_data <- suppressMessages(Seurat::RunUMAP(object = Single_data, assay = assay, reduction = "pca", dims = 1:npcs))
-    } else {
-      stop("ERROR:: The Reduction is TRUE, but no correct FigureType is choose, either tsne or umap")
-    }
-  }
-
+  Single_data$scPagwas_p <- scPagwas_p
   if(!is.null(filename)){
   if (!file.exists(paste0("./", filename))) {
     dir.create(filename)
@@ -92,7 +79,7 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
   # num<-length(unique(as.vector(Idents(Single_data))))
   Single_data <- Single_data[, !is.na(Single_data$scPagwas_score)]
 
-  thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * cellpercent]
+  #thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * cellpercent]
 
   if (FigureType == "umap") {
     all_fortify_can <- fortify.Seurat.umap(Single_data)
@@ -114,23 +101,23 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$scPagwas_score <= thre, ],
+        data = all_fortify_can[all_fortify_can$scPagwas_p > p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       #new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$scPagwas_score > thre, ],
+        data = all_fortify_can[all_fortify_can$scPagwas_p <= p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
       ) +
       umap_theme() +
       #new_scale_color() +
-      ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
+      ggtitle(paste0("p<", p_thre, " significant cells"))
 
 
     if(do_plot) print(plots_sigp1)
     if(!is.null(filename)){
-    pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_umap.pdf"), height = height, width = width)
+    pdf(file = paste0("./", filename, "/scPagwas_p", p_thre, "_umap.pdf"), height = height, width = width)
     print(plots_sigp1)
     dev.off()
     }
@@ -159,24 +146,24 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$scPagwas_score <= thre, ],
+        data = all_fortify_can[all_fortify_can$scPagwas_p > p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       #new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$scPagwas_score > thre, ],
+        data = all_fortify_can[all_fortify_can$scPagwas_p <= p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +
       #new_scale_color() +
-      ggtitle(paste0("Top ", cellpercent * 100, "% cells"))
+      ggtitle(paste0("p<", p_thre, " significant cells"))
 
     if (do_plot) print(plots_sigp1)
 
     if(!is.null(filename)){
-    pdf(file = paste0("./", filename, "/scPagwas_TOP", cellpercent, "_tsne.pdf"), height = height, width = width)
-    print(plots_sigp1)
+      pdf(file = paste0("./", filename, "/scPagwas_p", p_thre, "_tsne.pdf"), height = height, width = width)
+      print(plots_sigp1)
     dev.off()
     }
   }

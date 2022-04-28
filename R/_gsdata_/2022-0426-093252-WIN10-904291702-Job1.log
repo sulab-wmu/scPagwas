@@ -1,0 +1,4 @@
+2022-04-26 09:32:59: == Sync Started by User Command
+2022-04-26 09:32:59: Start only 1 threads, limited by tasks to run
+2022-04-26 09:32:59: Copy Over 'E:/RPakage/scPagwas/R/Singlecell_heritability_contributions.R' -> 'sftp://172.16.253.32/share/pub/dengcy/GWAS_Multiomics/pagwas/R3.25/Singlecell_heritability_contributions.R' (22,151)
+2022-04-26 09:32:59: == Sync Complete. Time: 00:00:01, Speed: 0.00/s, OK: 1, Errors: 0

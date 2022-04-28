@@ -5,7 +5,8 @@
 \title{Bootstrap_P_Barplot}
 \usage{
 Bootstrap_P_Barplot(
-  Pagwas,
+  p_results,
+  p_names,
   title = "Test scPagwas",
   figurenames = NULL,
   width = 5,
@@ -14,7 +15,9 @@ Bootstrap_P_Barplot(
 )
 }
 \arguments{
-\item{Pagwas}{Pagwas format of result in Pagwas_main()}
+\item{p_results}{vector p results}
+
+\item{p_names}{names for p}
 
 \item{title}{The title names of the plot}
 

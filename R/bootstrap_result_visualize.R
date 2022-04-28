@@ -3,7 +3,8 @@
 #' @description This bar plot shows the -log2(p value) for bootstrap result,
 #' using the ggplot packages
 #'
-#' @param Pagwas Pagwas format of result in Pagwas_main()
+#' @param p_results vector p results
+#' @param p_names names for p
 #' @param title The title names of the plot
 #' @param figurenames The filename and address of the output plot,
 #' default is "test_barplot.pdf".IF figurenames= NULL, only plot the figure
@@ -22,19 +23,20 @@
 #'                     title = "Test scPagwas",
 #'                     figurenames = "test_barplot.pdf",
 #'                     width = 5, height = 7)
-Bootstrap_P_Barplot <- function(Pagwas,
+Bootstrap_P_Barplot <- function(p_results,
+                                p_names,
                                 title = "Test scPagwas",
                                 figurenames = NULL,
                                 width = 5,
                                 height = 7,
                                 do_plot=TRUE) {
-  cell_severe <- Pagwas$bootstrap_results[-1, ]
-  cell_severe$logp <- -log2(cell_severe$bp_value)
-  cell_severe$sig <- rep("b", nrow(cell_severe))
-  cell_severe$sig[which(cell_severe$bp_value < 0.05)] <- "a"
 
-  if (sum(cell_severe$bp_value < 0.05) > 0) {
-    p1 <- ggplot2::ggplot(cell_severe, aes(x = reorder(annotation, logp),
+  logp <- -log2(p_results)
+  sig <- rep("b", length(p_results))
+  sig[which(p_results < 0.05)] <- "a"
+  gg<-data.frame(logp,sig,p_names)
+  if (sum(p_results < 0.05) > 0) {
+    p1 <- ggplot2::ggplot(gg, aes(x = reorder(p_names, logp),
                                            y = logp,
                                            fill = sig)) +
       geom_bar(position = "dodge", stat = "identity") +
@@ -48,8 +50,8 @@ Bootstrap_P_Barplot <- function(Pagwas,
       scale_fill_manual(values = c("#BB6464", "#C3DBD9")) +
       theme(legend.position = "none")
   } else {
-    p1 <- ggplot2::ggplot(cell_severe,
-                          aes(x = reorder(annotation, logp),
+    p1 <- ggplot2::ggplot(gg,
+                          aes(x = reorder(p_names, logp),
                               y = logp)) +
       geom_bar(position = "dodge", stat = "identity", color = "#C3DBD9") +
       theme_classic() +
