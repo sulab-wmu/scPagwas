@@ -34,7 +34,11 @@ Singlecell_heritability_contributions<-function(Pagwas,
   #Pagwas <- scGet_Pathway_heritability_correlation(Pagwas=Pagwas)
 
   if(SimpleResult){
-    Pagwas[c("VariableFeatures","merge_scexpr","data_mat","rawPathway_list","Pathway_list","pca_scCell_mat","snp_gene_df","Pathway_ld_gwas_data")]<-NULL
+    Pagwas[c("VariableFeatures","merge_scexpr",
+             "data_mat","rawPathway_list",
+             "Pathway_list",
+             #"pca_scCell_mat",
+             "snp_gene_df","Pathway_ld_gwas_data")]<-NULL
   }
   return(Pagwas)
 }
