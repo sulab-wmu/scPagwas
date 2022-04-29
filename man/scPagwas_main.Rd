@@ -26,7 +26,7 @@ scPagwas_main(
   max.pathway.size = 300,
   param.file = T,
   remove_outlier = T,
-  SimpleResult = F,
+  SimpleResult = T,
   log.file = "scPagwas.run.log",
   n.cores = 1
 )
