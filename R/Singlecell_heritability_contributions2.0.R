@@ -224,6 +224,7 @@ get_Pathway_sclm<-function(pa_block,
 
 
         results[is.na(results)] <- 0
+        names(results)<-colnames(data_mat)
         #Pathway_cell_regression<-results
       }else{
         results<-NULL

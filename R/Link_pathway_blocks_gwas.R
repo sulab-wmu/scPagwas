@@ -133,10 +133,11 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                                       rawPathway_list=Pagwas$rawPathway_list,
                                                       snp_gene_df=Pagwas$snp_gene_df,
                                                       n.cores=n.cores )
+
       }
 
 
-      Pathway_sclm_results[[pathway]] <-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),Pathway_sclm_part)
+      Pathway_sclm_results[[pathway]] <- unlist(Pathway_sclm_part)[colnames(Pagwas$pca_scCell_mat)]
 
     }else{
       Pathway_sclm_results[[pathway]]<-get_Pathway_sclm(pa_block=pa_block,
@@ -160,7 +161,8 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   rm(chrom_ld)
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
-  rownames(Pathway_sclm_results)<-colnames(Pagwas$pca_scCell_mat)
+  #table(rownames(Pathway_sclm_results)== colnames(Pagwas$pca_scCell_mat))
+  rownames(Pathway_sclm_results)<- colnames(Pagwas$pca_scCell_mat)
 
   Pagwas$Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
   #Pagwas$Pathway_sclm_results<-Pathway_sclm_results
