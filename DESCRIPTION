@@ -31,7 +31,6 @@ Imports:
     dplyr,
     irlba,
     Matrix,
-    stringr,
     glmnet,
     GenomicRanges,
     utils,

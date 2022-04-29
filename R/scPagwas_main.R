@@ -4,7 +4,6 @@
 #' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings
 #' @importFrom SeuratObject Idents
 #' @importFrom Matrix Matrix colSums rowSums crossprod
-#' @importFrom stringr str_replace_all
 #' @importFrom parallel mclapply
 #' @importFrom glmnet cv.glmnet
 #' @importFrom GenomicRanges GRanges resize resize

@@ -1,8 +1,8 @@
-## 2022-04-29 09:52:18 
-Single_data import: 1.05146 
-Pathway_pcascore_run: 7.6456 
-GWAS_summary_input: 0.192457 
-Snp2Gene: 0.5655179 
-Pathway_annotation_input: 1.069005 
-Link_pathway_blocks_gwas: 45.13663 
-link_scCell_pwpca_block: 2.593064 
+## 2022-04-29 14:45:08 
+Single_data import: 0.8040941 
+Pathway_pcascore_run: 9.541568 
+GWAS_summary_input: 0.1845179 
+Snp2Gene: 0.8716409 
+Pathway_annotation_input: 0.933531 
+Link_pathway_blocks_gwas: 39.11206 
+link_scCell_pwpca_block: 2.597585 

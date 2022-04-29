@@ -60,10 +60,10 @@ scPagwas_Visualization <- function(scPagwas_score = NULL,
     stop("ERROR: scPagwas_p is NULL.")
   }
   if (sum(colnames(Single_data) %in% names(scPagwas_score)) != length(names(scPagwas_score))) {
-    message("There is blank , '-' or '+' within cell names!")
-    colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), " ", ".")
-    colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "\\+", ".")
-    colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "-", ".")
+    warning("There is blank , '-' or '+' within cell names!")
+  #  colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), " ", ".")
+  #  colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "\\+", ".")
+  #  colnames(Single_data) <- stringr::str_replace_all(colnames(Single_data), "-", ".")
   }
 
   Single_data <- Single_data[, intersect(colnames(Single_data),names(scPagwas_score))]
