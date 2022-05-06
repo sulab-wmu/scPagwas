@@ -15,8 +15,7 @@
 #' # the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
 #' Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
 Pathway_annotation_input <- function(Pagwas,
-                                     block_annotation,
-                                     n.cores = 1) {
+                                     block_annotation) {
   #message("adding block annotations")
 
   if (class(Pagwas$Pathway_list) != "list") {
@@ -51,11 +50,11 @@ Pathway_annotation_input <- function(Pagwas,
 
   message("obtain the pathway block information")
 
-  paan_df <- papply(names(Pathway_list), function(pa) {
+  paan_df <- lapply(names(Pathway_list), function(pa) {
     paan <- block_annotation[block_annotation$label %in% Pathway_list[[pa]], ]
     paan$pathway <- rep(pa, nrow(paan))
     return(paan)
-  }, n.cores = n.cores)
+  })
 
   pathway_blocks <- lapply(paan_df, function(pa) {
     blocks <- pa %>% dplyr::arrange(chrom, start)

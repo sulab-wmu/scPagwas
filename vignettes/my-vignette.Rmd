@@ -134,30 +134,20 @@ Remove(Objects())
  #LD data
  data(chrom_ld)
  ##############真实例子：
-  Pagwas<-scPagwas_main(Pagwas = NULL,
-                     gwas_data ="E:/OneDrive/GWAS_Multiomics/ad_test/AD_prune_gwas_data.txt",
+ Pagwas<-scPagwas_main(Pagwas = NULL,
+                     gwas_data =system.file("extdata", "AD_prune_gwas_data.txt", package = "scPagwas"),
+                     output.prefix="test",
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      assay="RNA",
-                     Single_data = "E:/OneDrive/GWAS_Multiomics/ad_test/AD_final.rds",
-                     nfeatures =2000,
+                     Single_data =system.file("extdata", "GSE138852_ad.rds", package = "scPagwas"),
+                     split_n=2,
+                     ncores=5,
+                     nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
-                     chrom_ld = chrom_ld)
-  
-  #######################分步骤查看结果
-  Pagwas<-Celltype_heritability_contributions(Pagwas,iters = 200)
+                     chrom_ld = chrom_ld,
+                     SimpleResult=F)
 
-  
- Bootstrap_P_Barplot(Pagwas=Pagwas,
-                    figurenames = NULL,
-                    width = 5,
-                    height = 7,
-                    do_plot=T,
-                    title = "AD scPagwas")
-Pagwas<-Singlecell_heritability_contributions(Pagwas,
-                                              n.cores=1,
-                                              part = 0.5,
-                                              SimpleResult=F)
 ################################
 library(ggplot2)
 library(grDevices)

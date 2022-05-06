@@ -3,7 +3,7 @@
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param iters number of bootstrap iterations to perform
 #' @param part number of bootstrap iterations to perform,default is 0.5
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param ncores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
 #' @export
@@ -11,29 +11,25 @@
 #' @examples
 Celltype_heritability_contributions<-function(Pagwas,
                                               iters = 200,
-                                              n.cores=1,
                                               part = 0.5){
 
-  Pathway_ld_gwas_data <- link_pwpca_block(Pagwas)
-  message("done")
-  Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pathway_ld_gwas_data,
-                                      iters = iters,
-                                      n.cores=n.cores)
-  message("done")
+  #Pathway_ld_gwas_data <- link_pwpca_block(Pagwas)
+  #message("done")
+  Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data)
+  #message("done")
   # add on heritability values
-  message("** Get Pathway heritability contributions!")
-  Pagwas$Pathway_block_heritability <-
-    Get_Pathway_heritability_contributions(
-      Pagwas$pca_cell_df,
-      Pagwas$lm_results$parameters
-    )
-  message("done")
+  #message("** Get Pathway heritability contributions!")
+  #Pagwas$Pathway_block_heritability <-
+  #  Get_Pathway_heritability_contributions(
+  #    Pagwas$pca_cell_df,
+  #    Pagwas$lm_results$parameters
+   # )
+  #message("done")
   # Bootstrap error and 95% confidence interval estimates
 
   if (iters > 0) {
     Pagwas <- Boot_evaluate(Pagwas,
-                            Pathway_ld_gwas_data=Pathway_ld_gwas_data,
-                            bootstrap_iters = iters, n.cores = n.cores, part = part)
+                            bootstrap_iters = iters, part = part)
     Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
   }
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
@@ -56,21 +52,15 @@ return(Pagwas)
 #' # Pagwas should have inhibit data
 #' Pagwas <- link_pwpca_block(Pagwas)
 
-link_pwpca_block <- function(Pagwas) {
-  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  cell_names <- intersect(colnames(Pagwas$merge_scexpr), colnames(Pagwas$pca_cell_df))
-
-  Pagwas$merge_scexpr <- Pagwas$merge_scexpr[, cell_names]
-  Pagwas$pca_cell_df <- data.matrix(Pagwas$pca_cell_df[, cell_names])
-
-  message("*  merging functional information about blocks")
-  pb <- txtProgressBar(style = 3)
-
-  Pathway_ld_gwas_data <- lapply(Pagwas$Pathway_ld_gwas_data, function(pa_block) {
+link_pwpca_block <- function(pa_block,
+                             pca_cell_df,
+                             merge_scexpr,
+                             snp_gene_df,
+                             rawPathway_list) {
 
     pathway <- unique(pa_block$block_info$pathway)
 
-    x <- Pagwas$pca_cell_df[pathway, ]
+    x <-pca_cell_df[pathway, ]
     if(length(pathway)==1){
     x <- matrix(x, nrow = 1)
     rownames(x)<-pathway
@@ -82,9 +72,9 @@ link_pwpca_block <- function(Pagwas) {
       return(pa_block)
       # stop("remove duplicates from pa_block data")
     }
-    proper_genes <- rownames(Pagwas$merge_scexpr)
-    mg <- intersect(Pagwas$rawPathway_list[[pathway]], proper_genes)
-    x2 <- Pagwas$merge_scexpr[mg, ]
+    proper_genes <- rownames(merge_scexpr)
+    mg <- intersect(rawPathway_list[[pathway]], proper_genes)
+    x2 <- merge_scexpr[mg, ]
 
     if (length(mg) > 1) {
       x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
@@ -100,8 +90,8 @@ link_pwpca_block <- function(Pagwas) {
       rownames(x) <- pa_block$snps$rsid
 
       #snp_gene_df <- Pagwas$snp_gene_df
-      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
-      x <- x * Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
 
     } else {
@@ -112,9 +102,9 @@ link_pwpca_block <- function(Pagwas) {
 
       rownames(x) <- pa_block$snps$rsid
       #snp_gene_df <- Pagwas$snp_gene_df
-      rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
+      rownames(snp_gene_df) <- snp_gene_df$rsid
 
-      x <- matrix(as.numeric(x) * as.numeric(Pagwas$snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+      x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
       x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
     }
 
@@ -123,44 +113,63 @@ link_pwpca_block <- function(Pagwas) {
 
     pa_block$x <- t(pa_block$ld_matrix_squared) %*% x3
     rownames(pa_block$x) <- pa_block$snps$rsid
-    colnames(pa_block$x) <- colnames(Pagwas$merge_scexpr)
+    colnames(pa_block$x) <- colnames(merge_scexpr)
     rm(x3)
 
     pa_block$include_in_inference <- T
 
-    setTxtProgressBar(pb, which(names(Pagwas$Pathway_ld_gwas_data) == pathway) / length(Pagwas$Pathway_ld_gwas_data))
-
-    return(pa_block)
-  })
-  close(pb)
-  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[!sapply(Pathway_ld_gwas_data, is.null)]
-
-  gc()
-  return(Pathway_ld_gwas_data)
+  return(pa_block)
 }
 
 
-#' Pagwas_perform_regression
+#' Pa_Pagwas_perform_regression
 #' @description Run regression
-#' @param Pagwas Pagwas format, deault is NULL.
-#' @param iters number of bootstrap iterations to perform
-#' @param part number of bootstrap iterations to perform,default is 0.5
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#' @param scPagwasSession "scPagwasSession"
+#' @param pa_block Pagwas format, deault is NULL.
 #'
 #' @return
 #'
 #' @examples
 #' library(scPagwas)
 #' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
-Pagwas_perform_regression <- function(Pathway_ld_gwas_data,
-                                      iters = 200,
-                                      part = 0.5,
-                                      n.cores = 1) {
+Pa_Pagwas_perform_regression <- function(pa_block) {
+  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
+  if (is.null(pa_block)) {
+    warning("data has not been precomputed, returning without results")
+    #return(Pagwas)
+  }
+  #message("** Start inference")
+  # fit model
+  if (!is.null(pa_block$x)) {
+    if (pa_block$n_snps > 2) {
+  vectorized_Pagwas_data <- xy2vector_pa(pa_block)
+
+  lm_results <- pa_parameter_regression(vectorized_Pagwas_data)
+
+    }else{
+      lm_results<-NULL
+    }
+
+  } else {
+    lm_results<-NULL
+  }
+  return(lm_results)
+}
+
+
+#' Pagwas_perform_regression
+#' @description Run regression
+#' @param Pathway_ld_gwas_data Pagwas format, deault is NULL.
+#'
+#' @return
+#'
+#' @examples
+#' library(scPagwas)
+#' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
+Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
   #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
   if (is.null(Pathway_ld_gwas_data)) {
     warning("data has not been precomputed, returning without results")
-    return(Pagwas)
+    #return(Pagwas)
   }
   message("** Start inference")
   # fit model
@@ -170,8 +179,6 @@ Pagwas_perform_regression <- function(Pathway_ld_gwas_data,
 
   return(lm_results)
 }
-
-
 #' Parameter_regression
 #' @description Find parameter estimates for the data.
 #' @param vectorized_Pagwas_data Pagwas data that has been vectorized
@@ -195,31 +202,54 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
 }
 
 
+#' pa_parameter_regression
+#' @description Find parameter estimates for the data.
+#' @param vectorized_Pagwas_data Pagwas data that has been vectorized
+#'
+#' @return
+
+pa_parameter_regression <- function(vectorized_Pagwas_data) {
+  lm_results <- list()
+
+  m <- stats::lm(vectorized_Pagwas_data$y ~
+                   offset(vectorized_Pagwas_data$noise_per_snp) +
+                   vectorized_Pagwas_data$x)
+
+  lm_results$parameters <- stats::coef(m)
+
+  lm_results$parameters[is.na(lm_results$parameters)] <- 0
+  #names(results)<-colnames(data_mat)
+
+  annotation_names <- c("Intercept", colnames(vectorized_Pagwas_data$x))
+  names(lm_results$parameters) <- annotation_names
+  #lm_results$model <- m
+
+  return(lm_results$parameters[-1])
+}
+
+
 #' Boot_evaluate
 #' @description Bootstrap to evaluate for confidence intervals.
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param bootstrap_iters number of bootstrap iterations to run,default is 200
 #' @param part number of bootstrap iterations to perform,default is 0.5
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
 
 Boot_evaluate <- function(Pagwas,
-                          Pathway_ld_gwas_data,
                           bootstrap_iters = 200,
-                          part = 0.5,
-                          n.cores = 1) {
+                          part = 0.5) {
 
   # run things in parallel if user specified
   message(paste0("* starting bootstrap iteration for ", bootstrap_iters, " times"))
 
   pb <- txtProgressBar(style = 3)
-  Boot_evaluate <-
-    papply(1:bootstrap_iters, function(i) {
+  Boot_resultlist <-
+    lapply(1:bootstrap_iters, function(i) {
 
       boot_results <- Parameter_regression(
-        xy2vector(Pathway_ld_gwas_data[
-          sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
+        xy2vector(Pagwas$Pathway_ld_gwas_data[
+          sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
         ])
       )
 
@@ -236,11 +266,11 @@ Boot_evaluate <- function(Pagwas,
           )
         )
       )
-    }, n.cores = n.cores)
+    })
   close(pb)
 
   Pagwas$bootstrap_results <- Get_bootresults_df(
-    sapply(Boot_evaluate, function(boot) {
+    sapply(Boot_resultlist, function(boot) {
       boot$boot_parameters
     }),
     names(Pagwas$lm_results$parameters),
@@ -314,6 +344,24 @@ xy2vector <- function(Pathway_ld_gwas_data = NULL) {
 }
 
 
+xy2vector_pa <- function(pa_block = NULL) {
+  # use only blocks flagged for inference inclusion
+
+  # unpack Pathway_ld_gwas_data
+  y <- pa_block$y
+  x <- pa_block$x
+
+  rownames(x) <- pa_block$snps$rsid
+  noise_per_snp <- pa_block$snps$se**2
+
+  na_elements <- is.na(y) | apply(x, 1, function(x) {
+    any(is.na(x))
+  }) | is.na(noise_per_snp)
+  return(list(
+    y = y[!na_elements], x = x[!na_elements, ],
+    noise_per_snp = noise_per_snp[!na_elements]
+  ))
+}
 
 
 #' Get_Pathway_heritability_contributions

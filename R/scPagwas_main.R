@@ -43,11 +43,12 @@
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
+#' @param iters (integr)number of bootstrap iterations to perform
 #' @param remove_outlier (logical)Whether to remove the outlier for scPagwas score.
 #' @param param.file (logical)whether save parameters used for scPagwas.
 #' @param SimpleResult (logical)whether simplify the scPagwas result.
 #' @param log.file (character)log.file
-#' @param n.cores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param ncores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
 #' @export
@@ -87,11 +88,12 @@ scPagwas_main <- function(Pagwas = NULL,
                         min_clustercells=10,
                         min.pathway.size=5,
                         max.pathway.size=300,
+                        iters=200,
                         param.file=T,
                         remove_outlier=T,
-                        SimpleResult=T,
+                        SimpleResult=F,
                         log.file='scPagwas.run.log',
-                        n.cores=1) {
+                        ncores=1) {
   #######
   ## initialize log-file
   cat('##', format(Sys.time()), '\n', file=log.file)
@@ -114,7 +116,7 @@ scPagwas_main <- function(Pagwas = NULL,
       paste('Single_data: ', Single_data, sep='\t'),
       paste('assay: ', assay, sep='\t'),
       paste('nfeatures: ', nfeatures, sep='\t'),
-      paste('Pathway_list: ', names(Pathway_list),collapse = " ", sep='\t'),
+      paste('Pathway length: ', length(Pathway_list),collapse = " ", sep='\t'),
       paste('split_n: ', split_n, sep='\t'),
       paste('marg: ', marg, sep='\t'),
       paste('maf_filter: ', maf_filter, sep='\t'),
@@ -122,7 +124,8 @@ scPagwas_main <- function(Pagwas = NULL,
       paste('min.pathway.size: ', min.pathway.size, sep='\t'),
       paste('max.pathway.size: ', max.pathway.size, sep='\t'),
       paste('remove_outlier: ', remove_outlier, sep='\t'),
-      paste('n.cores: ', n.cores, sep='\t')
+      paste('iters: ', iters, sep='\t'),
+      paste('ncores: ', ncores, sep='\t')
     )
     writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
   }
@@ -168,7 +171,7 @@ scPagwas_main <- function(Pagwas = NULL,
   if (!is.null(Pathway_list)){
 
 
-  Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,n.cores=n.cores,
+  Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
                                  Pathway_list=Pathway_list,
                                  min.pathway.size=min.pathway.size,
                                  max.pathway.size=max.pathway.size
@@ -238,8 +241,7 @@ scPagwas_main <- function(Pagwas = NULL,
   tt <- Sys.time()
   if (!is.null(block_annotation)){
     Pagwas <- Pathway_annotation_input(Pagwas=Pagwas,
-                                       block_annotation=block_annotation,
-                                       n.cores=n.cores)
+                                       block_annotation=block_annotation)
   }
 
   message('done!')
@@ -256,29 +258,34 @@ scPagwas_main <- function(Pagwas = NULL,
   Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
                                      chrom_ld=chrom_ld,
                                      split_n=split_n,
-                                     n.cores=n.cores)
+                                     ncores=ncores)
 
    message('done!')
   }
   cat('Link_pathway_blocks_gwas: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
-  message(paste(utils::timestamp(quiet = T), ' ******* 7th: Pathway_singlecell_rankp function start! ********',sep = ''))
-  tt <- Sys.time()
-  Pagwas <- Pathway_singlecell_rankp(Pagwas=Pagwas,
-                                      n.cores =n.cores,
-                                      remove_outlier=remove_outlier)
-  cat('link_scCell_pwpca_block: ',  file=log.file, append=T)
+  message(paste(utils::timestamp(quiet = T), ' ******* 7th: Celltype_heritability_contributions function start! ********',sep = ''))
+
+  Pagwas<-Celltype_heritability_contributions(Pagwas=Pagwas,
+                                              iters = iters)
+  message('done!')
+  cat('Celltype_heritability_contributions: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
-  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scGet_gene_heritability_correlation function start! ********',sep = ''))
+  message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start! ********',sep = ''))
+  tt <- Sys.time()
+  Pagwas<-scPagwas_perform_score(Pagwas=Pagwas,
+                                 remove_outlier=TRUE)
+  message('done!')
+  cat('scPagwas_perform_score: ',  file=log.file, append=T)
+  cat(Sys.time()-tt, '\n',  file=log.file, append=T)
+
+  message(paste(utils::timestamp(quiet = T), ' ******* 9th: scGet_gene_heritability_correlation function start! ********',sep = ''))
 
   message("** Get gene heritability contributions!")
   Pagwas <- scGet_gene_heritability_correlation(Pagwas=Pagwas)
   message("done")
-
-  #message("** Get Pathway heritability contributions!")
-  #Pagwas <- scGet_Pathway_heritability_correlation(Pagwas=Pagwas)
 
   if(SimpleResult){
     Pagwas[c("VariableFeatures","merge_scexpr",

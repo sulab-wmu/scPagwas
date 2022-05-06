@@ -4,23 +4,10 @@
 \alias{Pagwas_perform_regression}
 \title{Pagwas_perform_regression}
 \usage{
-Pagwas_perform_regression(
-  Pathway_ld_gwas_data,
-  iters = 200,
-  part = 0.5,
-  n.cores = 1
-)
+Pagwas_perform_regression(Pathway_ld_gwas_data)
 }
 \arguments{
-\item{iters}{number of bootstrap iterations to perform}
-
-\item{part}{number of bootstrap iterations to perform,default is 0.5}
-
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
-
-\item{Pagwas}{Pagwas format, deault is NULL.}
-
-\item{scPagwasSession}{"scPagwasSession"}
+\item{Pathway_ld_gwas_data}{Pagwas format, deault is NULL.}
 }
 \value{
 

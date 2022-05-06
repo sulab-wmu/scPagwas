@@ -3,7 +3,6 @@
 #' @description The function can calculate the pathway pcascore for celltypes and single cells.
 #' @param Pagwas Pagwas format
 #' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #' @param min.pathway.size Threshold for min pathway gene size.
 #' @param max.pathway.size Threshold for max pathway gene size.
 #'
@@ -17,7 +16,6 @@
 #' Pagwas <- Pathway_pcascore_run(Pagwas = Pagwas, Pathway_list = Genes_by_pathway.kegg)
 Pathway_pcascore_run <- function(Pagwas = NULL,
                                  Pathway_list = NULL,
-                                 n.cores = 1,
                                  min.pathway.size = 10,
                                  max.pathway.size = 1000) {
 
@@ -72,8 +70,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
     #
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
-      scCounts = scCounts,
-      n.cores = n.cores
+      scCounts = scCounts
     )
     setTxtProgressBar(pb, which(celltypes == celltype) / length(celltypes))
     print(celltype)
@@ -135,13 +132,11 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 #' @description Calculate pca score
 #' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
 #' @param scCounts single cell Counts pathway
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #'
 #' @return
 #'
 PathwayPCAtest <- function(Pathway_list,
-                           scCounts,
-                           n.cores = 1) {
+                           scCounts) {
   if (any(duplicated(rownames(scCounts)))) {
     stop("Duplicate gene names are not allowed - please reduce")
   }
@@ -163,7 +158,7 @@ PathwayPCAtest <- function(Pathway_list,
   proper.gene.names<-colnames(scCounts)
   #SOAR::Store(scCounts)
   ###### calculate the pca for each pathway terms.
-  papca <- papply(Pathway_list, function(Pa_id) {
+  papca <- lapply(Pathway_list, function(Pa_id) {
 
     lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     mat <- scCounts[,lab]
@@ -184,7 +179,7 @@ PathwayPCAtest <- function(Pathway_list,
     rownames(pcs$rotation) <- colnames(mat)
 
     return(list(xp = pcs))
-  }, n.cores = n.cores)
+  })
 
 
   vdf <- data.frame(do.call(rbind, lapply(seq_along(papca), function(i) {

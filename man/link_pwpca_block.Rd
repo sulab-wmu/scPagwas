@@ -4,7 +4,13 @@
 \alias{link_pwpca_block}
 \title{link_pwpca_block}
 \usage{
-link_pwpca_block(Pagwas)
+link_pwpca_block(
+  pa_block,
+  pca_cell_df,
+  merge_scexpr,
+  snp_gene_df,
+  rawPathway_list
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}

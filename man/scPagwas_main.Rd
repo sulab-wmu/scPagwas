@@ -24,9 +24,10 @@ scPagwas_main(
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
+  iters = 200,
   param.file = T,
   remove_outlier = T,
-  SimpleResult = T,
+  SimpleResult = F,
   log.file = "scPagwas.run.log",
   n.cores = 1
 )
@@ -67,6 +68,8 @@ scPagwas_main(
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
+
+\item{iters}{(integr)number of bootstrap iterations to perform}
 
 \item{param.file}{(logical)whether save parameters used for scPagwas.}
 

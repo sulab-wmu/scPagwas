@@ -30,24 +30,23 @@ knitr::opts_chunk$set(
 You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with:
 
 ``` r
+#Dependency packages
+install.packages("BiocManager")
+BiocManager::install("GenomicRanges")
+BiocManager::install("IRanges")
+
 devtools::install_github("dengchunyu/scPagwas")
 
 ```
 
 ## Example 
 
-### 1.Preprogress and create internal storage
+## 1.Main functions
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
  library(scPagwas)
- library(ggplot2)
- suppressMessages(library(Seurat))
- suppressMessages(library("dplyr"))
- #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
- #gene annotation files.
  data(block_annotation)
- #LD data
  data(chrom_ld)
 
  #1.start to run the wrapper functions for preprogress.
@@ -58,239 +57,11 @@ devtools::install_github("dengchunyu/scPagwas")
                      block_annotation = block_annotation,
                      assay="RNA",
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     split_n=3,
+                     split_n=4,
                      nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
+                     ncores=1,
                      SimpleResult=T)
 
 ```
- 
-#### Visualize the celltypes results.
-
- 1.barplot
-```{r Bootstrap_P_Barplot, message=FALSE,warning = FALSE}
-
-Bootstrap_P_Barplot(p_results=Pagwas$celltypes_rankpvalue$pValueHigh,
-                    p_names=rownames(Pagwas$celltypes_rankpvalue),
-                    figurenames = NULL,
-                    width = 5,
-                    height = 7,
-                    do_plot=T,
-                    title = "Test scPagwas")
-
-```
-
-
-#### pathway network
-
-```{r pathway_contribution_network,message=FALSE,warning = FALSE}
-
-suppressMessages(require("WGCNA"))
-suppressMessages(require("patchwork"))
-suppressMessages(require("tidygraph"))
-suppressMessages(require("ggraph"))
-suppressMessages(require("igraph"))
-#check the objects
-
- 
-plot_pathway_contribution_network(
-                  mat_datExpr=Pagwas$Pathway_sclm_results,
-                  vec_pathwaycontribution=Pagwas$Pathways_rankPvalue,
-                  vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-                  n_max_pathways=20,
-                  igraph_algorithm = "drl",
-                  fontface_labels="bold.italic",
-                  color_edge = "#9D9D9D",
-                  fontSize_label_lg=4,
-                  fontSize_legend_lg=4,
-                  fontSize_legend_xlg=4,
-                  edge_thickness = 1,
-                  do_plot=T
-  )
-
-```
-
-#### Visualize the scPagwas_main results.
-##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
-
-```{r scPagwas_Visualization,message=FALSE,warning = FALSE}
- require("RColorBrewer")
- require("Seurat")
- require("SeuratObject")
- require("ggsci")
- #check the objects
-#Single_data<-FindVariableFeatures(Single_data)
-scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
-scRNAexample <- suppressMessages(Seurat::RunPCA(object = scRNAexample, assay =  "SCT", npcs = npcs))
-scRNAexample <- suppressMessages(Seurat::RunTSNE(object = scRNAexample, assay =  "SCT", reduction = "pca", dims = 1:50))
-scRNAexample <- suppressMessages(Seurat::RunUMAP(object = scRNAexample, assay =  "SCT", reduction = "pca", dims = 1:50))
-
-
- DimPlot(scRNAexample,group.by = "anno",pt.size=1,reduction="tsne",label = F, repel=TRUE)+ 
- umap_theme()+ggtitle("Test")+labs(x="TSNE",y="")+theme(aspect.ratio=1)
- 
- 
- scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
-                        scPagwas_p=Pagwas$CellsrankPvalue,
-                        Single_data = scRNAexample,
-                        p_thre = 0.01,
-                        filename = NULL,
-                        FigureType = "tsne",
-                        width = 7,
-                        height = 7,
-                        lowColor = "#FEFBE7", highColor = "#FC4F4F",
-                        size = 1,
-                        title = "scPagwas_score",
-                        do_plot = T)
-```
-
-##### Plot the barplot of the proportion of positive Cells in celltypes
-
-```{r bar_positie_nagtive,message=FALSE,warning = FALSE,fig.height=6, fig.width=6}
-library("RColorBrewer")
-library("ggplot2")
-
-#scPagwas_score <- Pagwas$scPagwas_score[intersect(colnames(scRNAexample),names(Pagwas$scPagwas_score))]
-#scRNAexample$scPagwas_score <- scPagwas_score
-#thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
-#scRNAexample$positiveCells<-rep(0,ncol(scRNAexample))
-#scRNAexample$positiveCells[scRNAexample$scPagwas_score>=thre]<-1
-
-scRNAexample$CellsrankPvalue<-Pagwas$CellsrankPvalue[colnames(scRNAexample)]
-#thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
-scRNAexample$positiveCells<-rep(0,ncol(scRNAexample))
-scRNAexample$positiveCells[scRNAexample$CellsrankPvalue <= 0.01]<-1
-
-plot_bar_positie_nagtive(seurat_obj=scRNAexample,
-                              var_ident="positiveCells",
-                              var_group="anno",
-                              vec_group_colors=NULL,
-                              f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
-                              do_plot = T)
-```
-
-##### Plot the barplot of the proportion of celltypes in positive Cell 
-
-```{r bar_positie_nagtive2,message=FALSE,warning = FALSE}
-plot_bar_positie_nagtive(seurat_obj=scRNAexample,
-                              var_ident="anno",
-                              var_group="positiveCells",
-                              vec_group_colors=c("#E8D0B3","#7EB5A6"),
-                              do_plot = T)
-```
-
-##### Plot the dotplot of the pathway for celltypes 
-
-```{r plot_sc_pa_contri_dot,message=FALSE,warning = FALSE}
-
-library(ggplot2)
-library(grDevices)
-library(stats)
-library(FactoMineR)
-library(scales)
-library(reshape2)
-library(ggdendro)
-library(grImport2)
-library(gridExtra)
-library(grid)
-library(sisal)
-load("E:/OneDrive/GWAS_Multiomics/dox/FlexDotPlot-master/FlexDotPlot-master/data/PBMC3K_example_data.rda")
-
-Pagwas$pca_scCell_mat<- apply(Pagwas$pca_scCell_mat,2, function(x) (x - min(x)) / (max(x) - min(x)))
-
-pca_scCell_mat<-Pagwas$pca_scCell_mat[colnames(Pagwas$Pathway_sclm_results),]
-
-Pagwas$Pathway_sclm_mat<-Pagwas$Pathway_sclm_results * t(pca_scCell_mat)
-
-rownames(Pagwas$Pathway_sclm_mat)<-colnames(Pagwas$pca_scCell_mat)
-Pagwas$Celltype_anno$annotation<-as.factor(Pagwas$Celltype_anno$annotation)
-
-celltype_pathway_scproportion<-tapply(Pagwas$Celltype_anno$cellnames,Pagwas$Celltype_anno$annotation,function(x){
-  colMeans(Pagwas$Pathway_sclm_mat[x,])
-})
-
-celltype_pathway_scproportion<-Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2),celltype_pathway_scproportion)
-
-celltype_pathway_scproportion<-as.data.frame(apply(celltype_pathway_scproportion,2, function(x) (x - min(x)) / (max(x) - min(x))))
-
-rownames(celltype_pathway_scproportion)<-levels(Pagwas$Celltype_anno$annotation)
-
-Pathway_sclm_mat<-t(as(Pagwas$Pathway_sclm_mat,"matrix"))
-
-
-ls_scCell<-CreateSeuratObject(
-  Pathway_sclm_mat,
-  project = "CreateSeuratObject",
-  assay = "RNA",
-  names.field = 1,
-  names.delim = "_",
-  meta.data = Pagwas$Celltype_anno
-)
-
-Idents(ls_scCell)<-Pagwas$Celltype_anno$annotation
-ls_scCell_markerpa <- FindAllMarkers(object = ls_scCell)
-
-pa_cellytpes<-lapply(unique(ls_scCell_markerpa$cluster),function(x){
-  ls_scCell_markerpa[ls_scCell_markerpa$cluster==x,"gene"][1:3]
-})
-
-pca_scCell<-CreateSeuratObject(
-  pca_scCell_mat,
-  project = "CreateSeuratObject",
-  assay = "RNA",
-  names.field = 1,
-  names.delim = "_",
-  meta.data = Pagwas$Celltype_anno
-)
-
-Idents(pca_scCell)<-Pagwas$Celltype_anno$annotation
-pca_scCell <- FindVariableFeatures(object = pca_scCell,nfeatures = dim(pca_scCell)[1]*0.1)
-pca_scCell_markerpa <- FindAllMarkers(object = pca_scCell,min.pct = 0,logfc.threshold = 0,return.thresh = 0.1)
-
-#pas<-VariableFeatures(object = pca_scCell)
-pas<-VariableFeatures(object = pca_scCell)
-#pas<-VariableFeatures(object = pca_scCell)
-
-a1<-celltype_pathway_scproportion[,pas]
-a2<-as.data.frame(t(Pagwas$pca_cell_df))[,pas]
-
-a1$celltype<-rownames(a1)
-a2$celltype<-rownames(a2)
-
-gg_pa<-reshape2::melt(a1,id.vars="celltype",variable.name = "pathway",value.name = "heritability_proporion")
-
-gg_pa2<-reshape2::melt(a2,id.vars="celltype",variable.name = "pathway",value.name = "pca")
-gg_pa<-merge(gg_pa,gg_pa2)
-gg_pa<-gg_pa[,c("pathway","celltype","heritability_proporion","pca")]
-plot_sc_pa_contri_dot(data.to.plot = gg_pa, 
-         size_var = "heritability_proporion", 
-         col_var="heritability_proporion",
-         shape.scale = 8,
-         dend_x_var = c("heritability_proporion"),
-         dist_method="euclidean", 
-         hclust_method="ward.D"
-         )
-
-```
-
-##### Plot the top5 heritability correlation genes in celltypes
-
-```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8,warning = FALSE}
-top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
-plot_vln_Corgenes(seurat_obj=scRNAexample,
-             assay="RNA", slot="data",
-             var_group="anno",
-             vec_features=top5genes,
-             vec_group_colors= pal_d3(alpha =0.5)(10),
-             do_plot = T
-             )
-
-```
-
-
-```{r remove,message=FALSE,warning = FALSE}
-#result is:
-names(Pagwas)
-```
-The workfile is ongoing...

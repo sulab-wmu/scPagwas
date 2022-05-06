@@ -4,13 +4,7 @@
 \alias{Boot_evaluate}
 \title{Boot_evaluate}
 \usage{
-Boot_evaluate(
-  Pagwas,
-  Pathway_ld_gwas_data,
-  bootstrap_iters = 200,
-  part = 0.5,
-  n.cores = 1
-)
+Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5, n.cores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}

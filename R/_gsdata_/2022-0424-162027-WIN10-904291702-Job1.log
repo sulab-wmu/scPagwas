@@ -1,8 +1,0 @@
-2022-04-24 16:20:32: -- Analysis Started by On File Change, After Delay
-2022-04-24 16:20:32: R: On disk sftp://172.16.253.32 space required for sync is 0.00, free space is unknown
-2022-04-24 16:20:32: Changes: 1, Conflicts: 0, CopyTime: 0, FixState: 0, Errors: 0, All: 23
-2022-04-24 16:20:32: Left to Right: Copy File: 1 
-2022-04-24 16:20:32: == Sync Started by On File Change, After Delay
-2022-04-24 16:20:32: Start only 1 threads, limited by tasks to run
-2022-04-24 16:20:32: Copy Over 'E:/RPakage/scPagwas/R/Singlecell_heritability_contributions.R' -> 'sftp://172.16.253.32/share/pub/dengcy/GWAS_Multiomics/pagwas/R3.25/Singlecell_heritability_contributions.R' (22,195)
-2022-04-24 16:20:33: == Sync Complete. Time: 00:00:06, Speed: 13.00/s, OK: 1, Errors: 0

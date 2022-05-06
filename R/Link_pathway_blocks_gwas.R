@@ -7,7 +7,7 @@
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param chrom_ld LD data for 22 chromosome.
 #' @param split_n number of times to compute the singlecell result
-#' @param n.cores Parallel cores,default is 1. use detectCores()
+#' @param ncores Parallel cores,default is 1. use detectCores()
 #' to check the cores in computer.
 #'
 #' @return
@@ -20,9 +20,9 @@
 Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
                                      split_n=1,
-                                     n.cores = 1) {
+                                     ncores = 1) {
 
-
+  options(bigmemory.allow.dimnames=TRUE)
   Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
   names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
@@ -37,13 +37,15 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   Pagwas$gwas_data<-NULL
   #rm(gwas_data)
   # prevent naming issues and indexing issues
+  Pathway_sclm_results<-list()
+  Pathway_lm_results<-list()
+  Pathway_ld_gwas_data<-list()
 
   message(paste0("* Start to link gwas and pathway block annotations for ",
                  length(Pachrom_block_list), " pathways!"))
   options(bigmemory.allow.dimnames=TRUE)
   pb <- txtProgressBar(style = 3)
 
-  Pathway_sclm_results<-list()
   #Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pathway) {
   for (pathway in names(Pachrom_block_list)) {
 
@@ -132,7 +134,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                                       data_mat=Pagwas$data_mat[,which(la==i)],
                                                       rawPathway_list=Pagwas$rawPathway_list,
                                                       snp_gene_df=Pagwas$snp_gene_df,
-                                                      n.cores=n.cores )
+                                                      ncores=ncores )
 
       }
 
@@ -144,15 +146,19 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                              pca_scCell_mat=Pagwas$pca_scCell_mat,
                                              data_mat=Pagwas$data_mat,
                                              rawPathway_list=Pagwas$rawPathway_list,
-                                             snp_gene_df=Pagwas$snp_gene_df)
-
+                                             snp_gene_df=Pagwas$snp_gene_df,
+                                             ncores=ncores)
     }
 
+      pa_block<-link_pwpca_block(pa_block=pa_block,
+                                 pca_cell_df=data.matrix(Pagwas$pca_cell_df),
+                                 merge_scexpr=Pagwas$merge_scexpr,
+                                 snp_gene_df=Pagwas$snp_gene_df,
+                                 rawPathway_list=Pagwas$rawPathway_list)
+    Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
+    Pathway_ld_gwas_data[[pathway]]<-pa_block
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
-    #return(Pathway_sclm_results)
-
-   # }, n.cores = n.cores)
   }
 
   close(pb)
@@ -161,11 +167,16 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   rm(chrom_ld)
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
-  #table(rownames(Pathway_sclm_results)== colnames(Pagwas$pca_scCell_mat))
   rownames(Pathway_sclm_results)<- colnames(Pagwas$pca_scCell_mat)
-
   Pagwas$Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
-  #Pagwas$Pathway_sclm_results<-Pathway_sclm_results
+
+  Pathway_lm_results <- Pathway_lm_results[!sapply(Pathway_lm_results, is.null)]
+  Pathway_lm_results <- data.matrix(as.data.frame(Pathway_lm_results))
+  rownames(Pathway_lm_results)<- colnames(Pagwas$pca_cell_df)
+  Pagwas$Pathway_lm_results<-as(Pathway_lm_results,"dgCMatrix")
+
+  names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
+  Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
   gc()
   return(Pagwas)
 
