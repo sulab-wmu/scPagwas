@@ -4,14 +4,12 @@
 \alias{scPagwas_perform_regression}
 \title{scPagwas_perform_regression}
 \usage{
-scPagwas_perform_regression(Pagwas, Pathway_ld_gwas_data, n.cores = 1)
+scPagwas_perform_regression(Pagwas, Pathway_ld_gwas_data, ncores = 1)
 }
 \arguments{
 \item{Pagwas}{Pagwas data list, default is "NULL"}
 
 \item{Pathway_ld_gwas_data}{Pathway_ld_gwas_data}
-
-\item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
 
@@ -21,5 +19,5 @@ Functions for inferring relevant annotations using the polyTest model.
 }
 \examples{
 library(scPagwas)
-scPagwas_perform_regression(Pagwas, n.cores = n.cores)
+scPagwas_perform_regression(Pagwas, ncores = ncores)
 }

@@ -38,7 +38,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   #rm(gwas_data)
   # prevent naming issues and indexing issues
   Pathway_sclm_results<-list()
-  Pathway_lm_results<-list()
+  #+++++++Pathway_lm_results<-list()
   Pathway_ld_gwas_data<-list()
 
   message(paste0("* Start to link gwas and pathway block annotations for ",
@@ -155,7 +155,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                  merge_scexpr=Pagwas$merge_scexpr,
                                  snp_gene_df=Pagwas$snp_gene_df,
                                  rawPathway_list=Pagwas$rawPathway_list)
-    Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
+    #Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
     Pathway_ld_gwas_data[[pathway]]<-pa_block
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
@@ -170,10 +170,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   rownames(Pathway_sclm_results)<- colnames(Pagwas$pca_scCell_mat)
   Pagwas$Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
 
-  Pathway_lm_results <- Pathway_lm_results[!sapply(Pathway_lm_results, is.null)]
-  Pathway_lm_results <- data.matrix(as.data.frame(Pathway_lm_results))
-  rownames(Pathway_lm_results)<- colnames(Pagwas$pca_cell_df)
-  Pagwas$Pathway_lm_results<-as(Pathway_lm_results,"dgCMatrix")
+  #Pathway_lm_results <- Pathway_lm_results[!sapply(Pathway_lm_results, is.null)]
+  #Pathway_lm_results <- data.matrix(as.data.frame(Pathway_lm_results))
+  #rownames(Pathway_lm_results)<- colnames(Pagwas$pca_cell_df)
+  #Pagwas$Pathway_lm_results<-as(Pathway_lm_results,"dgCMatrix")
 
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data

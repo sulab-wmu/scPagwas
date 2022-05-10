@@ -7,7 +7,6 @@
 Pathway_pcascore_run(
   Pagwas = NULL,
   Pathway_list = NULL,
-  n.cores = 1,
   min.pathway.size = 10,
   max.pathway.size = 1000
 )
@@ -16,8 +15,6 @@ Pathway_pcascore_run(
 \item{Pagwas}{Pagwas format}
 
 \item{Pathway_list}{Pathawy gene list(gene symbol),list name is pathway name.}
-
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 
 \item{min.pathway.size}{Threshold for min pathway gene size.}
 

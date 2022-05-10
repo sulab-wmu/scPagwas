@@ -4,7 +4,7 @@
 \alias{Boot_evaluate}
 \title{Boot_evaluate}
 \usage{
-Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5, n.cores = 1)
+Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
@@ -12,8 +12,6 @@ Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5, n.cores = 1)
 \item{bootstrap_iters}{number of bootstrap iterations to run,default is 200}
 
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
-
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
 

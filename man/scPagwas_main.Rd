@@ -29,7 +29,7 @@ scPagwas_main(
   remove_outlier = T,
   SimpleResult = F,
   log.file = "scPagwas.run.log",
-  n.cores = 1
+  ncores = 1
 )
 }
 \arguments{
@@ -79,7 +79,7 @@ scPagwas_main(
 
 \item{log.file}{(character)log.file}
 
-\item{n.cores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+\item{ncores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
 

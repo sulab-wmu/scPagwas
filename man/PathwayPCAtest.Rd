@@ -4,14 +4,12 @@
 \alias{PathwayPCAtest}
 \title{PathwayPCAtest}
 \usage{
-PathwayPCAtest(Pathway_list, scCounts, n.cores = 1)
+PathwayPCAtest(Pathway_list, scCounts)
 }
 \arguments{
 \item{Pathway_list}{Pathawy gene list(gene symbol),list name is pathway name.}
 
 \item{scCounts}{single cell Counts pathway}
-
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
 

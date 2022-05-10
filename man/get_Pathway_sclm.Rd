@@ -8,9 +8,9 @@ get_Pathway_sclm(
   pa_block,
   pca_scCell_mat,
   data_mat,
+  ncores = 1,
   rawPathway_list,
-  snp_gene_df,
-  n.cores = 1
+  snp_gene_df
 )
 }
 \arguments{
@@ -21,8 +21,6 @@ get_Pathway_sclm(
 \item{rawPathway_list}{Element in Pagwas}
 
 \item{snp_gene_df}{Element in Pagwas}
-
-\item{n.cores}{n.cores}
 
 \item{Pathway_ld_gwas_data}{Element in Pagwas}
 

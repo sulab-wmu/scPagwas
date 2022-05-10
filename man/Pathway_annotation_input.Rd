@@ -4,7 +4,7 @@
 \alias{Pathway_annotation_input}
 \title{Pathway_annotation_input}
 \usage{
-Pathway_annotation_input(Pagwas, block_annotation, n.cores = 1)
+Pathway_annotation_input(Pagwas, block_annotation)
 }
 \arguments{
 \item{Pagwas}{Pagwas format data list inherit from other functions.}

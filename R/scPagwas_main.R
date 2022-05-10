@@ -290,7 +290,6 @@ scPagwas_main <- function(Pagwas = NULL,
   if(SimpleResult){
     Pagwas[c("VariableFeatures","merge_scexpr",
              "data_mat","rawPathway_list",
-             "Pathway_list",
              "snp_gene_df")]<-NULL
   }
   gc()

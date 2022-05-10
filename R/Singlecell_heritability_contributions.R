@@ -148,18 +148,18 @@ scPagwas_perform_score <- function(Pagwas,
   #rm(data_mat)
   pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 
-  pathway_expr<-as(pathway_expr,"dgCMatrix")
+  #pathway_expr<-as(pathway_expr,"dgCMatrix")
   colnames(pathway_expr) <- Pathway_names
   pa_exp_mat <-t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
   rm(pathway_expr)
 
   pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
   Pathway_single_results<-Pathway_sclm_results * pa_exp_mat
-
+  Pagwas$Pathway_single_results<-Pathway_single_results
   message("* Get rankPvalue for each single cell")
-  Pagwas$CellsrankPvalue<-rankPvalue(Pathway_single_results, columnweights = NULL,
+  Pagwas$CellsrankPvalue<-rankPvalue(data.matrix(Pathway_single_results), columnweights = NULL,
                                      na.last = "keep", ties.method = "average",
-                                     calculateQvalue = F, pValueMethod = "all")
+                                     calculateQvalue = F, pValueMethod = "rank")
 
   message("* Get Pathways'rankPvalue for each celltypes!")
   cl<-unique((Pagwas$Celltype_anno$annotation))
@@ -176,7 +176,7 @@ scPagwas_perform_score <- function(Pagwas,
   Pagwas$scPathways_rankPvalue <- Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),Pathways_rankPvalue)
   Pagwas$scPathways_rankPvalue <-as.data.frame(Pagwas$scPathways_rankPvalue)
   colnames(Pagwas$scPathways_rankPvalue)<-cl
-  rownames(Pagwas$scPathways_rankPvalue)<-colnames(Pagwas$Pathway_single_results)
+  rownames(Pagwas$scPathways_rankPvalue)<-colnames(Pathway_sclm_results)
   rm(Pathways_rankPvalue)
   message("* Get scPgwas score for each single cell")
   scPagwas_score <- rowSums(Pathway_single_results)

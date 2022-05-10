@@ -5,21 +5,28 @@
 \title{plot_pathway_contribution_network}
 \usage{
 plot_pathway_contribution_network(
-  mat_datExpr,
-  vec_pathwaycontribution,
-  Celltype_anno,
+  mat_datExpr = Pagwas$data_mat,
+  gene_contribution = Pagwas$gene_heritability_correlation,
+  Celltype_anno = Pagwas$Celltype_anno,
+  Pathway_list = Pagwas$Pathway_list,
+  celltypes,
+  pathwat_select,
   pathways_thre = 0.05,
   adjacency.power = 4,
-  adjacency.thre = 0.1,
-  n_max_pathways = 10,
+  n_max_genes = 200,
+  text_topn = 10,
   igraph_algorithm = "drl",
+  h_method = c("ward.D", "ward.D2", "single", "complete", "average", "mcquitty",
+    "median", "centroid"),
   fontface_labels = "bold.italic",
-  color_point = pal_d3(alpha = 0.5)(10),
-  color_edge = "#9D9D9D",
-  fontSize_label_lg = 3,
-  fontSize_legend_lg = 1,
-  fontSize_legend_xlg = 1,
-  limits = c(0, 10),
+  color_edge = "lightblue",
+  color_group = pal_d3(alpha = 0.5)(10),
+  node_alpha = 0.6,
+  fontSize_label_lg = 2,
+  fontSize_legend_lg = 3,
+  fontSize_legend_xlg = 3,
+  limits = c(0, 14),
+  range = c(1, 5),
   edge_thickness = 2,
   do_plot = F,
   figurenames = NULL,
@@ -30,9 +37,7 @@ plot_pathway_contribution_network(
 \arguments{
 \item{mat_datExpr}{data matrix for single cell data}
 
-\item{vec_pathwaycontribution}{vector of pathway contribution score from pagwas}
-
-\item{n_max_pathways}{number of max pathways for showing.}
+\item{n_max_genes}{number of max pathways for showing.}
 
 \item{igraph_algorithm}{defalt is drl,method for igragh,details see igraph packages.}
 
@@ -56,6 +61,8 @@ plot_pathway_contribution_network(
 
 \item{height}{figure height}
 
+\item{vec_gene_contribution}{vector of pathway contribution score from pagwas}
+
 \item{vec_pathways_highlight}{vector of pathway highlight from your choose.}
 }
 \description{
@@ -68,9 +75,9 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 \examples{
 plot_pathway_contribution_network(
 mat_datExpr=pca_cell_df,
-vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
+vec_gene_contribution=Pagwas$Pathway_block_heritability,
 vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-n_max_pathways=20,
+n_max_genes=20,
 igraph_algorithm = "drl",
 fontface_labels="bold.italic",
 color_edge = "#9D9D9D",

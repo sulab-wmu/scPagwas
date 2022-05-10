@@ -32,6 +32,7 @@ Celltype_heritability_contributions<-function(Pagwas,
                             bootstrap_iters = iters, part = part)
     Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
   }
+  Pagwas$Pathway_ld_gwas_data<-NULL
   if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
     stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
   }

@@ -8,9 +8,9 @@
 #' https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plot.R
 #'
 #' @param mat_datExpr data matrix for single cell data
-#' @param vec_pathwaycontribution vector of pathway contribution score from pagwas
+#' @param vec_gene_contribution vector of pathway contribution score from pagwas
 #' @param vec_pathways_highlight vector of pathway highlight from your choose.
-#' @param n_max_pathways number of max pathways for showing.
+#' @param n_max_genes number of max pathways for showing.
 #' @param igraph_algorithm defalt is drl,method for igragh,details see igraph packages.
 #' @param fontface_labels fontface for labels
 #' @param color_edge edge color.
@@ -27,9 +27,9 @@
 #' @examples
 #' plot_pathway_contribution_network(
 #' mat_datExpr=pca_cell_df,
-#' vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
+#' vec_gene_contribution=Pagwas$Pathway_block_heritability,
 #' vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-#' n_max_pathways=20,
+#' n_max_genes=20,
 #' igraph_algorithm = "drl",
 #' fontface_labels="bold.italic",
 #' color_edge = "#9D9D9D",
@@ -39,71 +39,117 @@
 #' edge_thickness = 1
 #' )
 
-plot_pathway_contribution_network <- function(
-                                        mat_datExpr,
-                                        vec_pathwaycontribution,
-                                        Celltype_anno,
+plot_pathway_contribution_network <- function(  mat_datExpr=Pagwas$data_mat,
+                                                gene_contribution=Pagwas$gene_heritability_correlation,
+                                                Celltype_anno=Pagwas$Celltype_anno,
+                                                Pathway_list=Pagwas$Pathway_list,
+                                        celltypes,
+                                        pathwat_select,
                                         pathways_thre=0.05,
                                         adjacency.power=4,
-                                        adjacency.thre=0.1,
-                                        n_max_pathways=10,
+                                        n_max_genes=200,
+                                        text_topn=10,
                                         igraph_algorithm = "drl",
+                                        h_method =c("ward.D", "ward.D2", "single", "complete", "average","mcquitty","median" , "centroid"),
                                         fontface_labels="bold.italic",
-                                        color_point= pal_d3(alpha =0.5)(10),
-                                        color_edge = "#9D9D9D",
-                                        fontSize_label_lg=3,
-                                        fontSize_legend_lg=1,
-                                        fontSize_legend_xlg=1,
-                                        limits=c(0,10),
+                                        color_edge = "lightblue",
+                                        color_group=pal_d3(alpha =0.5)(10),
+                                        node_alpha=0.6,
+                                        #edge_filter,
+                                        fontSize_label_lg=2,
+                                        fontSize_legend_lg=3,
+                                        fontSize_legend_xlg=3,
+                                        limits=c(0,14),
+                                        range=c(1,5),
                                         edge_thickness = 2,
                                         do_plot=F ,
                                         figurenames=NULL,
                                         width=7,
                                         height=7
                                         ) {
+#####debug
 
-  # sort
-  #mat_datExpr
-  cl<-unique((Celltype_anno$annotation))
 
-  lapply(cl, function(ss){
-    tt<-Celltype_anno$annotation==ss
-    mat_datExpr_cell<-mat_datExpr[tt,]
-    pathwaycontribution<-vec_pathwaycontribution[,ss]
-    #pathwayhighlight = pathwaycontribution[pathwaycontribution<pathways_thre]
-    #pathwayhighlight = sort(pathwayhighlight, decreasing = F)
-    #if(length(pathwayhighlight)>n_max_pathways){
-     # pathwayhighlight<-pathwayhighlight[1:10]
-    pathwaycontribution<- -log10(pathwaycontribution)
-    #}
-    #pathwaycontribution = sort(pathwaycontribution, decreasing = F)
-  # take take hub pathways and pathways to highlight (if any)
-  #vec_logical = names(vec_pathwaycontribution) %in% c(names(vec_pathwaycontribution)[1:min(n_max_pathways, length(vec_pathwaycontribution))],  vec_pathways_highlight)
-  #vec_pathwaycontribution = vec_pathwaycontribution[vec_logical]
+  # pathwat_select=rownames(Pagwas$scPathways_rankPvalue)[order(Pagwas$scPathways_rankPvalue[,celltypes],decreasing = F)[1]];
+  # celltypes="OPC";
+  # mat_datExpr=Single_data@assays$RNA@data;
+  # gene_contribution=Pagwas$gene_heritability_correlation;
+  # Celltype_anno=Pagwas$Celltype_anno;
+  # Pathway_list=Pagwas$Pathway_list;
+  # pathwat_select=pathway;
+  # celltypes="OPC";
+  # pathways_thre=0.05;
+  # adjacency.power=4;
+  # n_max_genes=200;
+  # n_group=4;
+  # text_topn=10;
+  # igraph_algorithm = "drl";
+  # h_method =c("complete");
+  # fontface_labels="bold.italic";
+  # color_edge = "lightblue";
+  # color_group=pal_d3(alpha =0.5)(10);
+  # node_alpha=0.6;
+  # edge_filter=0.001;
+  # fontSize_label_lg=2;
+  # fontSize_legend_lg=3;
+  # fontSize_legend_xlg=3;
+  # limits=c(0,14);
+  # range=c(1,5);
+  # edge_thickness = 2;
+  # do_plot=F;
+  # figurenames=NULL;
+  # width=7;
+  # height=7;
 
-    mat_datExpr_cell <- mat_datExpr_cell[,names(pathwaycontribution)]
 
-  # Compute network adjacency
+
+    tt<-Celltype_anno$annotation==celltypes
+    mat_datExpr_cell<-mat_datExpr[,tt]
+    #gene_contribution<-gene_contribution[tt]
+    #names(gene_contribution)<- rownames(vec_gene_contribution)
+    #pathway_select<-
+    #
+
+    gene_contribution<- gene_contribution[,1]
+    #names(gene_contribution)<-rownames(vec_gene_contribution)
+
+    gene_contribution<- gene_contribution[unique(unlist(Pathway_list[pathwat_select]))]
+
+    if(length(gene_contribution)>n_max_genes){
+      gene_contribution<-gene_contribution[order(gene_contribution,decreasing = T)[1:n_max_genes]]
+    }
+    mat_datExpr_cell <- mat_datExpr_cell[names(gene_contribution),]
+    #distance = dist(data.matrix(mat_datExpr_cell))
+
+    pas<-names(sort(gene_contribution,decreasing = T))[text_topn]
+    #tf<-rep(F,length(gene_contribution))
+    #tf[which(names(gene_contribution)%in% pas )]<-T
+
+    #mydata.hclust = hclust(distance,method = h_method)
+    #plot(mydata.hclust,hang=-1)
+    #member = as.character(cutree(mydata.hclust,k = n_group))
+
+    #names(member)<-colnames(mat_datExpr_cell)
+    mat_datExpr_cell<- t(data.matrix(mat_datExpr_cell))
   mat_adj <- WGCNA::adjacency(mat_datExpr_cell,
                               power =adjacency.power,
                               corFnc = "cor",
                               corOptions = list(use = "p"),
                               type = "signed hybrid")
 
-  df_hub.data <- cbind.data.frame(pathway = names(pathwaycontribution), contribution = pathwaycontribution)
-  df_hub.data$color<-rep("none",nrow(df_hub.data))
-  #df_hub.data$color<-color_point
-  #df_hub.data$color[which(df_hub.data$pathway %in% vec_pathways_highlight)]<-"Highlight"
-  #df_hub.data$contribution[df_hub.data$contribution>limits[2]]<-10
-
-
-  mat_adj[which(mat_adj< adjacency.thre)]<-0
+  df_hub.data <- cbind.data.frame(pathway = names(gene_contribution), contribution = gene_contribution)
+ # df_hub.data$color<- member
+  mat_adj[is.na(mat_adj)]<-0
+  mat_adj[is.nan(mat_adj)]<-0
+  mat_adj[which(mat_adj< quantile(mat_adj)[4])]<-0
+  #mat_adj[ mat_adj< edge_filter]<-0
   mat_adj<-mat_adj[rowSums(mat_adj,na.rm = TRUE)!=0,colSums(mat_adj,na.rm = TRUE)!=0]
-
 
   df_hub.data<-df_hub.data[rownames(mat_adj),]
   a<-df_hub.data$contribution*edge_thickness
   a[a>limits[2]]<-limits[2]
+
+  names(a)<-rownames(mat_adj)
 
   mat_adj %>%
     igraph::graph.adjacency(mode = "undirected", weighted = T, diag = FALSE) %>%
@@ -112,56 +158,62 @@ plot_pathway_contribution_network <- function(
     tidygraph::activate(edges) %>%
     tidygraph::activate(nodes) %>%
     dplyr::filter(!tidygraph::node_is_isolated())-> hub.plot
- # library(graphlayouts)
- # library("oaqc")
- # library(ggforce)
- # library("concaveman")
-
-  #set.seed(665)
-  #create network with a group structure
-  #hub.plot <- sample_islands(9, 40, 0.4, 15)
   hub.plot <- igraph::simplify(hub.plot)
-  V(hub.plot)$grp <- as.character(rep(1,length(V(hub.plot))))
-  bb <- layout_as_backbone(hub.plot, keep = 0.4)
-  E(hub.plot)$col <- F
-  E(hub.plot)$col[bb$backbone] <- T
+  V(hub.plot)$grp <- rep(celltypes,length(V(hub.plot)))
 
-  #bb <- graphlayouts::layout_as_backbone(hub.plot, keep = 0.4)
-  #E(hub.plot)$col <- FALSE
-  #E(hub.plot)$col[bb$backbone] <- TRUE
+ # if(length(E(hub.plot))>10000){
+  #  bb <-graphlayouts::layout_as_backbone(hub.plot, keep = 0.1)
+ # }else(
+    bb <-graphlayouts::layout_as_backbone(hub.plot, keep = 0.4)
+ # )
 
-  #layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2]
-#cent = graph.strength(hub.plot)
- # ggraph::ggraph(hub.plot, layout = "stress") +
-  cell_p<-  ggraph::ggraph(hub.plot, layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2])+
-    ggraph::geom_edge_link0(aes(edge_width = weight), edge_colour = "grey66") +
-    ggraph::geom_node_point(aes(fill = grp, size = contribution), shape = 21) +
-    ggraph::geom_node_text(aes(filter = contribution >=7,
+  #E(hub.plot)$col <- F
+  #E(hub.plot)$col[bb$backbone] <- T
+
+  module.plot<-  ggraph::ggraph(hub.plot, layout = "manual", x = bb$xy[, 1], y = bb$xy[, 2])+
+    ggraph::geom_edge_link0(aes(edge_width = weight), edge_colour = color_edge) +
+    ggraph::geom_node_point(aes(fill = grp, size = contribution),
+                            alpha=node_alpha,
+                            shape = 21) +
+    ggraph::geom_node_text(aes(filter = contribution>= a[pas],
                                size=fontSize_label_lg,
-                               label = name)) +
-    #scale_fill_manual(values = df_hub.data$color) +
-    scale_edge_width(range = c(0, 0.7)) +
+                               label = name),repel=T) +
+    scale_edge_width(range = c(0, 1)) +
     scale_size(#breaks = c(1,2,3,4,5,6,7,8,9,10),
                limits = limits,
-               range = limits
+               range = range
                #labels = c(" \U00B1 1", " \U00B1 2", " \U00B1 3")
     )+
-    geom_mark_hull(
+    ggforce::geom_mark_hull(
         aes(x, y, group = grp, fill = grp),
         concavity = 4,
         expand = unit(2, "mm"),
-        alpha = 0.25
+        alpha = 0.15
       )+
     theme_graph() +
-      scale_color_brewer(values="") +
-      scale_fill_brewer(values="")+
+    scale_color_manual(values =color_group) +
+    scale_fill_manual(values =color_group,guide="none")+
+    ggtitle(paste0(celltypes,"\n",pathwat_select))+
     #theme(legend.position = "none")
-  theme(legend.position = "bottom")
+  #theme(legend.position = "bottom")
+  theme(
+    legend.title.align=1,
+    legend.position = "bottom",
+    legend.margin = margin(0,0,0,0, unit="cm"),
+    legend.title = element_text(size=fontSize_legend_xlg, face="bold"),
+    legend.text = element_text(size=fontSize_legend_lg),
+    legend.spacing.x = unit(0, "cm"),
+       # margin: top, right, bottom, and left
+    plot.margin = unit(c(0, 0, 0, 0), "cm"),
 
-  return(cell_p)
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
 
-  })
-    #coord_cartesian(clip="off")
+    plot.background = element_blank(),
+    panel.grid = element_blank()
+  )+theme_graph()
+
 
   if (do_plot) print(module.plot)
 

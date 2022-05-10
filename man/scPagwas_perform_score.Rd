@@ -4,12 +4,10 @@
 \alias{scPagwas_perform_score}
 \title{scPagwas_perform_score}
 \usage{
-scPagwas_perform_score(Pagwas, n.cores = 1, remove_outlier = TRUE)
+scPagwas_perform_score(Pagwas, remove_outlier = TRUE)
 }
 \arguments{
 \item{Pagwas}{pagwas}
-
-\item{n.cores}{cores}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.
 storage, you can set a large number to save time.}
