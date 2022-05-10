@@ -156,7 +156,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                  snp_gene_df=Pagwas$snp_gene_df,
                                  rawPathway_list=Pagwas$rawPathway_list)
     #Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
-    Pathway_ld_gwas_data[[pathway]]<-pa_block
+    Pathway_ld_gwas_data[[pathway]]<-pa_block[c("x","y","snps","include_in_inference")]
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
   }

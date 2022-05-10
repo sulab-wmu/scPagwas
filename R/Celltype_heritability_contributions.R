@@ -13,19 +13,7 @@ Celltype_heritability_contributions<-function(Pagwas,
                                               iters = 200,
                                               part = 0.5){
 
-  #Pathway_ld_gwas_data <- link_pwpca_block(Pagwas)
-  #message("done")
   Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data)
-  #message("done")
-  # add on heritability values
-  #message("** Get Pathway heritability contributions!")
-  #Pagwas$Pathway_block_heritability <-
-  #  Get_Pathway_heritability_contributions(
-  #    Pagwas$pca_cell_df,
-  #    Pagwas$lm_results$parameters
-   # )
-  #message("done")
-  # Bootstrap error and 95% confidence interval estimates
 
   if (iters > 0) {
     Pagwas <- Boot_evaluate(Pagwas,
