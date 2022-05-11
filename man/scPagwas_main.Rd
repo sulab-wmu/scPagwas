@@ -15,7 +15,6 @@ scPagwas_main(
   block_annotation = NULL,
   Single_data = NULL,
   assay = c("RNA", "SCT"),
-  nfeatures = NULL,
   Pathway_list = NULL,
   chrom_ld = NULL,
   split_n = 1,
@@ -50,8 +49,6 @@ scPagwas_main(
 \item{Single_data}{(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.}
 
 \item{assay}{(character)assay data of your single cell data to use,default is "RNA"}
-
-\item{nfeatures}{(integr) The parameter for FindVariableFeatures, NULL means select all genes}
 
 \item{Pathway_list}{(list,character) pathway gene sets list}
 

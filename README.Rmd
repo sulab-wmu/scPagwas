@@ -59,7 +59,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      assay="RNA",
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      split_n=2,
-                     nfeatures =NULL,
+                     #nfeatures =19000,
                      Pathway_list=Genes_by_pathway_kegg,
                      chrom_ld = chrom_ld,
                      SimpleResult=T)

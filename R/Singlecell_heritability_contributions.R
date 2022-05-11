@@ -9,7 +9,7 @@
 #' @param split_n number of times to compute the singlecell result
 #'
 #' @return
-#'
+#' @export
 #' @examples
 get_Pathway_sclm<-function(pa_block,
                            pca_scCell_mat,
@@ -113,7 +113,7 @@ get_Pathway_sclm<-function(pa_block,
 #' @param remove_outlier Whether to remove the outlier for scPagwas score.
 #' storage, you can set a large number to save time.
 #' @return
-#'
+#' @export
 #' @examples
 #' library(scPagwas)
 #' scPagwas_perform_score(Pagwas)
@@ -132,6 +132,7 @@ scPagwas_perform_score <- function(Pagwas,
   message("* Get pathways mean expression in single cell")
 
   pathway_expr <- lapply(Pathway_names, function(pa) {
+    print(pa)
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
 
     if (length(a) == 0) {
@@ -145,6 +146,7 @@ scPagwas_perform_score <- function(Pagwas,
       return(b)
     }
   })
+  pathway_expr<-pathway_expr[!sapply(pathway_expr, is.null)]
   #rm(data_mat)
   pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 

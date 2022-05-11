@@ -177,6 +177,10 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
+
+    Pagwas$pca_cell_df<-NULL
+    Pagwas$merge_scexpr<-NULL
+
   gc()
   return(Pagwas)
 

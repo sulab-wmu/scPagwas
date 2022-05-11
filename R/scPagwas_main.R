@@ -4,7 +4,6 @@
 #' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings
 #' @importFrom SeuratObject Idents
 #' @importFrom Matrix Matrix colSums rowSums crossprod
-#' @importFrom parallel mclapply
 #' @importFrom glmnet cv.glmnet
 #' @importFrom GenomicRanges GRanges resize resize
 #' @importFrom IRanges IRanges
@@ -35,7 +34,6 @@
 #' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
 #' @param Single_data (Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.
 #' @param assay (character)assay data of your single cell data to use,default is "RNA"
-#' @param nfeatures (integr) The parameter for FindVariableFeatures, NULL means select all genes
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
 #' @param split_n number of times to compute the singlecell result
@@ -79,7 +77,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         block_annotation = NULL,
                         Single_data = NULL,
                         assay=c("RNA","SCT"),
-                        nfeatures =NULL,
+                        #nfeatures =NULL,
                         Pathway_list=NULL,
                         chrom_ld=NULL,
                         split_n=1,
@@ -115,7 +113,7 @@ scPagwas_main <- function(Pagwas = NULL,
       paste('eqtls_files: ', eqtls_files, sep='\t'),
       paste('Single_data: ', Single_data, sep='\t'),
       paste('assay: ', assay, sep='\t'),
-      paste('nfeatures: ', nfeatures, sep='\t'),
+      #paste('nfeatures: ', nfeatures, sep='\t'),
       paste('Pathway length: ', length(Pathway_list),collapse = " ", sep='\t'),
       paste('split_n: ', split_n, sep='\t'),
       paste('marg: ', marg, sep='\t'),
@@ -151,12 +149,11 @@ scPagwas_main <- function(Pagwas = NULL,
   }
     Pagwas <- Single_data_input(Pagwas=Pagwas,
                                 assay=assay,
-                                nfeatures =nfeatures,
+                                #nfeatures =nfeatures,
                                 Single_data=Single_data,
                                 Pathway_list=Pathway_list,
                                 min_clustercells=min_clustercells)
   rm(Single_data)
-
   #message(ncol(Pagwas$Single_data)," cells are remain!" )
   message('done!')
   }
@@ -208,10 +205,8 @@ scPagwas_main <- function(Pagwas = NULL,
 
   tt <- Sys.time()
   if(!is.null(block_annotation)){
-
     if(add_eqtls!="OnlyTSS"){
       if (!is.null(eqtls_files)){
-
         message("Filter snps for significant eqtls!")
         Pagwas<-  Tissue_eqtls_Input(Pagwas=Pagwas,
                                      block_annotation=block_annotation,
