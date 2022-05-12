@@ -1,7 +1,6 @@
 
 #' @importFrom dplyr mutate filter inner_join %>%
 #' @importFrom irlba irlba
-#' @importFrom SOAR Store
 #' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings
 #' @importFrom SeuratObject Idents
 #' @importFrom Matrix Matrix colSums rowSums crossprod
