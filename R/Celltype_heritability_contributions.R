@@ -1,32 +1,3 @@
-#' Celltype_heritability_contributions
-#'
-#' @param Pagwas Pagwas format, deault is NULL.
-#' @param iters number of bootstrap iterations to perform
-#' @param part number of bootstrap iterations to perform,default is 0.5
-#' @param ncores Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#'
-#' @return
-#' @export
-#'
-#' @examples
-Celltype_heritability_contributions<-function(Pagwas,
-                                              iters = 200,
-                                              part = 0.5){
-
-  Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data)
-
-  if (iters > 0) {
-    Pagwas <- Boot_evaluate(Pagwas,
-                            bootstrap_iters = iters, part = part)
-    Pagwas$bootstrap_results$annotation<-c("Intercept",colnames(Pagwas$pca_cell_df))
-  }
-  Pagwas$Pathway_ld_gwas_data<-NULL
-  if (sum(is.na(Pagwas$lm_results$parameters)) > 1) {
-    stop("There is NA in parameters,can not appropriate to continue the calculation,Please check whether the GWAS data is too small!")
-  }
-
-return(Pagwas)
-}
 
 #' link_pwpca_block
 #' @description Link the pca score and expression for each pathway genes
@@ -107,41 +78,7 @@ link_pwpca_block <- function(pa_block,
 
     pa_block$include_in_inference <- T
 
-  return(pa_block)
-}
-
-
-#' Pa_Pagwas_perform_regression
-#' @description Run regression
-#' @param pa_block Pagwas format, deault is NULL.
-#'
-#' @return
-#'
-#' @examples
-#' library(scPagwas)
-#' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
-Pa_Pagwas_perform_regression <- function(pa_block) {
-  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  if (is.null(pa_block)) {
-    warning("data has not been precomputed, returning without results")
-    #return(Pagwas)
-  }
-  #message("** Start inference")
-  # fit model
-  if (!is.null(pa_block$x)) {
-    if (pa_block$n_snps > 2) {
-  vectorized_Pagwas_data <- xy2vector_pa(pa_block)
-
-  lm_results <- pa_parameter_regression(vectorized_Pagwas_data)
-
-    }else{
-      lm_results<-NULL
-    }
-
-  } else {
-    lm_results<-NULL
-  }
-  return(lm_results)
+  return(pa_block[c("x","y","snps","include_in_inference")])
 }
 
 
@@ -150,16 +87,11 @@ Pa_Pagwas_perform_regression <- function(pa_block) {
 #' @param Pathway_ld_gwas_data Pagwas format, deault is NULL.
 #'
 #' @return
-#'
+#' @export
 #' @examples
 #' library(scPagwas)
 #' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
 Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
-  #Sys.setenv(R_LOCAL_CACHE=scPagwasSession)
-  if (is.null(Pathway_ld_gwas_data)) {
-    warning("data has not been precomputed, returning without results")
-    #return(Pagwas)
-  }
   message("** Start inference")
   # fit model
   vectorized_Pagwas_data <- xy2vector(Pathway_ld_gwas_data)
@@ -188,32 +120,6 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
   lm_results$model <- m
 
   return(lm_results)
-}
-
-
-#' pa_parameter_regression
-#' @description Find parameter estimates for the data.
-#' @param vectorized_Pagwas_data Pagwas data that has been vectorized
-#'
-#' @return
-
-pa_parameter_regression <- function(vectorized_Pagwas_data) {
-  lm_results <- list()
-
-  m <- stats::lm(vectorized_Pagwas_data$y ~
-                   offset(vectorized_Pagwas_data$noise_per_snp) +
-                   vectorized_Pagwas_data$x)
-
-  lm_results$parameters <- stats::coef(m)
-
-  lm_results$parameters[is.na(lm_results$parameters)] <- 0
-  #names(results)<-colnames(data_mat)
-
-  annotation_names <- c("Intercept", colnames(vectorized_Pagwas_data$x))
-  names(lm_results$parameters) <- annotation_names
-  #lm_results$model <- m
-
-  return(lm_results$parameters[-1])
 }
 
 
@@ -333,26 +239,6 @@ xy2vector <- function(Pathway_ld_gwas_data = NULL) {
 }
 
 
-xy2vector_pa <- function(pa_block = NULL) {
-  # use only blocks flagged for inference inclusion
-
-  # unpack Pathway_ld_gwas_data
-  y <- pa_block$y
-  x <- pa_block$x
-
-  rownames(x) <- pa_block$snps$rsid
-  noise_per_snp <- pa_block$snps$se**2
-
-  na_elements <- is.na(y) | apply(x, 1, function(x) {
-    any(is.na(x))
-  }) | is.na(noise_per_snp)
-  return(list(
-    y = y[!na_elements], x = x[!na_elements, ],
-    noise_per_snp = noise_per_snp[!na_elements]
-  ))
-}
-
-
 #' Get_Pathway_heritability_contributions
 #' @description Caclulate predicted block values based on block information and model fit.
 #' @param pca_cell_df pca score dataframe
@@ -413,63 +299,4 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 
   return(parameter_estimates)
 }
-
-
-
-#' Pagwas_perform_regularized_inference
-#'
-#' @description Run inference with added regularization.
-#' If p-values are desired use the other inference function. This for
-#' prediction purposes.
-#' @param Pagwas Pagwas data
-#' @param n_folds folds for regularized inference
-#'
-#' @return
-
-Pagwas_perform_regularized_regression <- function(Pagwas, n_folds = 10) {
-  message("performing cross validation")
-  Pagwas$cv_regularized_lm_results <- cv_regularized_parameter_estimator(
-    xy2vector(),
-    n_folds = n_folds
-  )
-
-  # add on block values
-  Pagwas$regularized_Pathway_heritability_contributions <- Get_Pathway_heritability_contributions(
-    Pagwas$pca_cell_df, Pagwas$cv_regularized_lm_results$parameters
-  )
-
-  return(Pagwas)
-}
-
-#' cv_regularized_parameter_estimator
-#' @description Perform regularization inference.
-#' Use CV to find appropriate values of lambda for either feature selection
-#' @param vectorized_Pagwas_data Pagwas data used for inference
-#' @param n_folds number of folds for cross validation
-#' @param ... other arguments to pass to cv.glmnet
-#'
-#' @return
-
-cv_regularized_parameter_estimator <- function(vectorized_Pagwas_data,
-                                               n_folds = 10,
-                                               ...) {
-  lm_results <- list()
-  m <- glmnet::cv.glmnet(
-    x = vectorized_Pagwas_data$x,
-    y = vectorized_Pagwas_data$y,
-    offset = vectorized_Pagwas_data$noise_per_snp,
-    foldid = cut(seq_len(length(vectorized_Pagwas_data$y)), breaks = n_folds, labels = F),
-    family = "gaussian", ... = ...
-  )
-
-  # can choose coefficients with either: lambda.min, or lambda.1se
-  lm_results$parameters <- stats::coef(m, s = "lambda.min") %>% as.numeric()
-  annotation_names <- c("intercept", colnames(vectorized_Pagwas_data$x))
-  names(lm_results$parameters) <- annotation_names
-  lm_results$model <- m
-  return(lm_results)
-}
-
-
-
 

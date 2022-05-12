@@ -1,6 +1,7 @@
 
 #' @importFrom dplyr mutate filter inner_join %>%
 #' @importFrom irlba irlba
+#' @importFrom SOAR Store
 #' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings
 #' @importFrom SeuratObject Idents
 #' @importFrom Matrix Matrix colSums rowSums crossprod
@@ -77,7 +78,7 @@ scPagwas_main <- function(Pagwas = NULL,
                         block_annotation = NULL,
                         Single_data = NULL,
                         assay=c("RNA","SCT"),
-                        #nfeatures =NULL,
+                        #Store_CACHE="test",
                         Pathway_list=NULL,
                         chrom_ld=NULL,
                         split_n=1,
@@ -92,6 +93,31 @@ scPagwas_main <- function(Pagwas = NULL,
                         SimpleResult=F,
                         log.file='scPagwas.run.log',
                         ncores=1) {
+  #debug
+  # Pagwas = NULL;
+  # gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas");
+  # output.prefix="test";
+  # add_eqtls="OnlyTSS";
+  # eqtls_files=NULL;
+  # eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta");
+  # block_annotation = block_annotation;
+  # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
+  # assay="RNA";
+  # Pathway_list=Genes_by_pathway_kegg;
+  # chrom_ld=chrom_ld;
+  # split_n=3;
+  # marg=10000;
+  # maf_filter = 0.01;
+  # min_clustercells=10;
+  # min.pathway.size=5;
+  # max.pathway.size=300;
+  # iters=200;
+  # param.file=T;
+  # remove_outlier=T;
+  # SimpleResult=F;
+  # log.file='scPagwas.run.log';
+  # ncores=2;
+
   #######
   ## initialize log-file
   cat('##', format(Sys.time()), '\n', file=log.file)
@@ -127,6 +153,8 @@ scPagwas_main <- function(Pagwas = NULL,
     )
     writeLines(param.str, con=paste(output.prefix, 'parameters.txt', sep='_'))
   }
+
+  #Sys.setenv(R_LOCAL_CACHE=Store_CACHE)
 
   tt <- Sys.time()
   if (is.null(Pagwas)) {
@@ -262,8 +290,13 @@ scPagwas_main <- function(Pagwas = NULL,
 
   message(paste(utils::timestamp(quiet = T), ' ******* 7th: Celltype_heritability_contributions function start! ********',sep = ''))
 
-  Pagwas<-Celltype_heritability_contributions(Pagwas=Pagwas,
-                                              iters = iters)
+  #Pagwas<-Celltype_heritability_contributions(Pagwas=Pagwas,
+   #                                           iters = iters,
+   #                                           part = 0.5)
+  Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data)
+  Pagwas <- Boot_evaluate(Pagwas,bootstrap_iters = iters, part = 0.5)
+
+  Pagwas$Pathway_ld_gwas_data<-NULL
   message('done!')
   cat('Celltype_heritability_contributions: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)

@@ -132,21 +132,22 @@ scPagwas_perform_score <- function(Pagwas,
   message("* Get pathways mean expression in single cell")
 
   pathway_expr <- lapply(Pathway_names, function(pa) {
-    print(pa)
+    #print(pa)
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
 
     if (length(a) == 0) {
       #return(rep(0, ncol(Pagwas$data_mat)))
       return(NULL)
     } else if (length(a) == 1) {
-      #return(Pagwas$data_mat[a, ])
-      return(NULL)
+      return(Pagwas$data_mat[a, ])
+      #return(NULL)
     } else {
       b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
       return(b)
     }
   })
   pathway_expr<-pathway_expr[!sapply(pathway_expr, is.null)]
+  Pathway_names<-Pathway_names[!sapply(pathway_expr, is.null)]
   #rm(data_mat)
   pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 
@@ -156,7 +157,7 @@ scPagwas_perform_score <- function(Pagwas,
   rm(pathway_expr)
 
   pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
-  Pathway_single_results<-Pathway_sclm_results * pa_exp_mat
+  Pathway_single_results<-Pathway_sclm_results[,Pathway_names] * pa_exp_mat
   Pagwas$Pathway_single_results<-Pathway_single_results
   message("* Get rankPvalue for each single cell")
   Pagwas$CellsrankPvalue<-rankPvalue(data.matrix(Pathway_single_results), columnweights = NULL,
