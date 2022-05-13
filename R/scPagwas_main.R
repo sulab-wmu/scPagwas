@@ -32,7 +32,7 @@
 #' @param eqtls_files (character)eqtls files names,frome GTEx.
 #' @param eqtls_cols (character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")
 #' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
-#' @param Single_data (Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.
+#' @param Single_data (character or Seruat)Input the Single data in seruat format, or the Seruat data address for rds format.Idents should be the celltypes annotation.
 #' @param assay (character)assay data of your single cell data to use,default is "RNA"
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
@@ -104,7 +104,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # eqtls_files=NULL;
   # eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta");
   # block_annotation = block_annotation;
-  # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
+  # #Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;
@@ -142,7 +142,7 @@ scPagwas_main <- function(Pagwas = NULL,
       paste('input gwas data: ', gwas_data, sep='\t'),
       paste('add_eqtls: ', add_eqtls, sep='\t'),
       paste('eqtls_files: ', eqtls_files, sep='\t'),
-      paste('Single_data: ', Single_data, sep='\t'),
+      #paste('Single_data: ', Single_data, sep='\t'),
       paste('assay: ', assay, sep='\t'),
       #paste('nfeatures: ', nfeatures, sep='\t'),
       paste('Pathway length: ', length(Pathway_list),collapse = " ", sep='\t'),
@@ -170,12 +170,14 @@ scPagwas_main <- function(Pagwas = NULL,
 
   #suppressMessages(require(SeuratObject))
   if(!is.null(Single_data)){
-  if(grepl(".rds",Single_data)){
-    message("** Start to read the single cell data!")
-    Single_data=readRDS(Single_data)
-  }else{
-    stop("There is need a data in `.rds` format ")
-  }
+   if(class(Single_data)=="character"){
+     if(grepl(".rds",Single_data)){
+       message("** Start to read the single cell data!")
+       Single_data=readRDS(Single_data)
+     }else{
+       stop("There is need a data in `.rds` format ")
+     }
+   }
 
   if(!assay %in% Assays(Single_data)){
     stop("There is no need assays in your Single_data")

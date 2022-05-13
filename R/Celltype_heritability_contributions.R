@@ -36,23 +36,41 @@ link_pwpca_block <- function(pa_block,
     mg <- intersect(rawPathway_list[[pathway]], proper_genes)
     x2 <- merge_scexpr[mg, ]
 
+    if(ncol(merge_scexpr)==1){
+
+      x2<-data.matrix(x2)
+    }
     if (length(mg) > 1) {
       x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
 
     }
 
     if (pa_block$n_snps > 1) {
+      if(ncol(merge_scexpr)==1){
+        x2 <- data.matrix(x2[pa_block$snps$label, ])
+        pa_block$n_snps <- nrow(pa_block$snps)
 
-      x2 <- x2[pa_block$snps$label, ]
-      pa_block$n_snps <- nrow(pa_block$snps)
+        x <-data.matrix(x[rep(1, pa_block$n_snps), ])
+        rownames(x) <- pa_block$snps$rsid
 
-      x <-x[rep(1, pa_block$n_snps), ]
-      rownames(x) <- pa_block$snps$rsid
+        #snp_gene_df <- Pagwas$snp_gene_df
+        rownames(snp_gene_df) <- snp_gene_df$rsid
+        x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+        x3 <- x2 * x
 
-      #snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-      x3 <- x2 * x
+      }else{
+        x2 <- x2[pa_block$snps$label, ]
+        pa_block$n_snps <- nrow(pa_block$snps)
+
+        x <-x[rep(1, pa_block$n_snps), ]
+        rownames(x) <- pa_block$snps$rsid
+
+        #snp_gene_df <- Pagwas$snp_gene_df
+        rownames(snp_gene_df) <- snp_gene_df$rsid
+        x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+        x3 <- x2 * x
+
+      }
 
     } else {
 
@@ -147,9 +165,9 @@ Boot_evaluate <- function(Pagwas,
           sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
         ])
       )
+      #boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
+      names(boot_results$parameters)<-c("Intercept",colnames(Pagwas$pca_cell_df))
 
-
-      boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
       setTxtProgressBar(pb, i / bootstrap_iters)
 
       # return the important bits

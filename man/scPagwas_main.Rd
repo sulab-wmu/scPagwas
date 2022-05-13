@@ -48,7 +48,7 @@ scPagwas_main(
 
 \item{block_annotation}{(data.frame) Start and end points for block traits, usually genes.}
 
-\item{Single_data}{(Seruat)Input the Single data in seruat format, Idents should be the celltypes annotation.}
+\item{Single_data}{(character or Seruat)Input the Single data in seruat format, or the Seruat data address for rds format.Idents should be the celltypes annotation.}
 
 \item{assay}{(character)assay data of your single cell data to use,default is "RNA"}
 
