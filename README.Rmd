@@ -50,6 +50,10 @@ devtools::install_github("dengchunyu/scPagwas")
  #LD data
  data(chrom_ld)
 
+# a<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+# Idents(a)<- "1"
+ 
+# saveRDS(a,file = "E:/OneDrive/GWAS_Multiomics/test.rds")
  #1.start to run the wrapper functions for preprogress.
  Pagwas<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
@@ -57,6 +61,8 @@ devtools::install_github("dengchunyu/scPagwas")
                      add_eqtls="OnlyTSS",
                      block_annotation = block_annotation,
                      assay="RNA",
+                     singlecell=F,
+                     celltype=T,
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      split_n=3,
                      #nfeatures =19000,

@@ -1,31 +1,6 @@
----
-title: "The test for prune ad example and visulization"
-date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output:
-  md_document:
-    variant: markdown_github
-editor_options:
-  chunk_output_type: console
-vignette: >
-  %\VignetteIndexEntry{my-vignette}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
-
----
-
-```{r, include = FALSE}
-library(knitr)
-knitr::opts_chunk$set(
- collapse = TRUE,
- comment = "#>",
-  fig.path = "figures/vignette-",
- out.width = "60%"
-)
-
-```
-
 ## the process for some examples, not run and for Record
-```{r setup, eval = FALSE}
+
+``` r
 ###############not run
 #' scRNAexample
 #'
@@ -101,15 +76,15 @@ NULL
 #' data(GWAS_summ_example)
 #' str(GWAS_summ_example)
 NULL
-
-
 ```
 
-
 # 1. Data progress（not run）
-导入单细胞数据并对数据进行预处理，要求为标准化后的数据，assays 包含RNA或者SCT，Idents必须为细胞类型的注释。
+
+导入单细胞数据并对数据进行预处理，要求为标准化后的数据，assays
+包含RNA或者SCT，Idents必须为细胞类型的注释。
 为了后续可视化方便需要对单细胞进行降维处理，包括TSNE和UMAP降维方式。
-```{r realexample, eval=FALSE}
+
+``` r
  library(scPagwas)
  library(Seurat)
  library(parallel)
@@ -127,12 +102,11 @@ Single_data <- RunPCA(object = Single_data, assay = "RNA", npcs = 50)
 Single_data <- RunTSNE(object = Single_data,assay =  "RNA", reduction = "pca",dims = 1:50)
 Single_data <- RunUMAP(object = Single_data, assay = "RNA", reduction = "pca",dims = 1:50)
 save(Single_data,file = "E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds")
-
 ```
 
-
 # 1.Main functions
-```{r eval=FALSE}
+
+``` r
  ##############真实例子：
 Pagwas<-scPagwas_main(Pagwas = NULL,
                     gwas_data ="E:/RPakage/scPagwas/inst/extdata/AD_prune_gwas_data.txt",
@@ -146,23 +120,32 @@ Pagwas<-scPagwas_main(Pagwas = NULL,
                    Pathway_list=Genes_by_pathway_kegg,
                   chrom_ld = chrom_ld,
                   SimpleResult=F)
-
-
 ```
 
 导入结果，去掉结果中无用的list，减少内存消耗
-```{r message=FALSE,warning = FALSE}
+
+``` r
 load("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/Pagwas_GSE138852_Prune_adsubset_kegg.RData")
 Pagwas[c("Pathway_ld_gwas_data","VariableFeatures","merge_scexpr",
              "rawPathway_list",
              "snp_gene_df")]<-NULL
 names(Pagwas)
+#>  [1] "Celltype_anno"                 "data_mat"                     
+#>  [3] "Pathway_list"                  "pca_scCell_mat"               
+#>  [5] "pca_cell_df"                   "Pathway_sclm_results"         
+#>  [7] "Pathway_lm_results"            "lm_results"                   
+#>  [9] "bootstrap_results"             "CellsrankPvalue"              
+#> [11] "scPathways_rankPvalue"         "scPagwas_score"               
+#> [13] "gene_heritability_correlation" "Pathway_single_results"
 ```
 
 # Visualize the result
+
 ## Visualize the scPagwas_score for single cell
+
 首先产生单细胞单纯映射细胞类型位置和颜色
-```{r message=FALSE,results = "hide",warning = FALSE}
+
+``` r
  require("RColorBrewer")
  require("Seurat")
  require("SeuratObject")
@@ -183,12 +166,17 @@ DimPlot(Single_data,reduction="tsne",group.by = "oupSample.cellType",pt.size=0.8
         label = TRUE, repel=TRUE)+ labs(x="TSNE",y="")+
         scale_color_d3() +
         theme(aspect.ratio=1)
+```
+
+<img src="figures/vignette-unnamed-chunk-4-1.png" width="60%" />
+
+``` r
 #dev.off()
 ```
 
 之后产生两者单细胞降维可视化图，第一张为scPagwas_score得分映射，第二章为阳性细胞映射
-```{r message=FALSE,results = "hide",warning = FALSE}
 
+``` r
 setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
  scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
                                    scPagwas_p=scPagwas_p,
@@ -204,11 +192,13 @@ setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
                                    do_plot = T)
 ```
 
+<img src="figures/vignette-unnamed-chunk-5-1.png" width="60%" /><img src="figures/vignette-unnamed-chunk-5-2.png" width="60%" />
+
 ## positive cell percent
 
 ### 阳性细胞和阴性细胞中不同细胞类型的比例
-```{r message=FALSE,results = "hide",warning = FALSE}
 
+``` r
 Single_data$scPagwas_p <- scPagwas_p[intersect(colnames(Single_data),names(scPagwas_p))]
 #thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
 Single_data$positiveCells<-rep(0,ncol(Single_data))
@@ -223,22 +213,24 @@ plot_bar_positie_nagtive(seurat_obj=Single_data,
                               do_plot = T)
 ```
 
+<img src="figures/vignette-unnamed-chunk-6-1.png" width="60%" />
+
 ### 不同细胞类型中阳性细胞和阴性细胞的比例
 
-```{r message=FALSE,results = "hide",warning = FALSE}
-
+``` r
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/bar_positiveCells_celltypes.pdf")
 plot_bar_positie_nagtive(seurat_obj=Single_data,
                               var_ident="oupSample.cellType",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               do_plot = T)
-
 ```
 
-子函数：获得单细胞数据的meta数据以及降维坐标
-```{r message=FALSE,results = "hide",warning = FALSE}
+<img src="figures/vignette-unnamed-chunk-7-1.png" width="60%" />
 
+子函数：获得单细胞数据的meta数据以及降维坐标
+
+``` r
 fortify.Seurat <- function(x){
   
   xy <- as.data.frame(Embeddings(x, reduction = "umap"))
@@ -257,7 +249,8 @@ all_fortify_can <- fortify.Seurat(Single_data)
 ```
 
 ## 计算伪时间数据（去掉）
-```{r eval=FALSE}
+
+``` r
 library(slingshot)
 library(SingleCellExperiment)
 library(mclust, quietly = TRUE)
@@ -288,15 +281,13 @@ colors <- colorRampPalette(brewer.pal(11,'Spectral')[-6])(100)
       pch=16, asp = 1)
  lines(SlingshotDataSet(Slingshot_mat), lwd=2, col='black')
  dev.off()
-
 ```
-
 
 ## 计算通路数据降维结果
 
 将通路结果矩阵设置成为Seurat变量格式方便后面利用seurat包中的函数进行类单细胞数据处理。
 
-```{r message=FALSE,results = "hide",warning = FALSE}
+``` r
 #Pagwas$Pathway_single_results
 Pagwas$Celltype_anno$scPagwas_score<-Pagwas$scPagwas_score
 Pagwas$Celltype_anno$pValueHigh <-Pagwas$CellsrankPvalue$pValueHigh
@@ -333,18 +324,22 @@ Pagwas_seu <- RunUMAP(object = Pagwas_seu, assay ="RNA", reduction = "pca", dims
 
 ### 可视化通路降维数据中不同细胞类型的分布
 
-```{r message=FALSE,results = "hide",warning = FALSE}
+``` r
 Pagwas_fortify <- fortify.Seurat(Pagwas_seu)
 #  pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/Slingshot.plot.pdf")
 DimPlot(Pagwas_seu,group.by = "annotation",label = F)+ #umap_theme()+ ggtitle("annotation")+
         theme(aspect.ratio=1)
+```
+
+<img src="figures/vignette-unnamed-chunk-11-1.png" width="60%" />
+
+``` r
 #  dev.off()
-
-
 ```
 
 ## 通路数据降维可视化scPagwas_score映射
-```{r message=FALSE,results = "hide",warning = FALSE}
+
+``` r
 umap_theme <- function(){
   theme_grey() %+replace%
     theme(panel.background = element_rect(fill = "white", colour = "white", size = 0.1),
@@ -367,13 +362,17 @@ plot1 <- ggplot() +
 
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_score.pdf")
   print(plot1)
-#dev.off()
+```
 
+<img src="figures/vignette-unnamed-chunk-12-1.png" width="60%" />
+
+``` r
+#dev.off()
 ```
 
 ## 通路数据降维可视化阳性细胞映射
-```{r message=FALSE,results = "hide",warning = FALSE}
 
+``` r
   Pagwas_fortify$p_thre<-rep("non",nrow(Pagwas_fortify))
   Pagwas_fortify$p_thre[which(Pagwas_fortify$pValueHigh<0.05)]<-"<0.05"
 plot2 <-  ggplot() +
@@ -386,12 +385,18 @@ plot2 <-  ggplot() +
 
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_p.pdf")
   print(plot2)
+```
+
+<img src="figures/vignette-unnamed-chunk-13-1.png" width="60%" />
+
+``` r
 #  dev.off()
   
 ```
 
 ## 通路数据降维可视化伪时间（去掉）
-```{r eval=FALSE}
+
+``` r
 #Pagwas_fortify2<-Pagwas_fortify
 #Pagwas_fortify2$slingPseudotime[Pagwas_fortify2$slingPseudotime>25] <-25
 plot3 <-  ggplot() +
@@ -445,14 +450,13 @@ file_n<-paste0(cell,"_KeyGene_DExpression.pdf")
 pdf(file_n,height = 14)
 p_integrate
 dev.off()
-
-
 ```
 
-
 ## 可视化通路基因网络图
+
 选择感兴趣的细胞类型和通路，进行网络可视化
-```{r message=FALSE,results = "hide",warning = FALSE}
+
+``` r
 suppressMessages(require("WGCNA"))
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
@@ -510,12 +514,13 @@ plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data, gene_
   )
 #dev.off()
 })
-
 ```
+
+<img src="figures/vignette-unnamed-chunk-15-1.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-2.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-3.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-4.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-5.png" width="60%" />
 
 ## 可视化细胞类型遗传特异性通路-dotplot
 
-```{r message=FALSE,results = "hide",warning = FALSE}
+``` r
   library(tidyverse)
   library("rhdf5")
  library(ggplot2)
@@ -546,11 +551,13 @@ plot_scpathway_dot(Pagwas=Pagwas,
                    #figurenames = "E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/pathway_test_dotplot.pdf",
                    width = 12,
                    height = 7)
-
 ```
 
+<img src="figures/vignette-unnamed-chunk-16-1.png" width="60%" />
+
 ## 可视化基因遗传关联性排秩点图
-```{r message=FALSE,results = "hide",warning = FALSE}
+
+``` r
 source("E:/RPakage/visulizeplotR/heritability_cor_scatterplot.R")
 
 heritability_cor_scatterplot(gene_heri_cor=Pagwas$gene_heritability_correlation,
@@ -564,13 +571,13 @@ heritability_cor_scatterplot(gene_heri_cor=Pagwas$gene_heritability_correlation,
                                        width = 7,
                                        height = 7
 )
-
-
 ```
+
+<img src="figures/vignette-unnamed-chunk-17-1.png" width="60%" />
 
 ### Plot the top5 heritability correlation genes in celltypes
 
-```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8,warning = FALSE}
+``` r
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=Single_data,
              assay="RNA", slot="data",
@@ -579,11 +586,13 @@ plot_vln_Corgenes(seurat_obj=Single_data,
              vec_group_colors= pal_d3(alpha =0.5)(10),
              do_plot = T
              )
-
 ```
 
+<img src="figures/vignette-vln_Corgenes-1.png" width="60%" />
+
 ## 可视化细胞类型遗传关联显著性
-```{r message=FALSE,results = "hide",warning = FALSE}
+
+``` r
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_GSE138852/bar_celltypes.pdf")
 Bootstrap_P_Barplot(p_results=Pagwas$bootstrap_results$bp_value[-1],
                                 p_names=rownames(Pagwas$bootstrap_results)[-1],
@@ -592,6 +601,11 @@ Bootstrap_P_Barplot(p_results=Pagwas$bootstrap_results$bp_value[-1],
                                 width = 5,
                                 height = 7,
                                 do_plot=TRUE)
+```
+
+<img src="figures/vignette-unnamed-chunk-18-1.png" width="60%" />
+
+``` r
 #dev.off()
 Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         figurenames = NULL,
@@ -599,3 +613,5 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         height = 7,
                         do_plot=T)
 ```
+
+<img src="figures/vignette-unnamed-chunk-18-2.png" width="60%" />

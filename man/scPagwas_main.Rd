@@ -25,6 +25,8 @@ scPagwas_main(
   max.pathway.size = 300,
   iters = 200,
   param.file = T,
+  singlecell = T,
+  celltype = T,
   remove_outlier = T,
   SimpleResult = F,
   log.file = "scPagwas.run.log",
@@ -69,6 +71,8 @@ scPagwas_main(
 \item{iters}{(integr)number of bootstrap iterations to perform}
 
 \item{param.file}{(logical)whether save parameters used for scPagwas.}
+
+\item{celltype}{}
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for scPagwas score.}
 

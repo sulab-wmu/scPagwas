@@ -4,7 +4,14 @@
 \alias{Link_pathway_blocks_gwas}
 \title{Link_pathway_blocks_gwas}
 \usage{
-Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, split_n = 1, ncores = 1)
+Link_pathway_blocks_gwas(
+  Pagwas,
+  chrom_ld = NULL,
+  split_n = 1,
+  singlecell = T,
+  celltype = T,
+  ncores = 1
+)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}

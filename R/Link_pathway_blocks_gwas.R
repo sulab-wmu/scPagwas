@@ -20,6 +20,8 @@
 Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
                                      split_n=1,
+                                     singlecell=T,
+                                     celltype=T,
                                      ncores = 1) {
 
   options(bigmemory.allow.dimnames=TRUE)
@@ -35,18 +37,26 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     }
   )
   Pagwas$gwas_data<-NULL
+
+  if(!singlecell & celltype) split_n<-1
   if(split_n==1){
     Pagwas<-Pathway_block_func(Pagwas=Pagwas,
                        Pachrom_block_list=Pachrom_block_list,
                        chrom_gwas_list=chrom_gwas_list,
+                       singlecell=singlecell,
+                       celltype=celltype,
                        ncores = ncores)
   }
   if(split_n>1){
-    pa_blocksnplist <- Pachrom_func(Pagwas=Pagwas,
-                                  Pachrom_block_list=Pachrom_block_list,
-                                  chrom_gwas_list=chrom_gwas_list)
-    Pagwas <- celltypes_Pathway_block_func(Pagwas=Pagwas,pa_blocksnplist=pa_blocksnplist)
 
+      pa_blocksnplist <- Pachrom_func(Pagwas=Pagwas,
+                                      Pachrom_block_list=Pachrom_block_list,
+                                      chrom_gwas_list=chrom_gwas_list)
+
+    if(celltype){
+    Pagwas <- celltypes_Pathway_block_func(Pagwas=Pagwas,pa_blocksnplist=pa_blocksnplist)
+    }
+    #if(singlecell){}
     a<-ncol(Pagwas$pca_scCell_mat)
     for (ai in 1:10) {
       #print(ai)
@@ -56,20 +66,18 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 
     la<-gl(split_n,a/split_n,length=a)
 
-    #sclm_list<-list()
-    #sclm_list<-for (i in ) {
-    sclm_list<- lapply(1:split_n, function(i){
+    sclm_list<-list()
+    for (i in 1:split_n){
         message("** start to run the ",i," split!")
         #sclm_list[[i]]<- matrix(nrow=sum(la==i), ncol=nrow(Pagwas$pca_scCell_mat))
-        sclm<- scPathway_block_splitfunc(
+      sclm_list[[i]] <- scPathway_block_splitfunc(
           pa_blocksnplist=pa_blocksnplist,
           subpca_scCell_mat=Pagwas$pca_scCell_mat[,which(la==i)],
           subdata_mat=Pagwas$data_mat[,which(la==i)],
           rawPathway_list=Pagwas$rawPathway_list,
           snp_gene_df=Pagwas$snp_gene_df,
           ncores = ncores)
-        return(sclm)
-      })
+      }
     #Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),sclm_list)
     Pagwas$Pathway_sclm_results<-as(data.matrix(bigreadr::rbind_df(sclm_list)),"dgCMatrix")
     rm(pa_blocksnplist)
@@ -124,11 +132,12 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
 Pathway_block_func<-function(Pagwas=NULL,
                              Pachrom_block_list,
                              chrom_gwas_list,
-                             ncores = 1
+                             ncores = 1,
+                             singlecell=T,
+                             celltype=T
                              ){
 
    Pathway_sclm_results<-list()
-  #+++++++Pathway_lm_results<-list()
    Pathway_ld_gwas_data<-list()
 
   message(paste0("* Start to link gwas and pathway block annotations for ",
@@ -136,11 +145,8 @@ Pathway_block_func<-function(Pagwas=NULL,
   options(bigmemory.allow.dimnames=TRUE)
   pb <- txtProgressBar(style = 3)
 
-  #Pathway_ld_gwas_data <- papply(names(Pachrom_block_list), function(pathway) {
   for (pathway in names(Pachrom_block_list)) {
 
-    #   }
-    # message(paste(' - starting blocks on pathway: ', pa, sep = ''))
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
@@ -202,39 +208,45 @@ Pathway_block_func<-function(Pagwas=NULL,
     pa_block$ld_matrix_squared <- ld_matrix * ld_matrix
 
     ##compute the single cell result
-
+    if(singlecell){
       Pathway_sclm_results[[pathway]]<-get_Pathway_sclm(pa_block=pa_block,
                                                         pca_scCell_mat=Pagwas$pca_scCell_mat,
                                                         data_mat=Pagwas$data_mat,
                                                         rawPathway_list=Pagwas$rawPathway_list,
                                                         snp_gene_df=Pagwas$snp_gene_df,
                                                         ncores=ncores)
+    }
 
-
+    if(celltype){
     pa_block<-link_pwpca_block(pa_block=pa_block,
                                pca_cell_df=data.matrix(Pagwas$pca_cell_df),
                                merge_scexpr=Pagwas$merge_scexpr,
                                snp_gene_df=Pagwas$snp_gene_df,
                                rawPathway_list=Pagwas$rawPathway_list)
+
     #Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
     Pathway_ld_gwas_data[[pathway]]<-pa_block
+    }
     setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
 
   }
 
   close(pb)
+
+  if(singlecell){
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
   rownames(Pathway_sclm_results)<- colnames(Pagwas$pca_scCell_mat)
   Pagwas$Pathway_sclm_results<-as(Pathway_sclm_results,"dgCMatrix")
-
+  }
   #Pathway_lm_results <- Pathway_lm_results[!sapply(Pathway_lm_results, is.null)]
   #Pathway_lm_results <- data.matrix(as.data.frame(Pathway_lm_results))
   #rownames(Pathway_lm_results)<- colnames(Pagwas$pca_cell_df)
   #Pagwas$Pathway_lm_results<-as(Pathway_lm_results,"dgCMatrix")
-
+  if(celltype){
   names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
   Pagwas$Pathway_ld_gwas_data<-Pathway_ld_gwas_data
+  }
   return(Pagwas)
 
 }

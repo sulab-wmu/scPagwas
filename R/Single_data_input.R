@@ -76,7 +76,15 @@ Single_data_input <- function(Pagwas,
   }
 
   Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures,pagene)
-  Pagwas$merge_scexpr <-merge_scexpr[Pagwas$VariableFeatures,]
+  if(ncol(merge_scexpr)==1){
+    a<-colnames(merge_scexpr)
+    Pagwas$merge_scexpr <-data.matrix(merge_scexpr[Pagwas$VariableFeatures,])
+   rownames(Pagwas$merge_scexpr)<-Pagwas$VariableFeatures
+   colnames(Pagwas$merge_scexpr)<-a
+  }else{
+    Pagwas$merge_scexpr <- merge_scexpr[Pagwas$VariableFeatures,]
+
+  }
 
   return(Pagwas)
 }

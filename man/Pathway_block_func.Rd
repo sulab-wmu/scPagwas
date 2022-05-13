@@ -8,7 +8,9 @@ Pathway_block_func(
   Pagwas = NULL,
   Pachrom_block_list,
   chrom_gwas_list,
-  ncores = 1
+  ncores = 1,
+  singlecell = T,
+  celltype = T
 )
 }
 \arguments{

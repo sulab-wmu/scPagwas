@@ -47,6 +47,8 @@
 #' @param SimpleResult (logical)whether simplify the scPagwas result.
 #' @param log.file (character)log.file
 #' @param ncores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
+#' @param singlecell
+#' @param celltype
 #'
 #' @return
 #' @export
@@ -88,6 +90,8 @@ scPagwas_main <- function(Pagwas = NULL,
                         max.pathway.size=300,
                         iters=200,
                         param.file=T,
+                        singlecell=T,
+                        celltype=T,
                         remove_outlier=T,
                         SimpleResult=F,
                         log.file='scPagwas.run.log',
@@ -106,6 +110,8 @@ scPagwas_main <- function(Pagwas = NULL,
   # chrom_ld=chrom_ld;
   # split_n=3;
   # marg=10000;
+  # singlecell=T;
+  # celltype=T;
   # maf_filter = 0.01;
   # min_clustercells=10;
   # min.pathway.size=5;
@@ -280,6 +286,8 @@ scPagwas_main <- function(Pagwas = NULL,
   Pagwas <- Link_pathway_blocks_gwas(Pagwas=Pagwas,
                                      chrom_ld=chrom_ld,
                                      split_n=split_n,
+                                     singlecell=singlecell,
+                                     celltype=celltype,
                                      ncores=ncores)
 
    message('done!')
@@ -287,19 +295,22 @@ scPagwas_main <- function(Pagwas = NULL,
   cat('Link_pathway_blocks_gwas: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
+  if(celltype){
+
   message(paste(utils::timestamp(quiet = T), ' ******* 7th: Celltype_heritability_contributions function start! ********',sep = ''))
 
-  #Pagwas<-Celltype_heritability_contributions(Pagwas=Pagwas,
-   #                                           iters = iters,
-   #                                           part = 0.5)
   Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data=Pagwas$Pathway_ld_gwas_data)
   Pagwas <- Boot_evaluate(Pagwas,bootstrap_iters = iters, part = 0.5)
 
   Pagwas$Pathway_ld_gwas_data<-NULL
+
   message('done!')
   cat('Celltype_heritability_contributions: ',  file=log.file, append=T)
   cat(Sys.time()-tt, '\n',  file=log.file, append=T)
 
+  }
+
+  if(singlecell){
   message(paste(utils::timestamp(quiet = T), ' ******* 8th: scPagwas_perform_score function start! ********',sep = ''))
   tt <- Sys.time()
   Pagwas<-scPagwas_perform_score(Pagwas=Pagwas,
@@ -313,7 +324,7 @@ scPagwas_main <- function(Pagwas = NULL,
   message("** Get gene heritability contributions!")
   Pagwas <- scGet_gene_heritability_correlation(Pagwas=Pagwas)
   message("done")
-
+  }
   if(SimpleResult){
     Pagwas[c("VariableFeatures","merge_scexpr",
              "data_mat","rawPathway_list",

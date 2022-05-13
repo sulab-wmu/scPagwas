@@ -96,9 +96,16 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   rm(pca_df)
 
   rownames(pca_scoremat) <- pca_scoremat$name
-  pca_cell_df <- pca_scoremat[, -1]
+
+  if(dim(pca_scoremat)[2]==2){
+    pca_cell_df <- data.matrix(pca_scoremat[, -1])
+
+  }else{
+    pca_cell_df <- pca_scoremat[, -1]
+  }
   rownames(pca_cell_df) <- pca_scoremat$name
   colnames(pca_cell_df) <- colnames(pca_scoremat)[-1]
+  #colnames(Pagwas$merge_scexpr)<-colnames(pca_scoremat)[-1]
   rm(pca_scoremat)
 
   index <- !is.na(pca_cell_df[1, ])
