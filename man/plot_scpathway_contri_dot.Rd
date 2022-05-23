@@ -141,16 +141,18 @@ Create dotplots to represent two discrete factors (x & y) described by several o
 \examples{
 library(FlexDotPlot)
 data(CBMC8K_example_data)
-dotplot = dot_plot(data.to.plot=CBMC8K_example_data, size_var="RNA.avg.exp.scaled",
-col_var="ADT.avg.exp.scaled", text_var="ADT.pct.exp.sup.cutoff",
-shape_var="canonical_marker", shape_use = c("\u25CF","\u2737"),x.lab.pos="bottom",
-y.lab.pos="left", cols.use=c("lightgrey","orange","red", "darkred"),
-size_legend="RNA", col_legend="ADT", shape_legend="Canonical marker ?",
-shape.scale =12, text.size=3, plot.legend = TRUE,
-size.breaks.number=4, color.breaks.number=4, shape.breaks.number=5,
-dend_x_var=c("RNA.avg.exp.scaled","ADT.avg.exp.scaled"),
-dend_y_var=c("RNA.avg.exp.scaled","ADT.avg.exp.scaled"),
-dist_method="euclidean",hclust_method="ward.D", do.return = TRUE)
+dotplot <- dot_plot(
+  data.to.plot = CBMC8K_example_data, size_var = "RNA.avg.exp.scaled",
+  col_var = "ADT.avg.exp.scaled", text_var = "ADT.pct.exp.sup.cutoff",
+  shape_var = "canonical_marker", shape_use = c("\u25CF", "\u2737"), x.lab.pos = "bottom",
+  y.lab.pos = "left", cols.use = c("lightgrey", "orange", "red", "darkred"),
+  size_legend = "RNA", col_legend = "ADT", shape_legend = "Canonical marker ?",
+  shape.scale = 12, text.size = 3, plot.legend = TRUE,
+  size.breaks.number = 4, color.breaks.number = 4, shape.breaks.number = 5,
+  dend_x_var = c("RNA.avg.exp.scaled", "ADT.avg.exp.scaled"),
+  dend_y_var = c("RNA.avg.exp.scaled", "ADT.avg.exp.scaled"),
+  dist_method = "euclidean", hclust_method = "ward.D", do.return = TRUE
+)
 }
 \author{
 Simon Leonard - simon.leonard@univ-rennes1.fr

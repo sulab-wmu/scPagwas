@@ -53,7 +53,7 @@ Visualize the scPagwas score in Umap and Tsne.
 \examples{
 library(scPagwas)
 data(scRNAexample)
-#scPagwas_Visualization(
+# scPagwas_Visualization(
 #  scPagwas = Pagwas,
 #  Single_data = scRNAexample,
 #  cellpercent = 0.1,
@@ -64,5 +64,5 @@ data(scRNAexample)
 #  lowColor = "#000957", highColor = "#EBE645",
 #  size = 0.5,
 #  title = "scPagwas_score"
-#)
+# )
 }

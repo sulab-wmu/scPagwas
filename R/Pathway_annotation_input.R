@@ -16,7 +16,7 @@
 #' Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
 Pathway_annotation_input <- function(Pagwas,
                                      block_annotation) {
-  #message("adding block annotations")
+  # message("adding block annotations")
 
   if (class(Pagwas$Pathway_list) != "list") {
     stop("require list of Pathway_list")
@@ -34,7 +34,7 @@ Pathway_annotation_input <- function(Pagwas,
     block_annotation <- block_annotation[!duplicated(block_annotation$label), ]
   }
 
-  proper.gene.names <- intersect(Pagwas$VariableFeatures,Pagwas$snp_gene_df$label)
+  proper.gene.names <- intersect(Pagwas$VariableFeatures, Pagwas$snp_gene_df$label)
 
   if (length(intersect(unlist(Pagwas$Pathway_list), proper.gene.names)) < 1) {
     stop("no match for Pathway gene and VariableFeatures")
@@ -65,6 +65,6 @@ Pathway_annotation_input <- function(Pagwas,
 
   Pagwas$Pathway_list <- Pathway_list
 
-  Pagwas$pathway_blocks<-pathway_blocks
+  Pagwas$pathway_blocks <- pathway_blocks
   return(Pagwas)
 }

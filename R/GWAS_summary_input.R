@@ -17,8 +17,8 @@
 #' library(scPagwas)
 #' data(GWAS_summ_example)
 #' Pagwas <- GWAS_summary_input(Pagwas = NULL, gwas_data = GWAS_summ_example)
-GWAS_summary_input <- function(Pagwas=NULL,
-                               gwas_data=NULL,
+GWAS_summary_input <- function(Pagwas = NULL,
+                               gwas_data = NULL,
                                maf_filter = 0.01,
                                Sex_filter = TRUE,
                                MHC_filter = TRUE,
@@ -50,8 +50,7 @@ GWAS_summary_input <- function(Pagwas=NULL,
 
   if (!grepl("chr", gwas_data$chrom[1])) {
     message('No "chr" from chrom!, now pasting it!')
-    gwas_data$chrom <- paste("chr",gwas_data$chrom,sep = "")
-
+    gwas_data$chrom <- paste("chr", gwas_data$chrom, sep = "")
   }
 
   if ("maf" %in% colnames(gwas_data)) {
@@ -70,7 +69,8 @@ GWAS_summary_input <- function(Pagwas=NULL,
   }
 
   if (MHC_filter) {
-    gwas_data_6 <- gwas_data %>% dplyr::filter(chrom %in% "chr6") %>%
+    gwas_data_6 <- gwas_data %>%
+      dplyr::filter(chrom %in% "chr6") %>%
       dplyr::filter(pos > 25000000 & pos < 34000000)
 
     gwas_data <- gwas_data[!(gwas_data$chrom %in% "chr6"), ]
@@ -79,13 +79,12 @@ GWAS_summary_input <- function(Pagwas=NULL,
   }
 
   if (gwas_z_filter > 0) {
-
     message(paste("removing SNPs with |z| > ", gwas_z_filter, sep = ""))
     gwas_data <- gwas_data %>%
       dplyr::mutate(abs_z = abs(beta / se)) %>%
       dplyr::filter(abs_z < gwas_z_filter)
   }
 
-  Pagwas$gwas_data<-gwas_data
+  Pagwas$gwas_data <- gwas_data
   return(Pagwas)
 }

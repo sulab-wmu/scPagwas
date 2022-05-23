@@ -22,8 +22,8 @@
 Single_data_input <- function(Pagwas,
                               Single_data,
                               nfeatures = NULL,
-                              Pathway_list=NULL,
-                              assay="RNA",
+                              Pathway_list = NULL,
+                              assay = "RNA",
                               min_clustercells = 5) {
   message("Input single cell data!")
 
@@ -31,9 +31,11 @@ Single_data_input <- function(Pagwas,
     message("Single_data is not of class Seurat!")
     return(Pagwas)
   }
-  #1.Celltype_anno
-  Celltype_anno <- data.frame(cellnames = rownames(Single_data@meta.data),
-                              annotation = as.vector(SeuratObject::Idents(Single_data)))
+  # 1.Celltype_anno
+  Celltype_anno <- data.frame(
+    cellnames = rownames(Single_data@meta.data),
+    annotation = as.vector(SeuratObject::Idents(Single_data))
+  )
   rownames(Celltype_anno) <- Celltype_anno$cellnames
 
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
@@ -41,25 +43,24 @@ Single_data_input <- function(Pagwas,
   message(length(Afterre_cell_types), " cell types are remain, after filter!")
 
   Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
-  Single_data <-Single_data[,Celltype_anno$cellnames]
+  Single_data <- Single_data[, Celltype_anno$cellnames]
 
-  Pagwas$Celltype_anno<-Celltype_anno
+  Pagwas$Celltype_anno <- Celltype_anno
 
-  Pagwas$data_mat<- GetAssayData(Single_data, slot = "data", assay =assay)
+  Pagwas$data_mat <- GetAssayData(Single_data, slot = "data", assay = assay)
 
-  merge_scexpr <- Seurat::AverageExpression(Single_data,assays=assay)[[assay]]
+  merge_scexpr <- Seurat::AverageExpression(Single_data, assays = assay)[[assay]]
 
-  #message(4)
-  #5.VariableFeatures
+  # message(4)
+  # 5.VariableFeatures
   if (!is.null(nfeatures)) {
     if (nfeatures < nrow(Single_data)) {
       Single_data <- Seurat::FindVariableFeatures(Single_data,
-                                                    assay =assay,
-                                                    selection.method = "vst",
-                                                    nfeatures = nfeatures
-                                                    )
+        assay = assay,
+        selection.method = "vst",
+        nfeatures = nfeatures
+      )
       Pagwas$VariableFeatures <- Seurat::VariableFeatures(Single_data)
-
     } else if (nfeatures == nrow(Single_data)) {
       Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
     } else {
@@ -70,20 +71,19 @@ Single_data_input <- function(Pagwas,
   }
   rm(Single_data)
 
-  pagene<- intersect(unique(unlist(Pathway_list)),rownames(Pagwas$data_mat))
-  if(length(pagene)<100){
+  pagene <- intersect(unique(unlist(Pathway_list)), rownames(Pagwas$data_mat))
+  if (length(pagene) < 100) {
     stop("There are little match between rownames of Single_data and pathway genes!")
   }
 
-  Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures,pagene)
-  if(ncol(merge_scexpr)==1){
-    a<-colnames(merge_scexpr)
-    Pagwas$merge_scexpr <-data.matrix(merge_scexpr[Pagwas$VariableFeatures,])
-   rownames(Pagwas$merge_scexpr)<-Pagwas$VariableFeatures
-   colnames(Pagwas$merge_scexpr)<-a
-  }else{
-    Pagwas$merge_scexpr <- merge_scexpr[Pagwas$VariableFeatures,]
-
+  Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures, pagene)
+  if (ncol(merge_scexpr) == 1) {
+    a <- colnames(merge_scexpr)
+    Pagwas$merge_scexpr <- data.matrix(merge_scexpr[Pagwas$VariableFeatures, ])
+    rownames(Pagwas$merge_scexpr) <- Pagwas$VariableFeatures
+    colnames(Pagwas$merge_scexpr) <- a
+  } else {
+    Pagwas$merge_scexpr <- merge_scexpr[Pagwas$VariableFeatures, ]
   }
 
   return(Pagwas)

@@ -41,8 +41,10 @@ using the ggplot packages
 \examples{
 library(scPagwas)
 # Pagwas is the result of Pagwas_main()
-Bootstrap_P_Barplot(Pagwas=Pagwas,
-                    title = "Test scPagwas",
-                    figurenames = "test_barplot.pdf",
-                    width = 5, height = 7)
+Bootstrap_P_Barplot(
+  Pagwas = Pagwas,
+  title = "Test scPagwas",
+  figurenames = "test_barplot.pdf",
+  width = 5, height = 7
+)
 }

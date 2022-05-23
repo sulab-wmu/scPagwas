@@ -19,7 +19,7 @@
 #'
 #' Pagwas <- Tissue_eqtls_Input(Pagwas = Pagwas, add_eqtls = "OnlyEqtls", eqtls_files = eqtls_files)
 Tissue_eqtls_Input <- function(Pagwas = NULL,
-                               block_annotation=NULL,
+                               block_annotation = NULL,
                                add_eqtls = "OnlyEqtls",
                                eqtls_files = NULL,
                                eqtl_p = 0.05,
@@ -41,7 +41,6 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
 
   if ("pval_true_df" %in% colnames(eqtls_sig)) {
     eqtls_sig <- eqtls_sig[eqtls_sig$pval_true_df < eqtl_p, eqtls_cols]
-
   }
 
   colnames(eqtls_sig) <- c("rsid", "pos", "Disstance", "gene_chr", "gene_start", "geng_end", "gene_name", "slope")
@@ -74,12 +73,12 @@ Tissue_eqtls_Input <- function(Pagwas = NULL,
     snp_gene_df2$slope <- median(snp_gene_df1$slope)
     snp_gene_df <- rbind(snp_gene_df1, snp_gene_df2)
 
-    rm(snp_gene_df1,snp_gene_df2)
+    rm(snp_gene_df1, snp_gene_df2)
   }
-  Pagwas$snp_gene_df<-snp_gene_df
-  #SOAR::Store(gwas_data)
- # Pagwas$gwas_data<-NULL
- # SOAR::Store(snp_gene_df)
-  #SOAR::Store(block_annotation)
+  Pagwas$snp_gene_df <- snp_gene_df
+  # SOAR::Store(gwas_data)
+  # Pagwas$gwas_data<-NULL
+  # SOAR::Store(snp_gene_df)
+  # SOAR::Store(block_annotation)
   return(Pagwas)
 }

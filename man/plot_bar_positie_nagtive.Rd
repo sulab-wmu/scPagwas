@@ -73,5 +73,5 @@ Generate a percentage barplot that shows the composition of each identity
 (e.g. sample)in terms of groups (e.g. positive and negative cells for scPagwas)
 }
 \examples{
-p <- plot_barIdentGroup(seurat_obj=seu, var_ident="sample",var_group="cluster")
+p <- plot_barIdentGroup(seurat_obj = seu, var_ident = "sample", var_group = "cluster")
 }

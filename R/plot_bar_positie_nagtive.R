@@ -28,43 +28,46 @@
 #' @export
 #'
 #' @examples
-#' p <- plot_barIdentGroup(seurat_obj=seu, var_ident="sample",var_group="cluster")
+#' p <- plot_barIdentGroup(seurat_obj = seu, var_ident = "sample", var_group = "cluster")
 plot_bar_positie_nagtive <- function(seurat_obj,
-                              var_ident,
-                              var_group,
-                              vec_group_colors=NULL,
-                              f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
-                              do_plot = F,
-                              title = NULL,
-                              p_thre=0.05,
-                              fontsize_title = 24,
-                              fontsize_axistitle_x = 18,
-                              fontsize_axistitle_y = 18,
-                              fontsize_axistext_x = 12,
-                              fontsize_axistext_y = 12,
-                              fontsize_legendtitle = 12,
-                              fontsize_legendtext = 10,
-                              aspect.ratio=1.2,
-                              output.prefix="Test",
-                              output.dirs = NULL,
-                              width = 7,
-                              height = 7
-                              ) {
-  #===============seurat_obj p==================
-  #seurat_obj$scPagwas_p <- scPagwas_p[intersect(colnames(seurat_obj),names(scPagwas_p))]
-  #thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
-  seurat_obj$positiveCells<-rep(0,ncol(seurat_obj))
-  seurat_obj$positiveCells[seurat_obj$Cells.lm.rankPvalue<p_thre]<-1
+                                     var_ident,
+                                     var_group,
+                                     vec_group_colors = NULL,
+                                     f_color = colorRampPalette(brewer.pal(n = 11, name = "RdYlBu")),
+                                     do_plot = F,
+                                     title = NULL,
+                                     p_thre = 0.05,
+                                     fontsize_title = 24,
+                                     fontsize_axistitle_x = 18,
+                                     fontsize_axistitle_y = 18,
+                                     fontsize_axistext_x = 12,
+                                     fontsize_axistext_y = 12,
+                                     fontsize_legendtitle = 12,
+                                     fontsize_legendtext = 10,
+                                     aspect.ratio = 1.2,
+                                     output.prefix = "Test",
+                                     output.dirs = NULL,
+                                     width = 7,
+                                     height = 7) {
+  # ===============seurat_obj p==================
+  # seurat_obj$scPagwas_p <- scPagwas_p[intersect(colnames(seurat_obj),names(scPagwas_p))]
+  # thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
+  seurat_obj$positiveCells <- rep(0, ncol(seurat_obj))
+  seurat_obj$positiveCells[seurat_obj$Cells.lm.rankPvalue < p_thre] <- 1
 
-  #===============data.table with sums==================
-  dt = data.table("ident" = as.character(seurat_obj@meta.data[[var_ident]]),
-                  "group" = as.character(seurat_obj@meta.data[[var_group]]))
-  dt[,n_ident := paste0(ident," (n=",.N, ")"), by=ident]
-  vec_factorLevels <- dt$n_ident[gsub("\\ .*","",dt$n_ident) %>% as.numeric %>% order] %>% unique
-  dt[,n_ident := factor(n_ident, levels = vec_factorLevels, ordered=T),]
-  dt_sum <- dt[,.N, by=.(n_ident,group)]
+  # ===============data.table with sums==================
+  dt <- data.table(
+    "ident" = as.character(seurat_obj@meta.data[[var_ident]]),
+    "group" = as.character(seurat_obj@meta.data[[var_group]])
+  )
+  dt[, n_ident := paste0(ident, " (n=", .N, ")"), by = ident]
+  vec_factorLevels <- dt$n_ident[gsub("\\ .*", "", dt$n_ident) %>%
+    as.numeric() %>%
+    order()] %>% unique()
+  dt[, n_ident := factor(n_ident, levels = vec_factorLevels, ordered = T), ]
+  dt_sum <- dt[, .N, by = .(n_ident, group)]
 
-  #===============ggplot==================
+  # ===============ggplot==================
   # colors
   if (is.null(vec_group_colors)) {
     n_group <- length(unique(dt$group))
@@ -72,41 +75,38 @@ plot_bar_positie_nagtive <- function(seurat_obj,
     names(vec_group_colors) <- unique(dt$group)
   }
 
-  p <- ggplot(dt_sum,
-              aes(x = n_ident, y=N, fill = factor(group))) +
-
+  p <- ggplot(
+    dt_sum,
+    aes(x = n_ident, y = N, fill = factor(group))
+  ) +
     geom_bar(
-      position="fill",
-      stat="identity",
-      width=0.6,
+      position = "fill",
+      stat = "identity",
+      width = 0.6,
       show.legend = if (!is.null(fontsize_legendtext)) TRUE else FALSE
-      #position=position_dodge()
+      # position=position_dodge()
     ) +
-
     scale_y_continuous(labels = scales::percent) +
-    scale_fill_manual(values=vec_group_colors) +
-
+    scale_fill_manual(values = vec_group_colors) +
     theme(
-      axis.title.x = if (is.null(fontsize_axistitle_x)) element_blank() else element_text(size=fontsize_axistitle_x, vjust=0),
-      axis.text.x = if (is.null(fontsize_axistext_x)) element_blank() else element_text(angle = 90, size=fontsize_axistext_x,vjust=0.5),
-      axis.title.y = if (is.null(fontsize_axistitle_y)) element_blank() else element_text(size=fontsize_axistitle_y),
-      axis.text.y = if (is.null(fontsize_axistext_y)) element_blank() else  element_text(size=fontsize_axistext_y),
-      legend.title = if (is.null(fontsize_legendtext)) element_blank() else element_text(size=fontsize_legendtitle),
+      axis.title.x = if (is.null(fontsize_axistitle_x)) element_blank() else element_text(size = fontsize_axistitle_x, vjust = 0),
+      axis.text.x = if (is.null(fontsize_axistext_x)) element_blank() else element_text(angle = 90, size = fontsize_axistext_x, vjust = 0.5),
+      axis.title.y = if (is.null(fontsize_axistitle_y)) element_blank() else element_text(size = fontsize_axistitle_y),
+      axis.text.y = if (is.null(fontsize_axistext_y)) element_blank() else element_text(size = fontsize_axistext_y),
+      legend.title = if (is.null(fontsize_legendtext)) element_blank() else element_text(size = fontsize_legendtitle),
       legend.text = if (is.null(fontsize_legendtext)) element_blank() else element_text(size = fontsize_legendtext),
       legend.background = element_blank(),
       legend.box.background = element_blank(),
-      plot.background=element_blank(),
-      aspect.ratio = aspect.ratio) +
+      plot.background = element_blank(),
+      aspect.ratio = aspect.ratio
+    ) +
+    labs(x = var_ident, y = "proportion", fill = var_group)
 
-    labs(x=var_ident, y="proportion", fill = var_group)
-
-  if(do_plot) print(p)
-  if(!is.null(output.dirs)){
-    pdf(file = paste0("./", output.dirs, "/scPagwas.",output.prefix,".bar_positie_nagtive1.pdf"), height = height, width = width)
+  if (do_plot) print(p)
+  if (!is.null(output.dirs)) {
+    pdf(file = paste0("./", output.dirs, "/scPagwas.", output.prefix, ".bar_positie_nagtive1.pdf"), height = height, width = width)
     print(p)
     dev.off()
   }
-  #return(p)
+  # return(p)
 }
-
-

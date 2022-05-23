@@ -19,40 +19,48 @@
 #' @examples
 #' library(scPagwas)
 #' # Pagwas is the result of Pagwas_main()
-#' Bootstrap_P_Barplot(Pagwas=Pagwas,
-#'                     title = "Test scPagwas",
-#'                     figurenames = "test_barplot.pdf",
-#'                     width = 5, height = 7)
+#' Bootstrap_P_Barplot(
+#'   Pagwas = Pagwas,
+#'   title = "Test scPagwas",
+#'   figurenames = "test_barplot.pdf",
+#'   width = 5, height = 7
+#' )
 Bootstrap_P_Barplot <- function(p_results,
                                 p_names,
                                 title = "Test scPagwas",
                                 figurenames = NULL,
                                 width = 5,
                                 height = 7,
-                                do_plot=TRUE) {
-
+                                do_plot = TRUE) {
   logp <- -log2(p_results)
   sig <- rep("b", length(p_results))
   sig[which(p_results < 0.05)] <- "a"
-  gg<-data.frame(logp,sig,p_names)
+  gg <- data.frame(logp, sig, p_names)
   if (sum(p_results < 0.05) > 0) {
-    p1 <- ggplot2::ggplot(gg, aes(x = reorder(p_names, logp),
-                                           y = logp,
-                                           fill = sig)) +
+    p1 <- ggplot2::ggplot(gg, aes(
+      x = reorder(p_names, logp),
+      y = logp,
+      fill = sig
+    )) +
       geom_bar(position = "dodge", stat = "identity") +
       theme_classic() +
       labs(x = "", y = "-log2(p)", title = title) +
       coord_flip() +
       # scale_fill_discrete()+
       geom_hline(aes(yintercept = 4.321),
-                 colour = "#990000",
-                 linetype = "dashed") +
+        colour = "#990000",
+        linetype = "dashed"
+      ) +
       scale_fill_manual(values = c("#BB6464", "#C3DBD9")) +
       theme(legend.position = "none")
   } else {
-    p1 <- ggplot2::ggplot(gg,
-                          aes(x = reorder(p_names, logp),
-                              y = logp)) +
+    p1 <- ggplot2::ggplot(
+      gg,
+      aes(
+        x = reorder(p_names, logp),
+        y = logp
+      )
+    ) +
       geom_bar(position = "dodge", stat = "identity", color = "#C3DBD9") +
       theme_classic() +
       labs(x = "", y = "-log2(p)", title = title) +
@@ -61,15 +69,14 @@ Bootstrap_P_Barplot <- function(p_results,
     # scale_fill_discrete()+
     # geom_hline(aes(yintercept=4.321), colour="#990000", linetype="dashed")+
   }
-  if( do_plot) print(p1)
+  if (do_plot) print(p1)
 
-  if(!is.null(figurenames)){
+  if (!is.null(figurenames)) {
     pdf(figurenames, width = width, height = height)
     print(p1)
     dev.off()
   }
-
- }
+}
 
 
 #' Bootstrap_estimate_Plot
@@ -89,18 +96,22 @@ Bootstrap_P_Barplot <- function(p_results,
 #' @examples
 #' library(scPagwas)
 #' # Pagwas is the result of Pagwas_main()
-#' Bootstrap_estimate_Plot(Pagwas=Pagwas,
-#'                         figurenames = "test_forest.pdf",
-#'                         width = 9, height = 7)
+#' Bootstrap_estimate_Plot(
+#'   Pagwas = Pagwas,
+#'   figurenames = "test_forest.pdf",
+#'   width = 9, height = 7
+#' )
 Bootstrap_estimate_Plot <- function(Pagwas,
                                     figurenames = NULL,
                                     width = 9,
                                     height = 7,
-                                    do_plot=F) {
-  bootstrap_results <- Pagwas$bootstrap_results[-1, c("bp_value",
-                                                      "bias_corrected_estimate",
-                                                      "CI_lo",
-                                                      "CI_hi")]
+                                    do_plot = F) {
+  bootstrap_results <- Pagwas$bootstrap_results[-1, c(
+    "bp_value",
+    "bias_corrected_estimate",
+    "CI_lo",
+    "CI_hi"
+  )]
   bootstrap_results <- bootstrap_results[order(bootstrap_results$bias_corrected_estimate, decreasing = T), ]
 
 
@@ -113,23 +124,34 @@ Bootstrap_estimate_Plot <- function(Pagwas,
     Pvalue = bootstrap_results$bp_value
   )
 
-  plot1 <- ggplot2::ggplot(dat, aes(y = Index,
-                                    x = estimate)) +
-    geom_errorbarh(aes(xmin = lower,
-                       xmax = upper),
-                   color = "#6D8299",
-                   height = 0.25) +
-    geom_point(shape = 18,
-               size = 5,
-               color = "#D57E7E") +
-    geom_vline(xintercept = 0,
-               color = "#444444",
-               linetype = "dashed",
-               cex = 1,
-               alpha = 0.5) +
-    scale_y_continuous(name = "", breaks = seq_len(nrow(dat)),
-                       labels = dat$label,
-                       trans = "reverse") +
+  plot1 <- ggplot2::ggplot(dat, aes(
+    y = Index,
+    x = estimate
+  )) +
+    geom_errorbarh(aes(
+      xmin = lower,
+      xmax = upper
+    ),
+    color = "#6D8299",
+    height = 0.25
+    ) +
+    geom_point(
+      shape = 18,
+      size = 5,
+      color = "#D57E7E"
+    ) +
+    geom_vline(
+      xintercept = 0,
+      color = "#444444",
+      linetype = "dashed",
+      cex = 1,
+      alpha = 0.5
+    ) +
+    scale_y_continuous(
+      name = "", breaks = seq_len(nrow(dat)),
+      labels = dat$label,
+      trans = "reverse"
+    ) +
     xlab("bias_corrected_estimate (95% CI)") +
     ylab(" ") +
     theme_bw() +
@@ -150,9 +172,11 @@ Bootstrap_estimate_Plot <- function(Pagwas,
     xlab("  ") +
     theme(
       plot.title = element_text(hjust = 0.5, size = 12),
-      axis.text.x = element_text(color = "white",
-                                 hjust = -3,
-                                 size = 25), ## This is used to help with alignment
+      axis.text.x = element_text(
+        color = "white",
+        hjust = -3,
+        size = 25
+      ), ## This is used to help with alignment
       axis.line = element_blank(),
       axis.text.y = element_blank(),
       axis.ticks = element_blank(),
@@ -168,18 +192,21 @@ Bootstrap_estimate_Plot <- function(Pagwas,
   ## OR point estimate table
   tab1 <- table_base +
     labs(title = "space") +
-    geom_text(aes(y = rev(Index), x = 1,
-                  label = sprintf("%.3f", round(Pvalue, digits = 3))),
-              size = 4) + ## decimal places
+    geom_text(aes(
+      y = rev(Index), x = 1,
+      label = sprintf("%.3f", round(Pvalue, digits = 3))
+    ),
+    size = 4
+    ) + ## decimal places
     ggtitle("Pvalue")
 
   lay <- matrix(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 3), nrow = 1)
   plot2 <- gridExtra::grid.arrange(plot1, tab1, layout_matrix = lay)
-  if(do_plot) print(plot2)
+  if (do_plot) print(plot2)
   ## save the pdf figure
-  if(!is.null(figurenames)){
-  pdf(file = figurenames, width = width, height = height)
-  print(plot2)
-  dev.off()
+  if (!is.null(figurenames)) {
+    pdf(file = figurenames, width = width, height = height)
+    print(plot2)
+    dev.off()
   }
 }

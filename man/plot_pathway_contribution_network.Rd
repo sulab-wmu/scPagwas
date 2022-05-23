@@ -74,16 +74,16 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 }
 \examples{
 plot_pathway_contribution_network(
-mat_datExpr=pca_cell_df,
-vec_gene_contribution=Pagwas$Pathway_block_heritability,
-vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-n_max_genes=20,
-igraph_algorithm = "drl",
-fontface_labels="bold.italic",
-color_edge = "#9D9D9D",
-fontSize_label_lg=4,
-fontSize_legend_lg=4,
-fontSize_legend_xlg=4,
-edge_thickness = 1
+  mat_datExpr = pca_cell_df,
+  vec_gene_contribution = Pagwas$Pathway_block_heritability,
+  vec_pathways_highlight = names(sort(Pagwas$Pathway_block_heritability, decreasing = T)[1:5]),
+  n_max_genes = 20,
+  igraph_algorithm = "drl",
+  fontface_labels = "bold.italic",
+  color_edge = "#9D9D9D",
+  fontSize_label_lg = 4,
+  fontSize_legend_lg = 4,
+  fontSize_legend_xlg = 4,
+  edge_thickness = 1
 )
 }

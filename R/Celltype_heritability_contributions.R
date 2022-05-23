@@ -11,92 +11,84 @@
 #' library(scPagwas)
 #' # Pagwas should have inhibit data
 #' Pagwas <- link_pwpca_block(Pagwas)
-
 link_pwpca_block <- function(pa_block,
                              pca_cell_df,
                              merge_scexpr,
                              snp_gene_df,
                              rawPathway_list) {
+  pathway <- unique(pa_block$block_info$pathway)
 
-    pathway <- unique(pa_block$block_info$pathway)
-
-    x <-pca_cell_df[pathway, ]
-    if(length(pathway)==1){
+  x <- pca_cell_df[pathway, ]
+  if (length(pathway) == 1) {
     x <- matrix(x, nrow = 1)
-    rownames(x)<-pathway
-    }
+    rownames(x) <- pathway
+  }
 
-    if (nrow(pa_block$snps) == 0) {
-      pa_block$include_in_inference <- F
-      pa_block$x <- NULL # to make sure we totally replace previous stuffs
-      return(pa_block)
-      # stop("remove duplicates from pa_block data")
-    }
-    proper_genes <- rownames(merge_scexpr)
-    mg <- intersect(rawPathway_list[[pathway]], proper_genes)
-    x2 <- merge_scexpr[mg, ]
+  if (nrow(pa_block$snps) == 0) {
+    pa_block$include_in_inference <- F
+    pa_block$x <- NULL # to make sure we totally replace previous stuffs
+    return(pa_block)
+    # stop("remove duplicates from pa_block data")
+  }
+  proper_genes <- rownames(merge_scexpr)
+  mg <- intersect(rawPathway_list[[pathway]], proper_genes)
+  x2 <- merge_scexpr[mg, ]
 
-    if(ncol(merge_scexpr)==1){
+  if (ncol(merge_scexpr) == 1) {
+    x2 <- data.matrix(x2)
+  }
+  if (length(mg) > 1) {
+    x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
+  }
 
-      x2<-data.matrix(x2)
-    }
-    if (length(mg) > 1) {
-      x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
-
-    }
-
-    if (pa_block$n_snps > 1) {
-      if(ncol(merge_scexpr)==1){
-        x2 <- data.matrix(x2[pa_block$snps$label, ])
-        pa_block$n_snps <- nrow(pa_block$snps)
-
-        x <-data.matrix(x[rep(1, pa_block$n_snps), ])
-        rownames(x) <- pa_block$snps$rsid
-
-        #snp_gene_df <- Pagwas$snp_gene_df
-        rownames(snp_gene_df) <- snp_gene_df$rsid
-        x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-        x3 <- x2 * x
-
-      }else{
-        x2 <- x2[pa_block$snps$label, ]
-        pa_block$n_snps <- nrow(pa_block$snps)
-
-        x <-x[rep(1, pa_block$n_snps), ]
-        rownames(x) <- pa_block$snps$rsid
-
-        #snp_gene_df <- Pagwas$snp_gene_df
-        rownames(snp_gene_df) <- snp_gene_df$rsid
-        x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-        x3 <- x2 * x
-
-      }
-
-    } else {
-
-      x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
-      rownames(x2) <- pa_block$snps$label
+  if (pa_block$n_snps > 1) {
+    if (ncol(merge_scexpr) == 1) {
+      x2 <- data.matrix(x2[pa_block$snps$label, ])
       pa_block$n_snps <- nrow(pa_block$snps)
 
+      x <- data.matrix(x[rep(1, pa_block$n_snps), ])
       rownames(x) <- pa_block$snps$rsid
-      #snp_gene_df <- Pagwas$snp_gene_df
+
+      # snp_gene_df <- Pagwas$snp_gene_df
       rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      x3 <- x2 * x
+    } else {
+      x2 <- x2[pa_block$snps$label, ]
+      pa_block$n_snps <- nrow(pa_block$snps)
 
-      x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
-      x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+      x <- x[rep(1, pa_block$n_snps), ]
+      rownames(x) <- pa_block$snps$rsid
+
+      # snp_gene_df <- Pagwas$snp_gene_df
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      x3 <- x2 * x
     }
+  } else {
+    x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
+    rownames(x2) <- pa_block$snps$label
+    pa_block$n_snps <- nrow(pa_block$snps)
 
-    rm(x)
-    rm(x2)
+    rownames(x) <- pa_block$snps$rsid
+    # snp_gene_df <- Pagwas$snp_gene_df
+    rownames(snp_gene_df) <- snp_gene_df$rsid
 
-    pa_block$x <- t(pa_block$ld_matrix_squared) %*% x3
-    rownames(pa_block$x) <- pa_block$snps$rsid
-    colnames(pa_block$x) <- colnames(merge_scexpr)
-    rm(x3)
+    x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+    x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+  }
 
-    pa_block$include_in_inference <- T
+  rm(x)
+  rm(x2)
 
-  return(pa_block[c("x","y","snps","include_in_inference")])
+  pa_block$x <- t(pa_block$ld_matrix_squared) %*% x3
+  rownames(pa_block$x) <- pa_block$snps$rsid
+  colnames(pa_block$x) <- colnames(merge_scexpr)
+  rm(x3)
+
+  pa_block$include_in_inference <- T
+
+  return(pa_block[c("x", "y", "snps", "include_in_inference")])
 }
 
 
@@ -128,8 +120,8 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
   lm_results <- list()
 
   m <- stats::lm(vectorized_Pagwas_data$y ~
-                   offset(vectorized_Pagwas_data$noise_per_snp) +
-                   vectorized_Pagwas_data$x)
+  offset(vectorized_Pagwas_data$noise_per_snp) +
+    vectorized_Pagwas_data$x)
 
   lm_results$parameters <- stats::coef(m)
 
@@ -159,14 +151,13 @@ Boot_evaluate <- function(Pagwas,
   pb <- txtProgressBar(style = 3)
   Boot_resultlist <-
     lapply(1:bootstrap_iters, function(i) {
-
       boot_results <- Parameter_regression(
         xy2vector(Pagwas$Pathway_ld_gwas_data[
           sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
         ])
       )
-      #boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
-      names(boot_results$parameters)<-c("Intercept",colnames(Pagwas$pca_cell_df))
+      # boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
+      names(boot_results$parameters) <- c("Intercept", colnames(Pagwas$pca_cell_df))
 
       setTxtProgressBar(pb, i / bootstrap_iters)
 
@@ -201,7 +192,7 @@ Boot_evaluate <- function(Pagwas,
 #' @return
 
 para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
-  #pca_cell_df <- Pagwas$pca_cell_df
+  # pca_cell_df <- Pagwas$pca_cell_df
   if (sum(names(lm_results$parameters) %in% colnames(Pagwas$pca_cell_df)) < ncol(Pagwas$pca_cell_df)) {
     # message("There is blank or '+' within cell names!")
     names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), " ", ".")
@@ -317,4 +308,3 @@ Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 
   return(parameter_estimates)
 }
-
