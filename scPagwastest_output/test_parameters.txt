@@ -1,0 +1,16 @@
+## 2022-05-23 12:04:33
+input gwas data: 	C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/GWAS_summ_example.txt
+add_eqtls: 	OnlyTSS
+eqtls_files: 	
+Single_data: C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/scRNAexample.rds
+assay: 	RNA
+Pathway length: 	345
+split_n: 	1
+marg: 	10000
+maf_filter: 	0.01
+min_clustercells: 	10
+min.pathway.size: 	5
+max.pathway.size: 	300
+remove_outlier: 	TRUE
+iters: 	200
+ncores: 	2
