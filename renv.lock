@@ -63,6 +63,25 @@
       "Hash": "de5e346fed0fc44a0424a0531cf5d12d",
       "Requirements": []
     },
+    "BiocManager": {
+      "Package": "BiocManager",
+      "Version": "1.30.16",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "2fdca0877debdd4668190832cdee4c31",
+      "Requirements": []
+    },
+    "BiocVersion": {
+      "Package": "BiocVersion",
+      "Version": "3.13.1",
+      "Source": "Bioconductor",
+      "git_url": "https://git.bioconductor.org/packages/BiocVersion",
+      "git_branch": "master",
+      "git_last_commit": "3466413",
+      "git_last_commit_date": "2020-10-27",
+      "Hash": "94abf4508341d86378c2a78d219b3fca",
+      "Requirements": []
+    },
     "Biostrings": {
       "Package": "Biostrings",
       "Version": "2.60.1",
