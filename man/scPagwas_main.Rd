@@ -28,6 +28,7 @@ scPagwas_main(
   n_topgenes = 1000,
   singlecell = T,
   celltype = T,
+  seruat_return = T,
   remove_outlier = T,
   ncores = 1
 )

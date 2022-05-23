@@ -5,29 +5,24 @@
 \title{scPagwas_Visualization}
 \usage{
 scPagwas_Visualization(
-  scPagwas_score = NULL,
-  scPagwas_p = NULL,
   Single_data = NULL,
   p_thre = 0.05,
-  filename = NULL,
+  output.dirs = "scPagwastest_output",
   FigureType = "tsne",
   width = 7,
   height = 7,
   lowColor = "#000957",
   highColor = "#EBE645",
   size = 0.5,
-  title = "scPagwas_score",
   do_plot = F
 )
 }
 \arguments{
-\item{scPagwas_score}{scPagwas_score for scPagwas_main result}
-
 \item{Single_data}{Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE}
 
 \item{p_thre}{(numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.}
 
-\item{filename}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.}
+\item{output.dirs}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.}
 
 \item{FigureType}{(character)"tsne" or "umap}
 
@@ -41,11 +36,13 @@ scPagwas_Visualization(
 
 \item{size}{(numeric)size for scatters}
 
-\item{title}{(character)Figure title}
-
 \item{do_plot}{Whether to plot, logical}
 
+\item{scPagwas_score}{scPagwas_score for scPagwas_main result}
+
 \item{npcs}{(integr) the parameter of Seurat::RunPCA.}
+
+\item{title}{(character)Figure title}
 }
 \value{
 
@@ -60,7 +57,7 @@ data(scRNAexample)
 #  scPagwas = Pagwas,
 #  Single_data = scRNAexample,
 #  cellpercent = 0.1,
-#  filename = "scpagwas_pbc_False",
+#  output.dirs = "scpagwas_pbc_False",
 #  FigureType = "tsne",
 #  width = 7,
 #  height = 7,

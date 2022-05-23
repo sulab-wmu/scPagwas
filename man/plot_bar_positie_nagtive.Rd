@@ -12,6 +12,7 @@ plot_bar_positie_nagtive(
   f_color = colorRampPalette(brewer.pal(n = 11, name = "RdYlBu")),
   do_plot = F,
   title = NULL,
+  p_thre = 0.05,
   fontsize_title = 24,
   fontsize_axistitle_x = 18,
   fontsize_axistitle_y = 18,
@@ -20,7 +21,8 @@ plot_bar_positie_nagtive(
   fontsize_legendtitle = 12,
   fontsize_legendtext = 10,
   aspect.ratio = 1.2,
-  figurenames = NULL,
+  output.prefix = "Test",
+  output.dirs = NULL,
   width = 7,
   height = 7
 )
@@ -54,11 +56,11 @@ plot_bar_positie_nagtive(
 
 \item{fontsize_legendtext}{NULL to leave out}
 
-\item{figurenames}{The filename and address of the output plot,}
-
 \item{width}{figure width}
 
 \item{height}{figure height}
+
+\item{figurenames}{The filename and address of the output plot,}
 }
 \value{
 a ggplot2 object
