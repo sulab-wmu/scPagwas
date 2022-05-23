@@ -421,6 +421,26 @@ scPagwasPaHeritability_Visualization <- function(Single_data = NULL,
 
 
 
+#' scPagwasPaHeritability_Pagene
+#'
+#' @param Single_data
+#' @param gene
+#' @param pathway
+#' @param output.dirs
+#' @param FigureType
+#' @param width
+#' @param height
+#' @param lowColor
+#' @param midColor
+#' @param highColor
+#' @param p_color
+#' @param size
+#' @param do_plot
+#'
+#' @return
+#' @export
+#'
+#' @examples
 scPagwasPaHeritability_Pagene <- function(Single_data = NULL,
                                           gene = NULL,
                                           pathway = NULL,
