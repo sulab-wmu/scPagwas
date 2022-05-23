@@ -1,3 +1,5 @@
+# scPagwas 1.7.3
+
 # scPagwas 1.7.2
 
 # scPagwas 1.7.1

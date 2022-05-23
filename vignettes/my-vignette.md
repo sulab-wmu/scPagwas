@@ -88,7 +88,7 @@ NULL
  library(scPagwas)
  library(Seurat)
  library(parallel)
-library(SeuratData)
+#library(SeuratData)
 data(Genes_by_pathway_kegg)
 gene annotation files.
 data(block_annotation)
@@ -394,6 +394,50 @@ plot2 <-  ggplot() +
   
 ```
 
+## 可视化遗传基因的映射
+
+``` r
+###可选择
+gene<-"MAP2K2"
+Pa<-"hsa04630"
+
+data_mat<-Pagwas$data_mat[,rownames(Pagwas_fortify)]
+pca_scCell_mat<-Pagwas$pca_scCell_mat[,rownames(Pagwas_fortify)]
+
+Pagwas_fortify$gene<-as.vector(data_mat[gene,])
+Pagwas_fortify$Pa<-as.vector(pca_scCell_mat[Pa,])
+
+plot3 <-  ggplot() +
+        geom_point(data = Pagwas_fortify,
+                   aes(x = UMAP_1, y = UMAP_2,color =gene), size =0.6, alpha = 1) +
+        umap_theme() +
+        scale_colour_gradient2(low="#8479E1",mid="#F7F5F2",high="#FD5D5D")+
+        theme(aspect.ratio=1) +
+        guides(colour = guide_legend(override.aes = list(size=3)))+
+        labs(title = gene)
+#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_p.pdf")
+  print(plot3)
+```
+
+<img src="figures/vignette-unnamed-chunk-14-1.png" width="60%" />
+
+``` r
+#  dev.off()
+  
+  plot4 <-  ggplot() +
+        geom_point(data = Pagwas_fortify,
+                   aes(x = UMAP_1, y = UMAP_2,color =Pa), size =0.6, alpha = 1) +
+        umap_theme() +
+        scale_colour_gradient2(low="#8479E1",mid="#F7F5F2",high="#FD5D5D")+
+        theme(aspect.ratio=1) +
+        guides(colour = guide_legend(override.aes = list(size=3)))+
+        labs(title = Pa)
+#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_p.pdf")
+  print(plot4)
+```
+
+<img src="figures/vignette-unnamed-chunk-14-2.png" width="60%" />
+
 ## 通路数据降维可视化伪时间（去掉）
 
 ``` r
@@ -516,7 +560,7 @@ plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data, gene_
 })
 ```
 
-<img src="figures/vignette-unnamed-chunk-15-1.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-2.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-3.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-4.png" width="60%" /><img src="figures/vignette-unnamed-chunk-15-5.png" width="60%" />
+<img src="figures/vignette-unnamed-chunk-16-1.png" width="60%" /><img src="figures/vignette-unnamed-chunk-16-2.png" width="60%" /><img src="figures/vignette-unnamed-chunk-16-3.png" width="60%" /><img src="figures/vignette-unnamed-chunk-16-4.png" width="60%" /><img src="figures/vignette-unnamed-chunk-16-5.png" width="60%" />
 
 ## 可视化细胞类型遗传特异性通路-dotplot
 
@@ -553,7 +597,29 @@ plot_scpathway_dot(Pagwas=Pagwas,
                    height = 7)
 ```
 
-<img src="figures/vignette-unnamed-chunk-16-1.png" width="60%" />
+<img src="figures/vignette-unnamed-chunk-17-1.png" width="60%" />
+
+``` r
+plot_scpathway_dot(Pagwas=Pagwas,
+                   celltypes=unique(Pagwas$Celltype_anno$annotation)[1:5],
+                             topn_path_celltype=5,
+                             filter_p=0.05,
+                             max_logp=10,
+                             display_max_sizes=F,
+                             size_var = "lm_beta",
+                             col_var="logrankPvalue",
+                             shape.scale = 8,
+                             cols.use=c("lightgrey", "#E45826"),
+                             dend_x_var = "lm_beta",
+                             dist_method="euclidean",
+                             hclust_method="ward.D",
+                             do_plot = F,
+                             figurenames = NULL,
+                             width = 7,
+                             height = 7)
+```
+
+<img src="figures/vignette-unnamed-chunk-17-2.png" width="60%" />
 
 ## 可视化基因遗传关联性排秩点图
 
@@ -573,7 +639,7 @@ heritability_cor_scatterplot(gene_heri_cor=Pagwas$gene_heritability_correlation,
 )
 ```
 
-<img src="figures/vignette-unnamed-chunk-17-1.png" width="60%" />
+<img src="figures/vignette-unnamed-chunk-18-1.png" width="60%" />
 
 ### Plot the top5 heritability correlation genes in celltypes
 
@@ -603,7 +669,7 @@ Bootstrap_P_Barplot(p_results=Pagwas$bootstrap_results$bp_value[-1],
                                 do_plot=TRUE)
 ```
 
-<img src="figures/vignette-unnamed-chunk-18-1.png" width="60%" />
+<img src="figures/vignette-unnamed-chunk-19-1.png" width="60%" />
 
 ``` r
 #dev.off()
@@ -614,4 +680,4 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         do_plot=T)
 ```
 
-<img src="figures/vignette-unnamed-chunk-18-2.png" width="60%" />
+<img src="figures/vignette-unnamed-chunk-19-2.png" width="60%" />

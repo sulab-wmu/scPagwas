@@ -156,24 +156,25 @@ scPagwas_perform_score <- function(Pagwas,
   pa_exp_mat <-t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
   rm(pathway_expr)
 
-  pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
-  Pathway_single_results<-Pathway_sclm_results[,Pathway_names] * pa_exp_mat
-  Pagwas$Pathway_single_results<-Pathway_single_results
+  #pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
+  Pagwas$Pathway_single_results<-Pathway_sclm_results[,Pathway_names] * pa_exp_mat
+  rm(pa_exp_mat)
   rownames(Pagwas$Pathway_single_results)<-colnames(Pagwas$pca_scCell_mat)
 
   message("* Get rankPvalue for each single cell")
-  Pagwas$CellsrankPvalue<-rankPvalue(data.matrix(Pathway_single_results), columnweights = NULL,
+  Pagwas$CellsrankPvalue<-rankPvalue(Pagwas$Pathway_single_results, columnweights = NULL,
                                      na.last = "keep", ties.method = "average",
                                      calculateQvalue = F, pValueMethod = "rank")
   Pagwas$CellsrankPvalue$cellid<-colnames(Pagwas$pca_scCell_mat)
   Pagwas$CellsrankPvalue<-Pagwas$CellsrankPvalue[,c("cellid","pValueHigh")]
-
+  #Pagwas$CellsrankPvalue
   message("* Get Pathways'rankPvalue for each celltypes!")
   cl<-unique((Pagwas$Celltype_anno$annotation))
 
+  Pagwas$Pathway_single_results<-t(data.matrix(Pagwas$Pathway_single_results))
   Pathways_rankPvalue<-lapply(cl, function(ss){
     tt<-Pagwas$Celltype_anno$annotation==ss
-    PathwayrankPvalue<-rankPvalue(t(data.matrix(Pathway_single_results[tt,])),
+    PathwayrankPvalue<-rankPvalue(Pagwas$Pathway_single_results[,tt],
                                   columnweights = NULL, na.last = "keep",
                                   ties.method = "average", calculateQvalue = F,
                                   pValueMethod = "rank")
@@ -186,9 +187,9 @@ scPagwas_perform_score <- function(Pagwas,
   rownames(Pagwas$scPathways_rankPvalue)<-colnames(Pathway_sclm_results)
   rm(Pathways_rankPvalue)
   message("* Get scPgwas score for each single cell")
-  scPagwas_score <- rowSums(Pathway_single_results)
+  scPagwas_score <- colSums(Pagwas$Pathway_single_results)
 
-  rm(pa_exp_mat)
+
 
   #df <- data.frame(cellid = colnames(Pagwas$pca_scCell_mat), scPagwas_score = sign(scs) * log10(abs(scs) + 0.0001))
   #rownames(df) <- df$cellid
@@ -429,6 +430,8 @@ scGet_Pathway_heritability_contributions <- function(pca_scCell_mat, Pathway_scl
 
   Pathway_block_info <- as.numeric(pca_scCell_mat %*% parameters[intersect(colnames(pca_scCell_mat),names(parameters))])
   names(Pathway_block_info) <- rownames(pca_scCell_mat)
+
+  #T_scrna<-AddModuleScore(T_scrna,list(Anti_inflammatory,Pro_inflammatory),name=c("Anti_inflammatory","Pro_inflammatory"))
 
   return(Pathway_block_info)
 }

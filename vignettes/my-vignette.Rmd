@@ -113,11 +113,9 @@ NULL
  library(scPagwas)
  library(Seurat)
  library(parallel)
-library(SeuratData)
+#library(SeuratData)
 data(Genes_by_pathway_kegg)
-gene annotation files.
 data(block_annotation)
-LD data
 data(chrom_ld)
 Single_data =readRDS("E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds")
 Single_data <- FindVariableFeatures(Single_data,nfeatures = 3000)
@@ -131,13 +129,13 @@ save(Single_data,file = "E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds")
 ```
 
 
-# 1.Main functions
+# 1.Main functions v1.7.3
 ```{r eval=FALSE}
  ##############真实例子：
-Pagwas<-scPagwas_main(Pagwas = NULL,
+Pagwas_seu<-scPagwas_main(Pagwas = NULL,
                     gwas_data ="E:/RPakage/scPagwas/inst/extdata/AD_prune_gwas_data.txt",
                    output.prefix="adPrunetest",
-                    add_eqtls="OnlyTSS",
+                   output.dirs="adPrunetest",
                    block_annotation = block_annotation,
                    assay="RNA",
                    Single_data ="E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds",
@@ -145,62 +143,44 @@ Pagwas<-scPagwas_main(Pagwas = NULL,
                    ncores=5,
                    Pathway_list=Genes_by_pathway_kegg,
                   chrom_ld = chrom_ld,
-                  SimpleResult=F)
+                  singlecell=T,
+                  celltype=T)
 
-
+save(Pagwas_seu,file="E:/RPakage/scPagwas/data/Pagwas_AD_prune.RData")
 ```
 
-导入结果，去掉结果中无用的list，减少内存消耗
-```{r message=FALSE,warning = FALSE}
-load("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/Pagwas_GSE138852_Prune_adsubset_kegg.RData")
-Pagwas[c("Pathway_ld_gwas_data","VariableFeatures","merge_scexpr",
-             "rawPathway_list",
-             "snp_gene_df")]<-NULL
-names(Pagwas)
-```
 
 # Visualize the result
 ## Visualize the scPagwas_score for single cell
 首先产生单细胞单纯映射细胞类型位置和颜色
 ```{r message=FALSE,results = "hide",warning = FALSE}
- require("RColorBrewer")
- require("Seurat")
- require("SeuratObject")
- require("ggsci")
+require("RColorBrewer")
+require("SeuratObject")
+require("ggsci")
 library("RColorBrewer")
 library("ggplot2")
- library(scPagwas)
- library(Seurat)
+#load("E:/RPakage/scPagwas/data/Pagwas_AD_prune.RData")
 
-##导入开头处理的单细胞数据
-Single_data =readRDS("E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds")
-
-scPagwas_p<-Pagwas$CellsrankPvalue$pValueHigh
-names(scPagwas_p)<-rownames(Pagwas$CellsrankPvalue)
-sum(scPagwas_p<0.05)
-#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/tsne_test_ad.pdf")
-DimPlot(Single_data,reduction="tsne",group.by = "oupSample.cellType",pt.size=0.8,
+DimPlot(Pagwas_seu,reduction="umap",group.by = "oupSample.cellType",pt.size=0.8,
         label = TRUE, repel=TRUE)+ labs(x="TSNE",y="")+
         scale_color_d3() +
         theme(aspect.ratio=1)
-#dev.off()
+
 ```
 
 之后产生两者单细胞降维可视化图，第一张为scPagwas_score得分映射，第二章为阳性细胞映射
 ```{r message=FALSE,results = "hide",warning = FALSE}
 
-setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
- scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
-                                   scPagwas_p=scPagwas_p,
-                                   Single_data=Single_data,
+#setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
+ scPagwas_Visualization(Single_data=Pagwas,
                                    p_thre = 0.05,
-                                   filename = "ad_pruneGSE138852",
                                    FigureType = "tsne",
                                    width = 7,
                                    height = 7,
-                                   lowColor = "#000957", highColor = "#EBE645",
+                                   lowColor = "#000957", 
+                        highColor = "#EBE645",
+                        output.dirs="adPrunetest",
                                    size = 0.5,
-                                   title = "scPagwas_score",
                                    do_plot = T)
 ```
 
@@ -209,244 +189,89 @@ setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
 ### 阳性细胞和阴性细胞中不同细胞类型的比例
 ```{r message=FALSE,results = "hide",warning = FALSE}
 
-Single_data$scPagwas_p <- scPagwas_p[intersect(colnames(Single_data),names(scPagwas_p))]
-#thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
-Single_data$positiveCells<-rep(0,ncol(Single_data))
-Single_data$positiveCells[Single_data$scPagwas_p<0.05]<-1
-table(Single_data$positiveCells)
-#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/bar_positiveCells.pdf")
-plot_bar_positie_nagtive(seurat_obj=Single_data,
+plot_bar_positie_nagtive(seurat_obj=Pagwas,
                               var_ident="positiveCells",
                               var_group="oupSample.cellType",
                               vec_group_colors=NULL,
                               f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
-                              do_plot = T)
-```
+                              do_plot = T,
+                         output.prefix="1",
+                          output.dirs = "adPrunetest")
 
-### 不同细胞类型中阳性细胞和阴性细胞的比例
-
-```{r message=FALSE,results = "hide",warning = FALSE}
-
-#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/bar_positiveCells_celltypes.pdf")
-plot_bar_positie_nagtive(seurat_obj=Single_data,
+plot_bar_positie_nagtive(seurat_obj=Pagwas,
                               var_ident="oupSample.cellType",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
+                         output.prefix="2",
+                         output.dirs = "adPrunetest",
                               do_plot = T)
-
 ```
 
-子函数：获得单细胞数据的meta数据以及降维坐标
-```{r message=FALSE,results = "hide",warning = FALSE}
-
-fortify.Seurat <- function(x){
-  
-  xy <- as.data.frame(Embeddings(x, reduction = "umap"))
-  colnames(xy) <- c("UMAP_1", "UMAP_2")
-  xy$UMAP_1 <- as.numeric(xy$UMAP_1)
-  xy$UMAP_2 <- as.numeric(xy$UMAP_2)
-
-  xy2 <- as.data.frame(Embeddings(x, reduction = "tsne"))
-  colnames(xy2) <- c("TSNE_1", "TSNE_2")
-  xy2$TSNE_1 <- as.numeric(xy2$TSNE_1)
-  xy2$TSNE_2 <- as.numeric(xy2$TSNE_2)
-  xy<-cbind(xy,xy2)
-  return(cbind(xy, as.data.frame(x@meta.data)))
-}
-all_fortify_can <- fortify.Seurat(Single_data)
-```
-
-## 计算伪时间数据（去掉）
-```{r eval=FALSE}
-library(slingshot)
-library(SingleCellExperiment)
-library(mclust, quietly = TRUE)
-library(ggpubr)
-
-data_mat_sce<-SingleCellExperiment(assays = List(data =Pagwas$data_mat ))
-#Single_data#_opc<-  subset(Single_data, idents = c("OPC","mg"))
-
-rd1<-all_fortify_can[,c("UMAP_1" , "UMAP_2")]
-cl1 <- Mclust(rd1)$classification
-colData(data_mat_sce)$GMM <- cl1
-
-data_mat_sce<-  SingleCellExperiment(assays = List(data= GetAssayData(object =Single_data, slot = "data")),
-                                   reducedDims = SimpleList(UMAP = as.matrix(rd1)),
-                                    colData = data.frame(GMM = cl1))
-
-Slingshot_mat <- slingshot(data_mat_sce,
-                 clusterLabels = 'GMM',
-                 reducedDim = 'UMAP'
-                 )
-slingPseudotime_df<-as.data.frame(Slingshot_mat@colData[names(Slingshot_mat@colData)[c(-1,-2)]])
-
-slingPseudotime<-apply(slingPseudotime_df, 1, function(x)  mean(x,na.rm =T))
-colors <- colorRampPalette(brewer.pal(11,'Spectral')[-6])(100)
- pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/Slingshot.plot.pdf")
- plotcol <- colors[cut(slingPseudotime, breaks=100)]
- plot(reducedDims(Slingshot_mat)$UMAP, col = plotcol,
-      pch=16, asp = 1)
- lines(SlingshotDataSet(Slingshot_mat), lwd=2, col='black')
- dev.off()
-
-```
-
-
-## 计算通路数据降维结果
-
-将通路结果矩阵设置成为Seurat变量格式方便后面利用seurat包中的函数进行类单细胞数据处理。
-
-```{r message=FALSE,results = "hide",warning = FALSE}
-#Pagwas$Pathway_single_results
-Pagwas$Celltype_anno$scPagwas_score<-Pagwas$scPagwas_score
-Pagwas$Celltype_anno$pValueHigh <-Pagwas$CellsrankPvalue$pValueHigh
-#Pagwas$Celltype_anno$slingPseudotime<- slingPseudotime[rownames(Pagwas$Celltype_anno)]
-
-Pagwas_pca<-as.data.frame(t(data.matrix(Pagwas$Pathway_single_results)))
-
-Pagwas_pca <- do.call(data.frame,                      # Replace Inf in data by NA
-                   lapply(Pagwas_pca,
-                          function(x) replace(x, is.infinite(x), NA)))
-Pagwas_pca<- t(na.omit(t(Pagwas_pca)))
-rownames(Pagwas_pca)<-colnames(Pagwas$Pathway_single_results)
-
-Pagwas_seu<-CreateSeuratObject(
-  Pagwas_pca,
-  project = "CreateSeuratObject",
-  assay = "RNA",
-  names.field = 1,
-  names.delim = "_",
-  meta.data = Pagwas$Celltype_anno[colnames(Pagwas_pca),]
-)
-
-Idents(Pagwas_seu)<-Pagwas_seu$annotation
-#ls_scCell_markerpa <- FindAllMarkers(object = ls_scCell)
-#Pagwas_seu$slingPseudotime<-slingPseudotime[colnames(Pagwas_seu)]
-  
-Pagwas_seu<-ScaleData(Pagwas_seu)
-Pagwas_seu <- FindVariableFeatures(object = Pagwas_seu,nfeatures = round(dim(Pagwas_seu)[1]*0.2))
-
-Pagwas_seu <- RunPCA(object = Pagwas_seu, assay = "RNA", features = VariableFeatures(Pagwas_seu), npcs = 30)
-Pagwas_seu <- RunTSNE(object = Pagwas_seu,assay = "RNA", reduction = "pca", dims = 1:30)
-Pagwas_seu <- RunUMAP(object = Pagwas_seu, assay ="RNA", reduction = "pca", dims = 1:30)
-```
 
 ### 可视化通路降维数据中不同细胞类型的分布
 
 ```{r message=FALSE,results = "hide",warning = FALSE}
-Pagwas_fortify <- fortify.Seurat(Pagwas_seu)
-#  pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/Slingshot.plot.pdf")
-DimPlot(Pagwas_seu,group.by = "annotation",label = F)+ #umap_theme()+ ggtitle("annotation")+
+DimPlot(Pagwas,group.by = "oupSample.cellType",label = F)+ 
         theme(aspect.ratio=1)
-#  dev.off()
 
 
 ```
 
-## 通路数据降维可视化scPagwas_score映射
+## 通路数据降维可视化三种结果的映射
 ```{r message=FALSE,results = "hide",warning = FALSE}
-umap_theme <- function(){
-  theme_grey() %+replace%
-    theme(panel.background = element_rect(fill = "white", colour = "white", size = 0.1),
-          axis.text.x  = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.text.y  = element_blank(),
-          axis.ticks.y = element_blank(),
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          legend.key=element_blank())
-}
+Pagwas<-preprogress_PaSingle_data(Single_data=Pagwas,
+                       npcs=10,
+                       nfeatures=20)
+scPagwasPaHeritability_Visualization(Single_data=Pagwas,
+                                    p_thre = 0.05,
+                                    output.dirs="adPrunetest",
+                                    FigureType = "umap",
+                                    width = 7,
+                                    height = 7,
+                                    lowColor="#8479E1",
+                                    midColor="#F7F5F2",
+                                    highColor="#FD5D5D",
+                                    p_color= "#E45826",
+                                    size = 0.5,
+                                    do_plot = T) 
+  
+```
 
-plot1 <- ggplot() +
+
+## 可视化遗传基因的映射
+```{r message=FALSE,results = "hide",warning = FALSE}
+###可选择
+gene<-"MAP2K2"
+Pa<-"hsa04630"
+
+data_mat<-Pagwas$data_mat[,rownames(Pagwas_fortify)]
+pca_scCell_mat<-Pagwas$pca_scCell_mat[,rownames(Pagwas_fortify)]
+
+Pagwas_fortify$gene<-as.vector(data_mat[gene,])
+Pagwas_fortify$Pa<-as.vector(pca_scCell_mat[Pa,])
+
+plot3 <-  ggplot() +
         geom_point(data = Pagwas_fortify,
-                   aes(x = UMAP_1, y = UMAP_2,color =scPagwas_score), size = 0.6, alpha = 1) +
+                   aes(x = UMAP_1, y = UMAP_2,color =gene), size =0.6, alpha = 1) +
         umap_theme() +
         scale_colour_gradient2(low="#8479E1",mid="#F7F5F2",high="#FD5D5D")+
         theme(aspect.ratio=1) +
-        guides(colour = guide_legend(override.aes = list(size=3)))
-
-#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_score.pdf")
-  print(plot1)
-#dev.off()
-
-```
-
-## 通路数据降维可视化阳性细胞映射
-```{r message=FALSE,results = "hide",warning = FALSE}
-
-  Pagwas_fortify$p_thre<-rep("non",nrow(Pagwas_fortify))
-  Pagwas_fortify$p_thre[which(Pagwas_fortify$pValueHigh<0.05)]<-"<0.05"
-plot2 <-  ggplot() +
-        geom_point(data = Pagwas_fortify,
-                   aes(x = UMAP_1, y = UMAP_2,color =p_thre), size =0.6, alpha = 1) +
-        umap_theme() +
-        scale_color_manual(values = c("non" = "#05595B", "<0.05" = "#E45826"))+
-        theme(aspect.ratio=1) +
-        guides(colour = guide_legend(override.aes = list(size=3)))
-
+        guides(colour = guide_legend(override.aes = list(size=3)))+
+        labs(title = gene)
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_p.pdf")
-  print(plot2)
+  print(plot3)
 #  dev.off()
   
-```
-
-## 通路数据降维可视化伪时间（去掉）
-```{r eval=FALSE}
-#Pagwas_fortify2<-Pagwas_fortify
-#Pagwas_fortify2$slingPseudotime[Pagwas_fortify2$slingPseudotime>25] <-25
-plot3 <-  ggplot() +
+  plot4 <-  ggplot() +
         geom_point(data = Pagwas_fortify,
-                   aes(x = UMAP_1, y = UMAP_2,color =slingPseudotime), 
-                   size = 0.5, alpha = 1) +
+                   aes(x = UMAP_1, y = UMAP_2,color =Pa), size =0.6, alpha = 1) +
         umap_theme() +
-        scale_colour_gradient2(low="#8479E1",mid="#F7F5F2",high="#FD5D5D",midpoint = median(Pagwas_fortify$slingPseudotime))+
+        scale_colour_gradient2(low="#8479E1",mid="#F7F5F2",high="#FD5D5D")+
         theme(aspect.ratio=1) +
-        guides(colour = guide_legend(override.aes = list(size=3)))
-pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_slingPseudotime.pdf")
-  print(plot3)
-  dev.off()
-  
-Pagwas_fortify$logpValueHigh<- -log10(Pagwas_fortify$pValueHigh)
-
-#lapply(unique(Pagwas_fortify$annotation),function(ss){
-  
-plot4 <- ggplot(Pagwas_fortify,aes(x =logpValueHigh ,
-                y =slingPseudotime ))+
-          geom_point(color="#676FA3",size=0.5)+
-          geom_smooth(se = F,
-                      color = "#8E0505")+
-          labs(x = "logpValueHigh",y="slingPseudotime",title=ss)+
-          theme_classic()+
-          ggpubr::stat_cor(data =Pagwas_fortify,
-           method = "spearman")
-pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/cor_scPagwas_slingPseudotime.pdf")
+        guides(colour = guide_legend(override.aes = list(size=3)))+
+        labs(title = Pa)
+#pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/umap_opc_scPagwas_p.pdf")
   print(plot4)
-  dev.off()
-#})
-head(Pagwas_fortify)
-
-library(ggpubr)
-library(hrbrthemes)
-#####箱式图
-Pagwas_fortify$p_thre0.001<-rep("non",nrow(Pagwas_fortify))
-Pagwas_fortify$p_thre0.001[Pagwas_fortify$pValueHigh<0.001]<-"<0.001"
-
-
-p_integrate<- ggplot(Pagwas_fortify,aes(x=p_thre0.001,y=slingPseudotime,fill=p_thre0.001))+
-  geom_boxplot(outlier.size = 0.6,alpha=0.6)+ #箱式图异常值大小调整
-    scale_fill_manual(breaks=c("non","<0.05"), #图例顺序调整
-                      values=c("#9ad3bc","#f3eac2"))+ #填充颜色调整
-    geom_signif(comparisons=list(c("non","<0.05")),
-      map_signif_level=c("***"=0.001, "**"=0.01, "*"=0.05), #展示显著性
-      textsize=2,tip_length=0.03)+
-    geom_jitter(color="black" ,size=0.89,alpha=0.5)+theme(legend.position="none")+ #不需要图例
-    theme_ipsum_rc(base_family = "" )+facet_wrap(~Gene,scale="free",ncol=4)
-file_n<-paste0(cell,"_KeyGene_DExpression.pdf")
-pdf(file_n,height = 14)
-p_integrate
-dev.off()
-
-
 ```
 
 
@@ -482,7 +307,7 @@ lapply(1:length(pathways),function(ss){
  # library(showtext)
  #fond_add('Arial Narrow','/Library/Fonts/ArialNarrow.tiff')
 # pdf(paste0("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/",pathway,"_pthway_network.pdf"))
-plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data, gene_contribution=Pagwas$gene_heritability_correlation,
+plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data,                                              gene_contribution=Pagwas$gene_heritability_correlation,
                                   Celltype_anno=Pagwas$Celltype_anno,
                                   Pathway_list=Pagwas$Pathway_list,
                                   celltypes="OPC",
@@ -530,23 +355,25 @@ plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data, gene_
  library(grid)
  library(sisal)
 source("E:/RPakage/visulizeplotR/plot_scpathway_contri_dot.R")
-plot_scpathway_dot(Pagwas=Pagwas,
-                   topn_path_celltype=5,
-                   filter_p=0.05,
-                   max_logp=8,
-                   display_max_sizes=F,
-                   size_var = "lm_beta",
-                   col_var="logrankPvalue",
-                   shape.scale = 8,
-                   cols.use=c("lightgrey", "#E45826"),
-                   dend_x_var = "lm_beta",
-                   dist_method="euclidean",
-                   hclust_method="ward.D",
-                   do_plot = T,
-                   #figurenames = "E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_pruneGSE138852/pathway_test_dotplot.pdf",
-                   width = 12,
-                   height = 7)
 
+plot_scpathway_dot(Pagwas=Pagwas,
+                   celltypes=unique(Pagwas$Celltype_anno$annotation)[1:5],
+                             topn_path_celltype=5,
+                             filter_p=0.05,
+                             max_logp=15,
+                             display_max_sizes=F,
+                             size_var ="logrankPvalue" ,
+                             col_var="proportion",
+                             shape.scale = 8,
+                             cols.use=c("lightgrey", "#E45826"),
+                             dend_x_var = "logrankPvalue",
+                             dist_method="euclidean",
+                             hclust_method="ward.D",
+                             do_plot = T,
+                             figurenames = NULL,
+                             width = 7,
+                             height = 7)
+                             
 ```
 
 ## 可视化基因遗传关联性排秩点图

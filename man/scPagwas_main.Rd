@@ -7,8 +7,9 @@
 scPagwas_main(
   Pagwas = NULL,
   gwas_data = NULL,
-  output.prefix,
-  add_eqtls = c("OnlyTSS", "OnlyEqtls", "Both"),
+  output.prefix = "Test",
+  output.dirs = "scPagwastest_output",
+  add_eqtls = "OnlyTSS",
   eqtls_files = NULL,
   eqtls_cols = c("rs_id_dbSNP151_GRCh38p7", "variant_pos", "tss_distance", "gene_chr",
     "gene_start", "gene_end", "gene_name", "pval_beta"),
@@ -24,12 +25,10 @@ scPagwas_main(
   min.pathway.size = 5,
   max.pathway.size = 300,
   iters = 200,
-  param.file = T,
+  n_topgenes = 1000,
   singlecell = T,
   celltype = T,
   remove_outlier = T,
-  SimpleResult = F,
-  log.file = "scPagwas.run.log",
   ncores = 1
 )
 }
@@ -39,6 +38,8 @@ scPagwas_main(
 \item{gwas_data}{(data.frame)GWAS summary data}
 
 \item{output.prefix}{output.prefix,prefix used for output tables}
+
+\item{output.dirs}{(character)}
 
 \item{add_eqtls}{(character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;}
 
@@ -56,7 +57,7 @@ scPagwas_main(
 
 \item{chrom_ld}{(list,numeric)LD data for 22 chromosome.}
 
-\item{split_n}{number of times to compute the singlecell result}
+\item{split_n}{(integr)number of times to compute the singlecell result}
 
 \item{marg}{(integr)gene-TSS-window size}
 
@@ -70,15 +71,13 @@ scPagwas_main(
 
 \item{iters}{(integr)number of bootstrap iterations to perform}
 
-\item{param.file}{(logical)whether save parameters used for scPagwas.}
+\item{n_topgenes}{(integr)}
 
-\item{celltype}{}
+\item{singlecell}{(logical)}
+
+\item{celltype}{(logical)}
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for scPagwas score.}
-
-\item{SimpleResult}{(logical)whether simplify the scPagwas result.}
-
-\item{log.file}{(character)log.file}
 
 \item{ncores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }

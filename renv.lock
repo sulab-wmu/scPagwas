@@ -63,25 +63,6 @@
       "Hash": "de5e346fed0fc44a0424a0531cf5d12d",
       "Requirements": []
     },
-    "BiocManager": {
-      "Package": "BiocManager",
-      "Version": "1.30.16",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "2fdca0877debdd4668190832cdee4c31",
-      "Requirements": []
-    },
-    "BiocVersion": {
-      "Package": "BiocVersion",
-      "Version": "3.13.1",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/BiocVersion",
-      "git_branch": "master",
-      "git_last_commit": "3466413",
-      "git_last_commit_date": "2020-10-27",
-      "Hash": "94abf4508341d86378c2a78d219b3fca",
-      "Requirements": []
-    },
     "Biostrings": {
       "Package": "Biostrings",
       "Version": "2.60.1",
@@ -122,23 +103,6 @@
         "jsonlite",
         "magrittr",
         "promises"
-      ]
-    },
-    "DelayedArray": {
-      "Package": "DelayedArray",
-      "Version": "0.18.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/DelayedArray",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "4e18a4f",
-      "git_last_commit_date": "2021-05-19",
-      "Hash": "f90af4ffe50d94121884a63d732872b2",
-      "Requirements": [
-        "BiocGenerics",
-        "IRanges",
-        "Matrix",
-        "MatrixGenerics",
-        "S4Vectors"
       ]
     },
     "FNN": {
@@ -305,19 +269,6 @@
       "Hash": "4ed05e9c9726267e4a5872e09c04587c",
       "Requirements": [
         "lattice"
-      ]
-    },
-    "MatrixGenerics": {
-      "Package": "MatrixGenerics",
-      "Version": "1.4.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/MatrixGenerics",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "7a0f03a",
-      "git_last_commit_date": "2021-05-19",
-      "Hash": "48cab247b8dbb0ee0d35e2b6cc1370d4",
-      "Requirements": [
-        "matrixStats"
       ]
     },
     "MatrixModels": {
@@ -548,6 +499,14 @@
         "BiocGenerics"
       ]
     },
+    "SOAR": {
+      "Package": "SOAR",
+      "Version": "0.99-11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c67a3b28b6ead1d85adf7fd90d8930d6",
+      "Requirements": []
+    },
     "Seurat": {
       "Package": "Seurat",
       "Version": "4.0.3",
@@ -613,23 +572,6 @@
         "rlang"
       ]
     },
-    "SingleCellExperiment": {
-      "Package": "SingleCellExperiment",
-      "Version": "1.14.1",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/SingleCellExperiment",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "5357eff",
-      "git_last_commit_date": "2021-05-21",
-      "Hash": "9c8ebd33b820f5f1a0c09e9d4e722820",
-      "Requirements": [
-        "BiocGenerics",
-        "DelayedArray",
-        "GenomicRanges",
-        "S4Vectors",
-        "SummarizedExperiment"
-      ]
-    },
     "SparseM": {
       "Package": "SparseM",
       "Version": "1.81",
@@ -637,44 +579,6 @@
       "Repository": "CRAN",
       "Hash": "2042cd9759cc89a453c4aefef0ce9aae",
       "Requirements": []
-    },
-    "SummarizedExperiment": {
-      "Package": "SummarizedExperiment",
-      "Version": "1.22.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/SummarizedExperiment",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "7d1110e",
-      "git_last_commit_date": "2021-05-19",
-      "Hash": "74391cb9cefb4bcdffc38778fea7ecf3",
-      "Requirements": [
-        "Biobase",
-        "BiocGenerics",
-        "DelayedArray",
-        "GenomeInfoDb",
-        "GenomicRanges",
-        "IRanges",
-        "Matrix",
-        "MatrixGenerics",
-        "S4Vectors"
-      ]
-    },
-    "TrajectoryUtils": {
-      "Package": "TrajectoryUtils",
-      "Version": "1.0.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/TrajectoryUtils",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "f78814d",
-      "git_last_commit_date": "2021-05-19",
-      "Hash": "f55e7cff32fe92e6f499ab6ef628c9fc",
-      "Requirements": [
-        "Matrix",
-        "S4Vectors",
-        "SingleCellExperiment",
-        "SummarizedExperiment",
-        "igraph"
-      ]
     },
     "WGCNA": {
       "Package": "WGCNA",
@@ -1508,17 +1412,6 @@
         "withr"
       ]
     },
-    "gdtools": {
-      "Package": "gdtools",
-      "Version": "0.2.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "12a524de5a491ff39debb9311fc0763f",
-      "Requirements": [
-        "Rcpp",
-        "systemfonts"
-      ]
-    },
     "generics": {
       "Package": "generics",
       "Version": "0.1.0",
@@ -1908,23 +1801,6 @@
         "vctrs"
       ]
     },
-    "hrbrthemes": {
-      "Package": "hrbrthemes",
-      "Version": "0.8.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "0d1257948f016840ad90320ed19c8c7d",
-      "Requirements": [
-        "extrafont",
-        "gdtools",
-        "ggplot2",
-        "htmltools",
-        "knitr",
-        "magrittr",
-        "rmarkdown",
-        "scales"
-      ]
-    },
     "htmlTable": {
       "Package": "htmlTable",
       "Version": "2.4.0",
@@ -2264,14 +2140,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "45a2fee40a2f1bcad392cbe8a5f10d4f",
-      "Requirements": []
-    },
-    "mclust": {
-      "Package": "mclust",
-      "Version": "5.4.7",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "94d378428bc227483a83ab1de21dce41",
       "Requirements": []
     },
     "memoise": {
@@ -2620,16 +2488,6 @@
       "Repository": "CRAN",
       "Hash": "95ef9167b75dde9d2ccc3c7528393e7e",
       "Requirements": []
-    },
-    "princurve": {
-      "Package": "princurve",
-      "Version": "2.1.6",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "1e3d2690c203c82497e5520ba152d094",
-      "Requirements": [
-        "Rcpp"
-      ]
     },
     "processx": {
       "Package": "processx",
@@ -3114,25 +2972,6 @@
       "Hash": "0f9ba299f2385e686745b066c6d7a7c4",
       "Requirements": [
         "Rcpp"
-      ]
-    },
-    "slingshot": {
-      "Package": "slingshot",
-      "Version": "2.0.0",
-      "Source": "Bioconductor",
-      "git_url": "https://git.bioconductor.org/packages/slingshot",
-      "git_branch": "RELEASE_3_13",
-      "git_last_commit": "ffcbc53",
-      "git_last_commit_date": "2021-05-19",
-      "Hash": "d8aa9240759f780db87b8e27c4a70861",
-      "Requirements": [
-        "S4Vectors",
-        "SingleCellExperiment",
-        "SummarizedExperiment",
-        "TrajectoryUtils",
-        "igraph",
-        "matrixStats",
-        "princurve"
       ]
     },
     "sourcetools": {

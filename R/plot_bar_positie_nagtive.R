@@ -36,6 +36,7 @@ plot_bar_positie_nagtive <- function(seurat_obj,
                               f_color=colorRampPalette(brewer.pal(n=11, name="RdYlBu")),
                               do_plot = F,
                               title = NULL,
+                              p_thre=0.05,
                               fontsize_title = 24,
                               fontsize_axistitle_x = 18,
                               fontsize_axistitle_y = 18,
@@ -44,10 +45,16 @@ plot_bar_positie_nagtive <- function(seurat_obj,
                               fontsize_legendtitle = 12,
                               fontsize_legendtext = 10,
                               aspect.ratio=1.2,
-                              figurenames = NULL,
+                              output.prefix="Test",
+                              output.dirs = NULL,
                               width = 7,
                               height = 7
                               ) {
+  #===============seurat_obj p==================
+  #seurat_obj$scPagwas_p <- scPagwas_p[intersect(colnames(seurat_obj),names(scPagwas_p))]
+  #thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
+  seurat_obj$positiveCells<-rep(0,ncol(seurat_obj))
+  seurat_obj$positiveCells[seurat_obj$Cells.lm.rankPvalue<p_thre]<-1
 
   #===============data.table with sums==================
   dt = data.table("ident" = as.character(seurat_obj@meta.data[[var_ident]]),
@@ -93,9 +100,9 @@ plot_bar_positie_nagtive <- function(seurat_obj,
 
     labs(x=var_ident, y="proportion", fill = var_group)
 
-  if (do_plot) print(p)
-  if(!is.null(figurenames)){
-    pdf(file = figurenames, width = width, height = height)
+  if(do_plot) print(p)
+  if(!is.null(output.dirs)){
+    pdf(file = paste0("./", output.dirs, "/scPagwas.",output.prefix,".bar_positie_nagtive1.pdf"), height = height, width = width)
     print(p)
     dev.off()
   }
