@@ -95,7 +95,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           celltype = T,
                           seruat_return = T,
                           remove_outlier = T,
-                          ncores = 1) {
+                          ncores = 1){
   #####################################
   # debug test
   # Pagwas = NULL;
@@ -355,9 +355,8 @@ scPagwas_main <- function(Pagwas = NULL,
       Pagwas = Pagwas,
       remove_outlier = TRUE
     )
-    Pagwas$CellsrankPvalue$adj.p <- p.adjust(Pagwas$CellsrankPvalue$pValueHigh,
-      method = "bonferroni"
-    )
+   # Pagwas$CellsrankPvalue$adj.p <- p.adjust(Pagwas$CellsrankPvalue$pValueHigh,
+   #  method = "bonferroni")
     message("done!")
     cat("scPagwas_perform_score: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
     cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -379,7 +378,7 @@ scPagwas_main <- function(Pagwas = NULL,
     write.csv(Pagwas$gene_heritability_correlation, file = paste0("./", output.dirs, "/", output.prefix, "_gene_heritability_correlation.csv"), quote = F)
     Pagwas[c(
       "VariableFeatures", "merge_scexpr",
-      "data_mat", "rawPathway_list"
+       "rawPathway_list"
     )] <- NULL
     if (!seruat_return) {
       return(Pagwas)
@@ -403,24 +402,29 @@ scPagwas_main <- function(Pagwas = NULL,
     # DefaultAssay(Single_data) = 'RNA'
 
     scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
-    Single_data <- AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
+    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
+    message("* Get rankPvalue for each single cell")
+    CellScalepValue<-rankPvalue(t(data.matrix(GetAssayData(Single_data,assay = assay)[scPagwas_topgenes,])),
+                         pValueMethod = "scale")
 
+    Pagwas[c("data_mat")] <- NULL
     cat("scGet_gene_heritability_correlation: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
     cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
 
     message("done")
 
     Single_data$scPagwas.lm.score <- Pagwas$scPagwas_score[rownames(Pagwas$Celltype_anno)]
-    Single_data$Cells.lm.rankPvalue <- Pagwas$CellsrankPvalue[rownames(Pagwas$Celltype_anno), "pValueHigh"]
-    Single_data$Cells.lm.adjp <- Pagwas$CellsrankPvalue[rownames(Pagwas$Celltype_anno), "adj.p"]
+    Single_data$CellScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno),"pValueHighScale"]
+    Single_data$CellScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno),"qValueHighScale"]
+
+    #Single_data$Cells.lm.adjp <- Pagwas$CellsrankPvalue[rownames(Pagwas$Celltype_anno), "adj.p"]
 
     write.csv(Single_data@meta.data[, c(
       "scPagwas.lm.score",
-      "Cells.lm.rankPvalue",
-      "Cells.lm.adjp",
+      "CellScalepValue",
       "scPagwas.topgenes.Score1"
     )], file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_scPagwas_score_pvalue.Result.csv"), quote = F)
-    Pagwas[c("scPagwas_score", "CellsrankPvalue", "Celltype_anno")] <- NULL
+    Pagwas[c("scPagwas_score", "Celltype_anno")] <- NULL
 
     Single_data@misc <- Pagwas
 

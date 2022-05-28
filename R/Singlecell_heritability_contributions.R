@@ -129,10 +129,8 @@ scPagwas_perform_score <- function(Pagwas,
 
   message("* Get pathways mean expression in single cell")
 
-  pathway_expr <- lapply(Pathway_names, function(pa) {
-    # print(pa)
+  pathway_expr <- lapply(Pathway_names, function(pa){
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
-
     if (length(a) == 0) {
       # return(rep(0, ncol(Pagwas$data_mat)))
       return(NULL)
@@ -159,14 +157,9 @@ scPagwas_perform_score <- function(Pagwas,
   rm(pa_exp_mat)
   rownames(Pagwas$Pathway_single_results) <- colnames(Pagwas$pca_scCell_mat)
 
-  message("* Get rankPvalue for each single cell")
-  Pagwas$CellsrankPvalue <- rankPvalue(Pagwas$Pathway_single_results,
-    columnweights = NULL,
-    na.last = "keep", ties.method = "average",
-    calculateQvalue = F, pValueMethod = "rank"
-  )
-  Pagwas$CellsrankPvalue$cellid <- colnames(Pagwas$pca_scCell_mat)
-  Pagwas$CellsrankPvalue <- Pagwas$CellsrankPvalue[, c("cellid", "pValueHigh")]
+  #Pagwas$CellsrankPvalue <- rankPvalue(Pagwas$Pathway_single_results)
+  #Pagwas$CellsrankPvalue$cellid <- colnames(Pagwas$pca_scCell_mat)
+  #Pagwas$CellsrankPvalue <- Pagwas$CellsrankPvalue[, c("cellid", "pValueHigh")]
   # Pagwas$CellsrankPvalue
   message("* Get Pathways'rankPvalue for each celltypes!")
   cl <- unique((Pagwas$Celltype_anno$annotation))
@@ -174,11 +167,7 @@ scPagwas_perform_score <- function(Pagwas,
   Pagwas$Pathway_single_results <- t(data.matrix(Pagwas$Pathway_single_results))
   Pathways_rankPvalue <- lapply(cl, function(ss) {
     tt <- Pagwas$Celltype_anno$annotation == ss
-    PathwayrankPvalue <- rankPvalue(Pagwas$Pathway_single_results[, tt],
-      columnweights = NULL, na.last = "keep",
-      ties.method = "average", calculateQvalue = F,
-      pValueMethod = "rank"
-    )
+    PathwayrankPvalue <- rankPvalue(Pagwas$Pathway_single_results[, tt])
     return(PathwayrankPvalue$pValueHigh)
   })
   # Pathways_rankPvalue <- as.data.frame(Pathways_rankPvalue)
