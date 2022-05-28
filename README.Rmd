@@ -53,7 +53,7 @@ devtools::install_github("dengchunyu/scPagwas")
  #1.start to run the wrapper functions for preprogress.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
-                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     Single_data ="E:/OneDrive/GWAS_Multiomics/modelgroudtruth/sim_data.rds",
                      output.prefix="test",
                      output.dirs="scPagwastest_output",
                      block_annotation = block_annotation,

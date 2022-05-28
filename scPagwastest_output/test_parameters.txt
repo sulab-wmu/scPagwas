@@ -1,8 +1,8 @@
-## 2022-05-28 14:44:56
-input gwas data: 	E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt
+## 2022-05-28 15:46:31
+input gwas data: 	C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/GWAS_summ_example.txt
 add_eqtls: 	OnlyTSS
 eqtls_files: 	
-Single_data: E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds
+Single_data: E:/OneDrive/GWAS_Multiomics/modelgroudtruth/sim_data.rds
 assay: 	RNA
 Pathway length: 	345
 split_n: 	1

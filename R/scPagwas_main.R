@@ -106,7 +106,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # eqtls_files=NULL;
   # eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta");
   # block_annotation = block_annotation;
-  # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
+  # Single_data ="E:/OneDrive/GWAS_Multiomics/modelgroudtruth/sim_data.rds";
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;
@@ -351,6 +351,7 @@ scPagwas_main <- function(Pagwas = NULL,
   if (singlecell) {
     message(paste(utils::timestamp(quiet = T), " ******* 8th: scPagwas_perform_score function start! ********", sep = ""))
     tt <- Sys.time()
+    Pagwas$Pathway_ld_gwas_data <- NULL
     Pagwas <- scPagwas_perform_score(
       Pagwas = Pagwas,
       remove_outlier = TRUE
@@ -404,8 +405,9 @@ scPagwas_main <- function(Pagwas = NULL,
     scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
     Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
     message("* Get rankPvalue for each single cell")
-    CellScalepValue<-rankPvalue(t(data.matrix(GetAssayData(Single_data,assay = assay)[scPagwas_topgenes,])),
-                         pValueMethod = "scale")
+
+    a<-t(data.matrix(GetAssayData(Single_data,assay = assay)[scPagwas_topgenes,]))
+    CellScalepValue<-rankPvalue(datS=a, pValueMethod = "scale")
 
     Pagwas[c("data_mat")] <- NULL
     cat("scGet_gene_heritability_correlation: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
