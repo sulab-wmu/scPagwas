@@ -406,8 +406,8 @@ scPagwas_main <- function(Pagwas = NULL,
     Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
     message("* Get rankPvalue for each single cell")
 
-    a<-t(data.matrix(GetAssayData(Single_data,assay = assay)[scPagwas_topgenes,]))
-    CellScalepValue<-rankPvalue(datS=a, pValueMethod = "scale")
+    #a<-
+    CellScalepValue<-rankPvalue(datS=t(data.matrix(GetAssayData(Single_data,assay = assay)[scPagwas_topgenes,])), pValueMethod = "scale")
 
     Pagwas[c("data_mat")] <- NULL
     cat("scGet_gene_heritability_correlation: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
