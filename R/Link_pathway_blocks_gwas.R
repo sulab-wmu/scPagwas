@@ -82,6 +82,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     }
     # Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),sclm_list)
     Pagwas$Pathway_sclm_results <- as(data.matrix(bigreadr::rbind_df(sclm_list)), "dgCMatrix")
+    rownames(Pagwas$Pathway_sclm_results) <- colnames(Pagwas$pca_scCell_mat)
     rm(pa_blocksnplist)
   }
 
@@ -125,6 +126,9 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
 #' @param Pagwas
 #' @param Pachrom_block_list
 #' @param ncores
+#' @param chrom_gwas_list
+#' @param singlecell
+#' @param celltype
 #'
 #' @return
 #' @export
@@ -147,6 +151,7 @@ Pathway_block_func <- function(Pagwas = NULL,
   pb <- txtProgressBar(style = 3)
 
   for (pathway in names(Pachrom_block_list)) {
+    #print(pathway)
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
     Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
@@ -177,6 +182,7 @@ Pathway_block_func <- function(Pagwas = NULL,
 
       return(list(rsids_gwas, beta_squared, sub_ld, chrom_block))
     })
+    #print(1)
     # cbind_df代替 rbind_df(list_df)
     rm(Pa_chrom_block)
     pa_block <- list()
@@ -192,6 +198,7 @@ Pathway_block_func <- function(Pagwas = NULL,
       seq_len(length(Pa_chrom_data)),
       function(i) Pa_chrom_data[[i]][[2]]
     ))
+    #print(2)
     # message(paste0("snp is ",nrow(snp_data)))
     pa_block$ld_data <- bigreadr::rbind_df(lapply(
       seq_len(length(Pa_chrom_data)),
@@ -206,25 +213,23 @@ Pathway_block_func <- function(Pagwas = NULL,
     rm(Pa_chrom_data)
     # message(paste0("ld is ",nrow(sub_ld)))
     if (nrow(pa_block$ld_data) == 0) {
-      ld_matrix <- diag(1, nrow = nrow(pa_block$snps))
+      pa_block$ld_matrix_squared <- diag(1, nrow = nrow(pa_block$snps))
     } else {
       ld_matrix <- make_ld_matrix(
         all_snps = pa_block$snps$rsid,
         ld_data = pa_block$ld_data
       )
+      pa_block$ld_matrix_squared <- ld_matrix * ld_matrix
     }
 
     pa_block$n_snps <- nrow(pa_block$snps)
-    pa_block$ld_matrix_squared <- ld_matrix * ld_matrix
-
+    #print(3)
     ## compute the single cell result
     if (singlecell) {
       Pathway_sclm_results[[pathway]] <- get_Pathway_sclm(
-        pa_block = pa_block,
-        pca_scCell_mat = Pagwas$pca_scCell_mat,
-        data_mat = Pagwas$data_mat,
-        rawPathway_list = Pagwas$rawPathway_list,
-        snp_gene_df = Pagwas$snp_gene_df,
+        Pagwas=Pagwas,
+        pathway=pathway,
+        path_block = pa_block,
         ncores = ncores
       )
     }
@@ -289,16 +294,14 @@ scPathway_block_splitfunc <- function(pa_blocksnplist,
 
   for (pathway in names(pa_blocksnplist)) {
     pa_block <- pa_blocksnplist[[pathway]]
-    Pathway_sclm_results[[pathway]] <- get_Pathway_sclm(
-      pa_block = pa_block,
-      pca_scCell_mat = subpca_scCell_mat,
-      data_mat = subdata_mat,
+    Pathway_sclm_results[[pathway]] <- subget_Pathway_sclm(
+      pathway=pathway,
+      path_block = pa_block,
+      subdata_mat = subdata_mat,
       rawPathway_list = rawPathway_list,
       snp_gene_df = snp_gene_df,
       ncores = ncores
     )
-
-
     setTxtProgressBar(pb, which(names(pa_blocksnplist) == pathway) / length(names(pa_blocksnplist)))
   }
 
@@ -306,6 +309,7 @@ scPathway_block_splitfunc <- function(pa_blocksnplist,
   Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
   Pathway_sclm_results <- as.data.frame(Pathway_sclm_results)
   rownames(Pathway_sclm_results) <- colnames(subpca_scCell_mat)
+
   return(Pathway_sclm_results)
 }
 

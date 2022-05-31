@@ -106,7 +106,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # eqtls_files=NULL;
   # eqtls_cols=c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name","pval_beta");
   # block_annotation = block_annotation;
-  # Single_data ="E:/OneDrive/GWAS_Multiomics/modelgroudtruth/sim_data.rds";
+  # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;

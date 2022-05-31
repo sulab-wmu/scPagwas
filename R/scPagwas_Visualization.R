@@ -47,7 +47,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
   if (is.null(Single_data$scPagwas.lm.score)) {
     stop("ERROR: scPagwas.lm.score is NULL. scPagwas_score can be calculated by scPagwas_perform_score function!")
   }
-  if (is.null(Single_data$Cells.lm.rankPvalue)) {
+  if (is.null(Single_data$CellScaleqValue)) {
     stop("ERROR: Cells.lm.rankPvalue is NULL.")
   }
   if (!dir.exists(output.dirs)) {
@@ -56,29 +56,12 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
   if (FigureType == "umap") {
     all_fortify_can <- fortify.Seurat.umap(Single_data)
-    plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
-      x = "UMAP_1", y = "UMAP_2",
-      color = "scPagwas.lm.score", fill = "scPagwas.lm.score", size = size, title = title,
-      repel = TRUE
-    ) + umap_theme() +
-      scale_fill_gradient(low = lowColor, high = highColor) +
-      scale_color_gradient(low = lowColor, high = highColor) +
-      theme(aspect.ratio = 1) +
-      ggtitle("scPagwas.lm.score")
-
-    if (do_plot) print(plot_scPagwas_score)
-    if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_umap.pdf"), height = height, width = width)
-      print(plot_scPagwas_score)
-      dev.off()
-    }
 
     plot_scPagwas_score2 <- ggpubr::ggscatter(all_fortify_can,
       x = "UMAP_1", y = "UMAP_2",
       color = "scPagwas.topgenes.Score1",
       fill = "scPagwas.topgenes.Score1",
       size = size,
-      title = title,
       repel = TRUE
     ) + umap_theme() +
       scale_fill_gradient(low = lowColor, high = highColor) +
@@ -95,13 +78,13 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$Cells.lm.rankPvalue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$Cells.lm.rankPvalue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
       ) +
       umap_theme() +
@@ -121,28 +104,11 @@ scPagwas_Visualization <- function(Single_data = NULL,
   if (FigureType == "tsne") {
     all_fortify_can <- fortify.Seurat.tsne(Single_data)
 
-    plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
-      x = "TSNE_1", y = "TSNE_2",
-      color = "scPagwas.lm.score", fill = "scPagwas.lm.score", size = size,
-      repel = TRUE
-    ) + umap_theme() +
-      scale_fill_gradient(low = lowColor, high = highColor) +
-      scale_color_gradient(low = lowColor, high = highColor) +
-      ggtitle("scPagwas.lm.score") + theme(aspect.ratio = 1)
-
-
-    if (do_plot) print(plot_scPagwas_score)
-    if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_tsne.pdf"), height = height, width = width)
-      print(plot_scPagwas_score)
-      dev.off()
-    }
     plot_scPagwas_score2 <- ggpubr::ggscatter(all_fortify_can,
       x = "TSNE_1", y = "TSNE_2",
       color = "scPagwas.topgenes.Score1",
       fill = "scPagwas.topgenes.Score1",
       size = size,
-      title = title,
       repel = TRUE
     ) + umap_theme() +
       scale_fill_gradient(low = lowColor, high = highColor) +
@@ -160,13 +126,13 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$Cells.lm.rankPvalue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$Cells.lm.rankPvalue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +

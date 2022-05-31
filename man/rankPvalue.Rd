@@ -9,8 +9,8 @@ rankPvalue(
   columnweights = NULL,
   na.last = "keep",
   ties.method = "average",
-  calculateQvalue = TRUE,
-  pValueMethod = "all"
+  calculateQvalue = T,
+  pValueMethod = "rank"
 )
 }
 \arguments{

@@ -1,46 +1,43 @@
 
 #' get_Pathway_sclm
 #'
-#' @param Pathway_ld_gwas_data Element in Pagwas
-#' @param pca_scCell_mat Element in Pagwas
-#' @param data_mat Element in Pagwas
-#' @param rawPathway_list Element in Pagwas
-#' @param snp_gene_df Element in Pagwas
-#' @param split_n number of times to compute the singlecell result
+#' @param path_block Element in Pagwas
+#' @param pathway
+#' @param Pagwas
+#' @param ncores
 #'
 #' @return
 #' @export
 #' @examples
-get_Pathway_sclm <- function(pa_block,
-                             pca_scCell_mat,
-                             data_mat,
-                             ncores = 1,
-                             rawPathway_list,
-                             snp_gene_df) {
+get_Pathway_sclm <- function(Pagwas,
+                             path_block,
+                             pathway,
+                             ncores = 1) {
   # pb <- txtProgressBar(style = 3)
 
   # paths<-names(Pathway_ld_gwas_data)
 
-  # for (pa_block in Pathway_ld_gwas_data) {
+  # for (path_block in Pathway_ld_gwas_data) {
   # }
-  # Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(pa_block) {
-  pathway <- unique(pa_block$block_info$pathway)
-  x <- matrix(pca_scCell_mat[pathway, ], nrow = 1)
-  rownames(x) <- pathway
+  # Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(path_block) {
+  #pathway_snp <- unique(path_block$block_info$pathway)
+  #x <- matrix(pca_scCell_mat[pathway_snp, ], nrow = 1)
+  #rownames(x) <- pathway_snp
+  rawPathway_list<-Pagwas$rawPathway_list
 
-  if (pa_block$n_snps == 0) {
-    pa_block$include_in_inference <- F
-    pa_block$x <- NULL # to make sure we totally replace previous stuffs
-    return(pa_block)
+  if (path_block$n_snps == 0) {
+    path_block$include_in_inference <- F
+    path_block$x <- NULL # to make sure we totally replace previous stuffs
+    return(path_block)
   }
 
-  mg <- intersect(rawPathway_list[[pathway]], rownames(data_mat))
+  mg <- intersect(Pagwas$rawPathway_list[[pathway]], rownames(Pagwas$data_mat))
   if (length(mg) == 1) {
-    x2 <- matrix(data_mat[mg, ], nrow = 1)
+    x2 <- matrix(Pagwas$data_mat[mg, ], nrow = 1)
     x2 <- x2 / (x2 + 0.0001)
     rownames(x2) <- mg
   } else {
-    x2 <- biganalytics::apply(data_mat[mg, ], 2, function(ge) {
+    x2 <- biganalytics::apply(Pagwas$data_mat[mg, ], 2, function(ge) {
       if (sum(ge) == 0) {
         return(rep(0, length(ge)))
       } else {
@@ -52,49 +49,161 @@ get_Pathway_sclm <- function(pa_block,
 
   x2 <- as(x2, "dgCMatrix")
 
-  if (pa_block$n_snps > 1) {
-    x2 <- x2[pa_block$snps$label, ]
-    pa_block$n_snps <- nrow(pa_block$snps)
+  if (path_block$n_snps > 1) {
+    x2 <- x2[path_block$snps$label, ]
+    path_block$n_snps <- nrow(path_block$snps)
 
-    x <- x[rep(1, pa_block$n_snps), ]
-    rownames(x) <- pa_block$snps$rsid
-    rownames(snp_gene_df) <- snp_gene_df$rsid
-    x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-    x2 <- x2 * x
+    #x <- x[rep(1, path_block$n_snps), ]
+    #rownames(x) <- path_block$snps$rsid
+    #rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
+    #x <- x * snp_gene_df[path_block$snps$rsid, "slope"]
+    #x2 <- x2 * x
+    #x3<-x2 * x
   } else {
-    x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
-    rownames(x2) <- pa_block$snps$label
-    pa_block$n_snps <- nrow(pa_block$snps)
+    x2 <- matrix(x2[path_block$snps$label, ], nrow = 1)
+    rownames(x2) <- path_block$snps$label
+    path_block$n_snps <- nrow(path_block$snps)
 
-    x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
-    rownames(x) <- pa_block$snps$rsid
+    #x <- matrix(x[rep(1, path_block$n_snps), ], nrow = 1)
+    #rownames(x) <- path_block$snps$rsid
 
-    rownames(snp_gene_df) <- snp_gene_df$rsid
-    x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
-    x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+    #rownames(snp_gene_df) <- snp_gene_df$rsid
+    #x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[path_block$snps$rsid, "slope"]), nrow = 1)
+    #x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
     x2 <- as(x2, "dgCMatrix")
   }
-  pa_block$x <- as(pa_block$ld_matrix_squared %*% x2, "dgCMatrix")
+  path_block$x <- as(path_block$ld_matrix_squared %*% x2, "dgCMatrix")
 
-  pa_block$include_in_inference <- T
-  noise_per_snp <- pa_block$snps$se**2
+  path_block$include_in_inference <- T
+  noise_per_snp <- path_block$snps$se**2
 
-  if (!is.null(pa_block$x)) {
-    if (pa_block$n_snps > 2) {
-      na_elements <- is.na(pa_block$y) | apply(pa_block$x, 1, function(x) {
+  if (!is.null(path_block$x)) {
+    if (path_block$n_snps > 2) {
+      na_elements <- is.na(path_block$y) | apply(path_block$x, 1, function(x) {
         any(is.na(x))
       }) | is.na(noise_per_snp)
 
       results <- scParameter_regression(
-        Pagwas_x = pa_block$x[!na_elements, ],
-        Pagwas_y = pa_block$y[!na_elements],
+        Pagwas_x = path_block$x[!na_elements, ],
+        Pagwas_y = path_block$y[!na_elements],
         noise_per_snp = noise_per_snp[!na_elements],
         ncores = ncores
       )
 
+      results[is.na(results)] <- 0
+      names(results) <- colnames(Pagwas$data_mat)
+      # Pathway_cell_regression<-results
+    } else {
+      results <- NULL
+    }
+  } else {
+    results <- NULL
+  }
+
+  return(results)
+}
+
+
+
+#' subget_Pathway_sclm
+#'
+#' @param Pagwas
+#' @param path_block
+#' @param subdata_mat
+#' @param pathway
+#' @param ncores
+#' @param rawPathway_list
+#' @param snp_gene_df
+#'
+#' @return
+#' @export
+#'
+#' @examples
+subget_Pathway_sclm <- function(
+                             path_block,
+                             subdata_mat,
+                             pathway,
+                             rawPathway_list,
+                             snp_gene_df,
+                             ncores = 1) {
+  # pb <- txtProgressBar(style = 3)
+
+  # paths<-names(Pathway_ld_gwas_data)
+
+  # for (path_block in Pathway_ld_gwas_data) {
+  # }
+  # Pathway_sclm_results <- papply(Pathway_ld_gwas_data, function(path_block) {
+  #pathway_snp <- unique(path_block$block_info$pathway)
+  #x <- matrix(pca_scCell_mat[pathway_snp, ], nrow = 1)
+  #rownames(x) <- pathway_snp
+
+  if (path_block$n_snps == 0) {
+    path_block$include_in_inference <- F
+    path_block$x <- NULL # to make sure we totally replace previous stuffs
+    return(path_block)
+  }
+
+  mg <- intersect(rawPathway_list[[pathway]], rownames(subdata_mat))
+  if (length(mg) == 1) {
+    x2 <- matrix(subdata_mat[mg, ], nrow = 1)
+    x2 <- x2 / (x2 + 0.0001)
+    rownames(x2) <- mg
+  } else {
+    x2 <- biganalytics::apply(subdata_mat[mg, ], 2, function(ge) {
+      if (sum(ge) == 0) {
+        return(rep(0, length(ge)))
+      } else {
+        return(ge / sum(ge))
+      }
+    })
+    rownames(x2) <- mg
+  }
+
+  x2 <- as(x2, "dgCMatrix")
+
+  if (path_block$n_snps > 1) {
+    x2 <- x2[path_block$snps$label, ]
+    path_block$n_snps <- nrow(path_block$snps)
+
+    #x <- x[rep(1, path_block$n_snps), ]
+    #rownames(x) <- path_block$snps$rsid
+    #rownames(Pagwas$snp_gene_df) <- Pagwas$snp_gene_df$rsid
+    #x <- x * snp_gene_df[path_block$snps$rsid, "slope"]
+    #x2 <- x2 * x
+    #x3<-x2 * x
+  } else {
+    x2 <- matrix(x2[path_block$snps$label, ], nrow = 1)
+    rownames(x2) <- path_block$snps$label
+    path_block$n_snps <- nrow(path_block$snps)
+
+    #x <- matrix(x[rep(1, path_block$n_snps), ], nrow = 1)
+    #rownames(x) <- path_block$snps$rsid
+
+    #rownames(snp_gene_df) <- snp_gene_df$rsid
+    #x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[path_block$snps$rsid, "slope"]), nrow = 1)
+    #x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+    x2 <- as(x2, "dgCMatrix")
+  }
+  path_block$x <- as(path_block$ld_matrix_squared %*% x2, "dgCMatrix")
+
+  path_block$include_in_inference <- T
+  noise_per_snp <- path_block$snps$se**2
+
+  if (!is.null(path_block$x)) {
+    if (path_block$n_snps > 2) {
+      na_elements <- is.na(path_block$y) | apply(path_block$x, 1, function(x) {
+        any(is.na(x))
+      }) | is.na(noise_per_snp)
+
+      results <- scParameter_regression(
+        Pagwas_x = path_block$x[!na_elements, ],
+        Pagwas_y = path_block$y[!na_elements],
+        noise_per_snp = noise_per_snp[!na_elements],
+        ncores = ncores
+      )
 
       results[is.na(results)] <- 0
-      names(results) <- colnames(data_mat)
+      names(results) <- colnames(subdata_mat)
       # Pathway_cell_regression<-results
     } else {
       results <- NULL
@@ -127,34 +236,34 @@ scPagwas_perform_score <- function(Pagwas,
   # Pathway_sclm_results <- #data.matrix(as.data.frame(Pathway_sclm_results))
   ncells <- nrow(Pathway_sclm_results)
 
-  message("* Get pathways mean expression in single cell")
+  #message("* Get pathways mean expression in single cell")
 
-  pathway_expr <- lapply(Pathway_names, function(pa){
-    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
-    if (length(a) == 0) {
+  #pathway_expr <- lapply(Pathway_names, function(pa){
+  #  a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
+  #  if (length(a) == 0) {
       # return(rep(0, ncol(Pagwas$data_mat)))
-      return(NULL)
-    } else if (length(a) == 1) {
-      return(Pagwas$data_mat[a, ])
+  #    return(NULL)
+  #  } else if (length(a) == 1) {
+  #    return(Pagwas$data_mat[a, ])
       # return(NULL)
-    } else {
-      b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
-      return(b)
-    }
-  })
-  pathway_expr <- pathway_expr[!sapply(pathway_expr, is.null)]
-  Pathway_names <- Pathway_names[!sapply(pathway_expr, is.null)]
+  #  } else {
+  #    b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
+   #   return(b)
+   # }
+  #})
+  #pathway_expr <- pathway_expr[!sapply(pathway_expr, is.null)]
+  #Pathway_names <- Pathway_names[!sapply(pathway_expr, is.null)]
   # rm(data_mat)
-  pathway_expr <- data.matrix(as.data.frame(pathway_expr))
+  #pathway_expr <- data.matrix(as.data.frame(pathway_expr))
 
   # pathway_expr<-as(pathway_expr,"dgCMatrix")
-  colnames(pathway_expr) <- Pathway_names
-  pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
-  rm(pathway_expr)
+  #colnames(pathway_expr) <- Pathway_names
+  #pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ])# * pathway_expr
+  #rm(pathway_expr)
 
   # pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
-  Pagwas$Pathway_single_results <- Pathway_sclm_results[, Pathway_names] * pa_exp_mat
-  rm(pa_exp_mat)
+  Pagwas$Pathway_single_results <- Pathway_sclm_results[, Pathway_names] * t(Pagwas$pca_scCell_mat[Pathway_names, ])
+  #rm(pa_exp_mat)
   rownames(Pagwas$Pathway_single_results) <- colnames(Pagwas$pca_scCell_mat)
 
   #Pagwas$CellsrankPvalue <- rankPvalue(Pagwas$Pathway_single_results)
@@ -179,8 +288,6 @@ scPagwas_perform_score <- function(Pagwas,
   message("* Get scPgwas score for each single cell")
   scPagwas_score <- colSums(Pagwas$Pathway_single_results)
 
-
-
   # df <- data.frame(cellid = colnames(Pagwas$pca_scCell_mat), scPagwas_score = sign(scs) * log10(abs(scs) + 0.0001))
   # rownames(df) <- df$cellid
   gc()
@@ -191,8 +298,6 @@ scPagwas_perform_score <- function(Pagwas,
 
   return(Pagwas)
 }
-
-
 
 #' scParameter_regression
 #' @description Find parameter estimates for the data.
