@@ -9,10 +9,6 @@ scPagwas_main(
   gwas_data = NULL,
   output.prefix = "Test",
   output.dirs = "scPagwastest_output",
-  add_eqtls = "OnlyTSS",
-  eqtls_files = NULL,
-  eqtls_cols = c("rs_id_dbSNP151_GRCh38p7", "variant_pos", "tss_distance", "gene_chr",
-    "gene_start", "gene_end", "gene_name", "pval_beta"),
   block_annotation = NULL,
   Single_data = NULL,
   assay = c("RNA", "SCT"),
@@ -25,7 +21,6 @@ scPagwas_main(
   min.pathway.size = 5,
   max.pathway.size = 300,
   iters = 200,
-  sc.iters = 0,
   n_topgenes = 1000,
   singlecell = T,
   celltype = T,
@@ -42,12 +37,6 @@ scPagwas_main(
 \item{output.prefix}{output.prefix,prefix used for output tables}
 
 \item{output.dirs}{(character)}
-
-\item{add_eqtls}{(character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;}
-
-\item{eqtls_files}{(character)eqtls files names,frome GTEx.}
-
-\item{eqtls_cols}{(character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")}
 
 \item{block_annotation}{(data.frame) Start and end points for block traits, usually genes.}
 
@@ -73,8 +62,6 @@ scPagwas_main(
 
 \item{iters}{(integr)number of bootstrap iterations to perform}
 
-\item{sc.iters}{(integr)= NULL,}
-
 \item{n_topgenes}{(integr)}
 
 \item{singlecell}{(logical)}
@@ -84,6 +71,14 @@ scPagwas_main(
 \item{remove_outlier}{(logical)Whether to remove the outlier for scPagwas score.}
 
 \item{ncores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+
+\item{add_eqtls}{(character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;}
+
+\item{eqtls_files}{(character)eqtls files names,frome GTEx.}
+
+\item{eqtls_cols}{(character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")}
+
+\item{sc.iters}{(integr)= NULL,}
 }
 \value{
 

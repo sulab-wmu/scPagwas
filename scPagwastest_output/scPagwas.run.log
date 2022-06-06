@@ -1,0 +1,10 @@
+## start at: 2022-06-06 21:56:02 
+Single_data import: 4.60151 
+Pathway_pcascore_run: 14.17294 
+GWAS_summary_input: 0.1741109 
+Snp2Gene: 1.026364 
+Pathway_annotation_input: 1.746379 
+Link_pathway_blocks_gwas: 19.14957 
+Celltype_heritability_contributions: 20.59175 
+scPagwas_perform_score: 2.721272 
+scGet_gene_heritability_correlation: 3.228174 

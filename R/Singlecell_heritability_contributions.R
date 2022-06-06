@@ -14,7 +14,7 @@ scPagwas_perform_score <- function(Pagwas,
   options(bigmemory.allow.dimnames = TRUE)
   ###########sclm_score
   a<-matrix(Pagwas$sclm_results,ncol = 1)
-  mat<-Pagwas$pca_scCell_mat  * t(data.matrix(weighted_singlecell_mat))
+  mat<-Pagwas$pca_scCell_mat[colnames(weighted_singlecell_mat),]  * t(data.matrix(weighted_singlecell_mat))
   Pagwas$sclm_allsnpscore<-rowSums(apply(mat,1,function(x){
    x*a
   }))
