@@ -64,7 +64,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      seruat_return=T,
                      celltype=T,
                      ncores = 2,
-                     split_n=2)
+                     split_n=1)
 
 ```
  
@@ -106,13 +106,13 @@ Pagwas_data <- suppressMessages(Seurat::RunUMAP(object = Pagwas_data,  assay =  
  umap_theme()+ggtitle("Test")+labs(x="TSNE",y="")+theme(aspect.ratio=1)
  
  
- scPagwas_Visualization(Single_data=Pagwas_data,
-                                   p_thre = 0.1,
+ scPagwas_Visualization(Single_data=Single_data,
+                                   p_thre = 0.05,
                                    FigureType = "umap",
                                    width = 7,
                                    height = 7,
-                                   lowColor = "#000957", 
-                        highColor = "#EBE645",
+                                   lowColor = "white", 
+                        highColor = "red",
                         output.dirs="monosimu",
                                    size = 0.5,
                                    do_plot = T)

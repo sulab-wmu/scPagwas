@@ -40,6 +40,7 @@ link_pwpca_block <- function(pa_block,
   if (length(mg) > 1) {
     x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
   }
+  pa_block$x2<-x2
 
   if (pa_block$n_snps > 1) {
     if (ncol(merge_scexpr) == 1) {
@@ -51,7 +52,7 @@ link_pwpca_block <- function(pa_block,
 
       # snp_gene_df <- Pagwas$snp_gene_df
       rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      #x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
     } else {
       x2 <- x2[pa_block$snps$label, ]
@@ -62,7 +63,7 @@ link_pwpca_block <- function(pa_block,
 
       # snp_gene_df <- Pagwas$snp_gene_df
       rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      #x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
     }
   } else {
@@ -74,7 +75,7 @@ link_pwpca_block <- function(pa_block,
     # snp_gene_df <- Pagwas$snp_gene_df
     rownames(snp_gene_df) <- snp_gene_df$rsid
 
-    x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+    #x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
     x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
   }
 
@@ -88,8 +89,9 @@ link_pwpca_block <- function(pa_block,
 
   pa_block$include_in_inference <- T
 
-  return(pa_block[c("x", "y", "snps", "include_in_inference")])
+  return(pa_block[c("x", "y", "snps", "include_in_inference","x2")])
 }
+
 
 
 #' Pagwas_perform_regression
@@ -152,8 +154,8 @@ Boot_evaluate <- function(Pagwas,
   Boot_resultlist <-
     lapply(1:bootstrap_iters, function(i) {
       boot_results <- Parameter_regression(
-        xy2vector(Pagwas$Pathway_ld_gwas_data[
-          sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
+        xy2vector(Pathway_ld_gwas_data[
+          sample(seq_len(length(Pathway_ld_gwas_data)), floor(length(Pathway_ld_gwas_data) * part))
         ])
       )
       # boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)

@@ -44,10 +44,10 @@ scPagwas_Visualization <- function(Single_data = NULL,
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
                                    do_plot = F) {
-  if (is.null(Single_data$scPagwas.lm.score)) {
-    stop("ERROR: scPagwas.lm.score is NULL. scPagwas_score can be calculated by scPagwas_perform_score function!")
+  if (is.null(Single_data$scPagwas.topgenes.Score1)) {
+    stop("ERROR: scPagwas.topgenes.Score1 is NULL. scPagwas_score can be calculated by scPagwas_perform_score function!")
   }
-  if (is.null(Single_data$CellScaleqValue)) {
+  if (is.null(Single_data$CellLmpValue)) {
     stop("ERROR: Cells.lm.rankPvalue is NULL.")
   }
   if (!dir.exists(output.dirs)) {
@@ -67,7 +67,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1) +
-      ggtitle("scPagwas.topgenes.Score")
+      ggtitle("scPagwas.topgenes.Score1")
 
     if (do_plot) print(plot_scPagwas_score2)
     if (!is.null(output.dirs)) {
@@ -76,15 +76,56 @@ scPagwas_Visualization <- function(Single_data = NULL,
       dev.off()
     }
 
+
+    plot_scPagwas_score3 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "UMAP_1", y = "UMAP_2",
+                                              color = "sclm_allsnpscore",
+                                              fill = "sclm_allsnpscore",
+                                              size = size,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = highColor) +
+      scale_color_gradient(low = lowColor, high = highColor) +
+      theme(aspect.ratio = 1) +
+      ggtitle("sclm_allsnpscore")
+
+    if (do_plot) print(plot_scPagwas_score3)
+    if (!is.null(output.dirs)) {
+      pdf(file = paste0("./", output.dirs, "/sclm_allsnpscore_umap.pdf"), height = height, width = width)
+      print(plot_scPagwas_score3)
+      dev.off()
+    }
+
+
+    plot_scPagwas_score4 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "UMAP_1", y = "UMAP_2",
+                                              color = "scPagwas.lmtopgenes.Score2",
+                                              fill = "scPagwas.lmtopgenes.Score2",
+                                              size = size,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = highColor) +
+      scale_color_gradient(low = lowColor, high = highColor) +
+      theme(aspect.ratio = 1) +
+      ggtitle("scPagwas.lmtopgenes.Score2")
+
+    if (do_plot) print(plot_scPagwas_score4)
+    if (!is.null(output.dirs)) {
+      pdf(file = paste0("./", output.dirs, "/scPagwas.lmtopgenes.Score2_umap.pdf"), height = height, width = width)
+      print(plot_scPagwas_score4)
+      dev.off()
+    }
+
+
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellLmpValue > p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellLmpValue <= p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
       ) +
       umap_theme() +
@@ -123,16 +164,55 @@ scPagwas_Visualization <- function(Single_data = NULL,
       dev.off()
     }
 
+    plot_scPagwas_score3 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "TSNE_1", y = "TSNE_2",
+                                              color = "sclm_allsnpscore",
+                                              fill = "sclm_allsnpscore",
+                                              size = size,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = highColor) +
+      scale_color_gradient(low = lowColor, high = highColor) +
+      theme(aspect.ratio = 1) +
+      ggtitle("sclm_allsnpscore")
+
+    if (do_plot) print(plot_scPagwas_score3)
+    if (!is.null(output.dirs)) {
+      pdf(file = paste0("./", output.dirs, "/sclm_allsnpscore_tsne.pdf"), height = height, width = width)
+      print(plot_scPagwas_score3)
+      dev.off()
+    }
+
+
+
+    plot_scPagwas_score4 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "TSNE_1", y = "TSNE_2",
+                                              color = "scPagwas.lmtopgenes.Score2",
+                                              fill = "scPagwas.lmtopgenes.Score2",
+                                              size = size,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = highColor) +
+      scale_color_gradient(low = lowColor, high = highColor) +
+      theme(aspect.ratio = 1) +
+      ggtitle("scPagwas.lmtopgenes.Score2")
+
+    if (do_plot) print(plot_scPagwas_score4)
+    if (!is.null(output.dirs)) {
+      pdf(file = paste0("./", output.dirs, "/scPagwas.lmtopgenes.Score2_tsne.pdf"), height = height, width = width)
+      print(plot_scPagwas_score4)
+      dev.off()
+    }
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellLmpValue > p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), size = size, alpha = 0.8, color = "gray"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellLmpValue <= p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +
@@ -256,16 +336,16 @@ scPagwasPaHeritability_Visualization <- function(Single_data = NULL,
     plot1 <- ggplot() +
       geom_point(
         data = Pagwas_fortify,
-        aes(x = UMAP_1, y = UMAP_2, color = scPagwas.lm.score), size = size, alpha = 1
+        aes(x = UMAP_1, y = UMAP_2, color = scPagwas.topgenes.Score1), size = size, alpha = 1
       ) +
       umap_theme() +
       scale_colour_gradient2(low = lowColor, mid = midColor, high = highColor) +
       theme(aspect.ratio = 1) +
       guides(colour = guide_legend(override.aes = list(size = 3))) +
-      ggtitle("scPagwas.lm.score in scPagwasPaHeritability")
+      ggtitle("scPagwas.topgenes.Score1 in scPagwasPaHeritability")
     if (do_plot) print(plot1)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_scPagwasPaHeritability.umap.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score1_scPagwasPaHeritability.umap.pdf"), height = height, width = width)
       print(plot1)
       dev.off()
     }
@@ -322,7 +402,7 @@ scPagwasPaHeritability_Visualization <- function(Single_data = NULL,
         data = Pagwas_fortify,
         aes(
           x = TSNE_1, y = TSNE_2,
-          color = scPagwas.lm.score
+          color = scPagwas.topgenes.Score1
         ),
         size = size
       ) +
@@ -330,11 +410,11 @@ scPagwasPaHeritability_Visualization <- function(Single_data = NULL,
       scale_colour_gradient2(low = lowColor, mid = midColor, high = highColor, ) +
       theme(aspect.ratio = 1) +
       guides(colour = guide_legend(override.aes = list(size = 3))) +
-      ggtitle("scPagwas.lm.score in scPagwasPaHeritability")
+      ggtitle("scPagwas.topgenes.Score1 in scPagwasPaHeritability")
 
     if (do_plot) print(plot1)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_scPagwasPaHeritability.tsne.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score1_scPagwasPaHeritability.tsne.pdf"), height = height, width = width)
       print(plot1)
       dev.off()
     }
@@ -447,16 +527,16 @@ scPagwasPaHeritability_Pagene <- function(Single_data = NULL,
     plot1 <- ggplot() +
       geom_point(
         data = Pagwas_fortify,
-        aes(x = UMAP_1, y = UMAP_2, color = scPagwas.lm.score), size = size, alpha = 1
+        aes(x = UMAP_1, y = UMAP_2, color = scPagwas.topgenes.Score1), size = size, alpha = 1
       ) +
       umap_theme() +
       scale_colour_gradient2(low = lowColor, mid = midColor, high = highColor) +
       theme(aspect.ratio = 1) +
       guides(colour = guide_legend(override.aes = list(size = 3))) +
-      ggtitle("scPagwas.lm.score in scPagwasPaHeritability")
+      ggtitle("scPagwas.topgenes.Score1 in scPagwasPaHeritability")
     if (do_plot) print(plot1)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_scPagwasPaHeritability.umap.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score1_scPagwasPaHeritability.umap.pdf"), height = height, width = width)
       print(plot1)
       dev.off()
     }
@@ -513,7 +593,7 @@ scPagwasPaHeritability_Pagene <- function(Single_data = NULL,
         data = Pagwas_fortify,
         aes(
           x = TSNE_1, y = TSNE_2,
-          color = scPagwas.lm.score
+          color = scPagwas.topgenes.Score1
         ),
         size = size
       ) +
@@ -521,11 +601,11 @@ scPagwasPaHeritability_Pagene <- function(Single_data = NULL,
       scale_colour_gradient2(low = lowColor, mid = midColor, high = highColor, ) +
       theme(aspect.ratio = 1) +
       guides(colour = guide_legend(override.aes = list(size = 3))) +
-      ggtitle("scPagwas.lm.score in scPagwasPaHeritability")
+      ggtitle("scPagwas.topgenes.Score1 in scPagwasPaHeritability")
 
     if (do_plot) print(plot1)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_scPagwasPaHeritability.tsne.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score1_scPagwasPaHeritability.tsne.pdf"), height = height, width = width)
       print(plot1)
       dev.off()
     }

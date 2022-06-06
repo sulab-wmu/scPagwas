@@ -25,6 +25,7 @@ scPagwas_main(
   min.pathway.size = 5,
   max.pathway.size = 300,
   iters = 200,
+  sc.iters = 0,
   n_topgenes = 1000,
   singlecell = T,
   celltype = T,
@@ -71,6 +72,8 @@ scPagwas_main(
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
 \item{iters}{(integr)number of bootstrap iterations to perform}
+
+\item{sc.iters}{(integr)= NULL,}
 
 \item{n_topgenes}{(integr)}
 

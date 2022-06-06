@@ -126,6 +126,8 @@ Single_data <- RunTSNE(object = Single_data,assay =  "RNA", reduction = "pca",di
 Single_data <- RunUMAP(object = Single_data, assay = "RNA", reduction = "pca",dims = 1:50)
 save(Single_data,file = "E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds")
 
+Single_data<-subset(Single_data,idents = c("mg","OPC","astro"))
+
 ```
 
 
@@ -138,7 +140,7 @@ Pagwas_seu<-scPagwas_main(Pagwas = NULL,
                    output.dirs="adPrunetest",
                    block_annotation = block_annotation,
                    assay="RNA",
-                   Single_data ="E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds",
+                   Single_data =Single_data,
                    split_n=1,
                    ncores=5,
                    Pathway_list=Genes_by_pathway_kegg,
