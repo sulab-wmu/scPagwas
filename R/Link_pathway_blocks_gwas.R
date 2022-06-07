@@ -46,45 +46,6 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       celltype = celltype,
       ncores = ncores
     )
-#  }
-  # if (split_n > 1) {
-  #   pa_blocksnplist <- Pachrom_func(
-  #     Pagwas = Pagwas,
-  #     Pachrom_block_list = Pachrom_block_list,
-  #     chrom_gwas_list = chrom_gwas_list
-  #   )
-  #
-  #   if (celltype) {
-  #     Pagwas <- celltypes_Pathway_block_func(Pagwas = Pagwas, pa_blocksnplist = pa_blocksnplist)
-  #   }
-  #   # if(singlecell){}
-  #   a <- ncol(Pagwas$pca_scCell_mat)
-  #   for (ai in 1:10) {
-  #     # print(ai)
-  #     if (a %% split_n == 0) break
-  #     split_n <- split_n + 1
-  #   }
-  #
-  #   la <- gl(split_n, a / split_n, length = a)
-  #
-  #   sclm_list <- list()
-  #   for (i in 1:split_n) {
-  #     message("** start to run the ", i, " split!")
-  #     # sclm_list[[i]]<- matrix(nrow=sum(la==i), ncol=nrow(Pagwas$pca_scCell_mat))
-  #     sclm_list[[i]] <- scPathway_block_splitfunc(
-  #       pa_blocksnplist = pa_blocksnplist,
-  #       subpca_scCell_mat = Pagwas$pca_scCell_mat[, which(la == i)],
-  #       subdata_mat = Pagwas$data_mat[, which(la == i)],
-  #       rawPathway_list = Pagwas$rawPathway_list,
-  #       snp_gene_df = Pagwas$snp_gene_df,
-  #       ncores = ncores
-  #     )
-  #   }
-  #   # Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),sclm_list)
-  #   Pagwas$Pathway_sclm_results <- as(data.matrix(bigreadr::rbind_df(sclm_list)), "dgCMatrix")
-  #   rownames(Pagwas$Pathway_sclm_results) <- colnames(Pagwas$pca_scCell_mat)
-  #   rm(pa_blocksnplist)
-  # }
 
   rm(chrom_gwas_list)
   rm(chrom_ld)
@@ -227,12 +188,6 @@ Pathway_block_func <- function(Pagwas = NULL,
     pa_block$n_snps <- nrow(pa_block$snps)
 
     if (singlecell) {
-      #Pathway_sclm_results[[pathway]] <- get_Pathway_sclm(
-       # Pagwas=Pagwas,
-       # pathway=pathway,
-      #  path_block = pa_block,
-      #  ncores = ncores
-      #)
 
       scPathway_ld_gwas_data[[pathway]]<- link_pwpca_block(
         pa_block = pa_block,
@@ -241,7 +196,7 @@ Pathway_block_func <- function(Pagwas = NULL,
         snp_gene_df = Pagwas$snp_gene_df,
         rawPathway_list = Pagwas$rawPathway_list
       )
-      weighted_singlecell_mat[[pathway]]<-colSums(as.data.frame(scPathway_ld_gwas_data[[pathway]]$x2))
+      weighted_singlecell_mat[[pathway]]<-colSums(as.data.frame(scPathway_ld_gwas_data[[pathway]]$x2),na.rm = T)
       scPathway_ld_gwas_data[[pathway]]$x2<-NULL
     }
 

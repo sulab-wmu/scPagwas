@@ -1,4 +1,4 @@
-## 2022-06-06 21:56:02
+## 2022-06-07 20:45:19
 input gwas data: 	E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt
 Single_data: E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds
 assay: 	RNA

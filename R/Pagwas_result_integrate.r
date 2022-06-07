@@ -7,6 +7,7 @@
 #' @param output.prefix
 #' @param n_topgenes
 #' @param assay
+#' @param Single_data
 #'
 #' @return
 #' @export
@@ -15,6 +16,7 @@
 Pagwas_result_integtate<-function(Pagwas,
                                   seruat_return,
                                   output.dirs,
+                                  Single_data,
                                   output.prefix,
                                   n_topgenes,
                                   assay){
@@ -41,12 +43,12 @@ rm(scPagwas_pca)
 Pagwas[c("pca_scCell_mat","data_mat","snp_gene_df")] <- NULL
 
 #########scPagwaslm_topgenes
+
 scPagwaslm_topgenes <- names(Pagwas$allsnp_gene_heritability_correlation[order(Pagwas$allsnp_gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
 
 Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwaslm_topgenes),
                                       name = c("scPagwas.lmtopgenes.Score"))
 Single_data$scPagwas.lmtopgenes.Score1 <- scPagwas_score_filter(scPagwas_score = Single_data$scPagwas.lmtopgenes.Score1)
-
 
 Single_data$sclm_score<-Pagwas$sclm_allsnpscore
 
@@ -54,6 +56,7 @@ write.csv(Single_data@meta.data[, c(
   "sclm_score",
   "scPagwas.lmtopgenes.Score1"
 )], file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_scPagwas_score_pvalue.Result.csv"), quote = F)
+
 Pagwas[c("Celltype_anno","sclm_allsnpscore")] <- NULL
 
 Single_data@misc <- Pagwas

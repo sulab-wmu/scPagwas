@@ -17,7 +17,7 @@ scPagwas_perform_score <- function(Pagwas,
   mat<-Pagwas$pca_scCell_mat[colnames(weighted_singlecell_mat),]  * t(data.matrix(weighted_singlecell_mat))
   Pagwas$sclm_allsnpscore<-rowSums(apply(mat,1,function(x){
    x*a
-  }))
+  }),na.rm = T)
 
   gc()
   if (remove_outlier) {

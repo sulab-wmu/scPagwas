@@ -8,13 +8,14 @@ Pagwas_result_integtate(
   Pagwas,
   seruat_return,
   output.dirs,
+  Single_data,
   output.prefix,
   n_topgenes,
   assay
 )
 }
 \arguments{
-\item{assay}{}
+\item{Single_data}{}
 }
 \value{
 

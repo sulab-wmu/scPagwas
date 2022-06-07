@@ -1,4 +1,24 @@
 
+#' celltype_f
+#'
+#' @param Pagwas
+#' @param iters
+#'
+#' @return
+#' @export
+#'
+#' @examples
+celltype_f<-function(Pagwas,iters){
+  Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pathway_ld_gwas_data)
+  Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, part = 0.5)
+  if(!is.null(Pagwas$Pathway_ctlm_results)){
+    pathways<-colnames(Pagwas$Pathway_ctlm_results)
+    Pagwas$Pathway_ct_results<-Pagwas$Pathway_ctlm_results* t(Pagwas$pca_cell_df[pathways,])*data.matrix(weighted_celltypes_mat[,pathways])
+  }
+  return(Pagwas)
+}
+
+
 #' link_pwpca_block
 #' @description Link the pca score and expression for each pathway genes
 #' for each block

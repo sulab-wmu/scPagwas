@@ -1,4 +1,9 @@
-
+#' scPagwas, A single-cell pathway-based principal component (PC)-scoring algorithm named
+#' for integrating polygenic signals from GWAS with single cell data
+#' to infer disease-relevant cell populations and score the associations of
+#' individual cells with complex diseases.
+#'
+#'
 #' @importFrom dplyr mutate filter inner_join %>%
 #' @importFrom irlba irlba
 #' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings CreateAssayObject DefaultAssay AddModuleScore
@@ -12,7 +17,6 @@
 #' @importFrom SOAR Store Objects Remove
 #' @importFrom ggpubr ggscatter
 #' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
-#' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom bigreadr fread2 rbind_df
@@ -22,36 +26,96 @@
 
 #' @title Main wrapper functions for scPagwas
 #' @name scPagwas_main
-#' @description Main Pagwas wrapper re-progress function.
+#' @description Main Pagwas wrapper for workflow function.
 #' @details The entry point for Pagwas analysis.
 #'
-#' @param Pagwas (list)Pagwas data list, default is "NULL"
-#' @param gwas_data (data.frame)GWAS summary data
-#' @param output.prefix output.prefix,prefix used for output tables
-#' @param add_eqtls (character)There are three options: "OnlyTSS","OnlyEqtls","Both"; "OnlyTSS" means there is only snps within TSS window;"OnlyEqtls" represents only significant snps in eqtls files;  "Both" represents both significant snps in eqtls and the other snps in GWAS summary files;
-#' @param marg (integr)gene-TSS-window size
-#' @param eqtls_files (character)eqtls files names,frome GTEx.
-#' @param eqtls_cols (character) the needed columns in eqtls_files; In our examples files, the columns including: c("rs_id_dbSNP151_GRCh38p7","variant_pos","tss_distance","gene_chr", "gene_start", "gene_end","gene_name")
-#' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
-#' @param Single_data (character or Seruat)Input the Single data in seruat format, or the Seruat data address for rds format.Idents should be the celltypes annotation.
-#' @param assay (character)assay data of your single cell data to use,default is "RNA"
-#' @param Pathway_list (list,character) pathway gene sets list
-#' @param chrom_ld (list,numeric)LD data for 22 chromosome.
-#' @param split_n (integr)number of times to compute the singlecell result
-#' @param maf_filter (numeric)Filter the maf, default is 0.01
-#' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
+#' @param Pagwas (list)default is "NULL" when you first run the funciton; Pagwas
+#' should be list class; Sometimes, It can inherit the result from "scPagwas_main" function
+#' last time, when you turn the "seruat_return" to FALSE; It is suitable for circulation
+#' running for the same single data.
+#' @param gwas_data (data.frame)GWAS summary data; It must have some colmuns such as:
+#'  chrom|    pos    |   rsid    |   se  |  beta |  maf
+#'     6 | 119968580 | rs1159767 | 0.032 | 0.019 |0.5275
+#'    10 | 130566523 |  rs559109 | 0.033 | 0.045 |0.4047
+#'     5 | 133328825 | rs6893145 | 0.048 | 0.144 |0.1222
+#'     7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211
+#' @param marg (integr) the distance to TSS site,default is 10000, then gene-TSS-window size is 20000.
+#' @param block_annotation (data.frame) Start and end position for block traits, usually genes.
+#' @param Single_data (character or Seruat)Input the Single data in seruat format,
+#' or the Seruat data address for rds format;the "Idents" should be the celltypes
+#' annotation, if the "celltypes" is TRUE.
+#' @param assay (character)assay data of your single cell data to use,"RNA" or "SCT",default is "RNA";
+#' @param Pathway_list (list,character) pathway gene sets list,the name of list is pahtway names;
+#' the element of list including genes;
+#' @param chrom_ld (list,numeric)LD data for 22 chromosomes. Processed data is \code{data(chrom_ld)}
+#' @param split_n (integr)Number of blocks which are split from singlecell data;
+#' sometimes,the data is too big to run; we also advice split the data before run the main function.
+#' @param maf_filter (numeric)Filter the "maf" for gwas_data, default is 0.01;
+#' @param min_clustercells (integr)Threshold for number of cells in each cluster.default is 10;
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
-#' @param iters (integr)number of bootstrap iterations to perform
-#' @param sc.iters (integr)= NULL,
+#' @param iters (integr)Number of bootstrap iterations to perform, default is 200;
 #' @param remove_outlier (logical)Whether to remove the outlier for scPagwas score.
-#' @param ncores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#' @param singlecell (logical)
-#' @param celltype (logical)
-#' @param output.dirs (character)
-#' @param n_topgenes (integr)
+#' @param ncores (integr)Parallel cores,default is 1. use \code{detectCores()} to check the cores in computer.
+#' @param seruat_return (logical) Whether return the Seruat format result, if not,will return a list result;
+#' @param singlecell (logical)Whether to produce the singlecell result;
+#' @param celltype (logical)Whether to produce the celltypes result;
+#' @param output.prefix (character)output.prefix,prefix used for output tables;
+#' @param output.dirs (character)output directory for result; If the directory is nonexistence,
+#' the function will create it;
+#' @param n_topgenes (integr)Number of top associated gene selected to calculate the scPagwas score;
 #'
 #' @return
+#' Returns a Seruat data with entries(seruat_return=T):
+#' \describe{
+#'   \position{assay:}{
+#'   \item{scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}}
+#'
+#'   \position{meta.data}{
+#'   \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+#'   \item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
+#'
+#'   \position{misc: element in result,\code{Pagwas@misc }}{
+#'   \item{Pathway_list:}{a list for pathway gene list intersecting with single cell data}
+#'   \item{pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
+#'   \item{sclm_results:}{ the regression result for each cell.}
+#'   \item{allsnp_gene_heritability_correlation:}{
+#'   heritability correlation for each gene;}
+#'   \item{Pathway_ctlm_results:}{ the regression result for each pathway in each celltype}
+#'   \item{lm_results:}{ the regression result for celltypes}
+#'   \item{Pathway_ct_results:}{Inheritance conmtribution Matrix for pathways and celltypes, it contribute from "Pathway_ctlm_results"}
+#' }
+#'
+#' }
+#' Returns files:
+#'
+#' \describe{
+#'   \item{d:}{ max(nu, nv) approximate singular values}
+#'   \item{u:}{ nu approximate left singular vectors (only when right_only=FALSE)}
+#'   \item{v:}{ nv approximate right singular vectors}
+#'   \item{iter:}{ The number of Lanczos iterations carried out}
+#'   \item{mprod:}{ The total number of matrix vector products carried out}
+#' }
+#'
+#' Returns a Seruat data with entries(seruat_return=T):
+#' \describe{
+#'   \item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
+#'   \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+#'   \item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}
+#'   \item{Pathway_list:}{ The number of Lanczos iterations carried out}
+#'   \item{pca_cell_df:}{ The total number of matrix vector products carried out}
+#'   \item{sclm_results:}{ The total number of matrix vector products carried out}
+#'   \item{allsnp_gene_heritability_correlation:}{ The total number of matrix vector products carried out}
+#'   \item{Pathway_ctlm_results:}{ The total number of matrix vector products carried out}
+#'   \item{lm_results:}{ The total number of matrix vector products carried out}
+#'   \item{Pathway_ct_results:}{ The total number of matrix vector products carried out}
+#' }
+#'
+#' @note
+#' 1.When you run the package in linux server, you can run
+#' \code{export OPENBLAS_NUM_THREADS=1}
+#' before enter into R environment;
+#'
 #' @export
 #'
 #' @examples
@@ -119,6 +183,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # min.pathway.size=5;
   # max.pathway.size=300;
   # iters=200;
+  # seruat_return=T;
   # param.file=T;
   # remove_outlier=T;
   # log.file='scPagwas.run.log';
@@ -162,7 +227,7 @@ scPagwas_main <- function(Pagwas = NULL,
   if (is.null(Pagwas)) {
     Pagwas <- list()
   } else if (class(Pagwas) != "list") {
-    stop("The class for Pagwas is wrong! Should be a list data and be the result for celltype only")
+    stop("The class of Pagwas for input is wrong! Should be a list data")
   }
 
   #############################
@@ -217,7 +282,7 @@ scPagwas_main <- function(Pagwas = NULL,
       min.pathway.size = min.pathway.size,
       max.pathway.size = max.pathway.size
     )
-  } else if (!("pca_scCell_mat" %in% names(Pagwas))) {
+  } else if (!("pca_scCell_mat" %in% names(Pagwas)) ) {
     stop("Pathway_list should input!")
   }
   message("done!")
@@ -255,7 +320,7 @@ scPagwas_main <- function(Pagwas = NULL,
   tt <- Sys.time()
   if (!is.null(block_annotation)) {
       snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = marg)
-      snp_gene_df$slope <- rep(1, nrow(snp_gene_df))
+      #snp_gene_df$slope <- rep(1, nrow(snp_gene_df))
       Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance == "0", ]
 
   } else if (!("snp_gene_df" %in% names(Pagwas))) {
@@ -313,13 +378,7 @@ scPagwas_main <- function(Pagwas = NULL,
   if (celltype) {
     message(paste(utils::timestamp(quiet = T), " ******* 7th: Celltype_heritability_contributions function start! ********", sep = ""))
 
-    Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pathway_ld_gwas_data)
-    Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, part = 0.5)
-    if(!is.null(Pagwas$Pathway_ctlm_results)){
-      pathways<-colnames(Pagwas$Pathway_ctlm_results)
-      Pagwas$Pathway_ct_results<-Pagwas$Pathway_ctlm_results* t(Pagwas$pca_cell_df[pathways,])*data.matrix(weighted_celltypes_mat[,pathways])
-    }
-    #rm(Pathway_ld_gwas_data)
+    Pagwas<-celltype_f(Pagwas=Pagwas,iters=iters)
 
     message("done!")
     cat("Celltype_heritability_contributions: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -367,6 +426,7 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas<-Pagwas_result_integtate(Pagwas=Pagwas,
                                     seruat_return=seruat_return,
                                     output.dirs=output.dirs,
+                                    Single_data=Single_data,
                                     output.prefix=output.prefix,
                                     n_topgenes=n_topgenes,
                                     assay=assay)
