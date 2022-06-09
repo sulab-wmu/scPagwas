@@ -59,15 +59,14 @@ p <- hedenfalk$p
 
 # proportion of null p-values
 nullRatio <- pi0est(p)
-nullRatioS <- pi0est(p, lambda=seq(0.40, 0.95, 0.05), smooth.log.pi0="TRUE")
-nullRatioM <- pi0est(p, pi0.method="bootstrap")
+nullRatioS <- pi0est(p, lambda = seq(0.40, 0.95, 0.05), smooth.log.pi0 = "TRUE")
+nullRatioM <- pi0est(p, pi0.method = "bootstrap")
 
 # check behavior of estimate over lambda
 # also, pi0est arguments can be passed to qvalue
-qobj = qvalue(p, lambda=seq(0.05, 0.95, 0.1), smooth.log.pi0="TRUE")
+qobj <- qvalue(p, lambda = seq(0.05, 0.95, 0.1), smooth.log.pi0 = "TRUE")
 hist(qobj)
 plot(qobj)
-
 }
 \references{
 Storey JD. (2002) A direct approach to false discovery rates. Journal

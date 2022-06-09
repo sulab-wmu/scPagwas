@@ -1,6 +1,6 @@
-## 2022-06-07 20:45:19
+## 2022-06-09 10:47:50
 input gwas data: 	E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt
-Single_data: E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds
+Single_data: 
 assay: 	RNA
 Pathway length: 	345
 split_n: 	1
@@ -9,10 +9,6 @@ maf_filter: 	0.01
 min_clustercells: 	10
 min.pathway.size: 	5
 max.pathway.size: 	300
-singlecell: 	TRUE
-celltype: 	TRUE
-n_topgenes: 	1000
-seruat_return: 	TRUE
 remove_outlier: 	TRUE
 iters: 	200
 ncores: 	2

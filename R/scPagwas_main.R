@@ -17,6 +17,7 @@
 #' @importFrom SOAR Store Objects Remove
 #' @importFrom ggpubr ggscatter
 #' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
+#' @importFrom RMTstat qWishartMax
 #' @importFrom gridExtra grid.arrange
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom bigreadr fread2 rbind_df
@@ -26,7 +27,7 @@
 
 #' @title Main wrapper functions for scPagwas
 #' @name scPagwas_main
-#' @description Main Pagwas wrapper for workflow function.
+#' @description Main Pagwas wrapper re-progress function.
 #' @details The entry point for Pagwas analysis.
 #'
 #' @param Pagwas (list)default is "NULL" when you first run the funciton; Pagwas
@@ -39,28 +40,24 @@
 #'    10 | 130566523 |  rs559109 | 0.033 | 0.045 |0.4047
 #'     5 | 133328825 | rs6893145 | 0.048 | 0.144 |0.1222
 #'     7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211
+#' @param output.prefix (character)output.prefix,prefix used for output tables;
 #' @param marg (integr) the distance to TSS site,default is 10000, then gene-TSS-window size is 20000.
-#' @param block_annotation (data.frame) Start and end position for block traits, usually genes.
-#' @param Single_data (character or Seruat)Input the Single data in seruat format,
-#' or the Seruat data address for rds format;the "Idents" should be the celltypes
-#' annotation, if the "celltypes" is TRUE.
-#' @param assay (character)assay data of your single cell data to use,"RNA" or "SCT",default is "RNA";
-#' @param Pathway_list (list,character) pathway gene sets list,the name of list is pahtway names;
-#' the element of list including genes;
-#' @param chrom_ld (list,numeric)LD data for 22 chromosomes. Processed data is \code{data(chrom_ld)}
-#' @param split_n (integr)Number of blocks which are split from singlecell data;
-#' sometimes,the data is too big to run; we also advice split the data before run the main function.
-#' @param maf_filter (numeric)Filter the "maf" for gwas_data, default is 0.01;
-#' @param min_clustercells (integr)Threshold for number of cells in each cluster.default is 10;
+#' @param block_annotation (data.frame) Start and end points for block traits, usually genes.
+#' @param Single_data (character or Seruat)Input the Single data in seruat format, or the Seruat data address for rds format.Idents should be the celltypes annotation.
+#' @param assay (character)assay data of your single cell data to use,default is "RNA"
+#' @param Pathway_list (list,character) pathway gene sets list
+#' @param chrom_ld (list,numeric)LD data for 22 chromosome.
+#' @param split_n (integr)number of times to compute the singlecell result
+#' @param maf_filter (numeric)Filter the maf, default is 0.01
+#' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size. default is 300
-#' @param iters (integr)Number of bootstrap iterations to perform, default is 200;
+#' @param iters (integr)number of bootstrap iterations to perform
 #' @param remove_outlier (logical)Whether to remove the outlier for scPagwas score.
-#' @param ncores (integr)Parallel cores,default is 1. use \code{detectCores()} to check the cores in computer.
+#' @param ncores (integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.
 #' @param seruat_return (logical) Whether return the Seruat format result, if not,will return a list result;
 #' @param singlecell (logical)Whether to produce the singlecell result;
 #' @param celltype (logical)Whether to produce the celltypes result;
-#' @param output.prefix (character)output.prefix,prefix used for output tables;
 #' @param output.dirs (character)output directory for result; If the directory is nonexistence,
 #' the function will create it;
 #' @param n_topgenes (integr)Number of top associated gene selected to calculate the scPagwas score;
@@ -68,36 +65,40 @@
 #' @return
 #' Returns a Seruat data with entries(seruat_return=T):
 #' \describe{
-#'   \position{assay:}{
+#'   \item{assay:}{
 #'   \item{scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}}
-#'
-#'   \position{meta.data}{
-#'   \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-#'   \item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
-#'
-#'   \position{misc: element in result,\code{Pagwas@misc }}{
+#'scPagwasPaHeritability
+#'scPagwaslmHeritability
+#'   \item{meta.data}{
+#'   \item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+#'   \item{scPagwas.lm.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
+#'CellScalepValue
+#'CellScaleqValue
+#'   \item{misc: element in result,\code{Pagwas@misc }}{
 #'   \item{Pathway_list:}{a list for pathway gene list intersecting with single cell data}
 #'   \item{pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
-#'   \item{sclm_results:}{ the regression result for each cell.}
-#'   \item{allsnp_gene_heritability_correlation:}{
-#'   heritability correlation for each gene;}
-#'   \item{Pathway_ctlm_results:}{ the regression result for each pathway in each celltype}
-#'   \item{lm_results:}{ the regression result for celltypes}
-#'   \item{Pathway_ct_results:}{Inheritance conmtribution Matrix for pathways and celltypes, it contribute from "Pathway_ctlm_results"}
+#'   \item{lm_results:}{ the regression result for each cell.}
+#'   \item{gene_heritability_correlation:}{
+#'   heritability correlation value for each gene;}
+#'   \item{scPathways_rankPvalue:}{pvaues for each pathway}
+#'   \item{bootstrap_results:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.}
 #' }
 #'
 #' }
 #' Returns files:
 #'
 #' \describe{
-#'   \item{d:}{ max(nu, nv) approximate singular values}
-#'   \item{u:}{ nu approximate left singular vectors (only when right_only=FALSE)}
-#'   \item{v:}{ nv approximate right singular vectors}
-#'   \item{iter:}{ The number of Lanczos iterations carried out}
-#'   \item{mprod:}{ The total number of matrix vector products carried out}
+#'   \item{scPagwas.run.log:}{ the running log file for scPagwas}
+#'   \item{*_parameters.txt:}{parameters log file for scPagwas}
+#'   \item{*_pca_scCell_mat.txt:}{ 1st svd result for pathways in each cell}
+#'   \item{*_pca_celltypes_mat.txt:}{ 1st svd results for pathways in celltypes}
+#'   \item{*_singlecell_scPagwas_score.Result.csv:}{ The final result for lm and top gene score}
+#'   \item{*_celltypes_bootstrap_results.csv:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval}
+#'   \item{*_gene_heritability_correlation.csv:}{ heritability correlation value("cor" for pearson) for each gene;}
+
 #' }
 #'
-#' Returns a Seruat data with entries(seruat_return=T):
+#' Returns a list class with entries(seruat_return=F):
 #' \describe{
 #'   \item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
 #'   \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
@@ -115,7 +116,6 @@
 #' 1.When you run the package in linux server, you can run
 #' \code{export OPENBLAS_NUM_THREADS=1}
 #' before enter into R environment;
-#'
 #' @export
 #'
 #' @examples
@@ -157,19 +157,15 @@ scPagwas_main <- function(Pagwas = NULL,
                           celltype = T,
                           seruat_return = T,
                           remove_outlier = T,
-                          ncores = 1){
+                          ncores = 1) {
   #####################################
   # debug test
   # Pagwas = NULL;
   # gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas");
-  # "E:/RPakage/scPagwas/inst/extdata/AD_prune_gwas_data.txt";
-  #
   # output.prefix="test";
   # output.dirs="scPagwastest_output";
   # block_annotation = block_annotation;
   # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas");
-  # "E:/RPakage/scPagwas/inst/extdata/GSE138852_ad.rds";
-  #
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;
@@ -183,16 +179,18 @@ scPagwas_main <- function(Pagwas = NULL,
   # min.pathway.size=5;
   # max.pathway.size=300;
   # iters=200;
-  # seruat_return=T;
   # param.file=T;
   # remove_outlier=T;
   # log.file='scPagwas.run.log';
   # ncores=2;
+  # seruat_return=T
 
   #######
   ## initialize log-file
   if (!dir.exists(output.dirs)) {
+
     dir.create(output.dirs)
+
   }
   cat("## start at:", format(Sys.time()), "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"))
   ## miximal file path lenght;
@@ -211,60 +209,103 @@ scPagwas_main <- function(Pagwas = NULL,
     paste("min_clustercells: ", min_clustercells, sep = "\t"),
     paste("min.pathway.size: ", min.pathway.size, sep = "\t"),
     paste("max.pathway.size: ", max.pathway.size, sep = "\t"),
-    paste("singlecell: ", singlecell, sep = "\t"),
-    paste("celltype: ", celltype, sep = "\t"),
-    paste("n_topgenes: ", n_topgenes, sep = "\t"),
-    paste("seruat_return: ", seruat_return, sep = "\t"),
     paste("remove_outlier: ", remove_outlier, sep = "\t"),
     paste("iters: ", iters, sep = "\t"),
     paste("ncores: ", ncores, sep = "\t")
   )
   writeLines(param.str, con = paste0("./", output.dirs, "/", output.prefix, "_parameters.txt"))
+  # }
 
   Sys.setenv(R_LOCAL_CACHE = paste0("./", output.dirs, "/scPagwas_cache"))
 
   tt <- Sys.time()
   if (is.null(Pagwas)) {
+
     Pagwas <- list()
-  } else if (class(Pagwas) != "list") {
-    stop("The class of Pagwas for input is wrong! Should be a list data")
-  }
+    # class(Pagwas) <- 'Pagwas'
+  } else if (class(Pagwas) == "Seurat" & is.null(Single_data)) {
+
+      Single_data<-Pagwas
+      Pagwas <- list()
+      Pagwas<-Single_data@misc
+    if("scPagwasPaPca" %in% Assays(Single_data)){
+
+      Pagwas$pca_scCell_mat<-GetAssayData(Single_data,assay = "scPagwasPaPca")
+
+    }
+    if(assay %in% Assays(Single_data)){
+
+      Pagwas$data_mat<-GetAssayData(Single_data,assay = assay)
+
+    }else{
+     stop("Error:assay is not in Pagwas!")
+    }
+
+    if(is.null(Pathway_list)){
+
+      stop("Error:Pathway_list should be input!")
+    }
+    SOAR::Store(Single_data)
+    Pagwas$rawPathway_list <- Pathway_list
+  }else if(class(Pagwas) == "Seurat" & !is.null(Single_data)){
+
+    message("Warning:Single_data and Pagwas seruat class are redundant!
+              we will keep the new Single_data and rerun the Single_data_input and Pathway_pcascore_run function")
+    Pagwas <- list()
+  }else if(class(Pagwas) == "list" & is.null(Single_data)){
+    stop("Error:Single_data should be input!, the same as Pagwas")
+
+  }else if(class(Pagwas) == "list" & !is.null(Single_data)){
+    Pagwas$rawPathway_list <- Pathway_list
+  }else if(class(Pagwas) != "list" ){
+    stop("Error:The class for Pagwas is wrong! Should be NULL, list or Seurat class.")
+
+    }
 
   #############################
   ## 1.Single_data_input
   #############################
-  message(paste(utils::timestamp(quiet = T), " ******* 1st: Single_data_input function start! ********", sep = ""))
 
   if (!is.null(Single_data)) {
+    message(paste(utils::timestamp(quiet = T), " ******* 1st: Single_data_input function start! ********", sep = ""))
+    tt <- Sys.time()
     if (class(Single_data) == "character") {
+
       if (grepl(".rds", Single_data)) {
         message("** Start to read the single cell data!")
         Single_data <- readRDS(Single_data)
       } else {
-        stop("There is need a data in `.rds` format ")
+
+        stop("Error:There is need a data in `.rds` format ")
       }
     } else if (class(Single_data) != "Seurat") {
-      stop("There is need a Seurat class for Single_data")
+
+      stop("Error:There is need a Seurat class for Single_data")
     }
 
     if (!assay %in% Assays(Single_data)) {
-      stop("There is no need assays in your Single_data")
+
+      stop("Error:There is no need assays in your Single_data")
+    }
+    if(is.null(Pathway_list)){
+
+      stop("Error:Pathway_list should be input!")
     }
 
     Pagwas <- Single_data_input(
       Pagwas = Pagwas,
       assay = assay,
+      # nfeatures =nfeatures,
       Single_data = Single_data,
       Pathway_list = Pathway_list,
       min_clustercells = min_clustercells
     )
 
     Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+    #save the Single_data
     SOAR::Store(Single_data)
     message("done!")
-  } else {
-    stop("Single_data must input!")
-  }
+
 
   cat("Single_data import: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -272,36 +313,48 @@ scPagwas_main <- function(Pagwas = NULL,
   #############################
   ## 2.Pathway_pcascore_run
   #############################
-  message(paste(utils::timestamp(quiet = T), " ******* 2nd: Pathway_pcascore_run function start!! ********", sep = ""))
+  if(!("pca_cell_df" %in% names(Pagwas))){
+    message(paste(utils::timestamp(quiet = T), " ******* 2nd: Pathway_pcascore_run function start!! ********", sep = ""))
 
-  tt <- Sys.time()
-  if (!is.null(Pathway_list)) {
+    tt <- Sys.time()
+
     Pagwas <- Pathway_pcascore_run(
       Pagwas = Pagwas,
       Pathway_list = Pathway_list,
       min.pathway.size = min.pathway.size,
       max.pathway.size = max.pathway.size
     )
-  } else if (!("pca_scCell_mat" %in% names(Pagwas)) ) {
-    stop("Pathway_list should input!")
-  }
-  message("done!")
-  cat("Pathway_pcascore_run: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-  cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+    message("done!")
+    cat("Pathway_pcascore_run: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+    cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
 
+  }
+
+  }
   #############################
   ## 3.GWAS_summary_input
   #############################
   message(paste(utils::timestamp(quiet = T), " ******* 3rd: GWAS_summary_input function start! ********", sep = ""))
 
-  tt <- Sys.time()
+
   if (class(gwas_data) == "character") {
+
     message("** Start to read the gwas_data!")
     suppressMessages(gwas_data <- bigreadr::fread2(gwas_data))
+
   } else {
-    stop("There is need a filename and address for gwas_data")
+
+    stop("Error:There is need a filename and address for gwas_data")
+
   }
 
+  if (maf_filter >=1 & maf_filter < 0 ) {
+
+    stop("Error:maf_filter should between 0 and 1")
+
+  }
+
+  tt <- Sys.time()
   Pagwas <- GWAS_summary_input(
     Pagwas = Pagwas,
     gwas_data = gwas_data,
@@ -319,12 +372,11 @@ scPagwas_main <- function(Pagwas = NULL,
 
   tt <- Sys.time()
   if (!is.null(block_annotation)) {
-      snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = marg)
-      #snp_gene_df$slope <- rep(1, nrow(snp_gene_df))
-      Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance == "0", ]
-
+    snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = marg)
+    snp_gene_df$slope <- rep(1, nrow(snp_gene_df))
+    Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance == "0", ]
   } else if (!("snp_gene_df" %in% names(Pagwas))) {
-    stop("block_annotation should input!")
+    stop("Error: block_annotation should input!")
   }
   cat("Snp2Gene: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -341,12 +393,13 @@ scPagwas_main <- function(Pagwas = NULL,
       block_annotation = block_annotation
     )
   } else if (!("snp_gene_df" %in% names(Pagwas))) {
-    stop("block_annotation should input!")
+    stop("Error: block_annotation should input!")
   }
 
   message("done!")
   cat("Pathway_annotation_input: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+
 
   #############################
   ## 6.Link_pathway_blocks_gwas
@@ -365,9 +418,9 @@ scPagwas_main <- function(Pagwas = NULL,
     )
 
     message("done!")
-  } #else if (!("Pathway_sclm_results" %in% names(Pagwas))) {
-  #  stop("chrom_ld should input!")
- # }
+  } else if (!("Pathway_sclm_results" %in% names(Pagwas))) {
+    stop("Error: chrom_ld should input!")
+  }
 
   cat("Link_pathway_blocks_gwas: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -378,7 +431,10 @@ scPagwas_main <- function(Pagwas = NULL,
   if (celltype) {
     message(paste(utils::timestamp(quiet = T), " ******* 7th: Celltype_heritability_contributions function start! ********", sep = ""))
 
-    Pagwas<-celltype_f(Pagwas=Pagwas,iters=iters)
+    Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data)
+    Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters, part = 0.5)
+
+    Pagwas$Pathway_ld_gwas_data <- NULL
 
     message("done!")
     cat("Celltype_heritability_contributions: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -394,16 +450,13 @@ scPagwas_main <- function(Pagwas = NULL,
   if (singlecell) {
     message(paste(utils::timestamp(quiet = T), " ******* 8th: scPagwas_perform_score function start! ********", sep = ""))
     tt <- Sys.time()
-
-    Pagwas<- scPagwas_perform_regression(Pagwas,
-      Pathway_ld_gwas_data = scPathway_ld_gwas_data,
-      ncores = ncores)
-
+    Pagwas$Pathway_ld_gwas_data <- NULL
     Pagwas <- scPagwas_perform_score(
       Pagwas = Pagwas,
       remove_outlier = TRUE
     )
-
+    # Pagwas$CellsrankPvalue$adj.p <- p.adjust(Pagwas$CellsrankPvalue$pValueHigh,
+    #  method = "bonferroni")
     message("done!")
     cat("scPagwas_perform_score: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
     cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
@@ -414,25 +467,78 @@ scPagwas_main <- function(Pagwas = NULL,
 
     tt <- Sys.time()
     Pagwas <- scGet_gene_heritability_correlation(Pagwas = Pagwas)
-    ############# output
-    cat("scGet_gene_heritability_correlation: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-    cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-    message("done")
-    #############################
-    ## 10.Integrate the output write it to files
-    #############################
-    message(paste(utils::timestamp(quiet = T), " ******* 10th:Integrate the output write it to files! ********", sep = ""))
+    scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
 
-    Pagwas<-Pagwas_result_integtate(Pagwas=Pagwas,
-                                    seruat_return=seruat_return,
-                                    output.dirs=output.dirs,
-                                    Single_data=Single_data,
-                                    output.prefix=output.prefix,
-                                    n_topgenes=n_topgenes,
-                                    assay=assay)
+    message("done")
+
+    #############################
+    ## 9.output
+    #############################
+
+    #write.table(Pagwas$pca_scCell_mat, file = paste0("./", output.dirs, "/", output.prefix, "_pca_scCell_mat.txt"), quote = F)
+    #write.table(Pagwas$pca_cell_df, file = paste0("./", output.dirs, "/", output.prefix, "_pca_celltypes_mat.txt"), quote = F)
+    write.table(Pagwas$Pathway_sclm_results, file = paste0("./", output.dirs, "/", output.prefix, "_Pathway_singlecell_lm_results.txt"), quote = F)
+    write.csv(Pagwas$bootstrap_results, file = paste0("./", output.dirs, "/", output.prefix, "_cellytpes_bootstrap_results.csv"), quote = F)
+    write.csv(Pagwas$scPathways_rankPvalue, file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_Pathways_rankPvalue.csv"), quote = F)
+    write.csv(Pagwas$gene_heritability_correlation, file = paste0("./", output.dirs, "/", output.prefix, "_gene_heritability_correlation.csv"), quote = F)
+
+    Pagwas[c(
+      "VariableFeatures", "merge_scexpr","snp_gene_df",
+      "rawPathway_list","data_mat"
+    )] <- NULL
+
+    #Pagwas[c()] <- NULL
+    #Pagwas[c( "Pathway_single_results")] <- NULL
+
+    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
+
+    message("* Get rankPvalue for each single cell")
+    CellScalepValue <- rankPvalue(datS = t(data.matrix(GetAssayData(Single_data, assay = assay)[scPagwas_topgenes, ])), pValueMethod = "scale")
+
+    if (!seruat_return) {
+    Pagwas$scPagwas.topgenes.Score<-Single_data$scPagwas.topgenes.Score1
+    Pagwas$CellScalepValue<-CellScalepValue
+
+    #CellScalepValue
+    a<-data.frame(scPagwas.topgenes.Score=Pagwas$scPagwas.topgenes.Score,
+               scPagwas.lm.score=Pagwas$scPagwas.lm.score,
+               pValueHighScale=Pagwas$CellScalepValue$pValueHighScale,
+               qValueHighScale=Pagwas$CellScalepValue$qValueHighScale
+               )
+    write.csv(a, file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_scPagwas_score_pvalue.Result.csv"), quote = F)
 
     SOAR::Remove(SOAR::Objects())
-    gc()
     return(Pagwas)
+    }else{
+      Pagwas[c("snp_gene_df",
+               "Pathway_sclm_results","CellScalepValue",
+               "scPagwas.topgenes.Score"
+               )] <- NULL
+      #Pagwas[c()] <- NULL
+      scPagwas_pathway <- SeuratObject::CreateAssayObject(data = Pagwas$Pathway_single_results)
+      scPagwas_pca <- SeuratObject::CreateAssayObject(data = Pagwas$pca_scCell_mat)
+
+      Single_data[["scPagwasPaHeritability"]] <- scPagwas_pathway
+      Single_data[["scPagwasPaPca"]] <- scPagwas_pca
+
+      rm(scPagwas_pathway)
+      rm(scPagwas_pca)
+
+      Single_data$scPagwas.lm.score <- Pagwas$scPagwas.lm.score[rownames(Pagwas$Celltype_anno)]
+      Single_data$CellScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHighScale"]
+      Single_data$CellScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHighScale"]
+      Pagwas[ c("scPagwas.lm.score","Celltype_anno",
+                "Pathway_single_results","pca_scCell_mat")] <- NULL
+      Single_data@misc<-Pagwas
+      rm(Pagwas)
+      write.csv(Single_data@meta.data[, c(
+        "scPagwas.lm.score",
+        "CellScalepValue",
+        "scPagwas.topgenes.Score1"
+      )], file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_scPagwas_score_pvalue.Result.csv"), quote = F)
+      SOAR::Remove(SOAR::Objects())
+      return(Single_data)
+    }
+
   }
 }

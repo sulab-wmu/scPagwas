@@ -57,9 +57,8 @@ p <- hedenfalk$p
 lfdrVals <- lfdr(p)
 
 # plot local FDR values
-qobj = qvalue(p)
+qobj <- qvalue(p)
 hist(qobj)
-
 }
 \references{
 Efron B, Tibshirani R, Storey JD, and Tisher V. (2001) Empirical Bayes analysis

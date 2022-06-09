@@ -11,6 +11,7 @@ scPagwas_Visualization(
   FigureType = "tsne",
   width = 7,
   height = 7,
+  title = "",
   lowColor = "#000957",
   highColor = "#EBE645",
   size = 0.5,
@@ -30,6 +31,8 @@ scPagwas_Visualization(
 
 \item{height}{(numeric)Figure height}
 
+\item{title}{(character)Figure title}
+
 \item{lowColor}{(character)Color for low scPagwas score}
 
 \item{highColor}{(character)Color for high scPagwas score}
@@ -41,8 +44,6 @@ scPagwas_Visualization(
 \item{scPagwas_score}{scPagwas_score for scPagwas_main result}
 
 \item{npcs}{(integr) the parameter of Seurat::RunPCA.}
-
-\item{title}{(character)Figure title}
 }
 \value{
 

@@ -49,11 +49,11 @@ devtools::install_github("dengchunyu/scPagwas")
  data(block_annotation)
  #LD data
  data(chrom_ld)
-#
+
  #1.start to run the wrapper functions for preprogress.
- Pagwas_data<-scPagwas_main(Pagwas = NULL,
+ Pagwas_data<-scPagwas_main(Pagwas = Pagwas_data,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
-                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     #Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      output.prefix="test",
                      output.dirs="scPagwastest_output",
                      block_annotation = block_annotation,
@@ -94,28 +94,20 @@ Bootstrap_P_Barplot(p_results=Pagwas_data@misc$bootstrap_results$bp_value[-1],
  require("ggsci")
  #check the objects
 
-Pagwas_data <- ScaleData(Pagwas_data,assay ="RNA")
-Pagwas_data<-FindVariableFeatures(Pagwas_data,nfeatures = 2000,assay ="RNA")
-
-Pagwas_data <- suppressMessages(Seurat::RunPCA(object = Pagwas_data, assay =  "RNA", npcs = 50))
-
-Pagwas_data <- suppressMessages(Seurat::RunUMAP(object = Pagwas_data,  assay =  "RNA", reduction = "pca", dims = 1:50))
-
-
  DimPlot(Pagwas_data,group.by = "anno",pt.size=1,reduction="umap",label = T, repel=TRUE)+ 
  umap_theme()+ggtitle("Test")+labs(x="TSNE",y="")+theme(aspect.ratio=1)
  
  
- scPagwas_Visualization(Single_data=Single_data,
-                                   p_thre = 0.05,
-                                   FigureType = "umap",
-                                   width = 7,
-                                   height = 7,
-                                   lowColor = "white", 
+ scPagwas_Visualization(Single_data=Pagwas_data,
+                        p_thre = 0.05,
+                        FigureType = "umap",
+                        width = 7,
+                        height = 7,
+                        lowColor = "white", 
                         highColor = "red",
-                        output.dirs="monosimu",
-                                   size = 0.5,
-                                   do_plot = T)
+                        output.dirs="scPagwastest_output",
+                        size = 0.5,
+                        do_plot = T)
  
 ```
 

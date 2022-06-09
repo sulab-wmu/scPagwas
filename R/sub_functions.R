@@ -11,91 +11,92 @@
 #' @return
 #' @export
 #' @examples
-rankPvalue<-function(datS, columnweights = NULL,
-                     na.last = "keep",
-                     ties.method = "average",
-                    calculateQvalue = T,
-                    pValueMethod = "rank")
-{
-  no.rows = dim(datS)[[1]]
-  no.cols = dim(datS)[[2]]
+rankPvalue <- function(datS, columnweights = NULL,
+                       na.last = "keep",
+                       ties.method = "average",
+                       calculateQvalue = T,
+                       pValueMethod = "rank") {
+  no.rows <- dim(datS)[[1]]
+  no.cols <- dim(datS)[[2]]
 
   if (pValueMethod != "scale") {
-    percentilerank1 = function(x) {
-      R1 = rank(x, ties.method = ties.method, na.last = na.last)
-      (R1-.5)/max(R1, na.rm = TRUE)
+    percentilerank1 <- function(x) {
+      R1 <- rank(x, ties.method = ties.method, na.last = na.last)
+      (R1 - .5) / max(R1, na.rm = TRUE)
     }
 
-    datrankslow = apply(datS, 2, percentilerank1)
+    datrankslow <- apply(datS, 2, percentilerank1)
     if (!is.null(columnweights)) {
-      datrankslow = t(t(datrankslow) * columnweights)
+      datrankslow <- t(t(datrankslow) * columnweights)
     }
-    datSpresent = !is.na(datS) + 0
+    datSpresent <- !is.na(datS) + 0
     if (!is.null(columnweights)) {
-      datSpresent = t(t(datSpresent) * columnweights)
+      datSpresent <- t(t(datSpresent) * columnweights)
     }
-    expectedsum = rowSums(datSpresent, na.rm = TRUE) *
+    expectedsum <- rowSums(datSpresent, na.rm = TRUE) *
       0.5
-    varsum = rowSums(datSpresent^2, na.rm = TRUE) * 1/12
-    observed.sumPercentileslow = as.numeric(rowSums(datrankslow, na.rm = TRUE))
-    Zstatisticlow = (observed.sumPercentileslow - expectedsum)/sqrt(varsum)
-    datrankshigh = apply(-datS, 2, percentilerank1)
+    varsum <- rowSums(datSpresent^2, na.rm = TRUE) * 1 / 12
+    observed.sumPercentileslow <- as.numeric(rowSums(datrankslow, na.rm = TRUE))
+    Zstatisticlow <- (observed.sumPercentileslow - expectedsum) / sqrt(varsum)
+    datrankshigh <- apply(-datS, 2, percentilerank1)
 
-    observed.sumPercentileshigh = as.numeric(rowSums(datrankshigh, na.rm = TRUE))
-    Zstatistichigh = (observed.sumPercentileshigh - expectedsum)/sqrt(varsum)
-    pValueLow = pnorm((Zstatisticlow))
-    pValueHigh = pnorm((Zstatistichigh))
-    datoutrank = data.frame(pValueLow, pValueHigh)
+    observed.sumPercentileshigh <- as.numeric(rowSums(datrankshigh, na.rm = TRUE))
+    Zstatistichigh <- (observed.sumPercentileshigh - expectedsum) / sqrt(varsum)
+    pValueLow <- pnorm((Zstatisticlow))
+    pValueHigh <- pnorm((Zstatistichigh))
+    datoutrank <- data.frame(pValueLow, pValueHigh)
     if (calculateQvalue) {
-      qValueLow = rep(NA, dim(datS)[[1]])
-      qValueHigh = rep(NA, dim(datS)[[1]])
-      #qValueExtreme = rep(NA, dim(datS)[[1]])
-      rest1 = !is.na(pValueLow)
-      qValueLow[rest1] = qvalue(pValueLow[rest1])$qvalues
-      rest1 = !is.na(pValueHigh)
-      qValueHigh[rest1] = qvalue(pValueHigh[rest1])$qvalues
-      datq = data.frame(qValueLow, qValueHigh)
-      datoutrank = data.frame(datoutrank, datq)
-      names(datoutrank) = paste(names(datoutrank), "Rank",
-                                sep = "")
+      qValueLow <- rep(NA, dim(datS)[[1]])
+      qValueHigh <- rep(NA, dim(datS)[[1]])
+      # qValueExtreme = rep(NA, dim(datS)[[1]])
+      rest1 <- !is.na(pValueLow)
+      qValueLow[rest1] <- qvalue(pValueLow[rest1])$qvalues
+      rest1 <- !is.na(pValueHigh)
+      qValueHigh[rest1] <- qvalue(pValueHigh[rest1])$qvalues
+      datq <- data.frame(qValueLow, qValueHigh)
+      datoutrank <- data.frame(datoutrank, datq)
+      names(datoutrank) <- paste(names(datoutrank), "Rank",
+        sep = ""
+      )
     }
   }
   if (pValueMethod != "rank") {
-    datSpresent = !is.na(datS) + 0
-    scaled.datS = scale(datS)
+    datSpresent <- !is.na(datS) + 0
+    scaled.datS <- scale(datS)
 
-    expected.value = rep(0, no.rows)
-    varsum = rowSums(datSpresent^2) * 1
-    observed.sumScaleddatS = as.numeric(rowSums(scaled.datS, na.rm = TRUE))
-    Zstatisticlow = (observed.sumScaleddatS - expected.value)/sqrt(varsum)
-    scaled.minusdatS = scale(-datS)
+    expected.value <- rep(0, no.rows)
+    varsum <- rowSums(datSpresent^2) * 1
+    observed.sumScaleddatS <- as.numeric(rowSums(scaled.datS, na.rm = TRUE))
+    Zstatisticlow <- (observed.sumScaleddatS - expected.value) / sqrt(varsum)
+    scaled.minusdatS <- scale(-datS)
 
-    observed.sumScaledminusdatS = as.numeric(rowSums(scaled.minusdatS, na.rm = TRUE))
-    Zstatistichigh = (observed.sumScaledminusdatS - expected.value)/sqrt(varsum)
-    pValueLow = pnorm((Zstatisticlow))
-    pValueHigh = pnorm((Zstatistichigh))
-    datoutscale = data.frame(pValueLow, pValueHigh)
+    observed.sumScaledminusdatS <- as.numeric(rowSums(scaled.minusdatS, na.rm = TRUE))
+    Zstatistichigh <- (observed.sumScaledminusdatS - expected.value) / sqrt(varsum)
+    pValueLow <- pnorm((Zstatisticlow))
+    pValueHigh <- pnorm((Zstatistichigh))
+    datoutscale <- data.frame(pValueLow, pValueHigh)
     if (calculateQvalue) {
-      qValueLow = rep(NA, dim(datS)[[1]])
-      qValueHigh = rep(NA, dim(datS)[[1]])
-      #qValueExtreme = rep(NA, dim(datS)[[1]])
-      rest1 = !is.na(pValueLow)
-      qValueLow[rest1] = qvalue(pValueLow[rest1])$qvalues
-      rest1 = !is.na(pValueHigh)
-      qValueHigh[rest1] = qvalue(pValueHigh[rest1])$qvalues
-      datq = data.frame(qValueLow, qValueHigh)
-      datoutscale = data.frame(datoutscale, datq)
+      qValueLow <- rep(NA, dim(datS)[[1]])
+      qValueHigh <- rep(NA, dim(datS)[[1]])
+      # qValueExtreme = rep(NA, dim(datS)[[1]])
+      rest1 <- !is.na(pValueLow)
+      qValueLow[rest1] <- qvalue(pValueLow[rest1])$qvalues
+      rest1 <- !is.na(pValueHigh)
+      qValueHigh[rest1] <- qvalue(pValueHigh[rest1])$qvalues
+      datq <- data.frame(qValueLow, qValueHigh)
+      datoutscale <- data.frame(datoutscale, datq)
     }
-    names(datoutscale) = paste(names(datoutscale), "Scale",sep = "")
+    names(datoutscale) <- paste(names(datoutscale), "Scale", sep = "")
   }
   if (pValueMethod == "rank") {
-    datout = datoutrank
+    datout <- datoutrank
   }
   if (pValueMethod == "scale") {
-    datout = datoutscale
+    datout <- datoutscale
   }
-  if (pValueMethod != "rank" & pValueMethod != "scale")
-    datout = data.frame(datoutrank, datoutscale)
+  if (pValueMethod != "rank" & pValueMethod != "scale") {
+    datout <- data.frame(datoutrank, datoutscale)
+  }
   datout
 } # End of function
 
@@ -144,9 +145,8 @@ rankPvalue<-function(datS, columnweights = NULL,
 #' hist(qobj)
 #'
 #' # options available
-#' qobj <- qvalue(p, lambda=0.5, pfdr=TRUE)
-#' qobj <- qvalue(p, fdr.level=0.05, pi0.method="bootstrap", adj=1.2)
-#'
+#' qobj <- qvalue(p, lambda = 0.5, pfdr = TRUE)
+#' qobj <- qvalue(p, fdr.level = 0.05, pi0.method = "bootstrap", adj = 1.2)
 #' @author John D. Storey
 #' @keywords qvalue
 #' @aliases qvalue
@@ -168,9 +168,9 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
   if (is.null(pi0)) {
     pi0s <- pi0est(p, ...)
   } else {
-    if (pi0 > 0 && pi0 <= 1)  {
-      pi0s = list()
-      pi0s$pi0 = pi0
+    if (pi0 > 0 && pi0 <= 1) {
+      pi0s <- list()
+      pi0s$pi0 <- pi0
     } else {
       stop("pi0 is not (0,1]")
     }
@@ -182,9 +182,9 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
   o <- order(p, decreasing = TRUE)
   ro <- order(o)
   if (pfdr) {
-    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / (i * (1 - (1 - p[o]) ^ m))))[ro]
+    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / (i * (1 - (1 - p[o])^m))))[ro]
   } else {
-    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m /i ))[ro]
+    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / i))[ro]
   }
   qvals_out[rm_na] <- qvals
   # Calculate local FDR estimates
@@ -197,15 +197,19 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
 
   # Return results
   if (!is.null(fdr.level)) {
-    retval <- list(call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
-                   pvalues = p_in, lfdr = lfdr_out, fdr.level = fdr.level,
-                   significant = (qvals <= fdr.level),
-                   pi0.lambda = pi0s$pi0.lambda, lambda = pi0s$lambda,
-                   pi0.smooth = pi0s$pi0.smooth)
+    retval <- list(
+      call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
+      pvalues = p_in, lfdr = lfdr_out, fdr.level = fdr.level,
+      significant = (qvals <= fdr.level),
+      pi0.lambda = pi0s$pi0.lambda, lambda = pi0s$lambda,
+      pi0.smooth = pi0s$pi0.smooth
+    )
   } else {
-    retval <- list(call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
-                   pvalues = p_in, lfdr = lfdr_out, pi0.lambda = pi0s$pi0.lambda,
-                   lambda = pi0s$lambda, pi0.smooth = pi0s$pi0.smooth)
+    retval <- list(
+      call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
+      pvalues = p_in, lfdr = lfdr_out, pi0.lambda = pi0s$pi0.lambda,
+      lambda = pi0s$lambda, pi0.smooth = pi0s$pi0.smooth
+    )
   }
   class(retval) <- "qvalue"
   return(retval)
@@ -253,7 +257,7 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
 #' Storey JD and Tibshirani R. (2003) Statistical significance for
 #' genome-wide experiments. Proceedings of the National Academy of Sciences,
 #' 100: 9440-9445. \cr
-#" \url{http://www.pnas.org/content/100/16/9440.full}
+# " \url{http://www.pnas.org/content/100/16/9440.full}
 #'
 #' Storey JD. (2003) The positive false discovery rate: A Bayesian
 #' interpretation and the q-value. Annals of Statistics, 31: 2013-2035. \cr
@@ -276,26 +280,25 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
 #'
 #' # proportion of null p-values
 #' nullRatio <- pi0est(p)
-#' nullRatioS <- pi0est(p, lambda=seq(0.40, 0.95, 0.05), smooth.log.pi0="TRUE")
-#' nullRatioM <- pi0est(p, pi0.method="bootstrap")
+#' nullRatioS <- pi0est(p, lambda = seq(0.40, 0.95, 0.05), smooth.log.pi0 = "TRUE")
+#' nullRatioM <- pi0est(p, pi0.method = "bootstrap")
 #'
 #' # check behavior of estimate over lambda
 #' # also, pi0est arguments can be passed to qvalue
-#' qobj = qvalue(p, lambda=seq(0.05, 0.95, 0.1), smooth.log.pi0="TRUE")
+#' qobj <- qvalue(p, lambda = seq(0.05, 0.95, 0.1), smooth.log.pi0 = "TRUE")
 #' hist(qobj)
 #' plot(qobj)
-#'
 #' @author John D. Storey
 #' @seealso \code{\link{qvalue}}
 #' @keywords pi0est, proportion true nulls
 #' @aliases pi0est
 #' @export
-pi0est <- function(p, lambda = seq(0.05,0.95,0.05), pi0.method = c("smoother", "bootstrap"),
+pi0est <- function(p, lambda = seq(0.05, 0.95, 0.05), pi0.method = c("smoother", "bootstrap"),
                    smooth.df = 3, smooth.log.pi0 = FALSE, ...) {
   # Check input arguments
   rm_na <- !is.na(p)
   p <- p[rm_na]
-  pi0.method = match.arg(pi0.method)
+  pi0.method <- match.arg(pi0.method)
   m <- length(p)
   lambda <- sort(lambda) # guard against user input
 
@@ -303,21 +306,23 @@ pi0est <- function(p, lambda = seq(0.05,0.95,0.05), pi0.method = c("smoother", "
   if (min(p) < 0 || max(p) > 1) {
     stop("ERROR: p-values not in valid range [0, 1].")
   } else if (ll > 1 && ll < 4) {
-    stop(sprintf(paste("ERROR:", paste("length(lambda)=", ll, ".", sep=""),
-                       "If length of lambda greater than 1,",
-                       "you need at least 4 values.")))
+    stop(sprintf(paste(
+      "ERROR:", paste("length(lambda)=", ll, ".", sep = ""),
+      "If length of lambda greater than 1,",
+      "you need at least 4 values."
+    )))
   } else if (min(lambda) < 0 || max(lambda) >= 1) {
     stop("ERROR: Lambda must be within [0, 1).")
   }
   # Determines pi0
   if (ll == 1) {
-    pi0 <- mean(p >= lambda)/(1 - lambda)
+    pi0 <- mean(p >= lambda) / (1 - lambda)
     pi0.lambda <- pi0
     pi0 <- min(pi0, 1)
     pi0Smooth <- NULL
   } else {
     ind <- length(lambda):1
-    pi0 <- cumsum(tabulate(findInterval(p, vec=lambda))[ind]) / (length(p) * (1-lambda[ind]))
+    pi0 <- cumsum(tabulate(findInterval(p, vec = lambda))[ind]) / (length(p) * (1 - lambda[ind]))
     pi0 <- pi0[ind]
     pi0.lambda <- pi0
     # Smoother method approximation
@@ -336,7 +341,7 @@ pi0est <- function(p, lambda = seq(0.05,0.95,0.05), pi0.method = c("smoother", "
       # Bootstrap method closed form solution by David Robinson
       minpi0 <- quantile(pi0, prob = 0.1)
       W <- sapply(lambda, function(l) sum(p >= l))
-      mse <- (W / (m ^ 2 * (1 - lambda) ^ 2)) * (1 - W / m) + (pi0 - minpi0) ^ 2
+      mse <- (W / (m^2 * (1 - lambda)^2)) * (1 - W / m) + (pi0 - minpi0)^2
       pi0 <- min(pi0[mse == min(mse)], 1)
       pi0Smooth <- NULL
     } else {
@@ -346,8 +351,10 @@ pi0est <- function(p, lambda = seq(0.05,0.95,0.05), pi0.method = c("smoother", "
   if (pi0 <= 0) {
     stop("ERROR: The estimated pi0 <= 0. Check that you have valid p-values or use a different range of lambda.")
   }
-  return(list(pi0 = pi0, pi0.lambda = pi0.lambda,
-              lambda = lambda, pi0.smooth = pi0Smooth))
+  return(list(
+    pi0 = pi0, pi0.lambda = pi0.lambda,
+    lambda = lambda, pi0.smooth = pi0Smooth
+  ))
 }
 
 #' @title Estimate local False Discovery Rate (FDR)
@@ -398,16 +405,15 @@ pi0est <- function(p, lambda = seq(0.05,0.95,0.05), pi0.method = c("smoother", "
 #' lfdrVals <- lfdr(p)
 #'
 #' # plot local FDR values
-#' qobj = qvalue(p)
+#' qobj <- qvalue(p)
 #' hist(qobj)
-#'
 #' @author John D. Storey
 #' @seealso \code{\link{qvalue}}, \code{\link{pi0est}}, \code{\link{hist.qvalue}}
 #' @aliases lfdr
 #' @keywords local False Discovery Rate, lfdr
 #' @export
 lfdr <- function(p, pi0 = NULL, trunc = TRUE, monotone = TRUE,
-                 transf = c("probit", "logit"), adj = 1.5, eps = 10 ^ -8, ...) {
+                 transf = c("probit", "logit"), adj = 1.5, eps = 10^-8, ...) {
   # Check inputs
   lfdr_out <- p
   rm_na <- !is.na(p)
@@ -433,7 +439,7 @@ lfdr <- function(p, pi0 = NULL, trunc = TRUE, monotone = TRUE,
     myd <- density(x, adjust = adj)
     mys <- smooth.spline(x = myd$x, y = myd$y)
     y <- predict(mys, x)$y
-    dx <- exp(x) / (1 + exp(x)) ^ 2
+    dx <- exp(x) / (1 + exp(x))^2
     lfdr <- (pi0 * dx) / y
   }
   if (trunc) {
@@ -646,93 +652,3 @@ corSparse <- function(X, Y) {
   # cormat[is.nan(cormat),1]<-0
   return(cormat)
 }
-
-
-#' the source code from RMTstat package
-#'
-WishartMaxPar <- (function() {
-  mu <- function( n,p ) {
-    n.sqrt <- sqrt( n )
-    p.sqrt <- sqrt( p )
-    res    <- ( n.sqrt + p.sqrt )^2
-    res
-  }
-
-  sigma <- function( n,p ) {
-    n.sqrt <- sqrt( n )
-    p.sqrt <- sqrt( p )
-    res    <- ( n.sqrt + p.sqrt )*( 1/n.sqrt + 1/p.sqrt )^( 1/3 )
-    res
-  }
-
-  mu.real <- function( n,p ) {
-    mu( n-1/2,p-1/2 )
-  }
-
-  sigma.real <- function( n,p ) {
-    sigma( n-1/2,p-1/2 )
-  }
-
-  alpha <- function( n,p ) {
-    1/( 1 + ( mu( n-1/2,p+1/2 )/mu( n+1/2,p-1/2 ) )
-        * sqrt( sigma( n-1/2,p+1/2 )/sigma( n+1/2,p-1/2 ) ) )
-  }
-
-  mu.cplx <- function( n,p ) {
-    a   <- alpha( n,p )
-    res <- mu( n-1/2,p+1/2 )*a + mu( n+1/2,p-1/2 )*( 1-a )
-    res
-  }
-
-  sigma.cplx <- function( n,p ) {
-    a   <- alpha( n,p )
-    res <- sigma( n-1/2,p+1/2 )*a + sigma( n+1/2,p-1/2 )*( 1-a )
-    res
-  }
-
-  function( ndf, pdim, var=1, beta=1 ) {
-    n <- ndf
-    p <- pdim
-
-    if( beta == 1 ) {
-      m <- mu.real( n,p )
-      s <- sigma.real( n,p )
-    } else if( beta == 2 ) {
-      m <- mu.cplx( n,p )
-      s <- sigma.cplx( n,p )
-    } else {
-      stop( "`beta' must be 1 or 2, not `", beta, "'")
-    }
-
-    center <- var*( m/n )
-    scale  <- var*( s/n )
-
-    list( centering=center, scaling=scale )
-  }
-})()
-
-
-
-#' qWishartMax
-#' the source code from RMTstat package
-#' @param p
-#' @param ndf
-#' @param pdim
-#' @param var
-#' @param beta
-#' @param lower.tail
-#' @param log.p
-#'
-#' @return
-#' @export
-#'
-#' @examples
-qWishartMax <- function( p, ndf, pdim, var=1, beta=1,
-                         lower.tail = TRUE, log.p = FALSE ) {
-  params <- WishartMaxPar( ndf, pdim, var, beta )
-  q.tw   <- qtw( p, beta, lower.tail, log.p )
-  q      <- params$centering + q.tw*( params$scaling )
-  q
-}
-
-

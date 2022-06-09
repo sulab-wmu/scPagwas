@@ -14,7 +14,7 @@ Pathway_block_func(
 )
 }
 \arguments{
-\item{celltype}{}
+\item{ncores}{}
 }
 \value{
 

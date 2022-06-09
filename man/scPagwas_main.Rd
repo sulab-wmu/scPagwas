@@ -47,33 +47,29 @@ chrom|    pos    |   rsid    |   se  |  beta |  maf
 \item{output.dirs}{(character)output directory for result; If the directory is nonexistence,
 the function will create it;}
 
-\item{block_annotation}{(data.frame) Start and end position for block traits, usually genes.}
+\item{block_annotation}{(data.frame) Start and end points for block traits, usually genes.}
 
-\item{Single_data}{(character or Seruat)Input the Single data in seruat format,
-or the Seruat data address for rds format;the "Idents" should be the celltypes
-annotation, if the "celltypes" is TRUE.}
+\item{Single_data}{(character or Seruat)Input the Single data in seruat format, or the Seruat data address for rds format.Idents should be the celltypes annotation.}
 
-\item{assay}{(character)assay data of your single cell data to use,"RNA" or "SCT",default is "RNA";}
+\item{assay}{(character)assay data of your single cell data to use,default is "RNA"}
 
-\item{Pathway_list}{(list,character) pathway gene sets list,the name of list is pahtway names;
-the element of list including genes;}
+\item{Pathway_list}{(list,character) pathway gene sets list}
 
-\item{chrom_ld}{(list,numeric)LD data for 22 chromosomes. Processed data is \code{data(chrom_ld)}}
+\item{chrom_ld}{(list,numeric)LD data for 22 chromosome.}
 
-\item{split_n}{(integr)Number of blocks which are split from singlecell data;
-sometimes,the data is too big to run; we also advice split the data before run the main function.}
+\item{split_n}{(integr)number of times to compute the singlecell result}
 
 \item{marg}{(integr) the distance to TSS site,default is 10000, then gene-TSS-window size is 20000.}
 
-\item{maf_filter}{(numeric)Filter the "maf" for gwas_data, default is 0.01;}
+\item{maf_filter}{(numeric)Filter the maf, default is 0.01}
 
-\item{min_clustercells}{(integr)Threshold for number of cells in each cluster.default is 10;}
+\item{min_clustercells}{(integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10}
 
 \item{min.pathway.size}{(integr)Threshold for min pathway gene size. default is 5}
 
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size. default is 300}
 
-\item{iters}{(integr)Number of bootstrap iterations to perform, default is 200;}
+\item{iters}{(integr)number of bootstrap iterations to perform}
 
 \item{n_topgenes}{(integr)Number of top associated gene selected to calculate the scPagwas score;}
 
@@ -85,41 +81,44 @@ sometimes,the data is too big to run; we also advice split the data before run t
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for scPagwas score.}
 
-\item{ncores}{(integr)Parallel cores,default is 1. use \code{detectCores()} to check the cores in computer.}
+\item{ncores}{(integr)Parallel cores,default is 1. use detectCores() to check the cores in computer.}
 }
 \value{
 Returns a Seruat data with entries(seruat_return=T):
 \describe{
-\position{assay:}{
+\item{assay:}{
 \item{scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}}
-
-\position{meta.data}{
-\item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-\item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
-
-\position{misc: element in result,\code{Pagwas@misc }}{
+scPagwasPaHeritability
+scPagwaslmHeritability
+\item{meta.data}{
+\item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+\item{scPagwas.lm.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
+CellScalepValue
+CellScaleqValue
+\item{misc: element in result,\code{Pagwas@misc }}{
 \item{Pathway_list:}{a list for pathway gene list intersecting with single cell data}
 \item{pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
-\item{sclm_results:}{ the regression result for each cell.}
-\item{allsnp_gene_heritability_correlation:}{
-heritability correlation for each gene;}
-\item{Pathway_ctlm_results:}{ the regression result for each pathway in each celltype}
-\item{lm_results:}{ the regression result for celltypes}
-\item{Pathway_ct_results:}{Inheritance conmtribution Matrix for pathways and celltypes, it contribute from "Pathway_ctlm_results"}
+\item{lm_results:}{ the regression result for each cell.}
+\item{gene_heritability_correlation:}{
+heritability correlation value for each gene;}
+\item{scPathways_rankPvalue:}{pvaues for each pathway}
+\item{bootstrap_results:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.}
 }
 
 }
 Returns files:
 
 \describe{
-\item{d:}{ max(nu, nv) approximate singular values}
-\item{u:}{ nu approximate left singular vectors (only when right_only=FALSE)}
-\item{v:}{ nv approximate right singular vectors}
-\item{iter:}{ The number of Lanczos iterations carried out}
-\item{mprod:}{ The total number of matrix vector products carried out}
+\item{scPagwas.run.log:}{ the running log file for scPagwas}
+\item{\emph{_parameters.txt:}{parameters log file for scPagwas}
+\item{}_pca_scCell_mat.txt:}{ 1st svd result for pathways in each cell}
+\item{\emph{_pca_celltypes_mat.txt:}{ 1st svd results for pathways in celltypes}
+\item{}_singlecell_scPagwas_score.Result.csv:}{ The final result for lm and top gene score}
+\item{\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval}
+\item{}_gene_heritability_correlation.csv:}{ heritability correlation value("cor" for pearson) for each gene;}
 }
 
-Returns a Seruat data with entries(seruat_return=T):
+Returns a list class with entries(seruat_return=F):
 \describe{
 \item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
 \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
@@ -134,7 +133,7 @@ Returns a Seruat data with entries(seruat_return=T):
 }
 }
 \description{
-Main Pagwas wrapper for workflow function.
+Main Pagwas wrapper re-progress function.
 }
 \details{
 scPagwas, A single-cell pathway-based principal component (PC)-scoring algorithm named
