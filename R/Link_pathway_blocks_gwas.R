@@ -88,7 +88,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   rm(chrom_gwas_list)
   rm(chrom_ld)
 
-  Pagwas$merge_scexpr <- NULL
+  #Pagwas$merge_scexpr <- NULL
   gc()
   return(Pagwas)
 }

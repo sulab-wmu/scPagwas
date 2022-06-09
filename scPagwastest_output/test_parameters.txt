@@ -1,6 +1,6 @@
-## 2022-06-09 10:47:50
+## 2022-06-09 16:22:11
 input gwas data: 	E:/RPakage/scPagwas/inst/extdata/GWAS_summ_example.txt
-Single_data: 
+Single_data: E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds
 assay: 	RNA
 Pathway length: 	345
 split_n: 	1

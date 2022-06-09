@@ -252,7 +252,7 @@ scPagwas_main <- function(Pagwas = NULL,
     message("Warning:Single_data and Pagwas seruat class are redundant!
               we will keep the new Single_data and rerun the Single_data_input and Pathway_pcascore_run function")
     Pagwas <- list()
-  }else if(class(Pagwas) == "list" & is.null(Single_data)){
+  }else if(class(Pagwas) == "list" & is.null(Single_data) & singlecell){
     stop("Error:Single_data should be input!, the same as Pagwas")
 
   }else if(class(Pagwas) == "list" & !is.null(Single_data)){
@@ -443,6 +443,7 @@ scPagwas_main <- function(Pagwas = NULL,
     if (!singlecell) {
       return(Pagwas)
     }
+    Pagwas$merge_scexpr <- NULL
   }
   #############################
   ## 8.scPagwas_perform_score
