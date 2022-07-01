@@ -53,7 +53,7 @@ plot_bar_positie_nagtive <- function(seurat_obj,
   # seurat_obj$scPagwas_p <- scPagwas_p[intersect(colnames(seurat_obj),names(scPagwas_p))]
   # thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]
   seurat_obj$positiveCells <- rep(0, ncol(seurat_obj))
-  seurat_obj$positiveCells[seurat_obj$Cells.lm.rankPvalue < p_thre] <- 1
+  seurat_obj$positiveCells[seurat_obj$CellScaleqValue < p_thre] <- 1
 
   # ===============data.table with sums==================
   dt <- data.table(

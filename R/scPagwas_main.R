@@ -47,7 +47,6 @@
 #' @param assay (character)assay data of your single cell data to use,default is "RNA"
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
-#' @param split_n (integr)number of times to compute the singlecell result
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is TRUE.Threshold for total cells fo each cluster.default is 10
 #' @param min.pathway.size (integr)Threshold for min pathway gene size. default is 5
@@ -71,7 +70,7 @@
 #'scPagwaslmHeritability
 #'   \item{meta.data}{
 #'   \item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-#'   \item{scPagwas.lm.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
+#'   \item{scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
 #'CellScalepValue
 #'CellScaleqValue
 #'   \item{misc: element in result,\code{Pagwas@misc }}{
@@ -101,7 +100,7 @@
 #' Returns a list class with entries(seruat_return=F):
 #' \describe{
 #'   \item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
-#'   \item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+#'   \item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
 #'   \item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}
 #'   \item{Pathway_list:}{ The number of Lanczos iterations carried out}
 #'   \item{pca_cell_df:}{ The total number of matrix vector products carried out}
@@ -145,7 +144,6 @@ scPagwas_main <- function(Pagwas = NULL,
                           assay = c("RNA", "SCT"),
                           Pathway_list = NULL,
                           chrom_ld = NULL,
-                          split_n = 1,
                           marg = 10000,
                           maf_filter = 0.01,
                           min_clustercells = 10,
@@ -169,9 +167,8 @@ scPagwas_main <- function(Pagwas = NULL,
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;
-  # split_n=1;
   # marg=10000;
-  # singlecell=T;
+  # singlecell=F;
   # celltype=T;
   # n_topgenes=1000;
   # maf_filter = 0.01;
@@ -203,7 +200,6 @@ scPagwas_main <- function(Pagwas = NULL,
     paste0("Single_data: ", if (class(Single_data) == "Seurat") dim(Single_data) else Single_data),
     paste("assay: ", assay, sep = "\t"),
     paste("Pathway length: ", length(Pathway_list), collapse = " ", sep = "\t"),
-    paste("split_n: ", split_n, sep = "\t"),
     paste("marg: ", marg, sep = "\t"),
     paste("maf_filter: ", maf_filter, sep = "\t"),
     paste("min_clustercells: ", min_clustercells, sep = "\t"),
@@ -411,7 +407,6 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas <- Link_pathway_blocks_gwas(
       Pagwas = Pagwas,
       chrom_ld = chrom_ld,
-      split_n = split_n,
       singlecell = singlecell,
       celltype = celltype,
       ncores = ncores
@@ -491,18 +486,18 @@ scPagwas_main <- function(Pagwas = NULL,
     #Pagwas[c()] <- NULL
     #Pagwas[c( "Pathway_single_results")] <- NULL
 
-    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.topgenes.Score"))
+    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 
     message("* Get rankPvalue for each single cell")
     CellScalepValue <- rankPvalue(datS = t(data.matrix(GetAssayData(Single_data, assay = assay)[scPagwas_topgenes, ])), pValueMethod = "scale")
 
     if (!seruat_return) {
-    Pagwas$scPagwas.topgenes.Score<-Single_data$scPagwas.topgenes.Score1
+    Pagwas$scPagwas.TRS.Score<-Single_data$scPagwas.TRS.Score1
     Pagwas$CellScalepValue<-CellScalepValue
 
     #CellScalepValue
-    a<-data.frame(scPagwas.topgenes.Score=Pagwas$scPagwas.topgenes.Score,
-               scPagwas.lm.score=Pagwas$scPagwas.lm.score,
+    a<-data.frame(scPagwas.TRS.Score=Pagwas$scPagwas.TRS.Score,
+                  scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
                pValueHighScale=Pagwas$CellScalepValue$pValueHighScale,
                qValueHighScale=Pagwas$CellScalepValue$qValueHighScale
                )
@@ -513,7 +508,7 @@ scPagwas_main <- function(Pagwas = NULL,
     }else{
       Pagwas[c("snp_gene_df",
                "Pathway_sclm_results","CellScalepValue",
-               "scPagwas.topgenes.Score"
+               "scPagwas.TRS.Score"
                )] <- NULL
       #Pagwas[c()] <- NULL
       scPagwas_pathway <- SeuratObject::CreateAssayObject(data = Pagwas$Pathway_single_results)
@@ -525,17 +520,17 @@ scPagwas_main <- function(Pagwas = NULL,
       rm(scPagwas_pathway)
       rm(scPagwas_pca)
 
-      Single_data$scPagwas.lm.score <- Pagwas$scPagwas.lm.score[rownames(Pagwas$Celltype_anno)]
+      Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
       Single_data$CellScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHighScale"]
       Single_data$CellScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHighScale"]
-      Pagwas[ c("scPagwas.lm.score","Celltype_anno",
+      Pagwas[ c("scPagwas.gPAS.score","Celltype_anno",
                 "Pathway_single_results","pca_scCell_mat")] <- NULL
       Single_data@misc<-Pagwas
       rm(Pagwas)
       write.csv(Single_data@meta.data[, c(
-        "scPagwas.lm.score",
+        "scPagwas.gPAS.score",
         "CellScalepValue",
-        "scPagwas.topgenes.Score1"
+        "scPagwas.TRS.Score1"
       )], file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_scPagwas_score_pvalue.Result.csv"), quote = F)
       SOAR::Remove(SOAR::Objects())
       return(Single_data)

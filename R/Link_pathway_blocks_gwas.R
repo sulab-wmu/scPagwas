@@ -6,7 +6,6 @@
 #' or gene blocks,
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param chrom_ld LD data for 22 chromosome.
-#' @param split_n number of times to compute the singlecell result
 #' @param ncores Parallel cores,default is 1. use detectCores()
 #' to check the cores in computer.
 #'
@@ -19,7 +18,6 @@
 #' Pagwas <- Link_pathway_blocks_gwas(Pagwas = Pagwas, chrom_ld = chrom_ld)
 Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
-                                     split_n = 1,
                                      singlecell = T,
                                      celltype = T,
                                      ncores = 1) {
@@ -36,8 +34,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   })
   Pagwas$gwas_data <- NULL
 
-  if (!singlecell & celltype) split_n <- 1
-  if (split_n == 1) {
+
     Pagwas <- Pathway_block_func(
       Pagwas = Pagwas,
       Pachrom_block_list = Pachrom_block_list,
@@ -46,44 +43,8 @@ Link_pathway_blocks_gwas <- function(Pagwas,
       celltype = celltype,
       ncores = ncores
     )
-  }
-  if (split_n > 1) {
-    pa_blocksnplist <- Pachrom_func(
-      Pagwas = Pagwas,
-      Pachrom_block_list = Pachrom_block_list,
-      chrom_gwas_list = chrom_gwas_list
-    )
 
-    if (celltype) {
-      Pagwas <- celltypes_Pathway_block_func(Pagwas = Pagwas, pa_blocksnplist = pa_blocksnplist)
-    }
-    # if(singlecell){}
-    a <- ncol(Pagwas$pca_scCell_mat)
-    for (ai in 1:10) {
-      # print(ai)
-      if (a %% split_n == 0) break
-      split_n <- split_n + 1
-    }
 
-    la <- gl(split_n, a / split_n, length = a)
-
-    sclm_list <- list()
-    for (i in 1:split_n) {
-      message("** start to run the ", i, " split!")
-      # sclm_list[[i]]<- matrix(nrow=sum(la==i), ncol=nrow(Pagwas$pca_scCell_mat))
-      sclm_list[[i]] <- scPathway_block_splitfunc(
-        pa_blocksnplist = pa_blocksnplist,
-        subpca_scCell_mat = Pagwas$pca_scCell_mat[, which(la == i)],
-        subdata_mat = Pagwas$data_mat[, which(la == i)],
-        rawPathway_list = Pagwas$rawPathway_list,
-        snp_gene_df = Pagwas$snp_gene_df,
-        ncores = ncores
-      )
-    }
-    # Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),sclm_list)
-    Pagwas$Pathway_sclm_results <- as(data.matrix(bigreadr::rbind_df(sclm_list)), "dgCMatrix")
-    rm(pa_blocksnplist)
-  }
 
   rm(chrom_gwas_list)
   rm(chrom_ld)

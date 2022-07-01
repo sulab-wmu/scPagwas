@@ -12,6 +12,7 @@ heritability_cor_scatterplot(
   color_mid = "white",
   text_size = 3,
   do_plot = T,
+  max.overlaps = 10,
   figurenames = NULL,
   width = 7,
   height = 7
@@ -26,7 +27,9 @@ heritability_cor_scatterplot(
 
 \item{text_size}{text size}
 
-\item{do_plot}{Whether to plot, logical}
+\item{do_plot}{parametr for "geom_label_repel", Exclude text labels that overlap too many things. Defaults to 10.}
+
+\item{max.overlaps}{mac over}
 
 \item{figurenames}{The filename and address of the output plot}
 

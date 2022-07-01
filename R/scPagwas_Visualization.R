@@ -45,8 +45,8 @@ scPagwas_Visualization <- function(Single_data = NULL,
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
                                    do_plot = F) {
-  if (is.null(Single_data$scPagwas.lm.score)) {
-    stop("ERROR: scPagwas.lm.score is NULL. scPagwas_score can be calculated by scPagwas_perform_score function!")
+  if (is.null(Single_data$scPagwas.gPAS.score)) {
+    stop("ERROR: scPagwas.gPAS.score is NULL. scPagwas_score can be calculated by scPagwas_perform_score function!")
   }
   if (is.null(Single_data$CellScaleqValue)) {
     stop("ERROR: CellScaleqValue is NULL.")
@@ -59,25 +59,25 @@ scPagwas_Visualization <- function(Single_data = NULL,
     all_fortify_can <- fortify.Seurat.umap(Single_data)
     plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
       x = "UMAP_1", y = "UMAP_2",
-      color = "scPagwas.lm.score", fill = "scPagwas.lm.score", size = size, title = title,
+      color = "scPagwas.gPAS.score", fill = "scPagwas.gPAS.score", size = size, title = title,
       repel = TRUE
     ) + umap_theme() +
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1) +
-      ggtitle("scPagwas.lm.score")
+      ggtitle("scPagwas.gPAS.score")
 
     if (do_plot) print(plot_scPagwas_score)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_umap.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.gPAS.score_umap.pdf"), height = height, width = width)
       print(plot_scPagwas_score)
       dev.off()
     }
 
     plot_scPagwas_score2 <- ggpubr::ggscatter(all_fortify_can,
       x = "UMAP_1", y = "UMAP_2",
-      color = "scPagwas.topgenes.Score1",
-      fill = "scPagwas.topgenes.Score1",
+      color = "scPagwas.TRS.Score1",
+      fill = "scPagwas.TRS.Score1",
       size = size,
       title = title,
       repel = TRUE
@@ -85,11 +85,11 @@ scPagwas_Visualization <- function(Single_data = NULL,
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1) +
-      ggtitle("scPagwas.topgenes.Score")
+      ggtitle("scPagwas.TRS.Score")
 
     if (do_plot) print(plot_scPagwas_score2)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score_umap.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.TRS.Score_umap.pdf"), height = height, width = width)
       print(plot_scPagwas_score2)
       dev.off()
     }
@@ -124,24 +124,24 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plot_scPagwas_score <- ggpubr::ggscatter(all_fortify_can,
       x = "TSNE_1", y = "TSNE_2",
-      color = "scPagwas.lm.score", fill = "scPagwas.lm.score", size = size,
+      color = "scPagwas.gPAS.score", fill = "scPagwas.gPAS.score", size = size,
       repel = TRUE
     ) + umap_theme() +
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
-      ggtitle("scPagwas.lm.score") + theme(aspect.ratio = 1)
+      ggtitle("scPagwas.gPAS.score") + theme(aspect.ratio = 1)
 
 
     if (do_plot) print(plot_scPagwas_score)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.lm.score_tsne.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.gPAS.score_tsne.pdf"), height = height, width = width)
       print(plot_scPagwas_score)
       dev.off()
     }
     plot_scPagwas_score2 <- ggpubr::ggscatter(all_fortify_can,
       x = "TSNE_1", y = "TSNE_2",
-      color = "scPagwas.topgenes.Score1",
-      fill = "scPagwas.topgenes.Score1",
+      color = "scPagwas.TRS.Score1",
+      fill = "scPagwas.TRS.Score1",
       size = size,
       title = title,
       repel = TRUE
@@ -149,11 +149,11 @@ scPagwas_Visualization <- function(Single_data = NULL,
       scale_fill_gradient(low = lowColor, high = highColor) +
       scale_color_gradient(low = lowColor, high = highColor) +
       theme(aspect.ratio = 1) +
-      ggtitle("scPagwas.topgenes.Score")
+      ggtitle("scPagwas.TRS.Score")
 
     if (do_plot) print(plot_scPagwas_score2)
     if (!is.null(output.dirs)) {
-      pdf(file = paste0("./", output.dirs, "/scPagwas.topgenes.Score_tsne.pdf"), height = height, width = width)
+      pdf(file = paste0("./", output.dirs, "/scPagwas.TRS.Score_tsne.pdf"), height = height, width = width)
       print(plot_scPagwas_score2)
       dev.off()
     }

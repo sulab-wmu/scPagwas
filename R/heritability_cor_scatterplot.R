@@ -7,7 +7,8 @@
 #' @param color_high high color
 #' @param color_mid mid color
 #' @param text_size text size
-#' @param do_plot Whether to plot, logical
+#' @param max.overlaps mac over
+#' @param do_plot parametr for "geom_label_repel", Exclude text labels that overlap too many things. Defaults to 10.
 #' @param figurenames The filename and address of the output plot
 #' @param width figure width
 #' @param height figure height
@@ -23,6 +24,7 @@ heritability_cor_scatterplot <- function(gene_heri_cor = Pagwas$gene_heritabilit
                                          color_mid = "white",
                                          text_size = 3,
                                          do_plot = T,
+                                         max.overlaps =10,
                                          figurenames = NULL,
                                          width = 7,
                                          height = 7) {
@@ -42,7 +44,10 @@ heritability_cor_scatterplot <- function(gene_heri_cor = Pagwas$gene_heritabilit
       midpoint = 0
     ) +
     theme_classic() +
-    ggrepel::geom_text_repel(aes(x = order, y = cor, label = text), na.rm = T, size = text_size)
+    ggrepel::geom_text_repel(aes(x = order, y = cor,
+                                 label = text),
+                             max.overlaps = max.overlaps,
+                             na.rm = T, size = text_size)
 
   if (do_plot) print(p)
   if (!is.null(figurenames)) {

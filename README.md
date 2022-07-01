@@ -6,7 +6,7 @@ genetics-modulated cells associated with complex diseases. **scPagwas**
 is able to prioritize disease-associated individual cells by integrating
 the scRNA-seq data with polygenic signals from GWAS.
 
-<img src="./man/figures/workflow_20220407.png" width="100%" />
+![Graphical abstract](./docs/reference/figures/workflow_20220222.png)
 
 ## Installation
 
@@ -23,8 +23,8 @@ devtools::install_github("dengchunyu/scPagwas")
 
 ``` r
  library(scPagwas)
+ library(ggplot2)
  suppressMessages(library(Seurat))
- suppressWarnings(library(SOAR))
  suppressMessages(library("dplyr"))
  #Input pathway gene list, you can construct with youself.
  data(Genes_by_pathway_kegg)
@@ -34,24 +34,19 @@ devtools::install_github("dengchunyu/scPagwas")
  data(chrom_ld)
 
  #1.start to run the wrapper functions for preprogress.
- Pagwas<-scPagwas_main(Pagwas = NULL,
+ Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
-                     add_eqtls="OnlyTSS",
+                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     output.prefix="test",
+                     output.dirs="scPagwastest_output",
                      block_annotation = block_annotation,
                      assay="RNA",
-                     Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     nfeatures =NULL,
                      Pathway_list=Genes_by_pathway_kegg,
-                     chrom_ld = chrom_ld)
-
- 
-```
-
-### 2.Get the heritability_contributions for Cell types
-
-``` r
- Pagwas<-Celltype_heritability_contributions(Pagwas,iters = 200)
- names(Pagwas)
+                     chrom_ld = chrom_ld,
+                     singlecell=T,
+                     seruat_return=T,
+                     celltype=T,
+                     ncores = 1)
 ```
 
 #### Visualize the celltypes results.
@@ -59,7 +54,8 @@ devtools::install_github("dengchunyu/scPagwas")
 1.barplot
 
 ``` r
-Bootstrap_P_Barplot(Pagwas=Pagwas,
+Bootstrap_P_Barplot(p_results=Pagwas_data@misc$bootstrap_results$bp_value[-1],
+                    p_names=rownames(Pagwas_data@misc$bootstrap_results)[-1],
                     figurenames = NULL,
                     width = 5,
                     height = 7,
@@ -68,64 +64,6 @@ Bootstrap_P_Barplot(Pagwas=Pagwas,
 ```
 
 <img src="man/figures/README-Bootstrap_P_Barplot-1.png" width="60%" />
-
-2.Forestplot for estimate values
-
-``` r
-Bootstrap_estimate_Plot(Pagwas=Pagwas,
-                        figurenames = NULL,
-                        width = 9,
-                        height = 7,
-                        do_plot=T)
-```
-
-<img src="man/figures/README-Bootstrap_estimate_Plot-1.png" width="60%" />
-
-    #> TableGrob (1 x 13) "arrange": 2 grobs
-    #>   z         cells    name           grob
-    #> 1 1 ( 1- 1, 1-10) arrange gtable[layout]
-    #> 2 2 ( 1- 1,11-11) arrange gtable[layout]
-
-#### pathway network
-
-``` r
-suppressMessages(require("WGCNA"))
-suppressMessages(require("patchwork"))
-suppressMessages(require("tidygraph"))
-suppressMessages(require("ggraph"))
-suppressMessages(require("igraph"))
-#check the objects
-plot_pathway_contribution_network(
-                  mat_datExpr=Pagwas$pca_cell_df,
-                  vec_pathwaycontribution=Pagwas$Pathway_block_heritability,
-                  vec_pathways_highlight=names(sort(Pagwas$Pathway_block_heritability,decreasing = T)[1:5]),
-                  n_max_pathways=20,
-                  igraph_algorithm = "drl",
-                  fontface_labels="bold.italic",
-                  color_edge = "#9D9D9D",
-                  fontSize_label_lg=4,
-                  fontSize_legend_lg=4,
-                  fontSize_legend_xlg=4,
-                  edge_thickness = 1,
-                  do_plot=T
-                  
-  )
-```
-
-<img src="man/figures/README-pathway_contribution_network-1.png" width="60%" />
-\#\#\#\#\#\#\#
-
-### 3.Single cell function
-
-scPagwas_main is a function wrapper other process codes. as the
-parameters are the same as Pagwas_main,we can inherit the Pagwas reuslt
-for save time.
-
-``` r
-Pagwas<-Singlecell_heritability_contributions(Pagwas,
-                                              n.cores=1,
-                                              part = 0.5)
-```
 
 #### Visualize the scPagwas_main results.
 
@@ -137,24 +75,29 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
  require("SeuratObject")
  require("ggsci")
  #check the objects
-#Single_data<-FindVariableFeatures(Single_data)
- scRNAexample<-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
- scPagwas_Visualization(scPagwas_score = Pagwas$scPagwas_score,
-                        Single_data = scRNAexample,
-                        Reduction = TRUE,
-                        assay = "SCT",
-                        cellpercent = 0.1,
-                        filename = NULL,
-                        FigureType = "tsne",
+
+ DimPlot(Pagwas_data,group.by = "anno",pt.size=1,reduction="umap",label = T, repel=TRUE)+ 
+ umap_theme()+ggtitle("Test")+labs(x="TSNE",y="")+theme(aspect.ratio=1)
+```
+
+<img src="man/figures/README-scPagwas_Visualization-1.png" width="60%" />
+
+``` r
+ 
+ 
+ scPagwas_Visualization(Single_data=Pagwas_data,
+                        p_thre = 0.05,
+                        FigureType = "umap",
                         width = 7,
                         height = 7,
-                        lowColor = "#FFBC80", highColor = "#FC4F4F",
-                        size = 1,
-                        title = "scPagwas_score",
+                        lowColor = "white", 
+                        highColor = "red",
+                        output.dirs="scPagwastest_output",
+                        size = 0.5,
                         do_plot = T)
 ```
 
-<img src="man/figures/README-scPagwas_Visualization-1.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" />
+<img src="man/figures/README-scPagwas_Visualization-2.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-3.png" width="50%" /><img src="man/figures/README-scPagwas_Visualization-4.png" width="50%" />
 
 ##### Plot the barplot of the proportion of positive Cells in celltypes
 
@@ -162,15 +105,10 @@ Pagwas<-Singlecell_heritability_contributions(Pagwas,
 library("RColorBrewer")
 library("ggplot2")
 
-scPagwas_score <- Pagwas$scPagwas_score[intersect(colnames(scRNAexample),names(Pagwas$scPagwas_score))]
-scRNAexample$scPagwas_score <- scPagwas_score
-thre <- sort(scRNAexample$scPagwas_score, decreasing = T)[ncol(scRNAexample) * 0.1]
-scRNAexample$positiveCells<-rep(0,ncol(scRNAexample))
-scRNAexample$positiveCells[scRNAexample$scPagwas_score>=thre]<-1
-
-plot_bar_positie_nagtive(seurat_obj=scRNAexample,
+plot_bar_positie_nagtive(seurat_obj=Pagwas_data,
                               var_ident="positiveCells",
                               var_group="anno",
+                              p_thre = 0.01,
                               vec_group_colors=NULL,
                               f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
                               do_plot = T)
@@ -181,20 +119,21 @@ plot_bar_positie_nagtive(seurat_obj=scRNAexample,
 ##### Plot the barplot of the proportion of celltypes in positive Cell
 
 ``` r
-plot_bar_positie_nagtive(seurat_obj=scRNAexample,
+plot_bar_positie_nagtive(seurat_obj=Pagwas_data,
                               var_ident="anno",
                               var_group="positiveCells",
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               do_plot = T)
 ```
 
-<img src="man/figures/README-bar_positie_nagtive2-1.png" width="60%" />
+<img src="man/figures/README-bar_positie_nagtive2-1.png" width="70%" />
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
 ``` r
-top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
-plot_vln_Corgenes(seurat_obj=scRNAexample,
+top5genes<-rownames(Pagwas_data@misc$gene_heritability_correlation)[order(Pagwas_data@misc$gene_heritability_correlation,decreasing = T)[1:5]]
+
+plot_vln_Corgenes(seurat_obj=Pagwas_data,
              assay="RNA", slot="data",
              var_group="anno",
              vec_features=top5genes,
@@ -203,6 +142,61 @@ plot_vln_Corgenes(seurat_obj=scRNAexample,
              )
 ```
 
-<img src="man/figures/README-vln_Corgenes-1.png" width="60%" />
+<img src="man/figures/README-vln_Corgenes-1.png" width="70%" />
 
-The workfile is ongoing…
+##### Plot the heritability correlated Pathways for each celltypes
+
+``` r
+  library(tidyverse)
+  library("rhdf5")
+ library(ggplot2)
+ library(grDevices)
+ library(stats)
+ library(FactoMineR)
+ library(scales)
+ library(reshape2)
+ library(ggdendro)
+ library(grImport2)
+ library(gridExtra)
+ library(grid)
+ library(sisal)
+
+ source(system.file("extdata", "plot_scpathway_contri_dot.R", package = "scPagwas"))
+
+plot_scpathway_dot(Pagwas=Pagwas_data,
+                   celltypes=unique(Idents(Pagwas_data))[1:5],
+                             topn_path_celltype=5,
+                             filter_p=0.05,
+                             max_logp=15,
+                             display_max_sizes=F,
+                             size_var ="logrankPvalue" ,
+                             col_var="proportion",
+                             shape.scale = 8,
+                             cols.use=c("lightgrey", "#E45826"),
+                             dend_x_var = "logrankPvalue",
+                             dist_method="euclidean",
+                             hclust_method="ward.D",
+                             do_plot = T,
+                             figurenames = NULL,
+                             width = 7,
+                             height = 7)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="70%" />
+
+##### Plot the heritability correlated genes
+
+``` r
+heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_correlation,
+                             topn_genes_label=10,
+                             color_low="#035397",
+                             color_high ="#F32424",
+                             color_mid = "white",
+                             text_size=2,
+                             do_plot=T,
+                             max.overlaps =20,
+                             width = 7,
+                             height = 7)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="60%" />

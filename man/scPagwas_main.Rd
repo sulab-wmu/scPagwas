@@ -14,7 +14,6 @@ scPagwas_main(
   assay = c("RNA", "SCT"),
   Pathway_list = NULL,
   chrom_ld = NULL,
-  split_n = 1,
   marg = 10000,
   maf_filter = 0.01,
   min_clustercells = 10,
@@ -57,8 +56,6 @@ the function will create it;}
 
 \item{chrom_ld}{(list,numeric)LD data for 22 chromosome.}
 
-\item{split_n}{(integr)number of times to compute the singlecell result}
-
 \item{marg}{(integr) the distance to TSS site,default is 10000, then gene-TSS-window size is 20000.}
 
 \item{maf_filter}{(numeric)Filter the maf, default is 0.01}
@@ -92,7 +89,7 @@ scPagwasPaHeritability
 scPagwaslmHeritability
 \item{meta.data}{
 \item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-\item{scPagwas.lm.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
+\item{scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
 CellScalepValue
 CellScaleqValue
 \item{misc: element in result,\code{Pagwas@misc }}{
@@ -121,7 +118,7 @@ Returns files:
 Returns a list class with entries(seruat_return=F):
 \describe{
 \item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
-\item{scPagwas.lmtopgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+\item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
 \item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}
 \item{Pathway_list:}{ The number of Lanczos iterations carried out}
 \item{pca_cell_df:}{ The total number of matrix vector products carried out}

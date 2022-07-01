@@ -7,7 +7,6 @@
 Link_pathway_blocks_gwas(
   Pagwas,
   chrom_ld = NULL,
-  split_n = 1,
   singlecell = T,
   celltype = T,
   ncores = 1
@@ -17,8 +16,6 @@ Link_pathway_blocks_gwas(
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
 \item{chrom_ld}{LD data for 22 chromosome.}
-
-\item{split_n}{number of times to compute the singlecell result}
 
 \item{ncores}{Parallel cores,default is 1. use detectCores()
 to check the cores in computer.}

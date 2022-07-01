@@ -164,12 +164,12 @@ scPagwas_perform_score <- function(Pagwas,
   rownames(Pagwas$scPathways_rankPvalue) <- colnames(Pathway_sclm_results)
   rm(Pathways_rankPvalue)
   message("* Get scPgwas score for each single cell")
-  scPagwas.lm.score <- colSums(Pagwas$Pathway_single_results)
+  scPagwas.gPAS.score <- colSums(Pagwas$Pathway_single_results)
   gc()
   if (remove_outlier) {
-    Pagwas$scPagwas.lm.score <- scPagwas_score_filter(scPagwas_score = scPagwas.lm.score)
+    Pagwas$scPagwas.gPAS.score <- scPagwas_score_filter(scPagwas_score = scPagwas.gPAS.score)
   }
-  names(Pagwas$scPagwas.lm.score) <- colnames(Pagwas$pca_scCell_mat)
+  names(Pagwas$scPagwas.gPAS.score) <- colnames(Pagwas$pca_scCell_mat)
 
   return(Pagwas)
 }
@@ -269,17 +269,17 @@ scPagwas_score_filter <- function(scPagwas_score) {
 #'   data_mat = Seurat::GetAssayData(object = Single_data[, names(Pagwas$scPagwas_score)], slot = "data")
 #' )
 scGet_gene_heritability_correlation <- function(Pagwas) {
-  if (all(names(Pagwas$scPagwas.lm.score) == colnames(Pagwas$data_mat))) {
-    scPagwas.lm.score <- data.matrix(Pagwas$scPagwas.lm.score)
+  if (all(names(Pagwas$scPagwas.gPAS.score) == colnames(Pagwas$data_mat))) {
+    scPagwas.gPAS.score <- data.matrix(Pagwas$scPagwas.gPAS.score)
     sparse_cor <- corSparse(
       X = t(as_matrix(Pagwas$data_mat)),
-      Y = scPagwas.lm.score
+      Y = scPagwas.gPAS.score
     )
   } else {
-    data_mat <- Pagwas$data_mat[, names(scPagwas.lm.score)]
-    scPagwas.lm.score <- data.matrix(scPagwas.lm.score)
+    data_mat <- Pagwas$data_mat[, names(scPagwas.gPAS.score)]
+    scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(X = t(as_matrix(Pagwas$data_mat)),
-                            Y = scPagwas.lm.score)
+                            Y = scPagwas.gPAS.score)
   }
   rownames(sparse_cor) <- rownames(Pagwas$data_mat)
   colnames(sparse_cor) <- "gene_heritability_correlation"
@@ -288,8 +288,6 @@ scGet_gene_heritability_correlation <- function(Pagwas) {
 
   return(Pagwas)
 }
-
-
 
 #' scPagwas_perform_regression
 #' @description Functions for inferring relevant annotations using the polyTest model.
