@@ -2,7 +2,7 @@
 % Please edit documentation in R/Link_pathway_blocks_gwas.R
 \name{Pathway_block_func}
 \alias{Pathway_block_func}
-\title{Title}
+\title{Pathway_block_func}
 \usage{
 Pathway_block_func(
   Pagwas = NULL,
@@ -14,11 +14,15 @@ Pathway_block_func(
 )
 }
 \arguments{
-\item{ncores}{}
+\item{Pagwas}{NULL}
+
+\item{Pachrom_block_list}{result for chrome block}
+
+\item{ncores}{cores}
 }
 \value{
 
 }
 \description{
-Title
+Pathway_block_func
 }

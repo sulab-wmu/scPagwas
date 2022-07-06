@@ -12,11 +12,21 @@ reduce_pathway(
 )
 }
 \arguments{
-\item{remove_proporion}{}
+\item{pathway_seed}{randome select the seed pathways, sometimes can be the
+unredundant pathway set.}
+
+\item{pathway_list}{the list of pathway need to reduce.}
+
+\item{remove_proporion}{the propotion of pathways after reduce.}
 }
 \value{
 
 }
 \description{
 reduce_pathway
+}
+\examples{
+reduce_pathway <- function(pathway_seed = names(Genes_by_pathway_kegg)[sample(1:length(Genes_by_pathway_kegg), 20)],
+                           pathway_list = Genes_by_pathway_kegg,
+                           remove_proporion = 0.7)
 }

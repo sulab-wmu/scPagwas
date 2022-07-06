@@ -2,8 +2,6 @@
 #' scPagwas_Visualization
 #' @description Visualize the scPagwas score in Umap and Tsne.
 #'
-#' @param scPagwas_score scPagwas_score for scPagwas_main result
-#' @param scPagwas_p
 #' @param Single_data Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE
 #' @param output.dirs (character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.
 #' @param FigureType (character)"tsne" or "umap
@@ -11,7 +9,6 @@
 #' @param width (numeric)Figure width
 #' @param height (numeric)Figure height
 #' @param size (numeric)size for scatters
-#' @param npcs (integr) the parameter of Seurat::RunPCA.
 #' @param title (character)Figure title
 #' @param lowColor (character)Color for low scPagwas score
 #' @param highColor (character)Color for high scPagwas score
@@ -21,27 +18,24 @@
 #' @export
 #'
 #' @examples
-#' library(scPagwas)
-#' data(scRNAexample)
-#' # scPagwas_Visualization(
-#' #  scPagwas = Pagwas,
-#' #  Single_data = scRNAexample,
-#' #  cellpercent = 0.1,
-#' #  output.dirs = "scpagwas_pbc_False",
-#' #  FigureType = "tsne",
-#' #  width = 7,
-#' #  height = 7,
-#' #  lowColor = "#000957", highColor = "#EBE645",
-#' #  size = 0.5,
-#' #  title = "scPagwas_score"
-#' # )
+#' scPagwas_Visualization(Single_data=Pagwas_data,
+#'                        p_thre = 0.05,
+#'                        FigureType = "umap",
+#'                        width = 7,
+#'                        height = 7,
+#'                        lowColor = "white",
+#'                        highColor = "red",
+#'                        output.dirs="scPagwastest_output",
+#'                        size = 0.5,
+#'                        do_plot = T)
+
 scPagwas_Visualization <- function(Single_data = NULL,
                                    p_thre = 0.05,
                                    output.dirs = "scPagwastest_output",
                                    FigureType = "tsne",
                                    width = 7,
                                    height = 7,
-                                   title="",
+                                   title = "",
                                    lowColor = "#000957", highColor = "#EBE645",
                                    size = 0.5,
                                    do_plot = F) {
@@ -185,61 +179,8 @@ scPagwas_Visualization <- function(Single_data = NULL,
   # return(all_fortify_can)
 }
 
-
-#' preprogress_PaSingle_data
-#'
-#' @param Single_data
-#' @param npcs
-#' @param nfeatures
-#'
-#' @return
-#' @export
-#'
-#' @examples
-preprogress_PaSingle_data <- function(Single_data,
-                                      npcs = 10,
-                                      nfeatures = 20) {
-  SeuratObject::DefaultAssay(Single_data) <- "scPagwasPaHeritability"
-  b <- SeuratObject::GetAssayData(Single_data, slot = "data", assay = "scPagwasPaHeritability")
-  # if(b)
-  b <- t(apply(b, 1, function(x) (x - min(x)) / (max(x) - min(x))))
-
-  Single_data <- SeuratObject::SetAssayData(Single_data,
-    slot = "data",
-    assay = "scPagwasPaHeritability",
-    new.data = b
-  )
-  Single_data <- suppressWarnings(Seurat::FindVariableFeatures(Single_data,
-    assay = "scPagwasPaHeritability",
-    nfeatures = nfeatures,
-    selection.method = "mvp"
-  ))
-  Single_data <- ScaleData(Single_data)
-  Single_data <- suppressWarnings(Seurat::RunPCA(
-    object = Single_data,
-    assay = "scPagwasPaHeritability",
-    npcs = npcs
-  ))
-
-  Single_data <- suppressWarnings(Seurat::RunTSNE(
-    object = Single_data,
-    assay = "scPagwasPaHeritability",
-    reduction = "pca",
-    dims = 1:npcs
-  ))
-  Single_data <- suppressWarnings(Seurat::RunUMAP(
-    object = Single_data,
-    assay = "scPagwasPaHeritability",
-    reduction = "pca",
-    dims = 1:npcs
-  ))
-  return(Single_data)
-}
-
 #' umap_theme
 #' @description ggplot2 theme for umap plot
-#' @return
-#' @export
 
 umap_theme <- function() {
   theme_grey() %+replace%
@@ -261,8 +202,6 @@ umap_theme <- function() {
 #' fortify.Seurat.umap
 #' @description set data frame to ggplot
 #' @param x Seurat format
-#' @export
-#' @return
 
 fortify.Seurat.umap <- function(x) {
   xy1 <- as.data.frame(
@@ -279,8 +218,6 @@ fortify.Seurat.umap <- function(x) {
 #' fortify.Seurat.tsne
 #' @description set data frame to ggplot
 #' @param x seruat
-#' @export
-#' @return
 
 fortify.Seurat.tsne <- function(x) {
   xy2 <- as.data.frame(

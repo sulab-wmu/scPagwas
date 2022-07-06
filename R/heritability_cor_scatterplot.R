@@ -1,8 +1,8 @@
 
 #' heritability_cor_scatterplot
 #'
-#' @param gene_heri_cor
-#' @param topn_genes_label
+#' @param gene_heri_cor gene_heritability_correlation result for scPagwas.
+#' @param topn_genes_label 10, the number of top genes for correlation.
 #' @param color_low low color
 #' @param color_high high color
 #' @param color_mid mid color
@@ -17,14 +17,25 @@
 #' @export
 #'
 #' @examples
-heritability_cor_scatterplot <- function(gene_heri_cor = Pagwas$gene_heritability_correlation,
+#'
+#' heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_correlation,
+#'                              topn_genes_label=10,
+#'                              color_low="#035397",
+#'                              color_high ="#F32424",
+#'                              color_mid = "white",
+#'                              text_size=2,
+#'                              do_plot=T,
+#'                              max.overlaps =20,
+#'                              width = 7,
+#'                              height = 7)
+ heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
                                          topn_genes_label = 10,
                                          color_low = "#035397",
                                          color_high = "#F32424",
                                          color_mid = "white",
                                          text_size = 3,
                                          do_plot = T,
-                                         max.overlaps =10,
+                                         max.overlaps = 10,
                                          figurenames = NULL,
                                          width = 7,
                                          height = 7) {
@@ -44,10 +55,13 @@ heritability_cor_scatterplot <- function(gene_heri_cor = Pagwas$gene_heritabilit
       midpoint = 0
     ) +
     theme_classic() +
-    ggrepel::geom_text_repel(aes(x = order, y = cor,
-                                 label = text),
-                             max.overlaps = max.overlaps,
-                             na.rm = T, size = text_size)
+    ggrepel::geom_text_repel(aes(
+      x = order, y = cor,
+      label = text
+    ),
+    max.overlaps = max.overlaps,
+    na.rm = T, size = text_size
+    )
 
   if (do_plot) print(p)
   if (!is.null(figurenames)) {

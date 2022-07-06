@@ -43,12 +43,6 @@ devtools::install_github("dengchunyu/scPagwas")
  library(ggplot2)
  suppressMessages(library(Seurat))
  suppressMessages(library("dplyr"))
- #Input pathway gene list, you can construct with youself.
- data(Genes_by_pathway_kegg)
- #gene annotation files.
- data(block_annotation)
- #LD data
- data(chrom_ld)
 
  #1.start to run the wrapper functions for preprogress.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
@@ -64,7 +58,10 @@ devtools::install_github("dengchunyu/scPagwas")
                      seruat_return=T,
                      celltype=T,
                      ncores = 1)
-
+ 
+ 
+  
+ # SOAR::Remove(SOAR::Objects()) 
 ```
  
 #### Visualize the celltypes results.
@@ -81,7 +78,6 @@ Bootstrap_P_Barplot(p_results=Pagwas_data@misc$bootstrap_results$bp_value[-1],
                     title = "Test scPagwas")
 
 ```
-
 
 #### Visualize the scPagwas_main results.
 ##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 

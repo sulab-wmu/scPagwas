@@ -9,8 +9,6 @@
 #' @param pValueMethod "all"
 #'
 #' @return
-#' @export
-#' @examples
 rankPvalue <- function(datS, columnweights = NULL,
                        na.last = "keep",
                        ties.method = "average",

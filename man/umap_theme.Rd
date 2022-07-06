@@ -6,9 +6,6 @@
 \usage{
 umap_theme()
 }
-\value{
-
-}
 \description{
 ggplot2 theme for umap plot
 }

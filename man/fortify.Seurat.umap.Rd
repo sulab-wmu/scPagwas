@@ -9,9 +9,6 @@
 \arguments{
 \item{x}{Seurat format}
 }
-\value{
-
-}
 \description{
 set data frame to ggplot
 }

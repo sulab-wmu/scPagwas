@@ -9,8 +9,6 @@
 #' @param split_n number of times to compute the singlecell result
 #'
 #' @return
-#' @export
-#' @examples
 get_Pathway_sclm <- function(pa_block,
                              pca_scCell_mat,
                              data_mat,
@@ -53,7 +51,7 @@ get_Pathway_sclm <- function(pa_block,
     rownames(x) <- pa_block$snps$rsid
     rownames(snp_gene_df) <- snp_gene_df$rsid
     x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-     x2 <- x2 * x
+    x2 <- x2 * x
   } else {
     x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
     rownames(x2) <- pa_block$snps$label
@@ -108,7 +106,7 @@ get_Pathway_sclm <- function(pa_block,
 #' @export
 #' @examples
 #' library(scPagwas)
-#' scPagwas_perform_score(Pagwas)
+#' scPagwas_perform_score(Pagwas_data)
 scPagwas_perform_score <- function(Pagwas,
                                    remove_outlier = TRUE) {
   options(bigmemory.allow.dimnames = TRUE)
@@ -140,9 +138,9 @@ scPagwas_perform_score <- function(Pagwas,
 
   # pathway_expr<-as(pathway_expr,"dgCMatrix")
   colnames(pathway_expr) <- Pathway_names
-   pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
+  pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
   # pa_exp_mat <-
-   rm(pathway_expr)
+  rm(pathway_expr)
 
   # pa_exp_mat<-as(pa_exp_mat,"dgCMatrix")
   Pagwas$Pathway_single_results <- Pathway_sclm_results[, Pathway_names] * pa_exp_mat
@@ -278,8 +276,10 @@ scGet_gene_heritability_correlation <- function(Pagwas) {
   } else {
     data_mat <- Pagwas$data_mat[, names(scPagwas.gPAS.score)]
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
-    sparse_cor <- corSparse(X = t(as_matrix(Pagwas$data_mat)),
-                            Y = scPagwas.gPAS.score)
+    sparse_cor <- corSparse(
+      X = t(as_matrix(Pagwas$data_mat)),
+      Y = scPagwas.gPAS.score
+    )
   }
   rownames(sparse_cor) <- rownames(Pagwas$data_mat)
   colnames(sparse_cor) <- "gene_heritability_correlation"

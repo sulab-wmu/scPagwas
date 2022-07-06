@@ -1,9 +1,9 @@
-## start at: 2022-07-01 22:03:52 
-Single_data import: 4.857448 
-Pathway_pcascore_run: 7.946787 
-GWAS_summary_input: 0.1216538 
-Snp2Gene: 0.4965701 
-Pathway_annotation_input: 1.023206 
-Link_pathway_blocks_gwas: 29.864 
-Celltype_heritability_contributions: 30.92605 
-scPagwas_perform_score: 5.290887 
+## start at: 2022-07-06 15:37:16 
+Single_data import: 5.668588 
+Pathway_pcascore_run: 17.00423 
+GWAS_summary_input: 0.1127 
+Snp2Gene: 0.4130518 
+Pathway_annotation_input: 1.370005 
+Link_pathway_blocks_gwas: 17.23669 
+Celltype_heritability_contributions: 18.35374 
+scPagwas_perform_score: 5.502191 

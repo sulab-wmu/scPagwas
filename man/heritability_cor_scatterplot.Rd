@@ -5,7 +5,7 @@
 \title{heritability_cor_scatterplot}
 \usage{
 heritability_cor_scatterplot(
-  gene_heri_cor = Pagwas$gene_heritability_correlation,
+  gene_heri_cor = NULL,
   topn_genes_label = 10,
   color_low = "#035397",
   color_high = "#F32424",
@@ -19,6 +19,10 @@ heritability_cor_scatterplot(
 )
 }
 \arguments{
+\item{gene_heri_cor}{gene_heritability_correlation result for scPagwas.}
+
+\item{topn_genes_label}{10, the number of top genes for correlation.}
+
 \item{color_low}{low color}
 
 \item{color_high}{high color}
@@ -42,4 +46,17 @@ heritability_cor_scatterplot(
 }
 \description{
 heritability_cor_scatterplot
+}
+\examples{
+
+heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_correlation,
+                             topn_genes_label=10,
+                             color_low="#035397",
+                             color_high ="#F32424",
+                             color_mid = "white",
+                             text_size=2,
+                             do_plot=T,
+                             max.overlaps =20,
+                             width = 7,
+                             height = 7)
 }

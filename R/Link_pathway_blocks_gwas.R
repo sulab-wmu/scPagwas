@@ -35,21 +35,19 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   Pagwas$gwas_data <- NULL
 
 
-    Pagwas <- Pathway_block_func(
-      Pagwas = Pagwas,
-      Pachrom_block_list = Pachrom_block_list,
-      chrom_gwas_list = chrom_gwas_list,
-      singlecell = singlecell,
-      celltype = celltype,
-      ncores = ncores
-    )
-
-
+  Pagwas <- Pathway_block_func(
+    Pagwas = Pagwas,
+    Pachrom_block_list = Pachrom_block_list,
+    chrom_gwas_list = chrom_gwas_list,
+    singlecell = singlecell,
+    celltype = celltype,
+    ncores = ncores
+  )
 
   rm(chrom_gwas_list)
   rm(chrom_ld)
 
-  #Pagwas$merge_scexpr <- NULL
+  # Pagwas$merge_scexpr <- NULL
   gc()
   return(Pagwas)
 }
@@ -81,16 +79,14 @@ make_ld_matrix <- function(all_snps = snp_data$rsid, ld_data = sub_ld) {
 }
 
 
-#' Title
+#' Pathway_block_func
 #'
-#' @param Pagwas
-#' @param Pachrom_block_list
-#' @param ncores
+#' @param Pagwas NULL
+#' @param Pachrom_block_list result for chrome block
+#' @param ncores cores
 #'
 #' @return
-#' @export
 #'
-#' @examples
 Pathway_block_func <- function(Pagwas = NULL,
                                Pachrom_block_list,
                                chrom_gwas_list,
@@ -224,184 +220,3 @@ Pathway_block_func <- function(Pagwas = NULL,
   return(Pagwas)
 }
 
-
-
-#' Pathway_block_splitfunc
-#'
-#' @param Pagwas
-#' @param Pachrom_block_list
-#' @param ncores
-#'
-#' @return
-#' @export
-#'
-#' @examples
-scPathway_block_splitfunc <- function(pa_blocksnplist,
-                                      subpca_scCell_mat,
-                                      subdata_mat,
-                                      rawPathway_list,
-                                      snp_gene_df,
-                                      ncores = 1) {
-  Pathway_sclm_results <- list()
-  #+++++++Pathway_lm_results<-list()
-  message("* Start to link gwas and pathway block annotations for pathways!")
-  options(bigmemory.allow.dimnames = TRUE)
-  pb <- txtProgressBar(style = 3)
-
-  for (pathway in names(pa_blocksnplist)) {
-    pa_block <- pa_blocksnplist[[pathway]]
-    Pathway_sclm_results[[pathway]] <- get_Pathway_sclm(
-      pa_block = pa_block,
-      pca_scCell_mat = subpca_scCell_mat,
-      data_mat = subdata_mat,
-      rawPathway_list = rawPathway_list,
-      snp_gene_df = snp_gene_df,
-      ncores = ncores
-    )
-
-
-    setTxtProgressBar(pb, which(names(pa_blocksnplist) == pathway) / length(names(pa_blocksnplist)))
-  }
-
-  close(pb)
-  Pathway_sclm_results <- Pathway_sclm_results[!sapply(Pathway_sclm_results, is.null)]
-  Pathway_sclm_results <- as.data.frame(Pathway_sclm_results)
-  rownames(Pathway_sclm_results) <- colnames(subpca_scCell_mat)
-  return(Pathway_sclm_results)
-}
-
-
-#' celltypes_Pathway_block_func
-#'
-#' @param Pagwas
-#' @param pa_blocksnplist
-#'
-#' @return
-#' @export
-#'
-#' @examples
-celltypes_Pathway_block_func <- function(Pagwas, pa_blocksnplist) {
-  # Pathway_ld_gwas_data<-list()
-
-  message("* Start to run celltypes ")
-  options(bigmemory.allow.dimnames = TRUE)
-  pb <- txtProgressBar(style = 3)
-
-  Pathway_ld_gwas_data <- lapply(names(pa_blocksnplist), function(pathway) {
-
-    # for (pathway in names(pa_blocksnplist)) {
-    pa_block <- pa_blocksnplist[[pathway]]
-
-    pa_block <- link_pwpca_block(
-      pa_block = pa_block,
-      pca_cell_df = data.matrix(Pagwas$pca_cell_df),
-      merge_scexpr = Pagwas$merge_scexpr,
-      snp_gene_df = Pagwas$snp_gene_df,
-      rawPathway_list = Pagwas$rawPathway_list
-    )
-    # Pathway_lm_results[[pathway]]<- Pa_Pagwas_perform_regression(pa_block=pa_block)
-    # Pathway_ld_gwas_data[[pathway]]<-pa_block
-    setTxtProgressBar(pb, which(names(pa_blocksnplist) == pathway) / length(names(pa_blocksnplist)))
-    return(pa_block)
-  })
-  close(pb)
-  names(Pathway_ld_gwas_data) <- names(pa_blocksnplist)
-  Pagwas$Pathway_ld_gwas_data <- Pathway_ld_gwas_data
-
-  return(Pagwas)
-}
-
-#' Title
-#'
-#' @param Pagwas
-#' @param Pachrom_block_list
-#' @param chrom_gwas_list
-#'
-#' @return
-#' @export
-#'
-#' @examples
-Pachrom_func <- function(Pagwas, Pachrom_block_list, chrom_gwas_list) {
-  message("* Start to link pathway and snps ")
-
-  options(bigmemory.allow.dimnames = TRUE)
-
-  pb <- txtProgressBar(style = 3)
-
-  pa_blocksnplist <- lapply(names(Pachrom_block_list), function(pathway) {
-    Pa_chrom_block <- Pachrom_block_list[[pathway]]
-
-    Pa_chrom_data <- lapply(names(Pa_chrom_block), function(chrom) {
-      chrom_block <- Pa_chrom_block[[chrom]]
-      ld_data <- chrom_ld[[chrom]]
-
-      data.table::setkey(ld_data, SNP_A) # just in case
-      if (!(chrom %in% names(chrom_gwas_list))) {
-        warning(paste(chrom, " for gwas is missing, could be a problem!", sep = ""))
-        return(NULL)
-      }
-      if (is.null(chrom_gwas_list[[chrom]])) {
-        warning(paste(chrom, " data missing, could be a problem", sep = ""))
-        return(NULL)
-      }
-
-      rsids <- Pagwas$snp_gene_df[which(Pagwas$snp_gene_df$label %in%
-        chrom_block$label), c("rsid", "label")]
-
-      c2 <- chrom_gwas_list[[chrom]]
-      rsids_gwas <- suppressMessages(dplyr::inner_join(rsids, c2))
-      if (is.null(nrow(rsids_gwas))) {
-        return(NULL)
-      }
-      beta_squared <- rsids_gwas$beta^2
-      # again, pretty sure this is binarize data table lookup
-      sub_ld <- ld_data[.(as.vector(rsids_gwas$rsid)), nomatch = 0L]
-      setTxtProgressBar(pb, which(names(Pachrom_block_list) == pathway) / length(names(Pachrom_block_list)))
-
-      return(list(rsids_gwas, beta_squared, sub_ld, chrom_block))
-    })
-    close(pb)
-    # cbind_df代替 rbind_df(list_df)
-    rm(Pa_chrom_block)
-    pa_block <- list()
-    pa_block$block_info <- bigreadr::rbind_df(lapply(
-      seq_len(length(Pa_chrom_data)),
-      function(i) Pa_chrom_data[[i]][[4]]
-    ))
-    pa_block$snps <- bigreadr::rbind_df(lapply(
-      seq_len(length(Pa_chrom_data)),
-      function(i) Pa_chrom_data[[i]][[1]]
-    ))
-    pa_block$y <- unlist(lapply(
-      seq_len(length(Pa_chrom_data)),
-      function(i) Pa_chrom_data[[i]][[2]]
-    ))
-    # message(paste0("snp is ",nrow(snp_data)))
-    pa_block$ld_data <- bigreadr::rbind_df(lapply(
-      seq_len(length(Pa_chrom_data)),
-      function(i) Pa_chrom_data[[i]][[3]]
-    ))
-
-    rsid_x <- intersect(pa_block$snps$rsid, unique(unlist(pa_block$ld_data[, 1:2])))
-
-    pa_block$ld_data <- as.data.frame(pa_block$ld_data[pa_block$ld_data$SNP_A
-      %in% rsid_x & pa_block$ld_data$SNP_B
-      %in% rsid_x, ])
-    rm(Pa_chrom_data)
-    # message(paste0("ld is ",nrow(sub_ld)))
-    if (nrow(pa_block$ld_data) == 0) {
-      ld_matrix <- diag(1, nrow = nrow(pa_block$snps))
-    } else {
-      ld_matrix <- make_ld_matrix(
-        all_snps = pa_block$snps$rsid,
-        ld_data = pa_block$ld_data
-      )
-    }
-
-    pa_block$n_snps <- nrow(pa_block$snps)
-    pa_block$ld_matrix_squared <- ld_matrix * ld_matrix
-    return(pa_block)
-  })
-  names(pa_blocksnplist) <- names(Pachrom_block_list)
-  return(pa_blocksnplist)
-}

@@ -9,9 +9,6 @@
 \arguments{
 \item{x}{seruat}
 }
-\value{
-
-}
 \description{
 set data frame to ggplot
 }

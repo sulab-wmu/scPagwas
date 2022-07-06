@@ -40,10 +40,6 @@ scPagwas_Visualization(
 \item{size}{(numeric)size for scatters}
 
 \item{do_plot}{Whether to plot, logical}
-
-\item{scPagwas_score}{scPagwas_score for scPagwas_main result}
-
-\item{npcs}{(integr) the parameter of Seurat::RunPCA.}
 }
 \value{
 
@@ -52,18 +48,14 @@ scPagwas_Visualization(
 Visualize the scPagwas score in Umap and Tsne.
 }
 \examples{
-library(scPagwas)
-data(scRNAexample)
-# scPagwas_Visualization(
-#  scPagwas = Pagwas,
-#  Single_data = scRNAexample,
-#  cellpercent = 0.1,
-#  output.dirs = "scpagwas_pbc_False",
-#  FigureType = "tsne",
-#  width = 7,
-#  height = 7,
-#  lowColor = "#000957", highColor = "#EBE645",
-#  size = 0.5,
-#  title = "scPagwas_score"
-# )
+scPagwas_Visualization(Single_data=Pagwas_data,
+                       p_thre = 0.05,
+                       FigureType = "umap",
+                       width = 7,
+                       height = 7,
+                       lowColor = "white",
+                       highColor = "red",
+                       output.dirs="scPagwastest_output",
+                       size = 0.5,
+                       do_plot = T)
 }

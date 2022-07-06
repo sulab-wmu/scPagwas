@@ -427,3 +427,36 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         height = 7,
                         do_plot=T)
 ```
+
+
+```{r}
+ #1.start to run the wrapper functions for preprogress.
+ Pagwas_data1<-scPagwas_main(Pagwas = NULL,
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data ="E:/RPakage/scPagwas/inst/extdata/scRNAexample_split1.rds",
+                     output.prefix="test1",
+                     output.dirs="scPagwastest_output",
+                     block_annotation = block_annotation,
+                     assay="RNA",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     chrom_ld = chrom_ld,
+                     singlecell=T,
+                     seruat_return=T,
+                     celltype=T,
+                     ncores = 1)
+ 
+  Pagwas_data2<-scPagwas_main(Pagwas = NULL,
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data ="E:/RPakage/scPagwas/inst/extdata/scRNAexample_split2.rds",
+                     output.prefix="test2",
+                     output.dirs="scPagwastest_output",
+                     block_annotation = block_annotation,
+                     assay="RNA",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     chrom_ld = chrom_ld,
+                     singlecell=T,
+                     seruat_return=T,
+                     celltype=T,
+                     ncores = 1)
+
+```

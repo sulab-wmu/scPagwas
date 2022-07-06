@@ -84,49 +84,48 @@ the function will create it;}
 Returns a Seruat data with entries(seruat_return=T):
 \describe{
 \item{assay:}{
-\item{scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}}
-scPagwasPaHeritability
-scPagwaslmHeritability
+{scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}
+{scPagwasPaHeritability:}{An assay for S4 type of data; the gPas matrix for pathways in each cells;}}
 \item{meta.data}{
-\item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-\item{scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}}
-CellScalepValue
-CellScaleqValue
+{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+{scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}
+{CellScalepValue:}{ the column for "meta.data";CellScalepValue for each cells}
+{CellScaleqValue:}{ the column for "meta.data";CellScaleqValue for each cells}}
 \item{misc: element in result,\code{Pagwas@misc }}{
-\item{Pathway_list:}{a list for pathway gene list intersecting with single cell data}
-\item{pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
-\item{lm_results:}{ the regression result for each cell.}
-\item{gene_heritability_correlation:}{
+{Pathway_list:}{a list for pathway gene list intersecting with single cell data}
+{pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
+{lm_results:}{ the regression result for each cell.}
+{gene_heritability_correlation:}{
 heritability correlation value for each gene;}
-\item{scPathways_rankPvalue:}{pvaues for each pathway}
-\item{bootstrap_results:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.}
+{scPathways_rankPvalue:}{pvaues for each pathway}
+{bootstrap_results:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.}
 }
 
 }
 Returns files:
 
 \describe{
-\item{scPagwas.run.log:}{ the running log file for scPagwas}
-\item{\emph{_parameters.txt:}{parameters log file for scPagwas}
-\item{}_pca_scCell_mat.txt:}{ 1st svd result for pathways in each cell}
-\item{\emph{_pca_celltypes_mat.txt:}{ 1st svd results for pathways in celltypes}
-\item{}_singlecell_scPagwas_score.Result.csv:}{ The final result for lm and top gene score}
-\item{\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval}
-\item{}_gene_heritability_correlation.csv:}{ heritability correlation value("cor" for pearson) for each gene;}
+{scPagwas.run.log:}{ the running log file for scPagwas}
+{\emph{_parameters.txt:}{parameters log file for scPagwas}
+{}_pca_scCell_mat.txt:}{ 1st svd result for pathways in each cell}
+{\emph{_pca_celltypes_mat.txt:}{ 1st svd results for pathways in celltypes}
+{}_singlecell_scPagwas_score.Result.csv:}{ The final result for lm and top gene score}
+{\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval}
+{}_gene_heritability_correlation.csv:}{ heritability correlation value("cor" for pearson) for each gene;}
 }
 
 Returns a list class with entries(seruat_return=F):
 \describe{
-\item{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
-\item{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
-\item{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}
-\item{Pathway_list:}{ The number of Lanczos iterations carried out}
-\item{pca_cell_df:}{ The total number of matrix vector products carried out}
-\item{sclm_results:}{ The total number of matrix vector products carried out}
-\item{allsnp_gene_heritability_correlation:}{ The total number of matrix vector products carried out}
-\item{Pathway_ctlm_results:}{ The total number of matrix vector products carried out}
-\item{lm_results:}{ The total number of matrix vector products carried out}
-\item{Pathway_ct_results:}{ The total number of matrix vector products carried out}
+{scPagwasPaPca:}{Assays for S4 type of data; the svd result for pathways in each cells;}
+{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+{sclm_score:}{ the column for "meta.data";Inheritance regression effects for each cells}
+{Pathway_list:}{ The number of Lanczos iterations carried out}
+{pca_cell_df:}{ The total number of matrix vector products carried out}
+{sclm_results:}{ The total number of matrix vector products carried out}
+{allsnp_gene_heritability_correlation:}{ The total number of matrix vector products carried out}
+{Pathway_ctlm_results:}{ The total number of matrix vector products carried out}
+{lm_results:}{ The total number of matrix vector products carried out}
+{Pathway_ct_results:}{ The total number of matrix vector products carried out}
 }
 }
 \description{
@@ -143,24 +142,29 @@ The entry point for Pagwas analysis.
 \note{
 1.When you run the package in linux server, you can run
 \code{export OPENBLAS_NUM_THREADS=1}
-before enter into R environment;
+before enter into R environment, It can help you to avoid core errors.
+2. When the code is kill for some wrong, you can run
+\code{SOAR::Objects()} to check the objects, or
+run \code{SOAR::Remove(SOAR::Objects())} to remove it.
+3. When your data is too big to run the function(bus error), you can split
+your data into several sub-data and run the merge_pagwas to merge them.
 }
 \examples{
 library(scPagwas)
-data(Genes_by_pathway_kegg)
-data(GWAS_summ_example)
-data(gtf_df)
-data(scRNAexample)
-# data(eqtls_files)
-data(chrom_ld)
-# 1. OnlyTSS
-Pagwas <- scPagwas_main(
+library(ggplot2)
+library(Seurat)
+Pagwas_data <- scPagwas_main(
   Pagwas = NULL,
-  gwas_data = GWAS_summ_example,
-  add_eqtls = "OnlyTSS",
-  block_annotation = gtf_df,
-  Single_data = scRNAexample,
+  gwas_data = system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+  Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+  output.prefix = "test",
+  output.dirs = "scPagwastest_output",
+  block_annotation = block_annotation,
+  assay = "RNA",
   Pathway_list = Genes_by_pathway_kegg,
-  chrom_ld = chrom_ld
+  chrom_ld = chrom_ld,
+  singlecell = T,
+  celltype = T,
+  ncores = 1
 )
 }
