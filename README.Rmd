@@ -58,10 +58,7 @@ devtools::install_github("dengchunyu/scPagwas")
                      seruat_return=T,
                      celltype=T,
                      ncores = 1)
- 
- 
-  
- # SOAR::Remove(SOAR::Objects()) 
+# SOAR::Remove(SOAR::Objects()) 
 ```
  
 #### Visualize the celltypes results.

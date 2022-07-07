@@ -154,7 +154,7 @@ save(Pagwas_seu,file="E:/RPakage/scPagwas/data/Pagwas_AD_prune.RData")
 # Visualize the result
 ## Visualize the scPagwas_score for single cell
 首先产生单细胞单纯映射细胞类型位置和颜色
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 require("RColorBrewer")
 require("SeuratObject")
 require("ggsci")
@@ -170,7 +170,7 @@ DimPlot(Pagwas_seu,reduction="umap",group.by = "oupSample.cellType",pt.size=0.8,
 ```
 
 之后产生两者单细胞降维可视化图，第一张为scPagwas_score得分映射，第二章为阳性细胞映射
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 
 #setwd("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test")
  scPagwas_Visualization(Single_data=Pagwas,
@@ -188,7 +188,7 @@ DimPlot(Pagwas_seu,reduction="umap",group.by = "oupSample.cellType",pt.size=0.8,
 ## positive cell percent
 
 ### 阳性细胞和阴性细胞中不同细胞类型的比例
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 
 plot_bar_positie_nagtive(seurat_obj=Pagwas,
                               var_ident="positiveCells",
@@ -211,7 +211,7 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas,
 
 ### 可视化通路降维数据中不同细胞类型的分布
 
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 DimPlot(Pagwas,group.by = "oupSample.cellType",label = F)+ 
         theme(aspect.ratio=1)
 
@@ -219,7 +219,7 @@ DimPlot(Pagwas,group.by = "oupSample.cellType",label = F)+
 ```
 
 ## 通路数据降维可视化三种结果的映射
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 Pagwas<-preprogress_PaSingle_data(Single_data=Pagwas,
                        npcs=10,
                        nfeatures=20)
@@ -240,7 +240,7 @@ scPagwasPaHeritability_Visualization(Single_data=Pagwas,
 
 
 ## 可视化遗传基因的映射
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 ###可选择
 gene<-"MAP2K2"
 Pa<-"hsa04630"
@@ -278,7 +278,7 @@ plot3 <-  ggplot() +
 
 ## 可视化通路基因网络图
 选择感兴趣的细胞类型和通路，进行网络可视化
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 suppressMessages(require("WGCNA"))
 suppressMessages(require("patchwork"))
 suppressMessages(require("tidygraph"))
@@ -341,7 +341,7 @@ plot_pathway_contribution_network(mat_datExpr=Single_data@assays$RNA@data,      
 
 ## 可视化细胞类型遗传特异性通路-dotplot
 
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
   library(tidyverse)
   library("rhdf5")
  library(ggplot2)
@@ -378,7 +378,7 @@ plot_scpathway_dot(Pagwas=Pagwas_seu,
 ```
 
 ## 可视化基因遗传关联性排秩点图
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 source("E:/RPakage/visulizeplotR/heritability_cor_scatterplot.R")
 
 heritability_cor_scatterplot(gene_heri_cor=Pagwas$gene_heritability_correlation,
@@ -398,7 +398,7 @@ heritability_cor_scatterplot(gene_heri_cor=Pagwas$gene_heritability_correlation,
 
 ### Plot the top5 heritability correlation genes in celltypes
 
-```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8,warning = FALSE}
+```{r vln_Corgenes,message=FALSE,fig.height=6, fig.width=8,warning = FALSE, eval=FALSE}
 top5genes<-rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation,decreasing = T)[1:5]]
 plot_vln_Corgenes(seurat_obj=Single_data,
              assay="RNA", slot="data",
@@ -411,7 +411,7 @@ plot_vln_Corgenes(seurat_obj=Single_data,
 ```
 
 ## 可视化细胞类型遗传关联显著性
-```{r message=FALSE,results = "hide",warning = FALSE}
+```{r message=FALSE,results = "hide",warning = FALSE, eval=FALSE}
 #pdf("E:/OneDrive/GWAS_Multiomics/ad_test/5.6test/ad_GSE138852/bar_celltypes.pdf")
 Bootstrap_P_Barplot(p_results=Pagwas$bootstrap_results$bp_value[-1],
                                 p_names=rownames(Pagwas$bootstrap_results)[-1],
@@ -428,8 +428,8 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                         do_plot=T)
 ```
 
-
-```{r}
+## 拆分数据跑之后再合并
+```{r, eval=FALSE}
  #1.start to run the wrapper functions for preprogress.
  Pagwas_data1<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
@@ -458,5 +458,6 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
                      seruat_return=T,
                      celltype=T,
                      ncores = 1)
+Pagwas_merge <- merge_pagwas(Pagwas_list = list(Pagwas_data1, Pagwas_data2))
 
 ```

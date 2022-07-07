@@ -25,7 +25,7 @@ or gene blocks,"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@ or gene blocks,"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -67,7 +67,13 @@ or gene blocks,</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Link_pathway_blocks_gwas</span><span class="op">(</span><span class="va">Pagwas</span>, chrom_ld <span class="op">=</span> <span class="cn">NULL</span>, n.cores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Link_pathway_blocks_gwas</span><span class="op">(</span>
+  <span class="va">Pagwas</span>,
+  chrom_ld <span class="op">=</span> <span class="cn">NULL</span>,
+  singlecell <span class="op">=</span> <span class="cn">T</span>,
+  celltype <span class="op">=</span> <span class="cn">T</span>,
+  ncores <span class="op">=</span> <span class="fl">1</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -76,7 +82,7 @@ or gene blocks,</p>
 <dd><p>Pagwas format, deault is NULL.</p></dd>
 <dt>chrom_ld</dt>
 <dd><p>LD data for 22 chromosome.</p></dd>
-<dt>n.cores</dt>
+<dt>ncores</dt>
 <dd><p>Parallel cores,default is 1. use detectCores()
 to check the cores in computer.</p></dd>
 </dl></div>

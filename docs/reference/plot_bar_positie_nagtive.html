@@ -27,7 +27,7 @@ Generate a percentage barplot that shows the composition of each identity
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -42,7 +42,7 @@ Generate a percentage barplot that shows the composition of each identity
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -79,6 +79,7 @@ Generate a percentage barplot that shows the composition of each identity
   f_color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">11</span>, name <span class="op">=</span> <span class="st">"RdYlBu"</span><span class="op">)</span><span class="op">)</span>,
   do_plot <span class="op">=</span> <span class="cn">F</span>,
   title <span class="op">=</span> <span class="cn">NULL</span>,
+  p_thre <span class="op">=</span> <span class="fl">0.05</span>,
   fontsize_title <span class="op">=</span> <span class="fl">24</span>,
   fontsize_axistitle_x <span class="op">=</span> <span class="fl">18</span>,
   fontsize_axistitle_y <span class="op">=</span> <span class="fl">18</span>,
@@ -87,7 +88,8 @@ Generate a percentage barplot that shows the composition of each identity
   fontsize_legendtitle <span class="op">=</span> <span class="fl">12</span>,
   fontsize_legendtext <span class="op">=</span> <span class="fl">10</span>,
   aspect.ratio <span class="op">=</span> <span class="fl">1.2</span>,
-  figurenames <span class="op">=</span> <span class="cn">NULL</span>,
+  output.prefix <span class="op">=</span> <span class="st">"Test"</span>,
+  output.dirs <span class="op">=</span> <span class="cn">NULL</span>,
   width <span class="op">=</span> <span class="fl">7</span>,
   height <span class="op">=</span> <span class="fl">7</span>
 <span class="op">)</span></code></pre></div>
@@ -123,12 +125,12 @@ Generate a percentage barplot that shows the composition of each identity
 <dd><p>NULL to leave out</p></dd>
 <dt>fontsize_legendtext</dt>
 <dd><p>NULL to leave out</p></dd>
-<dt>figurenames</dt>
-<dd><p>The filename and address of the output plot,</p></dd>
 <dt>width</dt>
 <dd><p>figure width</p></dd>
 <dt>height</dt>
 <dd><p>figure height</p></dd>
+<dt>figurenames</dt>
+<dd><p>The filename and address of the output plot,</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -137,7 +139,7 @@ Generate a percentage barplot that shows the composition of each identity
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">plot_barIdentGroup</span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">seu</span>, var_ident<span class="op">=</span><span class="st">"sample"</span>,var_group<span class="op">=</span><span class="st">"cluster"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu">plot_barIdentGroup</span><span class="op">(</span>seurat_obj <span class="op">=</span> <span class="va">seu</span>, var_ident <span class="op">=</span> <span class="st">"sample"</span>, var_group <span class="op">=</span> <span class="st">"cluster"</span><span class="op">)</span></span>
 <span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot_barIdentGroup(seurat_obj = seu, var_ident = "sample", var_group = "cluster"):</span> could not find function "plot_barIdentGroup"</span>
 </code></pre></div>
     </div>

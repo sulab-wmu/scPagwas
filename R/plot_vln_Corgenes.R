@@ -22,16 +22,14 @@
 #' @export
 #'
 #' @examples
-#' top5genes <- rownames(Pagwas$gene_heritability_correlation)[order(Pagwas$gene_heritability_correlation, decreasing = T)[1:5]]
-#' library("RColorBrewer")
-#' library("ggplot2")
+#' top5genes<-rownames(Pagwas_data@misc$gene_heritability_correlation)[order(Pagwas_data@misc$gene_heritability_correlation,decreasing = T)[1:5]]
 #'
-#' plot_vln_Corgenes(
-#'   seurat_obj = scRNAexample,
-#'   assay = "RNA", slot = "data",
-#'   var_group = "anno", # 细胞cluster注释列
-#'   vec_features = top5genes,
-#'   vec_group_colors = pal_d3(alpha = 0.5)(10)
+#' plot_vln_Corgenes(seurat_obj=Pagwas_data,
+#'                   assay="RNA", slot="data",
+#'                   var_group="anno",
+#'                   vec_features=top5genes,
+#'                   vec_group_colors= pal_d3(alpha =0.5)(10),
+#'                   do_plot = T
 #' )
 plot_vln_Corgenes <- function(seurat_obj,
                               assay,

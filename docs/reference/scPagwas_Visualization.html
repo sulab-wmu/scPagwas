@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -64,37 +64,27 @@
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">scPagwas_Visualization</span><span class="op">(</span>
-  scPagwas_score <span class="op">=</span> <span class="cn">NULL</span>,
   Single_data <span class="op">=</span> <span class="cn">NULL</span>,
-  Reduction <span class="op">=</span> <span class="cn">FALSE</span>,
-  assay <span class="op">=</span> <span class="st">"SCT"</span>,
-  cellpercent <span class="op">=</span> <span class="fl">0.1</span>,
-  filename <span class="op">=</span> <span class="cn">NULL</span>,
+  p_thre <span class="op">=</span> <span class="fl">0.05</span>,
+  output.dirs <span class="op">=</span> <span class="st">"scPagwastest_output"</span>,
   FigureType <span class="op">=</span> <span class="st">"tsne"</span>,
   width <span class="op">=</span> <span class="fl">7</span>,
   height <span class="op">=</span> <span class="fl">7</span>,
+  title <span class="op">=</span> <span class="st">""</span>,
   lowColor <span class="op">=</span> <span class="st">"#000957"</span>,
   highColor <span class="op">=</span> <span class="st">"#EBE645"</span>,
   size <span class="op">=</span> <span class="fl">0.5</span>,
-  npcs <span class="op">=</span> <span class="fl">50</span>,
-  title <span class="op">=</span> <span class="st">"scPagwas_score"</span>,
   do_plot <span class="op">=</span> <span class="cn">F</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>scPagwas_score</dt>
-<dd><p>scPagwas_score for scPagwas_main result</p></dd>
-<dt>Single_data</dt>
+    <dl><dt>Single_data</dt>
 <dd><p>Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE</p></dd>
-<dt>Reduction</dt>
-<dd><p>(logical) default is FALSE. Whether to run the Reduction for Single_data.If you are do it before,ignore it.</p></dd>
-<dt>assay</dt>
-<dd><p>(character)"RNA" or "SCT", It depens on the Single_data.</p></dd>
-<dt>cellpercent</dt>
+<dt>p_thre</dt>
 <dd><p>(numeric),default is 0.1, Threshold for pecent(&lt;1) of Positive cells for level of scPagwas_score.</p></dd>
-<dt>filename</dt>
+<dt>output.dirs</dt>
 <dd><p>(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.</p></dd>
 <dt>FigureType</dt>
 <dd><p>(character)"tsne" or "umap</p></dd>
@@ -102,16 +92,14 @@
 <dd><p>(numeric)Figure width</p></dd>
 <dt>height</dt>
 <dd><p>(numeric)Figure height</p></dd>
+<dt>title</dt>
+<dd><p>(character)Figure title</p></dd>
 <dt>lowColor</dt>
 <dd><p>(character)Color for low scPagwas score</p></dd>
 <dt>highColor</dt>
 <dd><p>(character)Color for high scPagwas score</p></dd>
 <dt>size</dt>
 <dd><p>(numeric)size for scatters</p></dd>
-<dt>npcs</dt>
-<dd><p>(integr) the parameter of Seurat::RunPCA.</p></dd>
-<dt>title</dt>
-<dd><p>(character)Figure title</p></dd>
 <dt>do_plot</dt>
 <dd><p>Whether to plot, logical</p></dd>
 </dl></div>
@@ -122,23 +110,17 @@
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">scRNAexample</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'scRNAexample' not found</span>
-<span class="r-in"><span class="co">#scPagwas_Visualization(</span></span>
-<span class="r-in"><span class="co">#  scPagwas = Pagwas,</span></span>
-<span class="r-in"><span class="co">#  Single_data = scRNAexample,</span></span>
-<span class="r-in"><span class="co">#  Reduction = FALSE,</span></span>
-<span class="r-in"><span class="co">#  assay = "SCT",</span></span>
-<span class="r-in"><span class="co">#  cellpercent = 0.1,</span></span>
-<span class="r-in"><span class="co">#  filename = "scpagwas_pbc_False",</span></span>
-<span class="r-in"><span class="co">#  FigureType = "tsne",</span></span>
-<span class="r-in"><span class="co">#  width = 7,</span></span>
-<span class="r-in"><span class="co">#  height = 7,</span></span>
-<span class="r-in"><span class="co">#  lowColor = "#000957", highColor = "#EBE645",</span></span>
-<span class="r-in"><span class="co">#  size = 0.5,</span></span>
-<span class="r-in"><span class="co">#  title = "scPagwas_score"</span></span>
-<span class="r-in"><span class="co">#)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">scPagwas_Visualization</span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas_data</span>,</span>
+<span class="r-in">                       p_thre <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span class="r-in">                       FigureType <span class="op">=</span> <span class="st">"umap"</span>,</span>
+<span class="r-in">                       width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">                       height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">                       lowColor <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span class="r-in">                       highColor <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span class="r-in">                       output.dirs<span class="op">=</span><span class="st">"scPagwastest_output"</span>,</span>
+<span class="r-in">                       size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span class="r-in">                       do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in scPagwas_Visualization(Single_data = Pagwas_data, p_thre = 0.05,     FigureType = "umap", width = 7, height = 7, lowColor = "white",     highColor = "red", output.dirs = "scPagwastest_output", size = 0.5,     do_plot = T):</span> object 'Pagwas_data' not found</span>
 </code></pre></div>
     </div>
   </div>

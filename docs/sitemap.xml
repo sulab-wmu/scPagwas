@@ -79,6 +79,9 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/Get_Pathway_heritability_contributions.html</loc>
   </url>
   <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/get_Pathway_sclm.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/gtf_df.html</loc>
   </url>
   <url>
@@ -88,7 +91,13 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/GWAS_summ_example.html</loc>
   </url>
   <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/heritability_cor_scatterplot.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/lfdr.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Link_pathway_blocks_gwas.html</loc>
@@ -104,6 +113,9 @@
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/mean_expr.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/merge_pagwas.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Pagwas_main.html</loc>
@@ -130,7 +142,13 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_annotation_input.html</loc>
   </url>
   <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_block_func.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_pcascore_run.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/pi0est.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/plot_bar_positie_nagtive.html</loc>
@@ -140,6 +158,15 @@
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/plot_vln_Corgenes.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/qvalue.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/rankPvalue.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/reduce_pathway.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/scBoot_evaluate.html</loc>

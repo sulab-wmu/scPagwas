@@ -23,7 +23,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -38,7 +38,7 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -63,26 +63,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Pagwas_perform_regression</span><span class="op">(</span>
-  <span class="va">Pathway_ld_gwas_data</span>,
-  iters <span class="op">=</span> <span class="fl">200</span>,
-  part <span class="op">=</span> <span class="fl">0.5</span>,
-  n.cores <span class="op">=</span> <span class="fl">1</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Pagwas_perform_regression</span><span class="op">(</span><span class="va">Pathway_ld_gwas_data</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>iters</dt>
-<dd><p>number of bootstrap iterations to perform</p></dd>
-<dt>part</dt>
-<dd><p>number of bootstrap iterations to perform,default is 0.5</p></dd>
-<dt>n.cores</dt>
-<dd><p>Parallel cores,default is 1. use detectCores() to check the cores in computer.</p></dd>
-<dt>Pagwas</dt>
+    <dl><dt>Pathway_ld_gwas_data</dt>
 <dd><p>Pagwas format, deault is NULL.</p></dd>
-<dt>scPagwasSession</dt>
-<dd><p>"scPagwasSession"</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -93,7 +80,7 @@
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">Pagwas_perform_regression</span><span class="op">(</span><span class="va">Pagwas</span>, iters <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Pagwas_perform_regression(Pagwas, iters = 200):</span> could not find function "Pagwas_perform_regression"</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Pagwas_perform_regression(Pagwas, iters = 200):</span> unused argument (iters = 200)</span>
 </code></pre></div>
     </div>
   </div>

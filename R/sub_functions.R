@@ -9,6 +9,8 @@
 #' @param pValueMethod "all"
 #'
 #' @return
+#' @export
+#' @examples
 rankPvalue <- function(datS, columnweights = NULL,
                        na.last = "keep",
                        ties.method = "average",
@@ -451,23 +453,6 @@ lfdr <- function(p, pi0 = NULL, trunc = TRUE, monotone = TRUE,
   lfdr_out[rm_na] <- lfdr
   return(lfdr_out)
 }
-
-#' papply
-#' @description wrapper around different mclapply mechanisms
-#' Abstracts out mclapply implementation, and defaults to lapply when only one core is requested (helps with debugging)
-#' @param ... parameters to pass to lapply, mclapply, bplapply, etc.
-#' @param n.cores default is 1.
-#'
-#' @return
-#'
-papply <- function(..., n.cores = detectCores()) {
-  if (n.cores > 1) {
-    parallel::mclapply(..., mc.cores = n.cores)
-  } else {
-    lapply(...)
-  }
-}
-
 
 
 #' bh.adjust

@@ -24,7 +24,7 @@ using the ggplot packages"><!-- mathjax --><script src="https://cdnjs.cloudflare
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@ using the ggplot packages"><!-- mathjax --><script src="https://cdnjs.cloudflare
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -66,7 +66,8 @@ using the ggplot packages</p>
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">Bootstrap_P_Barplot</span><span class="op">(</span>
-  <span class="va">Pagwas</span>,
+  <span class="va">p_results</span>,
+  <span class="va">p_names</span>,
   title <span class="op">=</span> <span class="st">"Test scPagwas"</span>,
   figurenames <span class="op">=</span> <span class="cn">NULL</span>,
   width <span class="op">=</span> <span class="fl">5</span>,
@@ -77,8 +78,10 @@ using the ggplot packages</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>Pagwas</dt>
-<dd><p>Pagwas format of result in Pagwas_main()</p></dd>
+    <dl><dt>p_results</dt>
+<dd><p>vector p results</p></dd>
+<dt>p_names</dt>
+<dd><p>names for p</p></dd>
 <dt>title</dt>
 <dd><p>The title names of the plot</p></dd>
 <dt>figurenames</dt>
@@ -101,11 +104,13 @@ and have not pdf figure.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Pagwas is the result of Pagwas_main()</span></span>
-<span class="r-in"><span class="fu">Bootstrap_P_Barplot</span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,</span>
-<span class="r-in">                    title <span class="op">=</span> <span class="st">"Test scPagwas"</span>,</span>
-<span class="r-in">                    figurenames <span class="op">=</span> <span class="st">"test_barplot.pdf"</span>,</span>
-<span class="r-in">                    width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Bootstrap_P_Barplot(Pagwas = Pagwas, title = "Test scPagwas",     figurenames = "test_barplot.pdf", width = 5, height = 7):</span> object 'Pagwas' not found</span>
+<span class="r-in"><span class="fu">Bootstrap_P_Barplot</span><span class="op">(</span></span>
+<span class="r-in">  Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span class="r-in">  title <span class="op">=</span> <span class="st">"Test scPagwas"</span>,</span>
+<span class="r-in">  figurenames <span class="op">=</span> <span class="st">"test_barplot.pdf"</span>,</span>
+<span class="r-in">  width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">7</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Bootstrap_P_Barplot(Pagwas = Pagwas, title = "Test scPagwas",     figurenames = "test_barplot.pdf", width = 5, height = 7):</span> unused argument (Pagwas = Pagwas)</span>
 </code></pre></div>
     </div>
   </div>

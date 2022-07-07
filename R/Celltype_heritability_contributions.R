@@ -184,31 +184,6 @@ Boot_evaluate <- function(Pagwas,
 }
 
 
-#' para_names_adjust
-#' @description Adjustment the names of parameters and pca_cell_df, for the unidentified signals;
-#' @param Pagwas Pagwas format
-#' @param lm_results Pagwas data list for lm_results, it is the result of lm
-#'
-#' @return
-
-para_names_adjust <- function(Pagwas, lm_results = Pagwas$lm_results) {
-  # pca_cell_df <- Pagwas$pca_cell_df
-  if (sum(names(lm_results$parameters) %in% colnames(Pagwas$pca_cell_df)) < ncol(Pagwas$pca_cell_df)) {
-    # message("There is blank or '+' within cell names!")
-    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), " ", ".")
-    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "\\+", ".")
-    names(lm_results$parameters) <- stringr::str_replace_all(names(lm_results$parameters), "-", ".")
-  }
-
-  if (sum(names(lm_results$parameters) %in% colnames(Pagwas$pca_cell_df)) < ncol(Pagwas$pca_cell_df)) {
-    stop("unidentified signal within cell names, please remove it!")
-  }
-  return(lm_results)
-}
-
-
-
-
 #' xy2vector
 #' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
 #' @param Pathway_ld_gwas_data the list of block information from Pagwas object

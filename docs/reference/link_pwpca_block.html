@@ -25,7 +25,7 @@ Requires rownames that are identitcal to block labels loaded previously."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
       </span>
     </div>
 
@@ -40,7 +40,7 @@ Requires rownames that are identitcal to block labels loaded previously."><!-- m
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
+      <a href="../articles/my-vignette.html">The test for prune ad example and visulization</a>
     </li>
   </ul></li>
 <li>
@@ -67,7 +67,13 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">link_pwpca_block</span><span class="op">(</span>
+  <span class="va">pa_block</span>,
+  <span class="va">pca_cell_df</span>,
+  <span class="va">merge_scexpr</span>,
+  <span class="va">snp_gene_df</span>,
+  <span class="va">rawPathway_list</span>
+<span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -85,7 +91,7 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Pagwas should have inhibit data</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in link_pwpca_block(Pagwas):</span> could not find function "link_pwpca_block"</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in unique(pa_block$block_info$pathway):</span> object 'Pagwas' not found</span>
 </code></pre></div>
     </div>
   </div>
