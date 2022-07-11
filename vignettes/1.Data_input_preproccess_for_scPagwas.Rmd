@@ -1,0 +1,255 @@
+---
+title: "1.Data_input_preproccess_for_scPagwas"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+  md_document:
+    variant: markdown_github
+editor_options:
+  chunk_output_type: console
+vignette: >
+  %\VignetteIndexEntry{1.Data_input_preproccess_for_scPagwas}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
+)
+```
+
+# Data input preproccess for scPagwas
+
+There were three input resources for scPagwas: scRNA-seq dataset(seruat format), a GWAS summary dataset(txt file) on a given phenotype and an extensive panel of pathways or functional gene sets(gene symbol list).
+
+## 1.Single cell data Input
+The healthy BMMC scRNA-seq dataset was downloaded from the website:
+https://jeffgranja.s3.amazonaws.com/MPAL-10x/Supplementary_Data/Healthy-Data/scRNA-Healthy-Hematopoiesis-191120.rds
+
+1). The scRNA-seq dataset should have Idents for cell types or clusters.
+2). The scRNA-seq dataset should be normalized.
+
+### 1.1.read the scRNA-seq dataset(seruat format)
+
+```{r setup, eval = FALSE}
+library("scPagwas")
+library("Seurat")
+library("scRNAseq")
+library("SingleCellExperiment")
+library("stringr") 
+scRNA_Healthy_Hema<-readRDS("E:/OneDrive/SingleCell/data/PBMCscATAC-seq/scRNA-Healthy-Hematopoiesis-191120.rds")
+```
+Because the Example data `scRNA_Healthy_Hema` is SingleCellExperiment format, here creating a seruat format data:
+```{r setup, eval = FALSE}
+counts <- assay(scRNA_Healthy_Hema, "counts")
+Seu_Healthy_Hema <- CreateSeuratObject(
+               counts = counts, 
+               meta.data=as.data.frame(colData(scRNA_Healthy_Hema)),
+               min.cells = 3, 
+               min.features = 200)
+```
+
+### 1.2.Set Idents.
+```{r setup, eval = FALSE}
+Idents(Seu_Healthy_Hema)<-scRNA_Healthy_Hema@colData$BioClassification
+table(Idents(Seu_Healthy_Hema))
+
+        01_HSC 02_Early.Eryth  03_Late.Eryth  04_Early.Baso    05_CMP.LMPP       06_CLP.1 
+          1425           1653            446            111           2260            903 
+        07_GMP    08_GMP.Neut         09_pDC         10_cDC 11_CD14.Mono.1 12_CD14.Mono.2 
+          2097           1050            544            325           1800           4222 
+  13_CD16.Mono         14_Unk       15_CLP.2       16_Pre.B           17_B      18_Plasma 
+           292            520            377            710           1711             62 
+      19_CD8.N      20_CD4.N1      21_CD4.N2       22_CD4.M      23_CD8.EM      24_CD8.CM 
+          1521           2470           2364           3539            796           2080 
+         25_NK         26_Unk 
+          2143            161 
+```
+
+### 1.3.Normalized
+Scale and Normalize the dataset.
+```{r setup, eval = FALSE}
+Seu_Healthy_Hema <- ScaleData(Seu_Healthy_Hema)
+Seu_Healthy_Hema <- NormalizeData(Seu_Healthy_Hema, normalization.method = "LogNormalize", scale.factor = 10000)
+```
+
+## 2.GWAS summary data Input
+GWAS Summary statistics are download from: ftp://ftp.sanger.ac.uk/pub/project/humgen/summary_statistics/UKBB_blood_cell_traits/ for UK Biobank.
+- basophil cell count
+  Dataset: ieu-b-29
+- eosinophil cell count
+  Dataset: ieu-b-33
+- lymphocyte cell count
+  Dataset: ebi-a-GCST004627
+- monocyte cell count
+  Dataset: ieu-b-31
+- neutrophil cell count
+  Dataset: ieu-b-34
+- white blood cell count
+  Dataset: ieu-b-30
+- Lymphocyte percentage of white cells
+  Dataset: ebi-a-GCST004632
+- Hemoglobin concentration
+  Dataset: ebi-a-GCST90002311
+- Mean corpuscular hemoglobin concentration
+  Dataset: ebi-a-GCST90002329
+- Mean corpuscular volume
+  Dataset: ebi-a-GCST90002335
+
+The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited.
+##1.Check the example GWAS Summary statistics file:
+```{r setup, eval = FALSE}
+library(scPagwas)
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+head(gwas_data)
+  chrom       pos       rsid        se        beta    maf
+1     6 119968580  rs1159767 0.0329339 0.019305648 0.5275
+2    10 130566523   rs559109 0.0339840 0.045486574 0.4047
+3     5 133328825  rs6893145 0.0486105 0.144744046 0.1222
+4     7 146652932 rs13228798 0.0350390 0.003927479 0.3211
+5    11  23373027  rs4400806 0.0323868 0.010884277 0.4604
+6     5 168561511  rs1421766 0.0324148 0.026076107 0.5182
+```
+
+## 2.Take the monocyte count as real example and deal with it step by step:
+### 2.1 Preprogress the raw monocytecount GWAS Summary statistics file
+Extract the useful information from raw files.
+Download the Raw gwas GWAS Summary statistics file:
+https://gwas.mrcieu.ac.uk/files/ieu-b-31/ieu-b-31.vcf.gz
+```{r setup, eval = FALSE}
+library(readr)
+############read the raw vcf file
+monocytecount<-"ieu-b-31.vcf.gz"
+GWAS_raw <-read_table2(monocytecount,comment = "#")
+colnames(GWAS_raw )<-c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT","IEU")
+#ES:SE:LP:AF:SS:ID
+#ieu-a type of file:split the FORMAT and IEU coloumn, which including different information.
+value_list<-lapply(1:nrow(GWAS_raw),function(i){
+  index <- unlist(strsplit(GWAS_raw$FORMAT[i], split = ":",fixed=T))
+  value <- unlist(strsplit(GWAS_raw$IEU[i], split = ":",fixed=T))
+  names(value)<-index
+  value<-value[c("ES","SE","LP","AF","SS")]
+  return(value)
+  })
+
+ value_df<- matrix(as.numeric(unlist(value_list)),byrow=T,ncol=5)
+ value_df<-as.data.frame(value_df)
+ colnames(value_df)<-c("ES","SE","LP","AF","SS")
+ gwas_data<-GWAS_raw[,c(1:5)]
+ gwas_data<- cbind(gwas_data,value_df)
+ colnames(gwas_data)
+#[1] "CHROM" "POS"   "ID"    "REF"   "ALT"   "ES"    "SE"    "LP"    "AF"   
+#[10] "SS"
+#change the colnames:
+colnames(gwas_data)<-c("chrom","pos","rsid","REF","ALT","beta","se","maf","N")
+#select the useful information for scPagwas.
+gwas_data<-gwas_data[,c("chrom","pos","rsid","beta","se","maf")]
+write.table(gwas_data,file="monocytecount_gwas_data.txt",row.names=F,quote=F)
+```
+
+monocytecount_prune_gwas_data.txt
+https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv
+
+## 2.Pathway gene list
+There are some processed pathway gene list provided by scPagwas package:
+all these pathway list are including gene symbols.
+- Genes_by_pathway_kegg
+- genes.by.celltype.pathway
+- genes.by.gpbp.pathway
+- genes.by.reactome.pathway
+- genes.by.regulatory.pathway
+- genes.by.tft.pathway
+- genes.by.hallmark.pathway
+- genes.by.immunologic.pathway
+- genes.by.immunesigdb.pathway
+
+There are some steps for get these pathway gene list:
+There is no need to repeat running these code.
+### KEGG pathway list
+```{r, eval = FALSE}
+library(KEGGREST)
+pathways.list <- keggList("pathway", "hsa")
+# Pull all genes for each pathway
+pathway.codes <- sub("path:", "", names(pathways.list))	
+genes.by.pathway_kegg <- sapply(pathways.list,
+                           function(pwid){
+                             pw <- keggGet(pwid)
+                             if (is.null(pw[[1]]$GENE)) return(NA)
+                             pw2 <- pw[[1]]$GENE[c(FALSE,TRUE)] # may need to modify this to c(FALSE, TRUE) for other organisms
+                             pw2 <- unlist(lapply(strsplit(pw2, split = ";", fixed = T), function(x)x[1]))
+                             return(pw2)
+                           })
+```
+
+### Other pathway list
+These pathways data are download from [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) website.
+```{r, eval = FALSE}
+x <- readLines("c8.all.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.celltype.pathway <- lapply(res, "[", -c(1:2))
+
+x <- readLines("c3.tft.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.tft.pathway <- lapply(res, "[", -c(1:2))
+
+x <- readLines("c5.go.bp.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.gpbp.pathway <- lapply(res, "[", -c(1:2))
+
+x <- readLines("c3.all.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.regulatory.pathway <- lapply(res, "[", -c(1:2))
+
+x <- readLines("h.all.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.hallmark.pathway <- lapply(res, "[", -c(1:2))
+
+x <- readLines("c2.cp.reactome.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.reactome.pathway <- lapply(res, "[", -c(1:2))
+save(genes.by.reactome.pathway,file = "genes.by.reactome.pathway.RData")
+
+#all immunologic signature gene sets as Gene Symbols
+x <- readLines("c7.all.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.immunologic.pathway <- lapply(res, "[", -c(1:2))
+
+#ImmuneSigDB gene sets as Gene Symbols
+x <- readLines("c7.immunesigdb.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.immunesigdb.pathway <- lapply(res, "[", -c(1:2))
+
+```
+
+Note: 
+1.Sometimes, there is no need to change the pathway list frequently once you choose a fitable pathway list.
+2.The summed number of genes in pathway list should not too much to cost a long time or memory.Once your pathway list is too big, you can choose some sub-pathway suitable for you analysisi or remove some redundance pathways.
+
+### Reduce pathway gene list.
+```{r, eval = FALSE}
+ library(scPagwas)
+ length(genes.by.reactome.pathway)
+#[1] 1615
+ length(unlist(genes.by.reactome.pathway))
+#[1] 89476
+```
+We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and 89476 genes, a mount of resouces will be cost when running scPagwas, we can reduce_pathway to reduce the pathway list:
+- `pathway_seed` choose a list of pathway names as seed, which are some pahtways cann't be remove.
+- `remove_proporion` The propotion of duplicated between seed pathway and the others
+```{r, eval = FALSE}
+reduce_genes.by.reactome.pathway<-scPagwas::reduce_pathway(pathway_seed=names(genes.by.reactome.pathway)[sample(1:length(genes.by.reactome.pathway),500)],
+                                                 pathway_list=genes.by.reactome.pathway,
+                                                 remove_proporion=0.6)
+
+
+```

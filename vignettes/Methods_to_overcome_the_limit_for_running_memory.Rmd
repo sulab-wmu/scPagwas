@@ -1,0 +1,41 @@
+---
+title: "Methods_to_overcome_the_limit_for_running_memory"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Methods_to_overcome_the_limit_for_running_memory}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(scPagwas)
+```
+
+
+
+## 4. Splice the scRNA-seq dataset(If the dataset is too big for your computer)
+`If your computer storage is enough, ignore this item`.
+Sometimes, the storage is limit for your analysis, you can splice the data set by celltypes or in order.
+1) By cell types
+scPagwas don't limit the way to cut the data set, but we advice to do it by cell types, for some clusters may be filtered for the min cell number of clusters.
+```{r setup, eval = FALSE}
+Hema_splice1<-subset(Seu_Healthy_Hema,Idents=c("01_HSC","02_Early.Eryth","03_Late.Eryth","04_Early.Baso","05_CMP.LMPP","06_CLP.1"))
+Hema_splice2<-subset(Seu_Healthy_Hema,Idents=c("07_GMP","08_GMP.Neut","09_pDC","10_cDC","11_CD14.Mono.1","12_CD14.Mono.2"))
+Hema_splice3<-subset(Seu_Healthy_Hema,Idents=c("13_CD16.Mono","14_Unk","15_CLP.2","16_Pre.B","17_B","18_Plasma"))
+Hema_splice4<-subset(Seu_Healthy_Hema,Idents=c("19_CD8.N","20_CD4.N1","21_CD4.N2","22_CD4.M","23_CD8.EM","24_CD8.CM","25_NK","26_Unk"))
+```
+
+2) In order
+```{r setup, eval = FALSE}
+Hema_splice1<-Seu_Healthy_Hema[,1:10000]
+Hema_splice2<-Seu_Healthy_Hema[,10001:20000]
+Hema_splice3<-Seu_Healthy_Hema[,20001:30000]
+Hema_splice4<-Seu_Healthy_Hema[,30001:35582]
+```
