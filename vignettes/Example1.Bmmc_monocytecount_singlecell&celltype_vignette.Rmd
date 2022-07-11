@@ -1,12 +1,9 @@
 ---
-title: "2.Example1.Bmmc_monocytecount_singlecell&celltype_vignette"
+title: "Example1.Bmmc_monocytecount_singlecell&celltype_vignette"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-  md_document:
-    variant: markdown_github
-editor_options:
-  chunk_output_type: console
+output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2.Example1.Bmmc_monocytecount_singlecell&celltype_vignette}
+  %\VignetteIndexEntry{Example1.Bmmc_monocytecount_singlecell&celltype_vignette}
   %\VignetteEncoding{UTF-8}
   
   %\VignetteEngine{knitr::rmarkdown}
@@ -22,10 +19,15 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Example1. BMMC scRNA-seq data for monocyte count trait
+We use BMMC scRNA-seq data and monocyte count trait to test scPagwas. The processed data can be download from here:
+monocytecount_prune_gwas_data.txt
+https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv
+
+## 1. 
 ```{r setup}
 library(scPagwas)
 ```
-
 
 
 

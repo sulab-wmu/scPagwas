@@ -34,5 +34,6 @@ reduce_pathway <- function(pathway_seed = names(Genes_by_pathway_kegg)[sample(1:
     }
   }))
   pre_pathways <- pre_pathways[p_pa]
-  return(pathway_list[c(pathway_seed, pre_pathways)])
+  pathway_list<-pathway_list[c(pathway_seed, pre_pathways)]
+  return(pathway_list)
 }
