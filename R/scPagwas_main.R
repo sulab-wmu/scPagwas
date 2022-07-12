@@ -6,7 +6,7 @@
 #'
 #' @importFrom dplyr mutate filter inner_join %>%
 #' @importFrom irlba irlba
-#' @importFrom Seurat FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings CreateAssayObject DefaultAssay AddModuleScore
+#' @importFrom Seurat Assays FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings CreateAssayObject DefaultAssay AddModuleScore
 #' @importFrom SeuratObject Idents DefaultAssay GetAssayData SetAssayData
 #' @importFrom Matrix Matrix colSums rowSums crossprod
 #' @importFrom glmnet cv.glmnet
@@ -195,7 +195,6 @@ scPagwas_main <- function(Pagwas = NULL,
   cat("## start at:", format(Sys.time()), "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"))
   ## miximal file path lenght;
   ## Windows OS support max. 259 characters
-  max.nchar.file.path <- 259
 
   param.str <- c(
     paste("##", Sys.time()),
@@ -225,10 +224,10 @@ scPagwas_main <- function(Pagwas = NULL,
     Single_data <- Pagwas
     Pagwas <- list()
     Pagwas <- Single_data@misc
-    if ("scPagwasPaPca" %in% Assays(Single_data)) {
+    if ("scPagwasPaPca" %in% Seurat::Assays(Single_data)) {
       Pagwas$pca_scCell_mat <- GetAssayData(Single_data, assay = "scPagwasPaPca")
     }
-    if (assay %in% Assays(Single_data)) {
+    if (assay %in% Seurat::Assays(Single_data)) {
       Pagwas$data_mat <- GetAssayData(Single_data, assay = assay)
     } else {
       stop("Error:assay is not in Pagwas!")
@@ -269,7 +268,7 @@ scPagwas_main <- function(Pagwas = NULL,
       stop("Error:There is need a Seurat class for Single_data")
     }
 
-    if (!assay %in% Assays(Single_data)) {
+    if (!assay %in% Seurat::Assays(Single_data)) {
       stop("Error:There is no need assays in your Single_data")
     }
     if (is.null(Pathway_list)) {

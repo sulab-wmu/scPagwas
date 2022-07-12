@@ -84,7 +84,7 @@ plot_vln_Corgenes <- function(seurat_obj,
     message(paste0("Using aspect ratio ", aspect.ratio))
   }
 
-  list_plot_flip <- lapply(1:length(list_plot), function(i) {
+  list_plot_flip <- lapply(seq_len(length(list_plot)), function(i) {
     plot_tmp <- list_plot[[i]]
     if (flip) {
       plot_tmp <- plot_tmp +

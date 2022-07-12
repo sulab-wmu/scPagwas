@@ -5,18 +5,22 @@
 #' @param filter_p 0.05 threshold for pvalues
 #' @param display_max_sizes Boolean : Display max shape size behind each shape ? (Default=TRUE)
 #' @param size_var
-#' #'   If numeric : Column/List index which control shape sizes. This column/element has to be numeric.
-#' #'   Can also be a column/element name or a vector of the same size than the input dataset.
-#' #'   Set to NA if you don't want to control shape size.
+#' If numeric : Column/List index which control shape sizes. This column/element has to
+#' be numeric.
+#' Can also be a column/element name or a vector of the same size than the input dataset.
+#' Set to NA if you don't want to control shape size.
 #' @param col_var
-#' #'   If numeric : Column/List index which control shape colors.
-#' #'   Can also be a column/element name or a vector of the same size than the input dataset.
-#' #'   Set to NA if you don't want to control shape color.
+#' If numeric : Column/List index which control shape colors.
+#' Can also be a column/element name or a vector of the same size than the input dataset.
+#' Set to NA if you don't want to control shape color.
 #' @param shape.scale Scale the size of the shapes, similar to cex.
 #' @param cols.use 1 color or a vector containing multiple colors to color shapes.
-#' @param dend_x_var A vector containing Column/List indexes or Column/List names to compute the x axis dendrogramm.
-#' @param dist_method The distance measure to be used. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
-#' @param hclust_method The agglomeration method to be used. This must be one of "single", "complete", "average", "mcquitty", "ward.D", "ward.D2", "centroid" or "median".
+#' @param dend_x_var A vector containing Column/List indexes or Column/List names to
+#' compute the x axis dendrogramm.
+#' @param dist_method The distance measure to be used. This must be one of "euclidean",
+#' "maximum", "manhattan", "canberra", "binary" or "minkowski".
+#' @param hclust_method The agglomeration method to be used. This must be one of
+#' "single", "complete", "average", "mcquitty", "ward.D", "ward.D2", "centroid" or "median".
 #' @param do_plot Boolean : whether to print the plot
 #' @param figurenames
 #' @param width
@@ -45,8 +49,6 @@ plot_scpathway_dot <- function(Pagwas,
                                width = 7,
                                height = 7,
                                ...) {
-  # library(tidyverse)
-  # library("rhdf5")
   ############### proportion
   proportion_list <- tapply(
     as.vector(Idents(Pagwas)),
@@ -314,7 +316,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     }
 
     # Giving names to unnamed elements
-    names(data.to.plot) <- ifelse(names(data.to.plot) != "", names(data.to.plot), paste("Unnamed_column", 1:length(data.to.plot), sep = "_"))
+    names(data.to.plot) <- ifelse(names(data.to.plot) != "", names(data.to.plot), paste("Unnamed_column", seq_len(length(data.to.plot)), sep = "_"))
 
     # d : Col 1 = row names; Col 2 = col names
     d <- data.frame(row_names = rownames(data.to.plot[[1]])[row(data.to.plot[[1]])], col_names = colnames(data.to.plot[[1]])[col(data.to.plot[[1]])])
@@ -349,7 +351,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
         } else {
           stop(paste("size_var column (", size_var, ") has to be numeric"))
         }
-      } else if (is.numeric(size_var) & size_var %in% (1:ncol(save.data))) {
+      } else if (is.numeric(size_var) & size_var %in% seq_len(ncol(save.data))) {
         if (is.numeric(save.data[, size_var])) {
           cat(paste("\n -", colnames(save.data)[size_var], "values to set shape size"))
           data.to.plot[, 3] <- save.data[, size_var]
@@ -383,7 +385,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
         cat(paste("\n -", col_var, "values to set shape color"))
         data.to.plot[, 4] <- save.data[, col_var]
         col_legend <- ifelse(col_legend == "", col_var, col_legend)
-      } else if (is.numeric(col_var) & col_var %in% (1:ncol(save.data))) {
+      } else if (is.numeric(col_var) & col_var %in% seq_len(ncol(save.data))) {
         cat(paste("\n -", colnames(save.data)[col_var], "values to set shape color"))
         data.to.plot[, 4] <- save.data[, col_var]
         col_legend <- ifelse(col_legend == "", colnames(save.data)[col_var], col_legend)
@@ -414,7 +416,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       if (text_var %in% colnames(save.data)) {
         cat(paste("\n -", text_var, "values to add text on shapes"))
         data.to.plot[, 5] <- save.data[, text_var]
-      } else if (is.numeric(text_var) & text_var %in% (1:ncol(save.data))) {
+      } else if (is.numeric(text_var) & text_var %in% seq_len(ncol(save.data))) {
         cat(paste("\n -", colnames(save.data)[text_var], "values to add text on shapes"))
         data.to.plot[, 5] <- save.data[, text_var]
       } else {
@@ -480,7 +482,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
           }
         }
         if (is.numeric(FAMD_var)) {
-          if (all(FAMD_var %in% 1:ncol(save.data))) {
+          if (all(FAMD_var %in% seq_len(ncol(save.data)))) {
             if (2 %in% FAMD_var) {} else {
               print(paste("In FAMD_", type, "_var : Adding y index", sep = ""))
               FAMD_var <- c(2, FAMD_var)
@@ -736,7 +738,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       # discrete colors
       if (all(cols.use != "default")) {
         if (length(cols.use) > length(unique(data.to.plot[, 4]))) {
-          cols.use <- cols.use[1:length(unique(data.to.plot[, 4]))]
+          cols.use <- cols.use[seq_len(length(unique(data.to.plot[, 4])))]
           cat(paste("\n To much colors are supplied. Only the first", length(unique(data.to.plot[, 4])), "are used"))
         } else if (length(cols.use) < length(unique(data.to.plot[, 4]))) {
           cols.use <- rep_len(cols.use, length.out = length(unique(data.to.plot[, 4])))
@@ -906,12 +908,12 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   # final.plot.list[[10]]=dynTextGrob(levels(data.to.plot[,1]), x=x_coords, rot=ifelse(x.lab.rot, 90, 0),just="top", y=0.95, width=ifelse(x.lab.rot, 1, 1/length(levels(data.to.plot[,1]))* x.lab.size.factor))
 
   x_label_table <- data.frame(xtext = levels(data.to.plot[, 1]))
-  final.plot.list[[2]] <- p_raw + geom_text(data = x_label_table, mapping = aes_(label = ~xtext), y = 0.05, x = 1:length(levels(data.to.plot[, 1])), hjust = 0, vjust = 0.5, angle = 90, size = 3.88 * x.lab.size.factor)
+  final.plot.list[[2]] <- p_raw + geom_text(data = x_label_table, mapping = aes_(label = ~xtext), y = 0.05, x = seq_len(length(levels(data.to.plot[, 1]))), hjust = 0, vjust = 0.5, angle = 90, size = 3.88 * x.lab.size.factor)
   final.plot.list[[2]] <- final.plot.list[[2]] +
     coord_cartesian(ylim = c(0, 1), xlim = c(0.5, length(unique(data.to.plot[, 1])) + 0.5), expand = F, default = T) +
     theme(plot.margin = unit(c(0, 2, 0, 0), units = "points"), plot.background = element_rect(fill = "transparent", color = NA))
 
-  final.plot.list[[10]] <- p_raw + geom_text(data = x_label_table, mapping = aes_(label = ~xtext), y = 0.95, x = 1:length(levels(data.to.plot[, 1])), hjust = 1, vjust = 0.5, angle = 90, size = 3.88 * x.lab.size.factor)
+  final.plot.list[[10]] <- p_raw + geom_text(data = x_label_table, mapping = aes_(label = ~xtext), y = 0.95, x = seq_len(length(levels(data.to.plot[, 1]))), hjust = 1, vjust = 0.5, angle = 90, size = 3.88 * x.lab.size.factor)
   final.plot.list[[10]] <- final.plot.list[[10]] +
     coord_cartesian(ylim = c(0, 1), xlim = c(0.5, length(unique(data.to.plot[, 1])) + 0.5), expand = F, default = T) +
     theme(plot.margin = unit(c(2, 0, 0, 0), units = "points"), plot.background = element_rect(fill = "transparent", color = NA))
@@ -934,11 +936,11 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   # final.plot.list[[6]]=dynTextGrob(levels(data.to.plot[,2]), x=0.05, y=y_coords,  width=0.95,just="left")
 
   y_label_table <- data.frame(ytext = levels(data.to.plot[, 2]))
-  final.plot.list[[4]] <- p_raw + geom_text(data = y_label_table, mapping = aes_(label = ~ytext), x = 1, y = 1:length(levels(data.to.plot[, 2])), hjust = 1, vjust = 0.5, size = 3.88 * y.lab.size.factor)
+  final.plot.list[[4]] <- p_raw + geom_text(data = y_label_table, mapping = aes_(label = ~ytext), x = 1, y = seq_len(length(levels(data.to.plot[, 2]))), hjust = 1, vjust = 0.5, size = 3.88 * y.lab.size.factor)
   final.plot.list[[4]] <- final.plot.list[[4]] + coord_cartesian(xlim = c(0, 1), ylim = c(0.5, length(unique(data.to.plot[, 2])) + 0.5), expand = F, default = T) +
     theme(plot.margin = unit(c(0, 2, 2, 0), units = "points"), plot.background = element_rect(fill = "transparent", color = NA))
 
-  final.plot.list[[6]] <- p_raw + geom_text(data = y_label_table, mapping = aes_(label = ~ytext), x = 0.05, y = 1:length(levels(data.to.plot[, 2])), hjust = 0, vjust = 0.5, size = 3.88 * y.lab.size.factor)
+  final.plot.list[[6]] <- p_raw + geom_text(data = y_label_table, mapping = aes_(label = ~ytext), x = 0.05, y = seq_len(length(levels(data.to.plot[, 2]))), hjust = 0, vjust = 0.5, size = 3.88 * y.lab.size.factor)
   final.plot.list[[6]] <- final.plot.list[[6]] + coord_cartesian(xlim = c(0, 1), ylim = c(0.5, length(unique(data.to.plot[, 2])) + 0.5), expand = F, default = T) +
     theme(plot.margin = unit(c(0, 0, 2, 2), units = "points"), plot.background = element_rect(fill = "transparent", color = NA))
 

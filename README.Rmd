@@ -52,6 +52,7 @@ devtools::install_github("dengchunyu/scPagwas")
 quick-start example:
 ```{r message=FALSE, eval = FALSE}
  library(scPagwas)
+ #library(Seurat)
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 

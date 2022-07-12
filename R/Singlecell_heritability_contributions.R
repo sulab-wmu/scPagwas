@@ -116,7 +116,7 @@ scPagwas_perform_score <- function(Pagwas,
   Pathway_sclm_results <- Pagwas$Pathway_sclm_results # [!sapply(Pagwas$Pathway_sclm_results, is.null)]
   Pathway_names <- colnames(Pathway_sclm_results)
   # Pathway_sclm_results <- #data.matrix(as.data.frame(Pathway_sclm_results))
-  ncells <- nrow(Pathway_sclm_results)
+
 
   pathway_expr <- lapply(Pathway_names, function(pa) {
     a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
@@ -274,7 +274,6 @@ scGet_gene_heritability_correlation <- function(Pagwas) {
       Y = scPagwas.gPAS.score
     )
   } else {
-    data_mat <- Pagwas$data_mat[, names(scPagwas.gPAS.score)]
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(
       X = t(as_matrix(Pagwas$data_mat)),

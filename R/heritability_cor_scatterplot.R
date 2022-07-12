@@ -44,7 +44,7 @@
   cor_df <- cor_df[order(cor_df$cor, decreasing = T), ]
   cor_df$text[1:topn_genes_label] <- cor_df$genes[1:topn_genes_label]
   # save(stage_df1,stage_df2,file="stage_df.RData")
-  cor_df$order <- 1:nrow(cor_df)
+  cor_df$order <- seq_len(nrow(cor_df))
 
   p <- ggplot(data = cor_df) +
     geom_point(mapping = aes(x = order, y = cor, color = cor)) +
