@@ -1,11 +1,22 @@
 ---
 title: "Data_input_preproccess_for_scPagwas"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
 vignette: >
   %\VignetteIndexEntry{Data_input_preproccess_for_scPagwas}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: sentence
+  chunk_output_type: inline
 ---
 
 ```{r, include = FALSE}
@@ -22,11 +33,11 @@ knitr::opts_chunk$set(
 There were three input resources for scPagwas: scRNA-seq dataset(seruat format), a GWAS summary dataset(txt file) on a given phenotype and an extensive panel of pathways or functional gene sets(gene symbol list).
 
 ## 1.Single cell data Input
-The healthy BMMC scRNA-seq dataset was downloaded from the website:
-https://jeffgranja.s3.amazonaws.com/MPAL-10x/Supplementary_Data/Healthy-Data/scRNA-Healthy-Hematopoiesis-191120.rds 
 
-- 1). The scRNA-seq dataset should have Idents for cell types or clusters. 
-- 2). The scRNA-seq dataset should be normalized. 
+The healthy BMMC scRNA-seq dataset was downloaded from the website: <https://jeffgranja.s3.amazonaws.com/MPAL-10x/Supplementary_Data/Healthy-Data/scRNA-Healthy-Hematopoiesis-191120.rds>
+
+-   1). The scRNA-seq dataset should have Idents for cell types or clusters.
+-   2). The scRNA-seq dataset should be normalized.
 
 ### 1.1.read the scRNA-seq dataset(seruat format)
 
@@ -38,7 +49,9 @@ library("SingleCellExperiment")
 library("stringr") 
 scRNA_Healthy_Hema<-readRDS("E:/OneDrive/SingleCell/data/PBMCscATAC-seq/scRNA-Healthy-Hematopoiesis-191120.rds")
 ```
+
 Because the Example data `scRNA_Healthy_Hema` is SingleCellExperiment format, here creating a seruat format data:
+
 ```{r message=FALSE, eval = FALSE}
 counts <- assay(scRNA_Healthy_Hema, "counts")
 Seu_Healthy_Hema <- CreateSeuratObject(
@@ -48,7 +61,8 @@ Seu_Healthy_Hema <- CreateSeuratObject(
                min.features = 200)
 ```
 
-### 1.2.Set Idents.
+### 1.2.Set Idents
+
 ```{r message=FALSE, eval = FALSE}
 Idents(Seu_Healthy_Hema)<-scRNA_Healthy_Hema@colData$BioClassification
 table(Idents(Seu_Healthy_Hema))
@@ -65,30 +79,34 @@ table(Idents(Seu_Healthy_Hema))
           2143            161 
 ```
 
-### 1.3.Normalized 
+### 1.3.Normalized
+
 Scale and Normalize the dataset.
+
 ```{r setup, eval = FALSE}
 Seu_Healthy_Hema <- ScaleData(Seu_Healthy_Hema)
 Seu_Healthy_Hema <- NormalizeData(Seu_Healthy_Hema, normalization.method = "LogNormalize", scale.factor = 10000)
 ```
 
-## 2.GWAS summary data Input 
-GWAS Summary statistics are download from: ftp://ftp.sanger.ac.uk/pub/project/humgen/summary_statistics/UKBB_blood_cell_traits/ for UK Biobank. 
+## 2.GWAS summary data Input
 
-- basophil cell count: ieu-b-29 
-- eosinophil cell count : ieu-b-33 
-- lymphocyte cell count: ebi-a-GCST004627 
-- monocyte cell count: ieu-b-31 
-- neutrophil cell count: ieu-b-34 
-- white blood cell count: ieu-b-30 
-- Lymphocyte percentage of white cells: ebi-a-GCST004632 
-- Hemoglobin concentration: ebi-a-GCST90002311 
-- Mean corpuscular hemoglobin concentration: ebi-a-GCST90002329 
-- Mean corpuscular volume: ebi-a-GCST90002335 
+GWAS Summary statistics are download from: <ftp://ftp.sanger.ac.uk/pub/project/humgen/summary_statistics/UKBB_blood_cell_traits/> for UK Biobank.
 
-The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited. 
+-   basophil cell count: ieu-b-29
+-   eosinophil cell count : ieu-b-33
+-   lymphocyte cell count: ebi-a-GCST004627
+-   monocyte cell count: ieu-b-31
+-   neutrophil cell count: ieu-b-34
+-   white blood cell count: ieu-b-30
+-   Lymphocyte percentage of white cells: ebi-a-GCST004632
+-   Hemoglobin concentration: ebi-a-GCST90002311
+-   Mean corpuscular hemoglobin concentration: ebi-a-GCST90002329
+-   Mean corpuscular volume: ebi-a-GCST90002335
 
-### 2.1.Check the example GWAS Summary statistics file:
+The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited.
+
+### 2.1.Check the example GWAS Summary statistics file
+
 ```{r message=FALSE, eval = FALSE}
 library(scPagwas)
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
@@ -103,9 +121,11 @@ head(gwas_data)
 ```
 
 ### 2.2.Take the monocyte count as real example and deal with it step by step:
-Preprogress the raw monocytecount GWAS Summary statistics file. 
-Extract the useful information from raw files. 
-Download the Raw gwas GWAS Summary statistics file: https://gwas.mrcieu.ac.uk/files/ieu-b-31/ieu-b-31.vcf.gz
+
+Preprogress the raw monocytecount GWAS Summary statistics file.
+Extract the useful information from raw files.
+Download the Raw gwas GWAS Summary statistics file: <https://gwas.mrcieu.ac.uk/files/ieu-b-31/ieu-b-31.vcf.gz>
+
 ```{r message=FALSE, eval = FALSE}
 library(readr)
 ############read the raw vcf file
@@ -137,24 +157,24 @@ gwas_data<-gwas_data[,c("chrom","pos","rsid","beta","se","maf")]
 write.table(gwas_data,file="monocytecount_gwas_data.txt",row.names=F,quote=F)
 ```
 
-## 3.Pathway gene list 
-There are some processed pathway gene list provided by scPagwas package:
-all these pathway list are including gene symbols. 
+## 3.Pathway gene list
 
-- Genes_by_pathway_kegg 
-- genes.by.celltype.pathway 
-- genes.by.gpbp.pathway 
-- genes.by.reactome.pathway 
-- genes.by.regulatory.pathway 
-- genes.by.tft.pathway 
-- genes.by.hallmark.pathway 
-- genes.by.immunologic.pathway 
-- genes.by.immunesigdb.pathway 
+There are some processed pathway gene list provided by scPagwas package: all these pathway list are including gene symbols.
 
-There are some steps for get these pathway gene list:
-There is no need to repeat running these code. 
+-   Genes_by_pathway_kegg
+-   genes.by.celltype.pathway
+-   genes.by.gpbp.pathway
+-   genes.by.reactome.pathway
+-   genes.by.regulatory.pathway
+-   genes.by.tft.pathway
+-   genes.by.hallmark.pathway
+-   genes.by.immunologic.pathway
+-   genes.by.immunesigdb.pathway
+
+There are some steps for get these pathway gene list: There is no need to repeat running these code.
 
 ### KEGG pathway list
+
 ```{r message=FALSE, eval = FALSE}
 library(KEGGREST)
 pathways.list <- keggList("pathway", "hsa")
@@ -170,8 +190,10 @@ genes.by.pathway_kegg <- sapply(pathways.list,
                            })
 ```
 
-### Other pathway list 
+### Other pathway list
+
 These pathways data are download from [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) website.
+
 ```{r message=FALSE, eval = FALSE}
 x <- readLines("c8.all.v7.5.1.symbols.gmt")
 res <- strsplit(x, "\t")
@@ -218,22 +240,25 @@ genes.by.immunesigdb.pathway <- lapply(res, "[", -c(1:2))
 
 ```
 
-Note: 
- 
-1. Sometimes, there is no need to change the pathway list frequently once you choose a fitable pathway list. 
-2. The summed number of genes in pathway list should not too much to cost a long time or memory.Once your pathway list is too big, you can choose some sub-pathway suitable for you analysisi or remove some redundance pathways. 
+Note:
 
-### Reduce pathway gene list. 
+1.  Sometimes, there is no need to change the pathway list frequently once you choose a fitable pathway list.
+2.  The summed number of genes in pathway list should not too much to cost a long time or memory.Once your pathway list is too big, you can choose some sub-pathway suitable for you analysisi or remove some redundance pathways.
+
+### Reduce pathway gene list
+
 ```{r message=FALSE, eval = FALSE}
  length(genes.by.reactome.pathway)
 #[1] 1615
  length(unlist(genes.by.reactome.pathway))
 #[1] 89476
 ```
-We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and 89476 genes, a mount of resouces and time will be cost when running scPagwas, we provid `reduce_pathway` to reduce the pathway list: 
 
-- `pathway_seed` choose a list of pathway names as seed, which are some pahtways cann't be remove. 
-- `remove_proporion` The propotion of duplicated between seed pathway and the others 
+We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and 89476 genes, a mount of resouces and time will be cost when running scPagwas, we provid `reduce_pathway` to reduce the pathway list:
+
+-   `pathway_seed` choose a list of pathway names as seed, which are some pahtways cann't be remove.
+-   `remove_proporion` The propotion of duplicated between seed pathway and the others
+
 ```{r message=FALSE, eval = FALSE}
 reduce_genes.by.reactome.pathway<-scPagwas::reduce_pathway(pathway_seed=names(genes.by.reactome.pathway)[sample(1:length(genes.by.reactome.pathway),500)],
                                                  pathway_list=genes.by.reactome.pathway,
@@ -245,16 +270,19 @@ length(unlist(reduce_genes.by.reactome.pathway))
 ```
 
 ## 4.Gene block annotation
-Gene block annotation in chromosome is need to prepare for scPagwas. 
+
+Gene block annotation in chromosome is need to prepare for scPagwas.
 scPagwas can provide a block annotation data for protein-coding genes.
 
 the processed block annotation data are show here:
+
 ```{r}
 suppressMessages(library(scPagwas)) 
 head(block_annotation)
 ```
 
 Here is the procedure of obtaining the data:
+
 ```{r message=FALSE, eval = FALSE}
 library("rtracklayer")
 gtf_df<- rtracklayer::import("gencode.v34.annotation.gtf.gz")
@@ -269,6 +297,7 @@ colnames(block_annotation)<-c("chrom", "start","end","label")
 
 The 1,000 Genomes Project Phase 3 Panel was applied to calculate the linkage disequilibrium (LD) among SNPs extracted from GWAS summary statistics.
 the processed LD data are show here:
+
 ```{r}
 suppressMessages(library(scPagwas)) 
 class(chrom_ld)
@@ -277,13 +306,13 @@ chrom_ld["chr1"]
 ```
 
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
-```
-./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
-./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes
-./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome
-```
+
+    ./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
+    ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes
+    ./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome
 
 R environment to print out the scPagwas-needed data.
+
 ```{r message=FALSE, eval = FALSE}
 covid_ld<-read.delim("./ld_1000genome.ld")
 #remove sex chrome

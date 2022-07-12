@@ -1,12 +1,22 @@
 ---
 title: "Example1.Bmmc_monocytecount_singlecell&celltype_vignette"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
 vignette: >
   %\VignetteIndexEntry{Example1.Bmmc_monocytecount_singlecell&celltype_vignette}
   %\VignetteEncoding{UTF-8}
-  
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: sentence
+  chunk_output_type: inline
 ---
 
 ```{r, include = FALSE}
@@ -20,21 +30,38 @@ knitr::opts_chunk$set(
 ```
 
 # Example1. BMMC scRNA-seq data for monocyte count trait
-We use BMMC scRNA-seq data and monocyte count trait to test scPagwas. The processed data can be download from here:
-monocytecount_prune_gwas_data.txt
-https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv
 
-## 1. 
-```{r setup}
+We use BMMC scRNA-seq data and monocyte count trait to test scPagwas.
+The processed data can be download from here: monocytecount_prune_gwas_data.txt <https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv>
+
+BMMC scRNA-seq data can be obtained and treated in `Data_input_preproccess_for_scPagwas`.
+
+## 1. Compute the singlecell and celltype result for monocytecount trait
+
+```{r message=FALSE, eval = FALSE}
 library(scPagwas)
+Pagwas<-scPagwas_main(Pagwas =NULL,
+                     gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
+                     Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                     output.prefix="monocytecount_scPagwas",
+                     output.dirs="monocytecount_bmmc",
+                     seruat_return=T,
+                     Pathway_list=Genes_by_pathway_kegg,
+                     ncores=2,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+print(Pagwas)
+
 ```
 
 
 
- 
-#### Visualize the celltypes results.
+
+## 2.
 
 1.barplot
+
 ```{r Bootstrap_P_Barplot, message=FALSE,warning = FALSE}
 
 Bootstrap_P_Barplot(p_results=Pagwas_data@misc$bootstrap_results$bp_value[-1],
@@ -48,7 +75,8 @@ Bootstrap_P_Barplot(p_results=Pagwas_data@misc$bootstrap_results$bp_value[-1],
 ```
 
 #### Visualize the scPagwas_main results.
-##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot. 
+
+##### Visualize the scPagwas_score of single cell data in UMAP or TSNE plot.
 
 ```{r scPagwas_Visualization,message=FALSE,warning = FALSE}
  require("RColorBrewer")
@@ -89,7 +117,7 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas_data,
                               do_plot = T)
 ```
 
-##### Plot the barplot of the proportion of celltypes in positive Cell 
+##### Plot the barplot of the proportion of celltypes in positive Cell
 
 ```{r bar_positie_nagtive2,message=FALSE,warning = FALSE}
 plot_bar_positie_nagtive(seurat_obj=Pagwas_data,
@@ -98,7 +126,6 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas_data,
                               vec_group_colors=c("#E8D0B3","#7EB5A6"),
                               do_plot = T)
 ```
-
 
 ##### Plot the top5 heritability correlation genes in celltypes
 
@@ -171,4 +198,3 @@ heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_co
 
 
 ```
-
