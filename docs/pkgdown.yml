@@ -2,8 +2,10 @@ pandoc: 2.11.4
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  my-vignette: my-vignette.html
-last_built: 2022-07-07T01:18Z
+  Data_input_preproccess_for_scPagwas: Data_input_preproccess_for_scPagwas.html
+  Example1.Bmmc_monocytecount_singlecell_celltype_vignette: Example1.Bmmc_monocytecount_singlecell_celltype_vignette.html
+  Methods_to_overcome_the_limit_for_running_memory: Methods_to_overcome_the_limit_for_running_memory.html
+last_built: 2022-07-13T01:56Z
 urls:
   reference: https://github.com/dengchunyu/scPagwas/reference
   article: https://github.com/dengchunyu/scPagwas/articles

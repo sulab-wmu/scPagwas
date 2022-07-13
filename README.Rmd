@@ -21,20 +21,21 @@ knitr::opts_chunk$set(
 
 **scPagwas** employing the polygenic regression model to uncover trait-relevant cell subpopulations by incorporating pathway activity transformed scRNA-seq data with genome-wide association studies (GWAS) data.
 
-![Graphical abstract](./docs/reference/figures/Figures_1.jpg)
+![Graphical abstract](./docs/reference/figures/Figures_1.jpg) 
 
-The methodology and benchmarking performance are described in:
+ 
+The methodology and benchmarking performance are described in: 
 
-Polygenic regression identifies trait-relevant cell subpopulations through pathway activity transformed single-cell RNA sequencing data.(2022)
+Polygenic regression identifies trait-relevant cell subpopulations through pathway activity transformed single-cell RNA sequencing data.(2022) 
 
 
-Code for reproducing the analysis from the paper is available [here](https://github.com/dengchunyu/scPagwas_reproduce).
+Code for reproducing the analysis from the paper is available [here](https://github.com/dengchunyu/scPagwas_reproduce). 
 
-For further usage on the scPagwas package, please refer to the [tutorials](https://dengchunyu.github.io/scPagwas/). A vignette for using also can be accessed using browseVignettes("scPagwas")
+For further usage on the scPagwas package, please refer to the [tutorials](https://dengchunyu.github.io/scPagwas/). A vignette for using also can be accessed using browseVignettes("scPagwas") 
 
 ## Installation
 
-You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with:
+You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with: 
 
 ``` r
 #install some dependence packages
@@ -49,7 +50,7 @@ devtools::install_github("dengchunyu/scPagwas")
 ```
 
 ## Usage 
-quick-start example:
+quick-start example: 
 ```{r message=FALSE, eval = FALSE}
  library(scPagwas)
  #library(Seurat)

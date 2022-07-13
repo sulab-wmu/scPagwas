@@ -1,6 +1,6 @@
 ---
-title: "Example1.Bmmc_monocytecount_singlecell&celltype_vignette"
-date: "Last Updated: 12, 七月, 2022 at 21:48"
+title: "Example1.Bmmc_monocytecount_singlecell_celltype_vignette"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
 output:
   html_document:
     theme: flatly
@@ -10,7 +10,7 @@ output:
     fig_caption: true
     df_print: paged
 vignette: >
-  %\VignetteIndexEntry{Example1.Bmmc_monocytecount_singlecell&celltype_vignette}
+  %\VignetteIndexEntry{Example1.Bmmc_monocytecount_singlecell_celltype_vignette}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -19,9 +19,17 @@ editor_options:
   chunk_output_type: inline
 ---
 
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
+)
+```
 
-
-# Example1. BMMC scRNA-seq data for monocyte count trait
+## Preprocessed data
 
 We use BMMC scRNA-seq data and monocyte count trait to test scPagwas.
 The processed data can be download from here: monocytecount_prune_gwas_data.txt <https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv>
@@ -33,8 +41,7 @@ BMMC scRNA-seq data can be obtained and treated in `Data_input_preproccess_for_s
 If we running scPagwas in multi-core in Server environment, there may cause an error: `Error: Two levels of parallelism are used. See`?a
 ssert_cores\`\` add this code before call in R environment:
 
-
-```bash
+```{bash eval = FALSE}
 export OPENBLAS_NUM_THREADS=1
 ```
 
@@ -42,8 +49,7 @@ There is no need to run this code in window system.
 
 In this example, we run the scPagwas for usual step, both running singlecell and celltype process.
 
-
-```r
+```{r eval = FALSE}
 library(scPagwas)
 Pagwas<-scPagwas_main(Pagwas =NULL,
                      gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
@@ -67,8 +73,7 @@ There are two types of result, Seruat format return result and files output;
 
 ### 2.1 Pagwas : return result for seruat_return=TRUE
 
-
-```r
+```{r eval = FALSE}
 
 > print(Pagwas)
 An object of class Seurat 
@@ -146,8 +151,7 @@ Sometimes, If scPagwas is failed of running for some reason, you should remove t
 
 1) DimPlot of singlecell data.
 
-
-```r
+```{r eval = FALSE}
  require("RColorBrewer")
  require("Seurat")
  require("SeuratObject")
@@ -172,8 +176,7 @@ dev.off()
 
 scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
-
-```r
+```{r eval = FALSE}
  scPagwas_Visualization(Single_data=Pagwas,
                         p_thre = 0.05,
                         FigureType = "tsne",
@@ -203,8 +206,7 @@ Positive cells(q value<0.05): red dot; Negative cells: other dot.
 ### 3.2 Plot the barplot of the proportion of positive Cell. 
 
 Plot the barplot of the proportion of positive Cells in celltypes:
-
-```r
+```{r eval = FALSE}
 plot_bar_positie_nagtive(seurat_obj=Pagwas,
                          var_ident="celltypes",
                          var_group="positiveCells",
@@ -216,8 +218,7 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas,
 
 Plot the barplot of the proportion of celltypes in positive and negative Cells:
 
-
-```r
+```{r eval = FALSE}
 png("plot_bar_positie_nagtive2.png",width = 600, height = 600)
 plot_bar_positie_nagtive(seurat_obj=Pagwas,
                               var_ident="positiveCells",
@@ -236,8 +237,7 @@ dev.off()
 
 Plot the specific genetics pathway for each celltypes
 
-
-```r
+```{r eval = FALSE}
   library(tidyverse)
   library("rhdf5")
  library(ggplot2)
@@ -278,8 +278,7 @@ dev.off()
 
 ### 3.4 Plot the heritability correlated genes
 
-
-```r
+```{r eval = FALSE}
 pdf("heritability_cor_scatterplot.pdf")
 heritability_cor_scatterplot(gene_heri_cor=Pagwas@misc$gene_heritability_correlation,
                              topn_genes_label=10,
@@ -298,8 +297,7 @@ dev.off()
 
 ### 3.5 Show expression of the top heritability correlation genes in celltypes
 
-
-```r
+```{r eval = FALSE}
 library("ggsci")
 library("Seurat")
 top5genes<-rownames(Pagwas@misc$gene_heritability_correlation)[order(Pagwas@misc$gene_heritability_correlation,decreasing = T)[1:5]]
@@ -317,10 +315,10 @@ dev.off()
 <img src="E:\RPakage\scPagwas\vignettes\figures\plot_vln_Corgenes.png" width="60%" />
 
 
-### 3.6 Barplot for celltypes bootstrap_results reuslt
+### 3.6 celltypes bootstrap_results reuslt 
+Barplot for celltypes 
 
-
-```r
+```{r eval = FALSE}
 Bootstrap_P_Barplot(p_results=Pagwas@misc$bootstrap_results$bp_value[-1],
                     p_names=rownames(Pagwas@misc$bootstrap_results)[-1],
                     figurenames = "Bootstrap_P_Barplot.pdf",
@@ -330,6 +328,16 @@ Bootstrap_P_Barplot(p_results=Pagwas@misc$bootstrap_results$bp_value[-1],
                     title = "monocytecount_bmmc")
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\Bootstrap_P_Barplot.png" width="50%" />
+<img src="E:\RPakage\scPagwas\vignettes\figures\Bootstrap_P_Barplot.png" width="40%" />
 
+Forest plot for estimate value. 
+```{r eval = FALSE}
+pdf("estimate_Plot.pdf")
+Bootstrap_estimate_Plot(Pagwas=Pagwas,
+                        width = 9,
+                        height = 7,
+                        do_plot=T)
+dev.off()
+```
 
+<img src="E:\RPakage\scPagwas\vignettes\figures\estimate_Plot_00.png" width="60%" />

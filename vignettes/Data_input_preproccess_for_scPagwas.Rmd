@@ -306,7 +306,7 @@ chrom_ld["chr1"]
 ```
 
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
-```{bash}
+```{bash eval=FALSE}
 ./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
 ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes
 ./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome
