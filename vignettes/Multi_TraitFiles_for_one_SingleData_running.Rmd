@@ -9,12 +9,9 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-library(knitr)
 knitr::opts_chunk$set(
- collapse = TRUE,
- comment = "#>",
-  fig.path = "figures/vignette-",
- out.width = "60%"
+  collapse = TRUE,
+  comment = "#>"
 )
 ```
 
