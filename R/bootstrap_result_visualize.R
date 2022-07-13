@@ -95,6 +95,7 @@ Bootstrap_P_Barplot <- function(p_results,
 #'
 #' @examples
 #' library(scPagwas)
+#'
 #' # Pagwas is the result of Pagwas_main()
 #' Bootstrap_estimate_Plot(
 #'   Pagwas = Pagwas,
@@ -106,7 +107,7 @@ Bootstrap_estimate_Plot <- function(Pagwas,
                                     width = 9,
                                     height = 7,
                                     do_plot = F) {
-  bootstrap_results <- Pagwas$bootstrap_results[-1, c(
+  bootstrap_results <- Pagwas@misc$bootstrap_results[-1, c(
     "bp_value",
     "bias_corrected_estimate",
     "CI_lo",

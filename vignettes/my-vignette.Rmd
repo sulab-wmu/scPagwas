@@ -101,8 +101,6 @@ NULL
 #' data(GWAS_summ_example)
 #' str(GWAS_summ_example)
 NULL
-
-
 ```
 
 

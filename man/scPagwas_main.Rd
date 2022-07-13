@@ -87,7 +87,7 @@ Returns a Seruat data with entries(seruat_return=T):
 {scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}
 {scPagwasPaHeritability:}{An assay for S4 type of data; the gPas matrix for pathways in each cells;}}
 \item{meta.data}{
-{scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+{scPagwas.TRS.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
 {scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}
 {CellScalepValue:}{ the column for "meta.data";CellScalepValue for each cells}
 {CellScaleqValue:}{ the column for "meta.data";CellScaleqValue for each cells}}

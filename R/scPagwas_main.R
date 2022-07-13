@@ -68,7 +68,7 @@
 #'   {scPagwasPaPca:}{An assay for S4 type of data; the svd result for pathways in each cells;}
 #'   {scPagwasPaHeritability:}{An assay for S4 type of data; the gPas matrix for pathways in each cells;}}
 #'   \item{meta.data}{
-#'   {scPagwas.topgenes.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
+#'   {scPagwas.TRS.Score1:}{ the column for "meta.data";Enrichment socre for inheritance associated top genes.}
 #'   {scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance regression effects for each cells}
 #'   {CellScalepValue:}{ the column for "meta.data";CellScalepValue for each cells}
 #'   {CellScaleqValue:}{ the column for "meta.data";CellScaleqValue for each cells}}
@@ -198,11 +198,15 @@ scPagwas_main <- function(Pagwas = NULL,
 
   param.str <- c(
     paste("##", Sys.time()),
-    paste("input gwas data: ", gwas_data, sep = "\t"),
-    paste0("Single_data: ", if (class(Single_data) == "Seurat") dim(Single_data) else Single_data),
-    paste("assay: ", assay, sep = "\t"),
+    paste("input gwas data files: ", gwas_data, sep = "\t"),
+    paste0("Single_data files: ", if (class(Single_data) == "Seurat") dim(Single_data) else Single_data),
+    paste("assay in single data: ", assay, sep = "\t"),
     paste("Pathway length: ", length(Pathway_list), collapse = " ", sep = "\t"),
-    paste("marg: ", marg, sep = "\t"),
+    paste("marg distance from TSS: ", marg, sep = "\t"),
+    paste("output directory is: ", output.dirs, sep = "\t"),
+    paste("Whether to run singlecell step: ", singlecell, sep = "\t"),
+    paste("Whether to run celltype step: ", celltype, sep = "\t"),
+    paste("The number of top genes for TRS score: ", n_topgenes, sep = "\t"),
     paste("maf_filter: ", maf_filter, sep = "\t"),
     paste("min_clustercells: ", min_clustercells, sep = "\t"),
     paste("min.pathway.size: ", min.pathway.size, sep = "\t"),
@@ -446,14 +450,14 @@ scPagwas_main <- function(Pagwas = NULL,
     scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
 
     message("done")
+    cat("9.scGet_gene_heritability_correlation: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+    cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
 
     #############################
     ## 9.output
     #############################
 
-    # write.table(Pagwas$pca_scCell_mat, file = paste0("./", output.dirs, "/", output.prefix, "_pca_scCell_mat.txt"), quote = F)
-    # write.table(Pagwas$pca_cell_df, file = paste0("./", output.dirs, "/", output.prefix, "_pca_celltypes_mat.txt"), quote = F)
-    write.table(Pagwas$Pathway_sclm_results, file = paste0("./", output.dirs, "/", output.prefix, "_Pathway_singlecell_lm_results.txt"), quote = F)
+    write.table(Pagwas$Pathway_sclm_results, file = paste0("./", output.dirs, "/", output.prefix, "_Pathway_singlecell_lm_results.txt"), quote = F,sep = "\t")
     write.csv(Pagwas$bootstrap_results, file = paste0("./", output.dirs, "/", output.prefix, "_cellytpes_bootstrap_results.csv"), quote = F)
     write.csv(Pagwas$scPathways_rankPvalue, file = paste0("./", output.dirs, "/", output.prefix, "_singlecell_Pathways_rankPvalue.csv"), quote = F)
     write.csv(Pagwas$gene_heritability_correlation, file = paste0("./", output.dirs, "/", output.prefix, "_gene_heritability_correlation.csv"), quote = F)
@@ -462,9 +466,6 @@ scPagwas_main <- function(Pagwas = NULL,
       "VariableFeatures", "merge_scexpr", "snp_gene_df",
       "rawPathway_list", "data_mat"
     )] <- NULL
-
-    # Pagwas[c()] <- NULL
-    # Pagwas[c( "Pathway_single_results")] <- NULL
 
     Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 

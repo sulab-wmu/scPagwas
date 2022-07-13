@@ -1,9 +1,13 @@
-## 2022-07-12 14:16:41
-input gwas data: 	C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/GWAS_summ_example.txt
-Single_data: C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/scRNAexample.rds
-assay: 	RNA
+## 2022-07-13 09:12:59
+input gwas data files: 	C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/GWAS_summ_example.txt
+Single_data files: C:/Users/Administrator.WIN10-904291702/AppData/Local/R/cache/R/renv/library/scPagwas-f037130d/R-4.1/x86_64-w64-mingw32/scPagwas/extdata/scRNAexample.rds
+assay in single data: 	RNA
 Pathway length: 	345
-marg: 	10000
+marg distance from TSS: 	10000
+output directory is: 	scPagwastest_output
+Whether to run singlecell step: 	TRUE
+Whether to run celltype step: 	TRUE
+The number of top genes for TRS score: 	1000
 maf_filter: 	0.01
 min_clustercells: 	10
 min.pathway.size: 	5

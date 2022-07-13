@@ -181,6 +181,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
 #' umap_theme
 #' @description ggplot2 theme for umap plot
+#' @export
 
 umap_theme <- function() {
   theme_grey() %+replace%
@@ -201,7 +202,9 @@ umap_theme <- function() {
 
 #' fortify.Seurat.umap
 #' @description set data frame to ggplot
+#'
 #' @param x Seurat format
+#' @export
 
 fortify.Seurat.umap <- function(x) {
   xy1 <- as.data.frame(
@@ -217,7 +220,9 @@ fortify.Seurat.umap <- function(x) {
 
 #' fortify.Seurat.tsne
 #' @description set data frame to ggplot
+#'
 #' @param x seruat
+#' @export
 
 fortify.Seurat.tsne <- function(x) {
   xy2 <- as.data.frame(

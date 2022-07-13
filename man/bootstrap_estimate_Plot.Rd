@@ -34,6 +34,7 @@ This forest plot shows the correct estimate values and
 }
 \examples{
 library(scPagwas)
+
 # Pagwas is the result of Pagwas_main()
 Bootstrap_estimate_Plot(
   Pagwas = Pagwas,
