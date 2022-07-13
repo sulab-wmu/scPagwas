@@ -1,0 +1,47 @@
+---
+title: "Multi_TraitFiles_for_one_SingleData_running"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
+    md_document:
+     variant: markdown_github
+vignette: >
+  %\VignetteIndexEntry{Multi_TraitFiles_for_one_SingleData_running}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
+)
+```
+
+This vignette description a situation that multiple traits files are running for one single cell data. In this case, we can running single cell function for prepare and save the result for the following traits' code program. 
+The example trait files are:
+
+monocytecount_prune_gwas_data.txt:
+https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7
+Lymphocytecount_gwas_data.txt:
+https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ
+MeanCorpusVolume_prune_gwas_data.txt:
+https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3
+
+The scRNA-seq data can download from here:
+
+## Prepare the Single cell data in the early stage. 
+
+```{r }
+library(scPagwas)
+
+```

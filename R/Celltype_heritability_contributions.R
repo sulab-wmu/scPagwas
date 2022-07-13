@@ -138,7 +138,7 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param bootstrap_iters number of bootstrap iterations to run,default is 200
 #' @param part number of bootstrap iterations to perform,default is 0.5
-#'
+#' @export
 #' @return
 
 Boot_evaluate <- function(Pagwas,

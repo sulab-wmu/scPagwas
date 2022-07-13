@@ -9,6 +9,8 @@ output:
     fig_height: 6
     fig_caption: true
     df_print: paged
+  md_document:
+     variant: markdown_github
 vignette: >
   %\VignetteIndexEntry{Data_input_preproccess_for_scPagwas}
   %\VignetteEncoding{UTF-8}
@@ -107,17 +109,10 @@ The GWAS Summary statistics file need to be processed into a "txt" file includin
 
 ### 2.1.Check the example GWAS Summary statistics file
 
-```{r message=FALSE, eval = FALSE}
+```{r message=FALSE}
 library(scPagwas)
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
-head(gwas_data)
-  chrom       pos       rsid        se        beta    maf
-1     6 119968580  rs1159767 0.0329339 0.019305648 0.5275
-2    10 130566523   rs559109 0.0339840 0.045486574 0.4047
-3     5 133328825  rs6893145 0.0486105 0.144744046 0.1222
-4     7 146652932 rs13228798 0.0350390 0.003927479 0.3211
-5    11  23373027  rs4400806 0.0323868 0.010884277 0.4604
-6     5 168561511  rs1421766 0.0324148 0.026076107 0.5182
+knitr::kable(head(gwas_data))
 ```
 
 ### 2.2.Take the monocyte count as real example and deal with it step by step:
@@ -171,7 +166,12 @@ There are some processed pathway gene list provided by scPagwas package: all the
 -   genes.by.immunologic.pathway
 -   genes.by.immunesigdb.pathway
 
+```{r message=FALSE}
+Genes_by_pathway_kegg[1:3]
+```
+
 There are some steps for get these pathway gene list: There is no need to repeat running these code.
+
 
 ### KEGG pathway list
 
@@ -247,11 +247,9 @@ Note:
 
 ### Reduce pathway gene list
 
-```{r message=FALSE, eval = FALSE}
+```{r message=FALSE}
  length(genes.by.reactome.pathway)
-#[1] 1615
  length(unlist(genes.by.reactome.pathway))
-#[1] 89476
 ```
 
 We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and 89476 genes, a mount of resouces and time will be cost when running scPagwas, we provid `reduce_pathway` to reduce the pathway list:
@@ -276,9 +274,9 @@ scPagwas can provide a block annotation data for protein-coding genes.
 
 the processed block annotation data are show here:
 
-```{r}
-suppressMessages(library(scPagwas)) 
-head(block_annotation)
+```{r message=FALSE}
+suppressMessages(library(scPagwas))
+knitr::kable(head(block_annotation))
 ```
 
 Here is the procedure of obtaining the data:
@@ -293,17 +291,19 @@ block_annotation<-gtf_df[,c(1,2,3,5)]
 colnames(block_annotation)<-c("chrom", "start","end","label")
 ```
 
+
 ## 5.LD data
 
 The 1,000 Genomes Project Phase 3 Panel was applied to calculate the linkage disequilibrium (LD) among SNPs extracted from GWAS summary statistics.
 the processed LD data are show here:
 
-```{r}
-suppressMessages(library(scPagwas)) 
+
+```{r message=FALSE}
+suppressMessages(library(scPagwas))
 class(chrom_ld)
-#[1] "list"
-chrom_ld["chr1"]
+knitr::kable(head(chrom_ld[["chr1"]]))
 ```
+
 
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
 ```{bash eval=FALSE}

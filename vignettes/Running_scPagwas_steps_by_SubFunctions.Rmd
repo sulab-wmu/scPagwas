@@ -1,0 +1,232 @@
+---
+title: "Running_scPagwas_steps_by_SubFunctions"
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
+    md_document:
+     variant: markdown_github
+vignette: >
+  %\VignetteIndexEntry{Running_scPagwas_steps_by_SubFunctions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## 1. Only run celltypes functions.
+
+The executive programs for celltypes and single cell are independent, If you only want to know the celtypes, set the `celltype=T` and `singlecell=F`.
+The advantages is save a lot of times, for celltype only can omit many running processes.
+
+The data used the same with Bmmc_monocytecount_singlecell_celltype_vignette.
+
+```{r eval = FALSE}
+library(scPagwas)
+Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
+                     gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
+                     Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                     output.prefix="monocytecount_scPagwas",
+                     output.dirs="monocytecount_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     ncores=5,
+                     assay="RNA",
+                     singlecell=F, 
+                     celltype=T,
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+```
+
+The reuslt of celltypes is list format(not seruat format).
+```{r eval = FALSE}
+names(Pagwas_celltypes)
+# [1] "Celltype_anno"     "data_mat"          "VariableFeatures" 
+# [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     
+# [7] "pca_scCell_mat"    "pca_cell_df"       "snp_gene_df"      
+#[10] "lm_results"        "bootstrap_results
+```
+
+- bootstrap_results: The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.
+- pca_scCell_mat : a pahtway and cell data matrix for pathway svd(1'st pca) result for each cell;
+- pca_cell_df : a pahtway and celltype data matrix for pathway svd(1'st pca) result for each celltype;
+
+- Other elements are the intermediate data. 
+
+## 2. Continue to run singlecell functions  
+Because the parameters and input data are the same with celltypes function, we can take the celltypes result as the input data for single cell function. The advantage is there is no need to 
+run the `svd` code block, save a lot of time. 
+
+```{r eval = FALSE}
+Pagwas_singlecell<-scPagwas_main(Pagwas =Pagwas_celltypes, 
+                                 gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
+                                 Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                                 output.prefix="monocytecount_scPagwas",
+                                 output.dirs="monocytecount_bmmc",
+                                 seruat_return=T,
+                                 Pathway_list=Genes_by_pathway_kegg,
+                                 ncores=5,
+                                 assay="RNA",
+                                 singlecell=T, 
+                                 celltype=F,
+                                 block_annotation = block_annotation,
+                                 chrom_ld = chrom_ld)
+```
+The result is seruat format.
+
+## 3. Running scPagwas step by step
+
+To utilize and understand scPagwas better, we run scPagwas flexibly step by step. In usual, we needn't run these sub-functions one by one.
+
+We use an example provided by scPagwas package.
+
+### 3.1 Single data input
+
+Obtain the single cell expression matrix and filter the cluster for minimum cells.
+
+```{r}
+library(scPagwas)
+Pagwas <- list()
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+Pagwas <- Single_data_input(
+      Pagwas = Pagwas,
+      assay = "RNA",
+      Single_data = Single_data,
+      Pathway_list = Genes_by_pathway_kegg
+    )
+Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+names(Pagwas)
+```
+
+The result list including single cell expression matrix and cell types mean expression matrix.
+
+### 3.2 Run pathway pca score 
+
+Obtain the pathway pca score matrix.
+
+```{r}
+Pagwas <- Pathway_pcascore_run(
+        Pagwas = Pagwas,
+        Pathway_list = Genes_by_pathway_kegg
+      )
+names(Pagwas)
+```
+
+The result list including `pca_scCell_mat` single cell pca score matrix and `pca_cell_df` cell types pca score matrix.
+
+### 3.3 GWAS summary data input
+
+Read the GWAS summary data, remove the MHC and sex chromosome and filtered the maf of SNP.
+
+```{r}
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+Pagwas <- GWAS_summary_input(
+    Pagwas = Pagwas,
+    gwas_data = gwas_data,
+    maf_filter = 0.1
+  )
+names(Pagwas)
+```
+
+### 3.4 Mapping Snps to Genes
+
+We set the `marg` is 10KB, means the position for SNP is less 10KB distance to TSS of gene.
+
+```{r}
+Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
+```
+SNP to gene dataframe:
+```{r message=FALSE}
+knitr::kable(head(Pagwas$snp_gene_df))
+```
+
+### 3.5 Pathway-SNP annotation  
+Mapping SNPs to pahtways and getting block data. 
+```{r}
+Pagwas <- Pathway_annotation_input(
+      Pagwas = Pagwas,
+      block_annotation = block_annotation
+    )
+names(Pagwas)
+Pagwas$pathway_blocks[1:3]
+```
+
+### 3.6 Link the pathway blocks to pca score 
+Also run the regression function for single cell. 
+```{r message=FALSE, warning=FALSE, include=FALSE}
+Pagwas <- Link_pathway_blocks_gwas(
+      Pagwas = Pagwas,
+      chrom_ld = chrom_ld,
+      singlecell = T,
+      celltype = T,
+      ncores = 1
+    )
+```
+The pathway regression result for single cell. 
+```{r message=FALSE}
+knitr::kable(Pagwas$Pathway_sclm_results[1:10,1:5])
+```
+
+### 3.7 Perform regression for celltypes 
+Run the regression function for celltypes. 
+```{r message=FALSE, include=FALSE}
+Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data)
+Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5)
+Pagwas$Pathway_ld_gwas_data <- NULL
+```
+Show the regression result for celltypes.
+```{r message=FALSE}
+names(Pagwas)
+Pagwas$lm_results
+knitr::kable(Pagwas$bootstrap_results)
+```
+
+### 3.8 Construct the scPagwas score
+The gPAS scPagwas score mainly to deal with the single-cell regression result.
+```{r}
+Pagwas <- scPagwas_perform_score(
+      Pagwas = Pagwas,
+      remove_outlier = TRUE
+    )
+names(Pagwas)
+```
+Show result for Pathway pvalue for each cell types
+```{r message=FALSE}
+Pagwas$scPagwas.gPAS.score[1:10]
+knitr::kable(head(Pagwas$scPathways_rankPvalue))
+```
+
+
+### 3.9 Get the gene heritability correlation 
+Run heritability correlation for all genes.
+```{r}
+Pagwas <- scGet_gene_heritability_correlation(Pagwas = Pagwas)
+```
+
+The result for correlation: 
+```{r message=FALSE}
+knitr::kable(head(Pagwas$gene_heritability_correlation))
+```
+
+
+### 3.10 Calculate the TRS score for top genes. 
+
+Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `rankPvalue`. 
+
+```{r}
+scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
+Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
+#run pvalue
+CellScalepValue <- rankPvalue(datS = t(data.matrix(Seurat::GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ])), pValueMethod = "scale")
+```
+
+All these sub-functions for scPagwas can running dependently, but need to run orderly. The `scPagwas_main` function is a wrapper functions for these sub-functions.
+

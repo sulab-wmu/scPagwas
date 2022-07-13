@@ -46,7 +46,8 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
-devtools::install_github("dengchunyu/scPagwas")
+
+devtools::install_github("dengchunyu/scPagwas",build_vignettes = TRUE)
 ```
 
 ## Usage 
@@ -74,10 +75,12 @@ quick-start example:
 
 scPagwas provides a number of tutorials for various situation. Please also visit the documentation.
 
-- The "Data_input_preproccess_for_scPagwas" tutorial provides the methods of data-input preproccess for scPagwas.
+- The [Data_input_preproccess_for_scPagwas]() tutorial provides the methods of data-input preproccess for scPagwas.
 
-- The "Example1.Bmmc_monocytecount_singlecell&celltype_vignette" tutorial provides the usual  procedure for scPagwas including the result interpretation are discussed, and visualizing their characteristics.
+- The [Bmmc_monocytecount_singlecell_celltype_vignette]() tutorial provides the usual procedure for scPagwas including the result interpretation are discussed, and visualizing their characteristics.
 
-- The data import and visualization tutorial focuses on loading data from different sources and visualizing their characteristics.
+- The [Running_scPagwas_steps_by_SubFunctions]() tutorial provides the procedure for only cell types or single cell functions; Otherwise, a step by step introduction for scPgawas sub-functions are provided.
 
-- The tutorial on other methods explains how to apply other methods for differential abundance testing from within scPagwas.
+- The [Multi_TraitFiles_for_one_SingleData_running]() tutorial provides
+
+- The [Split_big_scRNAseqData_and_integrate_result]() tutorial provides

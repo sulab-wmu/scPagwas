@@ -1,5 +1,5 @@
 ---
-title: "Example1.Bmmc_monocytecount_singlecell_celltype_vignette"
+title: "Bmmc_monocytecount_singlecell_celltype_vignette"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
 output:
   html_document:
@@ -9,8 +9,10 @@ output:
     fig_height: 6
     fig_caption: true
     df_print: paged
+    md_document:
+     variant: markdown_github
 vignette: >
-  %\VignetteIndexEntry{Example1.Bmmc_monocytecount_singlecell_celltype_vignette}
+  %\VignetteIndexEntry{Bmmc_monocytecount_singlecell_celltype_vignette}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -32,7 +34,7 @@ knitr::opts_chunk$set(
 ## Preprocessed data
 
 We use BMMC scRNA-seq data and monocyte count trait to test scPagwas.
-The processed data can be download from here: monocytecount_prune_gwas_data.txt <https://1drv.ms/t/s!As-aKqXDnDUHi9Ub-q1D50G2S-sfjA?e=KYqJPv>
+The processed data can be download from here: monocytecount_prune_gwas_data.txt <https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7>
 
 BMMC scRNA-seq data can be obtained and treated in `Data_input_preproccess_for_scPagwas`.
 
@@ -52,8 +54,8 @@ In this example, we run the scPagwas for usual step, both running singlecell and
 ```{r eval = FALSE}
 library(scPagwas)
 Pagwas<-scPagwas_main(Pagwas =NULL,
-                     gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
-                     Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                     gwas_data ="monocytecount_prune_gwas_data.txt",
+                     Single_data ="Seu_Hema_data.rds",
                      output.prefix="monocytecount_scPagwas",
                      output.dirs="monocytecount_bmmc",
                      seruat_return=T,

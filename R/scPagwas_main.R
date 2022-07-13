@@ -168,7 +168,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # output.prefix="test";
   # output.dirs="scPagwastest_output";
   # block_annotation = block_annotation;
-  # Single_data ="E:/RPakage/scPagwas/inst/extdata/scRNAexample_split2.rds";
+  # Single_data ="E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds";
   # assay="RNA";
   # Pathway_list=Genes_by_pathway_kegg;
   # chrom_ld=chrom_ld;
@@ -351,9 +351,7 @@ scPagwas_main <- function(Pagwas = NULL,
 
   tt <- Sys.time()
   if (!is.null(block_annotation)) {
-    snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = marg)
-    snp_gene_df$slope <- rep(1, nrow(snp_gene_df))
-    Pagwas$snp_gene_df <- snp_gene_df[snp_gene_df$Disstance == "0", ]
+    Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = marg)
   } else if (!("snp_gene_df" %in% names(Pagwas))) {
     stop("Error: block_annotation should input!")
   }
@@ -466,6 +464,7 @@ scPagwas_main <- function(Pagwas = NULL,
       "VariableFeatures", "merge_scexpr", "snp_gene_df",
       "rawPathway_list", "data_mat"
     )] <- NULL
+
 
     Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 
