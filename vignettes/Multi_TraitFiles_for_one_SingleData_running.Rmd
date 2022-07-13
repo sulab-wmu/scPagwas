@@ -1,7 +1,16 @@
 ---
 title: "Multi_TraitFiles_for_one_SingleData_running"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
+    md_document:
+     variant: markdown_github
 vignette: >
   %\VignetteIndexEntry{Multi_TraitFiles_for_one_SingleData_running}
   %\VignetteEngine{knitr::rmarkdown}
@@ -9,9 +18,12 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
+library(knitr)
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
 )
 ```
 

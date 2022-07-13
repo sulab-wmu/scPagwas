@@ -1,16 +1,32 @@
 ---
 title: "Data_input_preproccess_for_scPagwas"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output: rmarkdown::html_vignette
+output:
+  html_document:
+    theme: flatly
+    highlight: zenburn
+    fig_width: 7
+    fig_height: 6
+    fig_caption: true
+    df_print: paged
+  md_document:
+     variant: markdown_github
 vignette: >
   %\VignetteIndexEntry{Data_input_preproccess_for_scPagwas}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  markdown: 
+    wrap: sentence
+  chunk_output_type: inline
 ---
 
+```{r, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
 )
 ```
 

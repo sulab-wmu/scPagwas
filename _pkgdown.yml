@@ -1,8 +1,9 @@
 title: scPagwas
 url: https://github.com/dengchunyu/scPagwas
 template:
+  bootstrap: 5
+  bootswatch: materia
   params:
-    bootswatch: flatly
     ganalytics: UA-12345678-0
 
 
