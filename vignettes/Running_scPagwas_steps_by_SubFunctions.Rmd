@@ -1,15 +1,6 @@
 ---
 title: "Running_scPagwas_steps_by_SubFunctions"
-output:
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: true
-    df_print: paged
-    md_document:
-     variant: markdown_github
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Running_scPagwas_steps_by_SubFunctions}
   %\VignetteEngine{knitr::rmarkdown}

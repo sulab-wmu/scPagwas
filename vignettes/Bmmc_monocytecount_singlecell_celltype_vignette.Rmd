@@ -1,24 +1,11 @@
 ---
 title: "Bmmc_monocytecount_singlecell_celltype_vignette"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output:
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: true
-    df_print: paged
-    md_document:
-     variant: markdown_github
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Bmmc_monocytecount_singlecell_celltype_vignette}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  markdown: 
-    wrap: sentence
-  chunk_output_type: inline
 ---
 
 ```{r, include = FALSE}

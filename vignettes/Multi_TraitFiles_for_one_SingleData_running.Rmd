@@ -1,16 +1,7 @@
 ---
 title: "Multi_TraitFiles_for_one_SingleData_running"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output:
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: true
-    df_print: paged
-    md_document:
-     variant: markdown_github
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Multi_TraitFiles_for_one_SingleData_running}
   %\VignetteEngine{knitr::rmarkdown}
