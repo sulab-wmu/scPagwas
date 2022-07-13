@@ -10,19 +10,10 @@
     <loc>https://github.com/dengchunyu/scPagwas/articles/Data_input_preproccess_for_scPagwas.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Example1.Bmmc_monocytecount_singlecell_celltype_vignette.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Methods_to_overcome_the_limit_for_running_memory.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/articles/Multi_TraitFiles_for_one_SingleData_running.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/my-vignette.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/articles/Running_scPagwas_steps_by_SubFunctions.html</loc>
@@ -64,19 +55,10 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/Boot_evaluate.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Celltype_heritability_contributions.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/chrom_ld.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/colnorm_sub.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/corSparse.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/cv_regularized_parameter_estimator.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/fortify.Seurat.tsne.html</loc>
@@ -103,13 +85,7 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/get_Pathway_sclm.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/gtf_df.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/GWAS_summary_input.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/GWAS_summ_example.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/heritability_cor_scatterplot.html</loc>
@@ -127,34 +103,16 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/link_pwpca_block.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/link_scCell_pwpca_block.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/make_ld_matrix.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/mean_expr.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/merge_pagwas.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pagwas_main.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Pagwas_perform_regression.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pagwas_perform_regularized_regression.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/papply.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Parameter_regression.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/para_names_adjust.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/PathwayPCAtest.html</loc>
@@ -190,19 +148,10 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/reduce_pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scBoot_evaluate.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/scGet_gene_heritability_correlation.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scGet_Pathway_heritability_contributions.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_main.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_perform_regression.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_perform_score.html</loc>
@@ -217,15 +166,6 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/scParameter_regression.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scRNAexample.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/SCxy2vector.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Singlecell_heritability_contributions.html</loc>
-  </url>
-  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Single_data_input.html</loc>
   </url>
   <url>
@@ -236,9 +176,6 @@
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/umap_theme.html</loc>
-  </url>
-  <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/utils_big_as.matrix.html</loc>
   </url>
   <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/xy2vector.html</loc>
