@@ -5,11 +5,7 @@ trait-relevant cell subpopulations by incorporating pathway activity
 transformed scRNA-seq data with genome-wide association studies (GWAS)
 data.
 
-``` r
-knitr::include_graphics(here::here("img", "Figures_1.jpg"))
-```
-
-<img src="./img/Figures_1.jpg" width="80%" style="display: block; margin: auto;" />
+<img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
 
 The methodology and benchmarking performance are described in:
 
