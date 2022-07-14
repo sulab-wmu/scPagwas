@@ -1,23 +1,11 @@
 ---
 title: "Bmmc_monocytecount_singlecell_celltype_vignette"
-date: 'Last Updated: `r format(Sys.time(), ''%d, %B, %Y at %H:%M'')`'
-output:
-  pdf_document: default
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: yes
-    df_print: paged
-    md_document:
-      variant: markdown_github
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output: rmarkdown::html_vignette
 vignette: |
-  %\VignetteIndexEntry{Bmmc_monocytecount_singlecell_celltype_vignette} %\VignetteEncoding{UTF-8} %\VignetteEngine{knitr::rmarkdown}
-editor_options:
-  markdown:
-    wrap: sentence
-  chunk_output_type: inline
+  %\VignetteIndexEntry{Bmmc_monocytecount_singlecell_celltype_vignette} 
+  %\VignetteEncoding{UTF-8} 
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r, include = FALSE}
@@ -65,9 +53,17 @@ Pagwas<-scPagwas_main(Pagwas =NULL,
                      celltype=T,
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
+
 save(Pagwas,file = "monocytecount_bmmc_Pagwas1.10.0.RData")
 ```
 
+Sometime, we need to remove the objects in cache folder: 
+
+```{r eval = FALSE}
+if(length(SOAR::Objects())>0){
+ SOAR::Remove(SOAR::Objects()) 
+}
+```
 ## 2. Result interpretation
 
 There are two types of result, Seruat format return result and files output;

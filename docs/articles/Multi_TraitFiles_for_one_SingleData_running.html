@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi_TraitFiles_for_one_SingleData_running • scPagwas</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -65,9 +65,6 @@
       <a href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     </li>
     <li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
-    </li>
-    <li>
       <a href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
     </li>
     <li>
@@ -94,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Multi_TraitFiles_for_one_SingleData_running</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 13, 七月, 2022 at 21:23</h4>
+            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:20</h4>
       
       
       <div class="hidden name"><code>Multi_TraitFiles_for_one_SingleData_running.Rmd</code></div>
@@ -105,12 +102,64 @@
     
 <p>This vignette description a situation that multiple traits files are running for one single cell data. In this case, we can running single cell function for prepare and save the result for the following traits’ code program. The example trait files are:</p>
 <p>monocytecount_prune_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7</a> Lymphocytecount_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ</a> MeanCorpusVolume_prune_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3</a></p>
-<p>The scRNA-seq data can download from here:</p>
+<p>The BMMC processed scRNA-seq data can download from here: <a href="https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ" class="external-link uri">https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ</a></p>
 <div class="section level2">
 <h2 id="prepare-the-single-cell-data-in-the-early-stage-">Prepare the Single cell data in the early stage.<a class="anchor" aria-label="anchor" href="#prepare-the-single-cell-data-in-the-early-stage-"></a>
 </h2>
+<p>The single cell Intermediate data is immobile for the same <code>Single_data</code> input no matter the <code>gwas_data</code> input files. First, Run the <code>Single_data_input</code> and <code>Pathway_pcascore_run</code> for <code>Seu_Hema_data.rds</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span>
+<span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="st">"Seu_Hema_data.rds"</span><span class="op">)</span>
+<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Single_data_input.html">Single_data_input</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,
+                            assay<span class="op">=</span><span class="st">"RNA"</span>,
+                            Single_data<span class="op">=</span><span class="va">Single_data</span>,
+                            Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span><span class="op">)</span>
+<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_pcascore_run.html">Pathway_pcascore_run</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,
+                               Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
+<span class="co">#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"    </span>
+<span class="co">#[5] "rawPathway_list"  "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"  </span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="run-different-traits-for-scpagwas-">Run different traits for scPagwas.<a class="anchor" aria-label="anchor" href="#run-different-traits-for-scpagwas-"></a>
+</h2>
+<p>We take the Pagwas as input for <code>scPagwas_main</code>, therefore, there is no need to run the Pathway_pcascore_run function for different traits which will save times.</p>
+<p>Second, Run the <code>scPagwas_main</code> for different trait files and take the single-cell result as input.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">#Pagwas is the result for last blocks.</span>
+<span class="va">Pagwas_monocytecount</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,
+                     gwas_data <span class="op">=</span><span class="st">"monocytecount_prune_gwas_data.txt"</span>,
+                     Single_data <span class="op">=</span><span class="st">"Seu_Hema_data.rds"</span>,
+                     output.prefix<span class="op">=</span><span class="st">"monocytecount_scPagwas"</span>,
+                     output.dirs<span class="op">=</span><span class="st">"monocytecount_bmmc"</span>,
+                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
+                     ncores<span class="op">=</span><span class="fl">5</span>,
+                     assay<span class="op">=</span><span class="st">"RNA"</span>,
+                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
+                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span>
+
+<span class="va">Pagwas_Lymphocytecount</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,
+                     gwas_data <span class="op">=</span><span class="st">"Lymphocytecount_gwas_data.txt"</span>,
+                     Single_data <span class="op">=</span><span class="st">"Seu_Hema_data.rds"</span>,
+                     output.prefix<span class="op">=</span><span class="st">"Lymphocytecountt_scPagwas"</span>,
+                     output.dirs<span class="op">=</span><span class="st">"Lymphocytecount_bmmc"</span>,
+                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
+                     ncores<span class="op">=</span><span class="fl">5</span>,
+                     assay<span class="op">=</span><span class="st">"RNA"</span>,
+                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
+                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span>
+
+<span class="va">Pagwas_MeanCorpusVolume</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,
+                     gwas_data <span class="op">=</span><span class="st">"MeanCorpusVolume_prune_gwas_data.txt"</span>,
+                     Single_data <span class="op">=</span><span class="st">"Seu_Hema_data.rds"</span>,
+                     output.prefix<span class="op">=</span><span class="st">"MeanCorpusVolume_scPagwas"</span>,
+                     output.dirs<span class="op">=</span><span class="st">"MeanCorpusVolume_bmmc"</span>,
+                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
+                     assay<span class="op">=</span><span class="st">"RNA"</span>,
+                     ncores<span class="op">=</span><span class="fl">5</span>,
+                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
+                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></code></pre></div>
 </div>
   </div>
 

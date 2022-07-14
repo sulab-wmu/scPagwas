@@ -1,16 +1,7 @@
 ---
 title: "Running_scPagwas_steps_by_SubFunctions"
-date: 'Last Updated: `r format(Sys.time(), ''%d, %B, %Y at %H:%M'')`'
-output:
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: true
-    df_print: paged
-    md_document:
-     variant: markdown_github
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Running_scPagwas_steps_by_SubFunctions}
   %\VignetteEngine{knitr::rmarkdown}

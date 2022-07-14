@@ -146,7 +146,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           output.dirs = "scPagwastest_output",
                           block_annotation = NULL,
                           Single_data = NULL,
-                          assay = c("RNA", "SCT"),
+                          assay = "RNA",
                           Pathway_list = NULL,
                           chrom_ld = NULL,
                           marg = 10000,
@@ -258,7 +258,6 @@ scPagwas_main <- function(Pagwas = NULL,
   ## 1.Single_data_input
   #############################
 
-  if (!is.null(Single_data)) {
     message(paste(utils::timestamp(quiet = T), " ******* 1st: Single_data_input function start! ********", sep = ""))
     tt <- Sys.time()
     if (class(Single_data) == "character") {
@@ -315,34 +314,35 @@ scPagwas_main <- function(Pagwas = NULL,
       cat("Pathway_pcascore_run: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
       cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
     }
-  }
+
   #############################
   ## 3.GWAS_summary_input
   #############################
   message(paste(utils::timestamp(quiet = T), " ******* 3rd: GWAS_summary_input function start! ********", sep = ""))
 
+  if(!is.null(gwas_data)){
 
-  if (class(gwas_data) == "character") {
-    message("** Start to read the gwas_data!")
-    suppressMessages(gwas_data <- bigreadr::fread2(gwas_data))
-  } else {
-    stop("Error:There is need a filename and address for gwas_data")
-  }
+   if (class(gwas_data) == "character") {
+     message("** Start to read the gwas_data!")
+     suppressMessages(gwas_data <- bigreadr::fread2(gwas_data))
+    } else {
+      stop("Error:There is need a filename and address for gwas_data")
+    }
 
-  if (maf_filter >= 1 & maf_filter < 0) {
-    stop("Error:maf_filter should between 0 and 1")
-  }
+   if (maf_filter >= 1 & maf_filter < 0) {
+     stop("Error:maf_filter should between 0 and 1")
+   }
 
-  tt <- Sys.time()
-  Pagwas <- GWAS_summary_input(
-    Pagwas = Pagwas,
-    gwas_data = gwas_data,
-    maf_filter = maf_filter
-  )
-  rm(gwas_data)
-  message("done!")
-  cat("GWAS_summary_input: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-  cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+   tt <- Sys.time()
+   Pagwas <- GWAS_summary_input(
+     Pagwas = Pagwas,
+     gwas_data = gwas_data,
+     maf_filter = maf_filter
+   )
+   rm(gwas_data)
+   message("done!")
+   cat("GWAS_summary_input: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
 
   #############################
   ## 4.Snp2Gene
@@ -357,25 +357,27 @@ scPagwas_main <- function(Pagwas = NULL,
   }
   cat("Snp2Gene: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-
+  }else if(!("gwas_data" %in% names(Pagwas)) | !("snp_gene_df" %in% names(Pagwas))){
+    stop("Error: gwas_data should be input!")
+  }
   #############################
   ## 5.Pathway_annotation_input
   #############################
   message(paste(utils::timestamp(quiet = T), " ******* 5th: Pathway_annotation_input function start! ********", sep = ""))
 
-  tt <- Sys.time()
-  if (!is.null(block_annotation)) {
-    Pagwas <- Pathway_annotation_input(
-      Pagwas = Pagwas,
-      block_annotation = block_annotation
-    )
-  } else if (!("snp_gene_df" %in% names(Pagwas))) {
+   tt <- Sys.time()
+   if (!is.null(block_annotation)) {
+     Pagwas <- Pathway_annotation_input(
+       Pagwas = Pagwas,
+       block_annotation = block_annotation
+     )
+   } else if (!("snp_gene_df" %in% names(Pagwas))) {
     stop("Error: block_annotation should input!")
-  }
+   }
 
-  message("done!")
-  cat("Pathway_annotation_input: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
-  cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+   message("done!")
+   cat("Pathway_annotation_input: ", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
+   cat(Sys.time() - tt, "\n", file = paste0("./", output.dirs, "/scPagwas.run.log"), append = T)
 
 
   #############################

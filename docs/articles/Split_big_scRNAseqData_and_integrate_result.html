@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Split_big_scRNAseqData_and_integrate_result • scPagwas</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -65,9 +65,6 @@
       <a href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     </li>
     <li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
-    </li>
-    <li>
       <a href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
     </li>
     <li>
@@ -94,6 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Split_big_scRNAseqData_and_integrate_result</h1>
             
+            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:21</h4>
       
       
       <div class="hidden name"><code>Split_big_scRNAseqData_and_integrate_result.Rmd</code></div>
@@ -105,14 +103,157 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></code></pre></div>
 <div class="section level2">
-<h2 id="splice-the-scrna-seq-datasetif-the-dataset-is-too-big-for-your-computer">4. Splice the scRNA-seq dataset(If the dataset is too big for your computer)<a class="anchor" aria-label="anchor" href="#splice-the-scrna-seq-datasetif-the-dataset-is-too-big-for-your-computer"></a>
+<h2 id="run-the-scpagwas-for-big-scrna-seq-data">Run the scPagwas for big scRNA-seq data<a class="anchor" aria-label="anchor" href="#run-the-scpagwas-for-big-scrna-seq-data"></a>
 </h2>
-<p><code>If your computer storage is enough, ignore this item</code>. Sometimes, the storage is limit for your analysis, you can splice the data set by celltypes or in order. 1) By cell types scPagwas don’t limit the way to cut the data set, but we advice to do it by cell types, for some clusters may be filtered for the min cell number of clusters.</p>
+<p><code>If your computer storage is enough, ignore this item</code>. Sometimes, the storage is limit for your analysis, you can splice the scRNA-seq data set by celltypes or in order.</p>
+<p>scPagwas don’t limit the way to cut the data set, but we advice to do it by cell types, because some clusters may be filtered for the minimum cell number.</p>
+<div class="section level3">
+<h3 id="splice-scrna-seq-data">1. Splice scRNA-seq data<a class="anchor" aria-label="anchor" href="#splice-scrna-seq-data"></a>
+</h3>
+<p>First, we splice the big scRNA-seq data for several sub-datas by cell types.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Hema_splice1</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span>,Idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"01_HSC"</span>,<span class="st">"02_Early.Eryth"</span>,<span class="st">"03_Late.Eryth"</span>,<span class="st">"04_Early.Baso"</span>,<span class="st">"05_CMP.LMPP"</span>,<span class="st">"06_CLP.1"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Hema_splice2</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span>,Idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"07_GMP"</span>,<span class="st">"08_GMP.Neut"</span>,<span class="st">"09_pDC"</span>,<span class="st">"10_cDC"</span>,<span class="st">"11_CD14.Mono.1"</span>,<span class="st">"12_CD14.Mono.2"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Hema_splice3</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span>,Idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"13_CD16.Mono"</span>,<span class="st">"14_Unk"</span>,<span class="st">"15_CLP.2"</span>,<span class="st">"16_Pre.B"</span>,<span class="st">"17_B"</span>,<span class="st">"18_Plasma"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Hema_splice4</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span>,Idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"19_CD8.N"</span>,<span class="st">"20_CD4.N1"</span>,<span class="st">"21_CD4.N2"</span>,<span class="st">"22_CD4.M"</span>,<span class="st">"23_CD8.EM"</span>,<span class="st">"24_CD8.CM"</span>,<span class="st">"25_NK"</span>,<span class="st">"26_Unk"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://satijalab.org/seurat" class="external-link">Seurat</a></span><span class="op">)</span>
+<span class="co">#&gt; Attaching SeuratObject</span>
+<span class="va">scRNAexample</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Example_splice1</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">scRNAexample</span>,idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Celltype1"</span>,<span class="st">"Celltype2"</span>,<span class="st">"Celltype3"</span>,<span class="st">"Celltype4"</span>, <span class="st">"Celltype5"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Example_splice2</span><span class="op">&lt;-</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Seurat-methods.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">scRNAexample</span>,idents<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span> <span class="st">"Celltype6"</span>,<span class="st">"Celltype7"</span>,<span class="st">"Celltype8"</span>,<span class="st">"Celltype9"</span>,<span class="st">"Celltype10"</span> <span class="op">)</span><span class="op">)</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="run-gwas-data-input">2. Run gwas data input<a class="anchor" aria-label="anchor" href="#run-gwas-data-input"></a>
+</h3>
+<p>Second, we run the <code>GWAS_summary_input</code> and <code>Snp2Gene</code> firstly, because the following function share the same gwas data. Sometimes, we need not run these functions for small gwas data, because a little time for these functions.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Pagwas</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
+<span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span>
+<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span>
+    Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
+    gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,
+    maf_filter <span class="op">=</span> <span class="fl">0.1</span>
+  <span class="op">)</span>
+<span class="co">#&gt; Input gwas summary data frame!</span>
+<span class="co">#&gt; No "chr" from chrom!, now pasting it!</span>
+<span class="co">#&gt; Filtering out SNPs with MAF criterion</span>
+<span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Snp2Gene.html">Snp2Gene</a></span><span class="op">(</span>snp <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span>, refGene <span class="op">=</span> <span class="va">block_annotation</span>, marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
+<span class="co">#&gt; * Computing distances between SNPs and genes</span>
+<span class="co">#&gt; 5332 SNPs not inside gene domain</span>
+<span class="co">#&gt; ** Computing distance to domain starts</span>
+<span class="co">#&gt; ** Computing distance to domain ends</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
+<span class="co">#&gt; [1] "gwas_data"   "snp_gene_df"</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="run-scpagwas-for-sub-data">2. Run scPagwas for sub-data<a class="anchor" aria-label="anchor" href="#run-scpagwas-for-sub-data"></a>
+</h3>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Pagwas1</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,
+                     gwas_data <span class="op">=</span><span class="cn">NULL</span>,
+                     Single_data <span class="op">=</span><span class="va">Example_splice1</span>,
+                     output.prefix<span class="op">=</span><span class="st">"splice1"</span>,
+                     output.dirs<span class="op">=</span><span class="st">"splice_scPagwas"</span>,
+                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
+                     ncores<span class="op">=</span><span class="fl">5</span>,
+                     assay<span class="op">=</span><span class="st">"RNA"</span>,
+                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
+                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
+ <span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Remove.html" class="external-link">Remove</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
+<span class="op">}</span>
+<span class="co"># ##------ Thu Jul 14 12:48:37 2022 ------## ******* 1st: Single_data_input function start! ********</span>
+<span class="co"># Input single cell data!</span>
+<span class="co"># 5 cell types are remain, after filter!</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:48:40 2022 ------## ******* 2nd: Pathway_pcascore_run function start!! ********</span>
+<span class="co"># * Start to get Pathway SVD socre!</span>
+<span class="co">#   |=================                                                                    |  20%[1] "Celltype1"</span>
+<span class="co">#   |==================================                                                   |  40%[1] "Celltype2"</span>
+<span class="co">#   |===================================================                                  |  60%[1] "Celltype3"</span>
+<span class="co">#   |====================================================================                 |  80%[1] "Celltype4"</span>
+<span class="co">#   |=====================================================================================| 100%[1] "Celltype5"</span>
+<span class="co"># </span>
+<span class="co"># Using score as value column: use value.var to override.</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:48:45 2022 ------## ******* 3rd: GWAS_summary_input function start! ********</span>
+<span class="co"># ##------ Thu Jul 14 12:48:45 2022 ------## ******* 5th: Pathway_annotation_input function start! ********</span>
+<span class="co"># obtain the pathway block information</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:48:47 2022 ------## ******* 6th: Link_pathway_blocks_gwas function start! ********</span>
+<span class="co"># * Start to link gwas and pathway block annotations for 278 pathways!</span>
+<span class="co">#   |=====================================================================================| 100%</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:49:12 2022 ------## ******* 7th: Celltype_heritability_contributions function start! ********</span>
+<span class="co"># ** Start inference</span>
+<span class="co"># * starting bootstrap iteration for 200 times</span>
+<span class="co">#   |=====================================================================================| 100%</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:49:14 2022 ------## ******* 8th: scPagwas_perform_score function start! ********</span>
+<span class="co"># * Get Pathways'rankPvalue for each celltypes!</span>
+<span class="co"># * Get scPgwas score for each single cell</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 12:49:19 2022 ------## ******* 9th: scGet_gene_heritability_correlation function start! ********</span>
+<span class="co"># done</span>
+<span class="co"># * Get rankPvalue for each single cell</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Pagwas2</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,
+                     gwas_data <span class="op">=</span><span class="cn">NULL</span>,
+                     Single_data <span class="op">=</span><span class="va">Example_splice2</span>,
+                     output.prefix<span class="op">=</span><span class="st">"splice2 "</span>,
+                     output.dirs<span class="op">=</span><span class="st">"splice_scPagwas"</span>,
+                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
+                     ncores<span class="op">=</span><span class="fl">5</span>,
+                     assay<span class="op">=</span><span class="st">"RNA"</span>,
+                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
+                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span>
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
+ <span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Remove.html" class="external-link">Remove</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
+<span class="op">}</span>
+
+<span class="co"># ##------ Thu Jul 14 11:19:59 2022 ------## ******* 1st: Single_data_input function start! ********</span>
+<span class="co"># Input single cell data!</span>
+<span class="co"># 5 cell types are remain, after filter!</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:00 2022 ------## ******* 2nd: Pathway_pcascore_run function start!! ********</span>
+<span class="co"># * Start to get Pathway SVD socre!</span>
+<span class="co">#   |=================                                                                     |  20%[1] "Celltype6"</span>
+<span class="co">#   |==================================                                                    |  40%[1] "Celltype7"</span>
+<span class="co">#   |====================================================                                  |  60%[1] "Celltype8"</span>
+<span class="co">#   |=====================================================================                 |  80%[1] "Celltype9"</span>
+<span class="co">#   |======================================================================================| 100%[1] "Celltype10"</span>
+<span class="co"># </span>
+<span class="co"># Using score as value column: use value.var to override.</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:06 2022 ------## ******* 3rd: GWAS_summary_input function start! ********</span>
+<span class="co"># ##------ Thu Jul 14 11:20:06 2022 ------## ******* 5th: Pathway_annotation_input function start! ********</span>
+<span class="co"># obtain the pathway block information</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:07 2022 ------## ******* 6th: Link_pathway_blocks_gwas function start! ********</span>
+<span class="co"># * Start to link gwas and pathway block annotations for 273 pathways!</span>
+<span class="co">#   |======================================================================================| 100%</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:22 2022 ------## ******* 7th: Celltype_heritability_contributions function start! ********</span>
+<span class="co"># ** Start inference</span>
+<span class="co"># * starting bootstrap iteration for 200 times</span>
+<span class="co">#   |======================================================================================| 100%</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:24 2022 ------## ******* 8th: scPagwas_perform_score function start! ********</span>
+<span class="co"># * Get Pathways'rankPvalue for each celltypes!</span>
+<span class="co"># * Get scPgwas score for each single cell</span>
+<span class="co"># done!</span>
+<span class="co"># ##------ Thu Jul 14 11:20:28 2022 ------## ******* 9th: scGet_gene_heritability_correlation function start! ********</span>
+<span class="co"># done</span>
+<span class="co"># * Get rankPvalue for each single cell</span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="integrate-the-result-for-splice-data-">3. Integrate the result for splice data.<a class="anchor" aria-label="anchor" href="#integrate-the-result-for-splice-data-"></a>
+</h3>
+<p>We integrate the splice result by <code>merge_pagwas</code> function.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">Pagwas_integrate</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_pagwas.html">merge_pagwas</a></span><span class="op">(</span>Pagwas_list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">Pagwas1</span>,<span class="va">Pagwas2</span><span class="op">)</span>,n_topgenes <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
+<span class="fu"><a href="https://satijalab.org/seurat/reference/DimReduc-methods.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Pagwas_integrate</span><span class="op">)</span>
+<span class="co">#&gt; An object of class Seurat </span>
+<span class="co">#&gt; 39235 features across 1000 samples within 4 assays </span>
+<span class="co">#&gt; Active assay: SCT (18715 features, 0 variable features)</span>
+<span class="co">#&gt;  3 other assays present: RNA, scPagwasPaHeritability, scPagwasPaPca</span></code></pre></div>
+</div>
 </div>
   </div>
 

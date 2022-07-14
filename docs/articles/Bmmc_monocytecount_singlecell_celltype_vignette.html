@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bmmc_monocytecount_singlecell_celltype_vignette • scPagwas</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -65,9 +65,6 @@
       <a href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     </li>
     <li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
-    </li>
-    <li>
       <a href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
     </li>
     <li>
@@ -94,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Bmmc_monocytecount_singlecell_celltype_vignette</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 13, 七月, 2022 at 21:22</h4>
+            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:18</h4>
       
       
       <div class="hidden name"><code>Bmmc_monocytecount_singlecell_celltype_vignette.Rmd</code></div>
@@ -131,7 +128,13 @@
                      celltype<span class="op">=</span><span class="cn">T</span>,
                      block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
                      chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span>
+
 <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">Pagwas</span>,file <span class="op">=</span> <span class="st">"monocytecount_bmmc_Pagwas1.10.0.RData"</span><span class="op">)</span></code></pre></div>
+<p>Sometime, we need to remove the objects in cache folder:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span>
+ <span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Remove.html" class="external-link">Remove</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
+<span class="op">}</span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="result-interpretation">2. Result interpretation<a class="anchor" aria-label="anchor" href="#result-interpretation"></a>
@@ -140,18 +143,18 @@
 <div class="section level3">
 <h3 id="pagwas-return-result-for-seruat_returntrue">2.1 Pagwas : return result for seruat_return=TRUE<a class="anchor" aria-label="anchor" href="#pagwas-return-result-for-seruat_returntrue"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">print</span>(Pagwas)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>An object of class Seurat </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="dv">16488</span> features across <span class="dv">35582</span> samples within <span class="dv">3</span> assays </span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>Active assay<span class="sc">:</span> <span class="fu">RNA</span> (<span class="dv">15860</span> features, <span class="dv">5000</span> variable features)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span> other assays present<span class="sc">:</span> scPagwasPaHeritability, scPagwasPaPca</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span> dimensional reductions calculated<span class="sc">:</span> pca, tsne, umap</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">names</span>(Pagwas<span class="sc">@</span>misc)</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Pathway_list"</span>                  <span class="st">"pca_cell_df"</span>                  </span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">3</span>] <span class="st">"lm_results"</span>                    <span class="st">"bootstrap_results"</span>            </span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>[<span class="dv">5</span>] <span class="st">"scPathways_rankPvalue"</span>         <span class="st">"gene_heritability_correlation"</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">print</span>(Pagwas)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>An object of class Seurat </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dv">16488</span> features across <span class="dv">35582</span> samples within <span class="dv">3</span> assays </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>Active assay<span class="sc">:</span> <span class="fu">RNA</span> (<span class="dv">15860</span> features, <span class="dv">5000</span> variable features)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span> other assays present<span class="sc">:</span> scPagwasPaHeritability, scPagwasPaPca</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span> dimensional reductions calculated<span class="sc">:</span> pca, tsne, umap</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">names</span>(Pagwas<span class="sc">@</span>misc)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Pathway_list"</span>                  <span class="st">"pca_cell_df"</span>                  </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">3</span>] <span class="st">"lm_results"</span>                    <span class="st">"bootstrap_results"</span>            </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>[<span class="dv">5</span>] <span class="st">"scPathways_rankPvalue"</span>         <span class="st">"gene_heritability_correlation"</span></span></code></pre></div>
 <p>Returns a Seruat data with entries(seruat_return=T):</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -212,7 +215,7 @@
 <ol style="list-style-type: decimal">
 <li>DimPlot of singlecell data.</li>
 </ol>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"RColorBrewer"</span><span class="op">)</span>
  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span>
  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"SeuratObject"</a></span><span class="op">)</span>
@@ -227,12 +230,12 @@
 
 <span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"monocyte_bmmc_dimplot_umap.png"</span>,width <span class="op">=</span> <span class="fl">600</span>, height <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">Pagwas</span>,pt.size<span class="op">=</span><span class="fl">1</span>,reduction<span class="op">=</span><span class="st">"tsne"</span>,label <span class="op">=</span> <span class="cn">T</span>, repel<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span>
- <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"celltypes"</span>, values <span class="op">=</span> <span class="va">color26</span><span class="op">)</span><span class="op">+</span>
- <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Monocyte BMMC"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"TSNE"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
+ <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"celltypes"</span>, values <span class="op">=</span> <span class="va">color26</span><span class="op">)</span><span class="op">+</span>
+ <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Monocyte BMMC"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"TSNE"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/monocyte_bmmc_dimplot_umap.png" width="50%"></p>
 <p>scPagwas.TRS.Score1 and positive(p&lt;0.05) cells showing in dimplot.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"> <span class="fu"><a href="../reference/scPagwas_Visualization.html">scPagwas_Visualization</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas</span>,
                         p_thre <span class="op">=</span> <span class="fl">0.05</span>,
                         FigureType <span class="op">=</span> <span class="st">"tsne"</span>,
@@ -261,7 +264,7 @@
 <h3 id="plot-the-barplot-of-the-proportion-of-positive-cell-">3.2 Plot the barplot of the proportion of positive Cell.<a class="anchor" aria-label="anchor" href="#plot-the-barplot-of-the-proportion-of-positive-cell-"></a>
 </h3>
 <p>Plot the barplot of the proportion of positive Cells in celltypes:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas</span>,
                          var_ident<span class="op">=</span><span class="st">"celltypes"</span>,
                          var_group<span class="op">=</span><span class="st">"positiveCells"</span>,
@@ -269,7 +272,7 @@
                          do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/plot_bar_positie_nagtive.png" width="60%"></p>
 <p>Plot the barplot of the proportion of celltypes in positive and negative Cells:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"plot_bar_positie_nagtive2.png"</span>,width <span class="op">=</span> <span class="fl">600</span>, height <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas</span>,
                               var_ident<span class="op">=</span><span class="st">"positiveCells"</span>,
@@ -285,7 +288,7 @@
 <h3 id="visualize-the-heritability-correlated-pathways">3.3 Visualize the heritability correlated Pathways<a class="anchor" aria-label="anchor" href="#visualize-the-heritability-correlated-pathways"></a>
 </h3>
 <p>Plot the specific genetics pathway for each celltypes</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R">  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span>
   <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/grimbough/rhdf5" class="external-link">"rhdf5"</a></span><span class="op">)</span>
  <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -325,7 +328,7 @@
 <div class="section level3">
 <h3 id="plot-the-heritability-correlated-genes">3.4 Plot the heritability correlated genes<a class="anchor" aria-label="anchor" href="#plot-the-heritability-correlated-genes"></a>
 </h3>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"heritability_cor_scatterplot.pdf"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,
                              topn_genes_label<span class="op">=</span><span class="fl">10</span>,
@@ -343,10 +346,10 @@
 <div class="section level3">
 <h3 id="show-expression-of-the-top-heritability-correlation-genes-in-celltypes">3.5 Show expression of the top heritability correlation genes in celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top-heritability-correlation-genes-in-celltypes"></a>
 </h3>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span>
-<span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
+<span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"plot_vln_Corgenes.pdf"</span>,width <span class="op">=</span> <span class="fl">6</span>, height <span class="op">=</span><span class="fl">7</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_vln_Corgenes.html">plot_vln_Corgenes</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas</span>,
              assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,
@@ -362,9 +365,9 @@
 <h3 id="celltypes-bootstrap_results-reuslt">3.6 celltypes bootstrap_results reuslt<a class="anchor" aria-label="anchor" href="#celltypes-bootstrap_results-reuslt"></a>
 </h3>
 <p>Barplot for celltypes</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Bootstrap_P_Barplot.html">Bootstrap_P_Barplot</a></span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
-                    p_names<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+                    p_names<span class="op">=</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
                     figurenames <span class="op">=</span> <span class="st">"Bootstrap_P_Barplot.pdf"</span>,
                     width <span class="op">=</span> <span class="fl">5</span>,
                     height <span class="op">=</span> <span class="fl">7</span>,
@@ -372,7 +375,7 @@
                     title <span class="op">=</span> <span class="st">"monocytecount_bmmc"</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/Bootstrap_P_Barplot.png" width="40%"></p>
 <p>Forest plot for estimate value.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"estimate_Plot.pdf"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/Bootstrap_estimate_Plot.html">Bootstrap_estimate_Plot</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,
                         width <span class="op">=</span> <span class="fl">9</span>,

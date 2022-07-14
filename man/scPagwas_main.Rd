@@ -11,7 +11,7 @@ scPagwas_main(
   output.dirs = "scPagwastest_output",
   block_annotation = NULL,
   Single_data = NULL,
-  assay = c("RNA", "SCT"),
+  assay = "RNA",
   Pathway_list = NULL,
   chrom_ld = NULL,
   marg = 10000,

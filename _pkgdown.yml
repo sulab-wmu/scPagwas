@@ -1,8 +1,7 @@
 title: scPagwas
 url: https://github.com/dengchunyu/scPagwas
 template:
-  bootstrap: 5
-  bootswatch: materia
+  bootswatch: lux
   params:
     ganalytics: UA-12345678-0
 

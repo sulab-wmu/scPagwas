@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data_input_preproccess_for_scPagwas • scPagwas</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
@@ -65,9 +65,6 @@
       <a href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     </li>
     <li>
-      <a href="../articles/my-vignette.html">my-vignette</a>
-    </li>
-    <li>
       <a href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
     </li>
     <li>
@@ -94,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Data_input_preproccess_for_scPagwas</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 13, 七月, 2022 at 21:22</h4>
+            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:18</h4>
       
       
       <div class="hidden name"><code>Data_input_preproccess_for_scPagwas.Rmd</code></div>
@@ -158,6 +155,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">Seu_Healthy_Hema</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/ScaleData.html" class="external-link">ScaleData</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span><span class="op">)</span>
 <span class="va">Seu_Healthy_Hema</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://satijalab.org/seurat/reference/NormalizeData.html" class="external-link">NormalizeData</a></span><span class="op">(</span><span class="va">Seu_Healthy_Hema</span>, normalization.method <span class="op">=</span> <span class="st">"LogNormalize"</span>, scale.factor <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></code></pre></div>
+<p>The BMMC processed scRNA-seq data can download from here: <a href="https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ" class="external-link uri">https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ</a></p>
 </div>
 </div>
 <div class="section level3">
@@ -253,7 +251,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span>
 <span class="co">############read the raw vcf file</span>
 <span class="va">monocytecount</span><span class="op">&lt;-</span><span class="st">"ieu-b-31.vcf.gz"</span>
-<span class="va">GWAS_raw</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/readr/man/read_table.html" class="external-link">read_table2</a></span><span class="op">(</span><span class="va">monocytecount</span>,comment <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span>
+<span class="va">GWAS_raw</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html" class="external-link">read_table2</a></span><span class="op">(</span><span class="va">monocytecount</span>,comment <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">GWAS_raw</span> <span class="op">)</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHROM"</span>,<span class="st">"POS"</span>,<span class="st">"ID"</span>,<span class="st">"REF"</span>,<span class="st">"ALT"</span>,<span class="st">"QUAL"</span>,<span class="st">"FILTER"</span>,<span class="st">"INFO"</span>,<span class="st">"FORMAT"</span>,<span class="st">"IEU"</span><span class="op">)</span>
 <span class="co">#ES:SE:LP:AF:SS:ID</span>
 <span class="co">#ieu-a type of file:split the FORMAT and IEU coloumn, which including different information.</span>

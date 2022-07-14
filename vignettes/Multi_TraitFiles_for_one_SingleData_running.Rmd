@@ -1,16 +1,7 @@
 ---
 title: "Multi_TraitFiles_for_one_SingleData_running"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
-output:
-  html_document:
-    theme: flatly
-    highlight: zenburn
-    fig_width: 7
-    fig_height: 6
-    fig_caption: true
-    df_print: paged
-    md_document:
-     variant: markdown_github
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Multi_TraitFiles_for_one_SingleData_running}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,11 +28,68 @@ https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ
 MeanCorpusVolume_prune_gwas_data.txt:
 https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3
 
-The scRNA-seq data can download from here:
+The BMMC processed scRNA-seq data can download from here:
+https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ
 
 ## Prepare the Single cell data in the early stage. 
 
-```{r }
-library(scPagwas)
+The single cell Intermediate data is immobile for the same `Single_data` input no matter the `gwas_data` input files. 
+First, Run the `Single_data_input` and `Pathway_pcascore_run` for `Seu_Hema_data.rds`.
 
+```{r eval = FALSE}
+library(scPagwas)
+Single_data <- readRDS("Seu_Hema_data.rds")
+Pagwas <- list()
+Pagwas <- Single_data_input(Pagwas=Pagwas,
+                            assay="RNA",
+                            Single_data=Single_data,
+                            Pathway_list=Genes_by_pathway_kegg)
+Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
+                               Pathway_list=Genes_by_pathway_kegg)
+names(Pagwas)
+#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"    
+#[5] "rawPathway_list"  "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"  
 ```
+
+## Run different traits for scPagwas. 
+
+We take the Pagwas as input for `scPagwas_main`, therefore, there is no need to run the Pathway_pcascore_run function for different traits which will save times. 
+
+Second, Run the `scPagwas_main` for different trait files and take the single-cell result as input. 
+
+```{r eval = FALSE}
+#Pagwas is the result for last blocks.
+Pagwas_monocytecount<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ="monocytecount_prune_gwas_data.txt",
+                     Single_data ="Seu_Hema_data.rds",
+                     output.prefix="monocytecount_scPagwas",
+                     output.dirs="monocytecount_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     ncores=5,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+
+Pagwas_Lymphocytecount<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ="Lymphocytecount_gwas_data.txt",
+                     Single_data ="Seu_Hema_data.rds",
+                     output.prefix="Lymphocytecountt_scPagwas",
+                     output.dirs="Lymphocytecount_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     ncores=5,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+
+Pagwas_MeanCorpusVolume<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ="MeanCorpusVolume_prune_gwas_data.txt",
+                     Single_data ="Seu_Hema_data.rds",
+                     output.prefix="MeanCorpusVolume_scPagwas",
+                     output.dirs="MeanCorpusVolume_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     ncores=5,
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+```
+
