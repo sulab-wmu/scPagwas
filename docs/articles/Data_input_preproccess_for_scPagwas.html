@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Data_input_preproccess_for_scPagwas</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:18</h4>
+            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 13:37</h4>
       
       
       <div class="hidden name"><code>Data_input_preproccess_for_scPagwas.Rmd</code></div>
@@ -251,7 +251,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org" class="external-link">readr</a></span><span class="op">)</span>
 <span class="co">############read the raw vcf file</span>
 <span class="va">monocytecount</span><span class="op">&lt;-</span><span class="st">"ieu-b-31.vcf.gz"</span>
-<span class="va">GWAS_raw</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html" class="external-link">read_table2</a></span><span class="op">(</span><span class="va">monocytecount</span>,comment <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span>
+<span class="va">GWAS_raw</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/readr/man/read_table.html" class="external-link">read_table2</a></span><span class="op">(</span><span class="va">monocytecount</span>,comment <span class="op">=</span> <span class="st">"#"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">GWAS_raw</span> <span class="op">)</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"CHROM"</span>,<span class="st">"POS"</span>,<span class="st">"ID"</span>,<span class="st">"REF"</span>,<span class="st">"ALT"</span>,<span class="st">"QUAL"</span>,<span class="st">"FILTER"</span>,<span class="st">"INFO"</span>,<span class="st">"FORMAT"</span>,<span class="st">"IEU"</span><span class="op">)</span>
 <span class="co">#ES:SE:LP:AF:SS:ID</span>
 <span class="co">#ieu-a type of file:split the FORMAT and IEU coloumn, which including different information.</span>

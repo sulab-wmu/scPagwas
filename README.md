@@ -66,19 +66,27 @@ quick-start example:
 scPagwas provides a number of tutorials for various situation. Please
 also visit the documentation.
 
--   The [Data_input_preproccess_for_scPagwas]() tutorial provides the
-    methods of data-input preproccess for scPagwas.
+-   The
+    [Data_input_preproccess_for_scPagwas](https://dengchunyu.github.io/scPagwas/articles/Data_input_preproccess_for_scPagwas.html)
+    tutorial provides the methods of data-input preproccess for
+    scPagwas.
 
--   The [Bmmc_monocytecount_singlecell_celltype_vignette]() tutorial
-    provides the usual procedure for scPagwas including the result
-    interpretation are discussed, and visualizing their characteristics.
+-   The
+    [Bmmc_monocytecount_singlecell_celltype_vignette](https://dengchunyu.github.io/scPagwas/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html)
+    tutorial provides the usual procedure for scPagwas including the
+    result interpretation are discussed, and visualizing their
+    characteristics.
 
--   The [Running_scPagwas_steps_by_SubFunctions]() tutorial provides the
-    procedure for only cell types or single cell functions; Otherwise, a
-    step by step introduction for scPgawas sub-functions are provided.
+-   The
+    [Running_scPagwas_steps_by_SubFunctions](https://dengchunyu.github.io/scPagwas/articles/Running_scPagwas_steps_by_SubFunctions.html)
+    tutorial provides the procedure for only cell types or single cell
+    functions; Otherwise, a step by step introduction for scPgawas
+    sub-functions are provided.
 
--   The [Multi_TraitFiles_for_one_SingleData_running]() tutorial
-    provides
+-   The
+    [Multi_TraitFiles_for_one_SingleData_running](https://dengchunyu.github.io/scPagwas/articles/Multi_TraitFiles_for_one_SingleData_running.html)
+    tutorial provides
 
--   The [Split_big_scRNAseqData_and_integrate_result]() tutorial
-    provides
+-   The
+    [Split_big_scRNAseqData_and_integrate_result](https://dengchunyu.github.io/scPagwas/articles/Split_big_scRNAseqData_and_integrate_result.html)
+    tutorial provides
