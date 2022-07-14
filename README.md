@@ -5,7 +5,7 @@ trait-relevant cell subpopulations by incorporating pathway activity
 transformed scRNA-seq data with genome-wide association studies (GWAS)
 data.
 
-<img src="E:/RPakage/scPagwas/img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
+<img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
 
 The methodology and benchmarking performance are described in:
 
