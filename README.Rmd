@@ -21,8 +21,9 @@ knitr::opts_chunk$set(
 
 **scPagwas** employing the polygenic regression model to uncover trait-relevant cell subpopulations by incorporating pathway activity transformed scRNA-seq data with genome-wide association studies (GWAS) data.
 
-![Graphical abstract](./docs/reference/figures/Figures_1.jpg) 
-
+```{r figure1, fig.align = 'center', out.width = "80%"}
+knitr::include_graphics(here::here("img", "Figures_1.jpg"))
+```
  
 The methodology and benchmarking performance are described in: 
 
