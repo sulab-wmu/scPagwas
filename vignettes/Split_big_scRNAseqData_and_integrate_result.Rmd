@@ -58,7 +58,7 @@ names(Pagwas)
 
 ### 2. Run scPagwas for sub-data
 
-```{r echo=T,results='hide',message=FALSE, warning=FALSE}
+```{r eval = FALSE}
 Pagwas1<-scPagwas_main(Pagwas =Pagwas,
                      gwas_data =NULL,
                      Single_data =Example_splice1,
@@ -108,7 +108,7 @@ if(length(SOAR::Objects())>0){
 # * Get rankPvalue for each single cell
 ```
 
-```{r echo=T,results='hide',message=FALSE, warning=FALSE}
+```{r eval = FALSE}
 Pagwas2<-scPagwas_main(Pagwas =Pagwas,
                      gwas_data =NULL,
                      Single_data =Example_splice2,
@@ -163,7 +163,11 @@ if(length(SOAR::Objects())>0){
 
 We integrate the splice result by `merge_pagwas` function. 
 
-```{r}
+```{r eval = FALSE}
 Pagwas_integrate <- merge_pagwas(Pagwas_list = list(Pagwas1,Pagwas2),n_topgenes = 1000)
 print(Pagwas_integrate)
+# An object of class Seurat 
+# 39235 features across 1000 samples within 4 assays 
+# Active assay: SCT (18715 features, 0 variable features)
+#  3 other assays present: RNA, scPagwasPaHeritability, scPagwasPaPca
 ```

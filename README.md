@@ -7,6 +7,8 @@ data.
 
 <img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
 
+
+
 The methodology and benchmarking performance are described in:
 
 Polygenic regression identifies trait-relevant cell subpopulations
