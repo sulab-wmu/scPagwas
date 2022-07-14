@@ -9,7 +9,7 @@ data.
 knitr::include_graphics(here::here("img", "Figures_1.jpg"))
 ```
 
-<img src="E:/RPakage/scPagwas/img/Figures_1.jpg" width="80%" style="display: block; margin: auto;" />
+<img src="./img/Figures_1.jpg" width="80%" style="display: block; margin: auto;" />
 
 The methodology and benchmarking performance are described in:
 
