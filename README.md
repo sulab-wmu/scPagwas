@@ -5,7 +5,7 @@ trait-relevant cell subpopulations by incorporating pathway activity
 transformed scRNA-seq data with genome-wide association studies (GWAS)
 data.
 
-<img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
+<img src="E:/RPakage/scPagwas/img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
 
 The methodology and benchmarking performance are described in:
 
@@ -81,12 +81,14 @@ also visit the documentation.
     [Running_scPagwas_steps_by_SubFunctions](https://dengchunyu.github.io/scPagwas/articles/Running_scPagwas_steps_by_SubFunctions.html)
     tutorial provides the procedure for only cell types or single cell
     functions; Otherwise, a step by step introduction for scPgawas
-    sub-functions are provided.
+    sub-functions also provided.
 
 -   The
     [Multi_TraitFiles_for_one_SingleData_running](https://dengchunyu.github.io/scPagwas/articles/Multi_TraitFiles_for_one_SingleData_running.html)
-    tutorial provides
+    tutorial provides the procedure that running scPagwas based on
+    multiple trait files in one scRNA-seq data.
 
 -   The
     [Split_big_scRNAseqData_and_integrate_result](https://dengchunyu.github.io/scPagwas/articles/Split_big_scRNAseqData_and_integrate_result.html)
-    tutorial provides
+    tutorial provides procedure that running scPagwas with several
+    splited scRNA-seq data which the whole data is too big for running.

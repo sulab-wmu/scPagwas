@@ -7,7 +7,7 @@ articles:
   Multi_TraitFiles_for_one_SingleData_running: Multi_TraitFiles_for_one_SingleData_running.html
   Running_scPagwas_steps_by_SubFunctions: Running_scPagwas_steps_by_SubFunctions.html
   Split_big_scRNAseqData_and_integrate_result: Split_big_scRNAseqData_and_integrate_result.html
-last_built: 2022-07-14T05:49Z
+last_built: 2022-07-14T06:13Z
 urls:
   reference: https://github.com/dengchunyu/scPagwas/reference
   article: https://github.com/dengchunyu/scPagwas/articles
