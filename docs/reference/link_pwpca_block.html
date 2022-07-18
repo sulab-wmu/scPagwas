@@ -103,7 +103,7 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># Pagwas should have inhibit data</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">link_pwpca_block</span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in unique(pa_block$block_info$pathway):</span> object 'Pagwas' not found</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in link_pwpca_block(Pagwas):</span> could not find function "link_pwpca_block"</span>
 </code></pre></div>
     </div>
   </div>

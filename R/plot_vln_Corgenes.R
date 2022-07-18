@@ -51,7 +51,7 @@ plot_vln_Corgenes <- function(seurat_obj,
 
   # =============prepare group and colors==================
   seurat_obj_tmp <- seurat_obj
-  Idents(seurat_obj_tmp) <- var_group
+  SeuratObject::Idents(seurat_obj_tmp) <- var_group
   levels(x = seurat_obj_tmp) <- sort(unique(seurat_obj_tmp@meta.data[[var_group]]), decreasing = if (flip) T else F)
 
   if (is.null(vec_group_colors)) {

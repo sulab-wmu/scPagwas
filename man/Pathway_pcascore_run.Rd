@@ -28,7 +28,30 @@ The function can calculate the pathway pcascore for celltypes and single cells.
 }
 \examples{
 library(scPagwas)
-data(Genes_by_pathway.kegg)
-# the Pagwas shoul be after Single_data_input() and GWAS_summary_input()
-Pagwas <- Pathway_pcascore_run(Pagwas = Pagwas, Pathway_list = Genes_by_pathway.kegg)
+Pagwas <- list()
+#Start to read the single cell data
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+Pagwas <- Single_data_input(
+  Pagwas = Pagwas,
+  assay = "RNA",
+  Single_data = Single_data,
+  Pathway_list = Genes_by_pathway_kegg
+)
+Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+#Run pathway pca score!
+Pagwas <- Pathway_pcascore_run(
+  Pagwas = Pagwas,
+  Pathway_list = Genes_by_pathway_kegg
+)
 }
+\author{
+Chunyu Deng
+}
+\keyword{Single_data_input,}
+\keyword{calculate}
+\keyword{data.}
+\keyword{for}
+\keyword{matrix}
+\keyword{singlecell}
+\keyword{svd}
+\keyword{the}

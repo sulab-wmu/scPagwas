@@ -11,13 +11,30 @@
 #'
 #' @examples
 #' library(scPagwas)
-#' data(Genes_by_pathway.kegg)
-#' # the Pagwas shoul be after Single_data_input() and GWAS_summary_input()
-#' Pagwas <- Pathway_pcascore_run(Pagwas = Pagwas, Pathway_list = Genes_by_pathway.kegg)
+#' Pagwas <- list()
+#' #Start to read the single cell data
+#' Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+#' Pagwas <- Single_data_input(
+#'   Pagwas = Pagwas,
+#'   assay = "RNA",
+#'   Single_data = Single_data,
+#'   Pathway_list = Genes_by_pathway_kegg
+#' )
+#' Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+#' #Run pathway pca score!
+#' Pagwas <- Pathway_pcascore_run(
+#'   Pagwas = Pagwas,
+#'   Pathway_list = Genes_by_pathway_kegg
+#' )
+#' @author Chunyu Deng
+#' @aliases Pathway_pcascore_run
+#' @keywords Single_data_input, calculate the svd matrix for singlecell data.
+
 Pathway_pcascore_run <- function(Pagwas = NULL,
                                  Pathway_list = NULL,
                                  min.pathway.size = 10,
                                  max.pathway.size = 1000) {
+
   if (is.null(Pathway_list)) {
     stop("not loaded Pathway_list data")
   }
@@ -155,6 +172,7 @@ PathwayPCAtest <- function(Pathway_list,
     stop("NA cell names are not allowed - please fix")
   }
 
+
   ## filter pathway
   nPcs <- 1
   scCounts <- t(scCounts)
@@ -167,7 +185,7 @@ PathwayPCAtest <- function(Pathway_list,
     lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     mat <- scCounts[, lab]
     # rm(scCounts)
-    pcs <- irlba::irlba(as(mat, "dgCMatrix"), nv = nPcs, nu = 0, center = cm[lab])
+    pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"), nv = nPcs, nu = 0, center = cm[lab])
 
     pcs$d <- pcs$d / sqrt(nrow(mat))
     pcs$rotation <- pcs$v
@@ -176,7 +194,7 @@ PathwayPCAtest <- function(Pathway_list,
 
     pcs$scores <- Matrix::crossprod(pcs$rotation, t(mat)) - as.numeric((cm[lab] %*% pcs$rotation))
 
-    cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(cor(pcs$scores[i, ], colMeans(t(mat) * abs(pcs$rotation[, i]))))))
+    cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(stats::cor(pcs$scores[i, ], colMeans(t(mat) * abs(pcs$rotation[, i]))))))
 
     pcs$scores <- pcs$scores * cs
     pcs$rotation <- pcs$rotation * cs

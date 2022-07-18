@@ -91,7 +91,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Bmmc_monocytecount_singlecell_celltype_vignette</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 14, 七月, 2022 at 16:04</h4>
+            <h4 data-toc-skip class="date">Last Updated: 18, 七月, 2022 at 14:51</h4>
       
       
       <div class="hidden name"><code>Bmmc_monocytecount_singlecell_celltype_vignette.Rmd</code></div>
@@ -230,8 +230,8 @@
 
 <span class="fu"><a href="https://rdrr.io/r/grDevices/png.html" class="external-link">png</a></span><span class="op">(</span><span class="st">"monocyte_bmmc_dimplot_umap.png"</span>,width <span class="op">=</span> <span class="fl">600</span>, height <span class="op">=</span> <span class="fl">600</span><span class="op">)</span>
  <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">Pagwas</span>,pt.size<span class="op">=</span><span class="fl">1</span>,reduction<span class="op">=</span><span class="st">"tsne"</span>,label <span class="op">=</span> <span class="cn">T</span>, repel<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span>
- <span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"celltypes"</span>, values <span class="op">=</span> <span class="va">color26</span><span class="op">)</span><span class="op">+</span>
- <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Monocyte BMMC"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"TSNE"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://rdrr.io/pkg/ggplot2/man/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
+ <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"celltypes"</span>, values <span class="op">=</span> <span class="va">color26</span><span class="op">)</span><span class="op">+</span>
+ <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Monocyte BMMC"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"TSNE"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/monocyte_bmmc_dimplot_umap.png" width="50%"></p>
 <p>scPagwas.TRS.Score1 and positive(p&lt;0.05) cells showing in dimplot.</p>
@@ -349,7 +349,7 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span>
-<span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
+<span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/pdf.html" class="external-link">pdf</a></span><span class="op">(</span><span class="st">"plot_vln_Corgenes.pdf"</span>,width <span class="op">=</span> <span class="fl">6</span>, height <span class="op">=</span><span class="fl">7</span><span class="op">)</span>
 <span class="fu"><a href="../reference/plot_vln_Corgenes.html">plot_vln_Corgenes</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas</span>,
              assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,
@@ -367,7 +367,7 @@
 <p>Barplot for celltypes</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/Bootstrap_P_Barplot.html">Bootstrap_P_Barplot</a></span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
-                    p_names<span class="op">=</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
+                    p_names<span class="op">=</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
                     figurenames <span class="op">=</span> <span class="st">"Bootstrap_P_Barplot.pdf"</span>,
                     width <span class="op">=</span> <span class="fl">5</span>,
                     height <span class="op">=</span> <span class="fl">7</span>,
@@ -383,6 +383,39 @@
                         do_plot<span class="op">=</span><span class="cn">T</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html" class="external-link">dev.off</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="figures/estimate_Plot_00.png" width="60%"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; R version 4.1.0 (2021-05-18)</span>
+<span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span>
+<span class="co">#&gt; Running under: Windows 10 x64 (build 19044)</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; Matrix products: default</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; locale:</span>
+<span class="co">#&gt; [1] LC_COLLATE=Chinese (Simplified)_China.936 </span>
+<span class="co">#&gt; [2] LC_CTYPE=Chinese (Simplified)_China.936   </span>
+<span class="co">#&gt; [3] LC_MONETARY=Chinese (Simplified)_China.936</span>
+<span class="co">#&gt; [4] LC_NUMERIC=C                              </span>
+<span class="co">#&gt; [5] LC_TIME=Chinese (Simplified)_China.936    </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; attached base packages:</span>
+<span class="co">#&gt; [1] stats     graphics  grDevices datasets  utils     methods   base     </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; other attached packages:</span>
+<span class="co">#&gt; [1] knitr_1.33</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; loaded via a namespace (and not attached):</span>
+<span class="co">#&gt;  [1] magrittr_2.0.1      R6_2.5.0            ragg_1.2.2         </span>
+<span class="co">#&gt;  [4] rlang_0.4.11        fastmap_1.1.0       stringr_1.4.0      </span>
+<span class="co">#&gt;  [7] tools_4.1.0         xfun_0.24           jquerylib_0.1.4    </span>
+<span class="co">#&gt; [10] systemfonts_1.0.4   htmltools_0.5.1.1   yaml_2.2.1         </span>
+<span class="co">#&gt; [13] digest_0.6.27       rprojroot_2.0.2     pkgdown_2.0.2      </span>
+<span class="co">#&gt; [16] crayon_1.4.1        textshaping_0.3.6   BiocManager_1.30.16</span>
+<span class="co">#&gt; [19] purrr_0.3.4         sass_0.4.0          fs_1.5.0           </span>
+<span class="co">#&gt; [22] memoise_2.0.1       cachem_1.0.6        evaluate_0.14      </span>
+<span class="co">#&gt; [25] rmarkdown_2.12      stringi_1.6.1       compiler_4.1.0     </span>
+<span class="co">#&gt; [28] bslib_0.2.5.1       desc_1.3.0          jsonlite_1.7.2     </span>
+<span class="co">#&gt; [31] renv_0.15.4</span></code></pre></div>
 </div>
 </div>
   </div>

@@ -1,6 +1,6 @@
 ---
 title: "Running_scPagwas_steps_by_SubFunctions"
-date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+date: "Last Updated on `r format(Sys.time(), '%d %B, %Y')`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Running_scPagwas_steps_by_SubFunctions}
@@ -20,13 +20,11 @@ knitr::opts_chunk$set(
 The executive programs for celltypes and single cell are independent, If you only want to know the celtypes, set the `celltype=T` and `singlecell=F`.
 The advantages is save a lot of times, for celltype only can omit many running processes.
 
-The data used the same with Bmmc_monocytecount_singlecell_celltype_vignette.
-
-```{r eval = FALSE}
+```{r message=FALSE, warning=FALSE,results="hide"}
 library(scPagwas)
 Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
-                     gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
-                     Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      output.prefix="monocytecount_scPagwas",
                      output.dirs="monocytecount_bmmc",
                      Pathway_list=Genes_by_pathway_kegg,
@@ -39,7 +37,7 @@ Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
 ```
 
 The reuslt of celltypes is list format(not seruat format).
-```{r eval = FALSE}
+```{r }
 names(Pagwas_celltypes)
 # [1] "Celltype_anno"     "data_mat"          "VariableFeatures" 
 # [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     
@@ -57,10 +55,10 @@ names(Pagwas_celltypes)
 Because the parameters and input data are the same with celltypes function, we can take the celltypes result as the input data for single cell function. The advantage is there is no need to 
 run the `svd` code block, save a lot of time. 
 
-```{r eval = FALSE}
+```{r message=FALSE, warning=FALSE,results="hide"}
 Pagwas_singlecell<-scPagwas_main(Pagwas =Pagwas_celltypes, 
-                                 gwas_data ="/share/pub/dengcy/GWAS_Multiomics/compare/bloodtraits/monocytecount_prune_gwas_data.txt",
-                                 Single_data ="/share/pub/dengcy/GWAS_Multiomics/singlecelldata/Seu_Hema_data.rds",
+                                 gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                                 Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                                  output.prefix="monocytecount_scPagwas",
                                  output.dirs="monocytecount_bmmc",
                                  seruat_return=T,
@@ -153,7 +151,7 @@ Pagwas$pathway_blocks[1:3]
 
 ### 3.6 Link the pathway blocks to pca score 
 Also run the regression function for single cell. 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE,results="hide"}
 Pagwas <- Link_pathway_blocks_gwas(
       Pagwas = Pagwas,
       chrom_ld = chrom_ld,
@@ -162,20 +160,22 @@ Pagwas <- Link_pathway_blocks_gwas(
       ncores = 1
     )
 ```
+
 The pathway regression result for single cell. 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 knitr::kable(Pagwas$Pathway_sclm_results[1:10,1:5])
 ```
 
 ### 3.7 Perform regression for celltypes 
 Run the regression function for celltypes. 
-```{r message=FALSE, include=FALSE}
+```{r message=FALSE, warning=FALSE,results="hide"}
 Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data)
 Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5)
 Pagwas$Pathway_ld_gwas_data <- NULL
 ```
+
 Show the regression result for celltypes.
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 names(Pagwas)
 Pagwas$lm_results
 knitr::kable(Pagwas$bootstrap_results)
@@ -183,7 +183,7 @@ knitr::kable(Pagwas$bootstrap_results)
 
 ### 3.8 Construct the scPagwas score
 The gPAS scPagwas score mainly to deal with the single-cell regression result.
-```{r}
+```{r message=FALSE, warning=FALSE}
 Pagwas <- scPagwas_perform_score(
       Pagwas = Pagwas,
       remove_outlier = TRUE
@@ -191,7 +191,7 @@ Pagwas <- scPagwas_perform_score(
 names(Pagwas)
 ```
 Show result for Pathway pvalue for each cell types
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 Pagwas$scPagwas.gPAS.score[1:10]
 knitr::kable(head(Pagwas$scPathways_rankPvalue))
 ```
@@ -199,12 +199,12 @@ knitr::kable(head(Pagwas$scPathways_rankPvalue))
 
 ### 3.9 Get the gene heritability correlation 
 Run heritability correlation for all genes.
-```{r}
+```{r message=FALSE, warning=FALSE}
 Pagwas <- scGet_gene_heritability_correlation(Pagwas = Pagwas)
 ```
 
 The result for correlation: 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 knitr::kable(head(Pagwas$gene_heritability_correlation))
 ```
 
@@ -213,7 +213,7 @@ knitr::kable(head(Pagwas$gene_heritability_correlation))
 
 Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `rankPvalue`. 
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
 Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 #run pvalue
@@ -222,3 +222,149 @@ CellScalepValue <- rankPvalue(datS = t(data.matrix(Seurat::GetAssayData(Single_d
 
 All these sub-functions for scPagwas can running dependently, but need to run orderly. The `scPagwas_main` function is a wrapper functions for these sub-functions.
 
+
+## 4. Result Visualization
+
+### 4.1 Visualize the scPagwas Score of single cell data in UMAP or TSNE plot.
+
+1) DimPlot of singlecell data.
+
+```{r message=FALSE, warning=FALSE}
+ suppressMessages(require("RColorBrewer"))
+ suppressMessages(require("Seurat"))
+ suppressMessages(require("SeuratObject"))
+ suppressMessages(require("ggsci"))
+ suppressMessages(require("dplyr"))
+ suppressMessages(require("ggplot2"))
+ suppressMessages(require("ggpubr"))
+ Seurat::DimPlot(Pagwas_singlecell,pt.size=1,reduction="umap",label = T, repel=TRUE)+
+ umap_theme()+ggtitle("Test")+labs(x="UMAP",y="")+theme(aspect.ratio=1)
+```
+
+
+scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
+
+```{r message=FALSE, warning=FALSE}
+ scPagwas_Visualization(Single_data=Pagwas_singlecell,
+                        p_thre = 0.05,
+                        FigureType = "umap",
+                        width = 7,
+                        height = 7,
+                        lowColor = "white", 
+                        highColor = "red",
+                        output.dirs="figure",
+                        size = 0.5,
+                        do_plot = T)
+```
+
+### 4.2 Plot the barplot of the proportion of positive Cell. 
+
+Plot the barplot of the proportion of positive Cells in celltypes:
+```{r message=FALSE, warning=FALSE}
+plot_bar_positie_nagtive(seurat_obj=Pagwas_singlecell,
+                         var_ident="anno",
+                         var_group="positiveCells",
+                         vec_group_colors=c("#E8D0B3","#7EB5A6"),
+                         do_plot = T)
+```
+
+Plot the barplot of the proportion of celltypes in positive and negative Cells:
+
+```{r message=FALSE, warning=FALSE}
+plot_bar_positie_nagtive(seurat_obj=Pagwas_singlecell,
+                              var_ident="positiveCells",
+                              var_group="anno",
+                              p_thre = 0.01,
+                              vec_group_colors=NULL,
+                              f_color=colorRampPalette(brewer.pal(n=10, name="RdYlBu")),
+                              do_plot = T)
+```
+
+### 4.3 Visualize the heritability correlated Pathways
+
+Plot the specific genetics pathway for each celltypes
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library(tidyverse))
+suppressMessages(library(rhdf5))
+suppressMessages(library(ggplot2))
+suppressMessages(library(grDevices))
+suppressMessages(library(stats))
+suppressMessages(library(FactoMineR))
+suppressMessages(library(scales))
+suppressMessages(library(reshape2))
+suppressMessages(library(ggdendro))
+suppressMessages(library(grImport2))
+suppressMessages(library(gridExtra))
+suppressMessages(library(grid))
+suppressMessages(library(sisal))
+
+source(system.file("extdata", "plot_scpathway_contri_dot.R", package = "scPagwas"))
+plot_scpathway_dot(Pagwas=Pagwas_singlecell,
+                   celltypes=unique(Idents(Pagwas_singlecell)),
+                   topn_path_celltype=5,
+                   filter_p=0.05,
+                   max_logp=15,
+                   display_max_sizes=F,
+                   size_var ="logrankPvalue" ,
+                   col_var="proportion",
+                   shape.scale = 8,
+                   cols.use=c("lightgrey", "#E45826"),
+                   dend_x_var = "logrankPvalue",
+                   dist_method="euclidean",
+                   hclust_method="ward.D",
+                   do_plot = T,
+                   #figurenames = "Pathway_plot.pdf",
+                   width = 7,
+                   height = 7)
+```
+
+### 4.4 Plot the heritability correlated genes
+
+```{r message=FALSE, warning=FALSE}
+heritability_cor_scatterplot(gene_heri_cor=Pagwas_singlecell@misc$gene_heritability_correlation,
+                             topn_genes_label=10,
+                             color_low="#035397",
+                             color_high ="#F32424",
+                             color_mid = "white",
+                             text_size=2,
+                             do_plot=T,
+                             max.overlaps =20,
+                             width = 7,
+                             height = 7)
+```
+
+### 4.5 Show expression of the top heritability correlation genes in celltypes
+
+```{r message=FALSE, warning=FALSE}
+suppressMessages(library("ggsci"))
+suppressMessages(library("Seurat"))
+top5genes<-rownames(Pagwas_singlecell@misc$gene_heritability_correlation)[order(Pagwas_singlecell@misc$gene_heritability_correlation,decreasing = T)[1:5]]
+plot_vln_Corgenes(seurat_obj=Pagwas_singlecell,
+             assay="RNA", slot="data",
+             var_group="anno",
+             vec_features=top5genes,
+             do_plot = T
+             )
+```
+
+### 4.6 celltypes bootstrap_results reuslt 
+Barplot for celltypes 
+
+```{r message=FALSE, warning=FALSE}
+Bootstrap_P_Barplot(p_results=Pagwas_singlecell@misc$bootstrap_results$bp_value[-1],
+                    p_names=rownames(Pagwas_singlecell@misc$bootstrap_results)[-1],
+                    width = 5,
+                    height = 7,
+                    do_plot=T,
+                    title = "Test")
+```
+
+Forest plot for estimate value. 
+```{r message=FALSE, warning=FALSE}
+Bootstrap_estimate_Plot(Pagwas=Pagwas_singlecell,
+                        width = 9,
+                        height = 7,
+                        do_plot=T)
+
+```

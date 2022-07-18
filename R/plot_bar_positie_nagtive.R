@@ -49,6 +49,7 @@ plot_bar_positie_nagtive <- function(seurat_obj,
                                      output.dirs = NULL,
                                      width = 7,
                                      height = 7) {
+  n_ident<-ident<-group<-NULL
   # ===============seurat_obj p==================
   # seurat_obj$scPagwas_p <- scPagwas_p[intersect(colnames(seurat_obj),names(scPagwas_p))]
   # thre <- sort(Single_data$scPagwas_score, decreasing = T)[ncol(Single_data) * 0.1]

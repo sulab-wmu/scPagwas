@@ -28,6 +28,40 @@ That is "singlecell = T;celltype =F" can use to all the split data,
 but "singlecell = F;celltype =T" can not be used.
 }
 \examples{
+library(scPagwas)
+Pagwas<-list()
+library(Seurat)
+scRNAexample <-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+Example_splice1<-subset(scRNAexample,idents=c("Celltype1","Celltype2","Celltype3","Celltype4", "Celltype5"))
+Example_splice2<-subset(scRNAexample,idents=c( "Celltype6","Celltype7","Celltype8","Celltype9","Celltype10" ))
 
-Pagwas_merge <- merge_pagwas(Pagwas_list = list(Pagwas_data1, Pagwas_data2))
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+Pagwas <- GWAS_summary_input(
+  Pagwas = Pagwas,
+  gwas_data = gwas_data,
+  maf_filter = 0.1
+)
+Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
+#Run the first split data
+Pagwas1<-scPagwas_main(Pagwas =Pagwas,
+                      gwas_data =NULL,
+                       Single_data =Example_splice1,
+                       output.prefix="splice1",
+                       output.dirs="splice_scPagwas",
+                       Pathway_list=Genes_by_pathway_kegg,
+                       ncores=5,
+                       assay="RNA",
+                       block_annotation = block_annotation,
+                       chrom_ld = chrom_ld)
+Pagwas2<-scPagwas_main(Pagwas =Pagwas,
+                      gwas_data =NULL,
+                      Single_data =Example_splice2,
+                      output.prefix="splice2 ",
+                      output.dirs="splice_scPagwas",
+                      Pathway_list=Genes_by_pathway_kegg,
+                      ncores=5,
+                      assay="RNA",
+                      block_annotation = block_annotation,
+                      chrom_ld = chrom_ld)
+Pagwas_integrate <- merge_pagwas(Pagwas_list = list(Pagwas1,Pagwas2),n_topgenes = 1000)
 }

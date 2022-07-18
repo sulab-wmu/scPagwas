@@ -40,10 +40,12 @@ Pathway_annotation_input <- function(Pagwas,
     stop("no match for Pathway gene and VariableFeatures")
   }
 
+  chrom<-start<-NULL
   # sort and add a random partition label for bootstrap
   Pathway_list <- lapply(Pagwas$Pathway_list, function(Pa) intersect(Pa, proper.gene.names))
 
-  Pa_index <- names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0] %>% intersect(., rownames(Pagwas$pca_cell_df))
+  a<-names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0]
+  Pa_index <-   intersect(a, rownames(Pagwas$pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
 

@@ -129,7 +129,7 @@ Returns a list class with entries(seruat_return=F):
 }
 }
 \description{
-Main Pagwas wrapper re-progress function.
+Main Pagwas wrapper functions.
 }
 \details{
 scPagwas, A single-cell pathway-based principal component (PC)-scoring algorithm named
@@ -138,6 +138,8 @@ to infer disease-relevant cell populations and score the associations of
 individual cells with complex diseases.
 
 The entry point for Pagwas analysis.
+Including the data input functions and the main progress functions; It can also output the
+running log and parameter log for scPagwas, and construct the folder for output.
 }
 \note{
 1.When you run the package in linux server, you can run
@@ -151,8 +153,6 @@ your data into several sub-data and run the merge_pagwas to merge them.
 }
 \examples{
 library(scPagwas)
-library(ggplot2)
-library(Seurat)
 Pagwas_data <- scPagwas_main(
   Pagwas = NULL,
   gwas_data = system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
@@ -168,3 +168,14 @@ Pagwas_data <- scPagwas_main(
   ncores = 1
 )
 }
+\references{
+
+}
+\author{
+Chunyu Deng
+}
+\keyword{functions.}
+\keyword{of}
+\keyword{scPagwas}
+\keyword{scPagwas_main,}
+\keyword{wrapper}

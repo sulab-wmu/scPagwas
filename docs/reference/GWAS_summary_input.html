@@ -104,17 +104,39 @@ filter the maf and the sex chrom data</p>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>Returns a list:</p>
+<dl><dt>gwas_data</dt>
+<dd><p>filtered gwas summary data frame.</p></dd>
+</dl></div>
+    <div id="author">
+    <h2>Author</h2>
+    <p>Chunyu Deng</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">GWAS_summ_example</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'GWAS_summ_example' not found</span>
-<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">GWAS_summary_input</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="cn">NULL</span>, gwas_data <span class="op">=</span> <span class="va">GWAS_summ_example</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">GWAS_summary_input</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas</span>, gwas_data <span class="op">=</span> <span class="va">gwas_data</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Input gwas summary data frame!</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in GWAS_summary_input(Pagwas = NULL, gwas_data = GWAS_summ_example):</span> object 'GWAS_summ_example' not found</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No "chr" from chrom!, now pasting it!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering out SNPs with MAF criterion</span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   chrom     pos       rsid        se         beta     maf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  chr1 1138913  rs3819001 0.0724484 4.774317e-01 0.06761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  chr1 1691050 rs35672141 0.0368296 1.108626e-01 0.48200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  chr1 1722932  rs3737628 0.0324817 7.881858e-02 0.48820</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  chr1 2369498  rs4592207 0.0399954 8.822031e-02 0.41790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  chr1 3259369  rs2483286 0.0352555 1.541813e-03 0.30470</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  chr1 3811790 rs12085743 0.0405247 2.465163e-05 0.18500</span>
+<span class="r-in"><span class="co">#chrom     pos       rsid        se         beta     maf</span></span>
+<span class="r-in"><span class="co">#1  chr1 1138913  rs3819001 0.0724484 4.774317e-01 0.06761</span></span>
+<span class="r-in"><span class="co">#2  chr1 1691050 rs35672141 0.0368296 1.108626e-01 0.48200</span></span>
+<span class="r-in"><span class="co">#3  chr1 1722932  rs3737628 0.0324817 7.881858e-02 0.48820</span></span>
+<span class="r-in"><span class="co">#4  chr1 2369498  rs4592207 0.0399954 8.822031e-02 0.41790</span></span>
+<span class="r-in"><span class="co">#5  chr1 3259369  rs2483286 0.0352555 1.541813e-03 0.30470</span></span>
+<span class="r-in"><span class="co">#6  chr1 3811790 rs12085743 0.0405247 2.465163e-05 0.18500</span></span>
 </code></pre></div>
     </div>
   </div>

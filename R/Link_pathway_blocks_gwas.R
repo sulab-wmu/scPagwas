@@ -22,6 +22,8 @@ Link_pathway_blocks_gwas <- function(Pagwas,
                                      celltype = T,
                                      ncores = 1) {
   options(bigmemory.allow.dimnames = TRUE)
+  pos <- NULL
+
   Pachrom_block_list <- lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks, f = as.vector(pa_blocks$chrom)))
 
   names(Pachrom_block_list) <- names(Pagwas$pathway_blocks)
@@ -51,6 +53,99 @@ Link_pathway_blocks_gwas <- function(Pagwas,
   gc()
   return(Pagwas)
 }
+
+
+#' link_pwpca_block
+#' @description Link the pca score and expression for each pathway genes
+#' for each block
+#' Requires rownames that are identitcal to block labels loaded previously.
+#' @param Pagwas Pagwas format, deault is NULL.
+#'
+#' @return
+#' @examples
+#' library(scPagwas)
+#' # Pagwas should have inhibit data
+#' Pagwas <- link_pwpca_block(Pagwas)
+link_pwpca_block <- function(pa_block,
+                             pca_cell_df,
+                             merge_scexpr,
+                             snp_gene_df,
+                             rawPathway_list) {
+  pathway <- unique(pa_block$block_info$pathway)
+
+  x <- pca_cell_df[pathway, ]
+  if (length(pathway) == 1) {
+    x <- matrix(x, nrow = 1)
+    rownames(x) <- pathway
+  }
+
+  if (nrow(pa_block$snps) == 0) {
+    pa_block$include_in_inference <- F
+    pa_block$x <- NULL # to make sure we totally replace previous stuffs
+    return(pa_block)
+    # stop("remove duplicates from pa_block data")
+  }
+  proper_genes <- rownames(merge_scexpr)
+  mg <- intersect(rawPathway_list[[pathway]], proper_genes)
+  x2 <- merge_scexpr[mg, ]
+
+  if (ncol(merge_scexpr) == 1) {
+    x2 <- data.matrix(x2)
+  }
+  if (length(mg) > 1) {
+    x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
+  }
+
+  if (pa_block$n_snps > 1) {
+    if (ncol(merge_scexpr) == 1) {
+      x2 <- data.matrix(x2[pa_block$snps$label, ])
+      pa_block$n_snps <- nrow(pa_block$snps)
+
+      x <- data.matrix(x[rep(1, pa_block$n_snps), ])
+      rownames(x) <- pa_block$snps$rsid
+
+      # snp_gene_df <- Pagwas$snp_gene_df
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      x3 <- x2 * x
+    } else {
+      x2 <- x2[pa_block$snps$label, ]
+      pa_block$n_snps <- nrow(pa_block$snps)
+
+      x <- x[rep(1, pa_block$n_snps), ]
+      rownames(x) <- pa_block$snps$rsid
+
+      # snp_gene_df <- Pagwas$snp_gene_df
+      rownames(snp_gene_df) <- snp_gene_df$rsid
+      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      x3 <- x2 * x
+    }
+  } else {
+    x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
+    rownames(x2) <- pa_block$snps$label
+    pa_block$n_snps <- nrow(pa_block$snps)
+
+    rownames(x) <- pa_block$snps$rsid
+    # snp_gene_df <- Pagwas$snp_gene_df
+    rownames(snp_gene_df) <- snp_gene_df$rsid
+
+    x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
+    x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
+  }
+
+  rm(x)
+  rm(x2)
+
+  pa_block$x <- t(pa_block$ld_matrix_squared) %*% x3
+  rownames(pa_block$x) <- pa_block$snps$rsid
+  colnames(pa_block$x) <- colnames(merge_scexpr)
+  rm(x3)
+
+  pa_block$include_in_inference <- T
+
+  return(pa_block[c("x", "y", "snps", "include_in_inference")])
+}
+
 
 #' make_ld_matrix
 #' @description construct the final matrix for regression in blocks
@@ -95,7 +190,7 @@ Pathway_block_func <- function(Pagwas = NULL,
                                celltype = T) {
   Pathway_sclm_results <- list()
   Pathway_ld_gwas_data <- list()
-
+  SNP_A<-NULL
   message(paste0(
     "* Start to link gwas and pathway block annotations for ",
     length(Pachrom_block_list), " pathways!"

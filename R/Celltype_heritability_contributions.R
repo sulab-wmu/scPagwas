@@ -1,106 +1,10 @@
-
-#' link_pwpca_block
-#' @description Link the pca score and expression for each pathway genes
-#' for each block
-#' Requires rownames that are identitcal to block labels loaded previously.
-#' @param Pagwas Pagwas format, deault is NULL.
-#'
-#' @return
-#' @export
-#' @examples
-#' library(scPagwas)
-#' # Pagwas should have inhibit data
-#' Pagwas <- link_pwpca_block(Pagwas)
-link_pwpca_block <- function(pa_block,
-                             pca_cell_df,
-                             merge_scexpr,
-                             snp_gene_df,
-                             rawPathway_list) {
-  pathway <- unique(pa_block$block_info$pathway)
-
-  x <- pca_cell_df[pathway, ]
-  if (length(pathway) == 1) {
-    x <- matrix(x, nrow = 1)
-    rownames(x) <- pathway
-  }
-
-  if (nrow(pa_block$snps) == 0) {
-    pa_block$include_in_inference <- F
-    pa_block$x <- NULL # to make sure we totally replace previous stuffs
-    return(pa_block)
-    # stop("remove duplicates from pa_block data")
-  }
-  proper_genes <- rownames(merge_scexpr)
-  mg <- intersect(rawPathway_list[[pathway]], proper_genes)
-  x2 <- merge_scexpr[mg, ]
-
-  if (ncol(merge_scexpr) == 1) {
-    x2 <- data.matrix(x2)
-  }
-  if (length(mg) > 1) {
-    x2 <- apply(x2, 2, function(x) (x - min(x)) / (max(x) - min(x)))
-  }
-
-  if (pa_block$n_snps > 1) {
-    if (ncol(merge_scexpr) == 1) {
-      x2 <- data.matrix(x2[pa_block$snps$label, ])
-      pa_block$n_snps <- nrow(pa_block$snps)
-
-      x <- data.matrix(x[rep(1, pa_block$n_snps), ])
-      rownames(x) <- pa_block$snps$rsid
-
-      # snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-      x3 <- x2 * x
-    } else {
-      x2 <- x2[pa_block$snps$label, ]
-      pa_block$n_snps <- nrow(pa_block$snps)
-
-      x <- x[rep(1, pa_block$n_snps), ]
-      rownames(x) <- pa_block$snps$rsid
-
-      # snp_gene_df <- Pagwas$snp_gene_df
-      rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
-      x3 <- x2 * x
-    }
-  } else {
-    x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
-    rownames(x2) <- pa_block$snps$label
-    pa_block$n_snps <- nrow(pa_block$snps)
-
-    rownames(x) <- pa_block$snps$rsid
-    # snp_gene_df <- Pagwas$snp_gene_df
-    rownames(snp_gene_df) <- snp_gene_df$rsid
-
-    x <- matrix(as.numeric(x) * as.numeric(snp_gene_df[pa_block$snps$rsid, "slope"]), nrow = 1)
-    x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
-  }
-
-  rm(x)
-  rm(x2)
-
-  pa_block$x <- t(pa_block$ld_matrix_squared) %*% x3
-  rownames(pa_block$x) <- pa_block$snps$rsid
-  colnames(pa_block$x) <- colnames(merge_scexpr)
-  rm(x3)
-
-  pa_block$include_in_inference <- T
-
-  return(pa_block[c("x", "y", "snps", "include_in_inference")])
-}
-
-
 #' Pagwas_perform_regression
 #' @description Run regression
 #' @param Pathway_ld_gwas_data Pagwas format, deault is NULL.
 #'
 #' @return
 #' @export
-#' @examples
-#' library(scPagwas)
-#' Pagwas <- Pagwas_perform_regression(Pagwas, iters = 200)
+
 Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
   message("** Start inference")
   # fit model
@@ -110,6 +14,7 @@ Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
 
   return(lm_results)
 }
+
 #' Parameter_regression
 #' @description Find parameter estimates for the data.
 #' @param vectorized_Pagwas_data Pagwas data that has been vectorized
@@ -148,7 +53,7 @@ Boot_evaluate <- function(Pagwas,
   # run things in parallel if user specified
   message(paste0("* starting bootstrap iteration for ", bootstrap_iters, " times"))
 
-  pb <- txtProgressBar(style = 3)
+  pb <- utils::txtProgressBar(style = 3)
   Boot_resultlist <-
     lapply(1:bootstrap_iters, function(i) {
       boot_results <- Parameter_regression(
@@ -159,7 +64,7 @@ Boot_evaluate <- function(Pagwas,
       # boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
       names(boot_results$parameters) <- c("Intercept", colnames(Pagwas$pca_cell_df))
 
-      setTxtProgressBar(pb, i / bootstrap_iters)
+      utils::setTxtProgressBar(pb, i / bootstrap_iters)
 
       # return the important bits
       return(
@@ -256,6 +161,7 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
 
 Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
 
+  bootstrap_estimate<-bootstrap_error <- bt_value<-NULL
   # in the case we're calculating single parameter estimates
   if (is.null(dim(value_collection))) {
     value_collection <- matrix(value_collection, nrow = 1)

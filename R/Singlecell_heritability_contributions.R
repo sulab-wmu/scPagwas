@@ -15,6 +15,7 @@ get_Pathway_sclm <- function(pa_block,
                              ncores = 1,
                              rawPathway_list,
                              snp_gene_df) {
+
   pathway <- unique(pa_block$block_info$pathway)
   x <- matrix(pca_scCell_mat[pathway, ], nrow = 1)
   rownames(x) <- pathway
@@ -187,10 +188,7 @@ scParameter_regression <- function(Pagwas_x,
                                    noise_per_snp,
                                    ncores = 1) {
 
-  # x_df <-Pagwas_x
-
   if (bigmemory::is.big.matrix(Pagwas_x)) {
-    #  liear_m<- biglm.big.matrix(Pagwas_y ~ offset(noise_per_snp) + Pagwas_x)
     liear_m <- bigstatsr::big_univLinReg(
       X = as_FBM(Pagwas_x[]),
       y.train = Pagwas_y,
@@ -229,7 +227,6 @@ scParameter_regression <- function(Pagwas_x,
 #' @return
 
 scPagwas_score_filter <- function(scPagwas_score) {
-  # scPagwas_score <- scPagwas_score$scPagwas_score
   # remove the NAN!
   if (sum(is.nan(scPagwas_score)) > 0) {
     scPagwas_score[is.nan(scPagwas_score)] <- 0

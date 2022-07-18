@@ -34,7 +34,22 @@ Input the Single data in seruat format
 }
 \examples{
 library(scPagwas)
-data(scRNAexample)
-# Pagwas is better getting from GWAS_summary_input(),or NULL is right,
-Pagwas <- Single_data_input(Pagwas = Pagwas, Single_data = scRNAexample)
+Pagwas <- list()
+#Start to read the single cell data
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+Pagwas <- Single_data_input(
+  Pagwas = Pagwas,
+  assay = "RNA",
+  Single_data = Single_data,
+  Pathway_list = Genes_by_pathway_kegg
+)
 }
+\author{
+Chunyu Deng
+}
+\keyword{Single_data_input,}
+\keyword{cell}
+\keyword{extract}
+\keyword{matrix.}
+\keyword{single}
+\keyword{the}

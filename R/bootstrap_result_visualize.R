@@ -32,13 +32,14 @@ Bootstrap_P_Barplot <- function(p_results,
                                 width = 5,
                                 height = 7,
                                 do_plot = TRUE) {
+
   logp <- -log2(p_results)
   sig <- rep("b", length(p_results))
   sig[which(p_results < 0.05)] <- "a"
   gg <- data.frame(logp, sig, p_names)
   if (sum(p_results < 0.05) > 0) {
     p1 <- ggplot2::ggplot(gg, aes(
-      x = reorder(p_names, logp),
+      x = stats::reorder(p_names, logp),
       y = logp,
       fill = sig
     )) +
@@ -57,7 +58,7 @@ Bootstrap_P_Barplot <- function(p_results,
     p1 <- ggplot2::ggplot(
       gg,
       aes(
-        x = reorder(p_names, logp),
+        x = stats::reorder(p_names, logp),
         y = logp
       )
     ) +
@@ -72,9 +73,9 @@ Bootstrap_P_Barplot <- function(p_results,
   if (do_plot) print(p1)
 
   if (!is.null(figurenames)) {
-    pdf(figurenames, width = width, height = height)
+    grDevices::pdf(figurenames, width = width, height = height)
     print(p1)
-    dev.off()
+    grDevices::dev.off()
   }
 }
 
@@ -107,6 +108,8 @@ Bootstrap_estimate_Plot <- function(Pagwas,
                                     width = 9,
                                     height = 7,
                                     do_plot = F) {
+
+  Index<-estimate<-lower<-upper<-label<-Pvalue<-NULL
   bootstrap_results <- Pagwas@misc$bootstrap_results[-1, c(
     "bp_value",
     "bias_corrected_estimate",
@@ -206,8 +209,8 @@ Bootstrap_estimate_Plot <- function(Pagwas,
   if (do_plot) print(plot2)
   ## save the pdf figure
   if (!is.null(figurenames)) {
-    pdf(file = figurenames, width = width, height = height)
+    grDevices::pdf(file = figurenames, width = width, height = height)
     print(plot2)
-    dev.off()
+    grDevices::dev.off()
   }
 }

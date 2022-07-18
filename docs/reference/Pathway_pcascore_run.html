@@ -98,15 +98,44 @@
     <h2>Value</h2>
     
     </div>
+    <div id="author">
+    <h2>Author</h2>
+    <p>Chunyu Deng</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Genes_by_pathway.kegg</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'Genes_by_pathway.kegg' not found</span>
-<span class="r-in"><span class="co"># the Pagwas shoul be after Single_data_input() and GWAS_summary_input()</span></span>
-<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">Pathway_pcascore_run</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas</span>, Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway.kegg</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Pathway_pcascore_run(Pagwas = Pagwas, Pathway_list = Genes_by_pathway.kegg):</span> object 'Genes_by_pathway.kegg' not found</span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="co">#Start to read the single cell data</span></span>
+<span class="r-in"><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="Single_data_input.html">Single_data_input</a></span><span class="op">(</span></span>
+<span class="r-in">  Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span class="r-in">  assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
+<span class="r-in">  Single_data <span class="op">=</span> <span class="va">Single_data</span>,</span>
+<span class="r-in">  Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input single cell data!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 10 cell types are remain, after filter!</span>
+<span class="r-in"><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="va">Single_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span><span class="op">]</span></span>
+<span class="r-in"><span class="co">#Run pathway pca score!</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">Pathway_pcascore_run</span><span class="op">(</span></span>
+<span class="r-in">  Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span class="r-in">  Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> * Start to get Pathway SVD socre!</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |=======                                                               |  10%[1] "Celltype1"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |==============                                                        |  20%[1] "Celltype2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |=====================                                                 |  30%[1] "Celltype3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |============================                                          |  40%[1] "Celltype4"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |===================================                                   |  50%[1] "Celltype5"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |==========================================                            |  60%[1] "Celltype6"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |=================================================                     |  70%[1] "Celltype7"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |========================================================              |  80%[1] "Celltype8"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |===============================================================       |  90%[1] "Celltype9"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |======================================================================| 100%[1] "Celltype10"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using score as value column: use value.var to override.</span>
 </code></pre></div>
     </div>
   </div>

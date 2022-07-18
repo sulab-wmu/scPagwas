@@ -49,11 +49,12 @@ plot_scpathway_dot <- function(Pagwas,
                                width = 7,
                                height = 7,
                                ...) {
+  paras_sum_mean<-NULL
   ############### proportion
   proportion_list <- tapply(
     as.vector(Idents(Pagwas)),
     Idents(Pagwas), function(x) {
-      scPagwasPaHeritability<-t(GetAssayData(Pagwas,assay ="scPagwasPaHeritability"))
+      scPagwasPaHeritability <- t(GetAssayData(Pagwas, assay ="scPagwasPaHeritability"))
       a <- apply(scPagwasPaHeritability, 2, function(y) sum(y > 0) / length(y))
       return(unlist(a))
     }
@@ -271,6 +272,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   # hclust_method="ward.D2";
   # do.plot=TRUE
 
+  size_leg<-shape_leg<-col_leg<-NULL
   x.lab.pos <- match.arg(x.lab.pos)
   y.lab.pos <- match.arg(y.lab.pos)
 
@@ -532,13 +534,13 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     # Perform FAMD or PCA or MCA
     if (all(lapply(FAMD_final_input, class) %in% c("numeric", "integer"))) {
       # Quantitate factors only -> PCA
-      res.A <- PCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::PCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
     } else if (all(!lapply(FAMD_final_input, class) %in% c("numeric", "integer"))) {
       # Qualitative factors only -> MCA
-      res.A <- MCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::MCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
     } else {
       # Mixed data -> FAMD
-      res.A <- FAMD(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::FAMD(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
     }
 
     # Get coordinates, calculate distance and perform hierarchical clustering
@@ -920,14 +922,14 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
   if (x.lab.pos == "top") {
     heigths[4] <- 0
-    final.plot.list[[10]] <- grob()
+    final.plot.list[[10]] <- grid::grob()
   } else if (x.lab.pos == "bottom") {
     heigths[2] <- 0
-    final.plot.list[[2]] <- grob()
+    final.plot.list[[2]] <- grid::grob()
   } else if (x.lab.pos == "none") {
     heigths[c(2, 4)] <- 0
-    final.plot.list[[2]] <- grob()
-    final.plot.list[[10]] <- grob()
+    final.plot.list[[2]] <- grid::grob()
+    final.plot.list[[10]] <- grid::grob()
   }
 
   # y_coords=rescale(x = seq(1, length(levels(data.to.plot[,2]))), to = c(0,1), from=c(0.5,length(levels(data.to.plot[,2]))+0.5))
@@ -946,14 +948,14 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
   if (y.lab.pos == "left") {
     widths[4] <- 0
-    final.plot.list[[6]] <- grob()
+    final.plot.list[[6]] <- grid::grob()
   } else if (y.lab.pos == "right") {
     widths[2] <- 0
-    final.plot.list[[4]] <- grob()
+    final.plot.list[[4]] <- grid::rob()
   } else if (y.lab.pos == "none") {
     widths[c(2, 4)] <- 0
-    final.plot.list[[4]] <- grob()
-    final.plot.list[[6]] <- grob()
+    final.plot.list[[4]] <- grid::grob()
+    final.plot.list[[6]] <- grid::grob()
   }
 
 
@@ -963,7 +965,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
   if (!is.null(hc_x_result)) {
     # Arrange x dendrogram
-    ddata_x <- segment(dendro_data(hc_x_result))
+    ddata_x <- ggdendro::segment(ggdendro::dendro_data(hc_x_result))
 
     dendro_horizontal <- p_raw + geom_segment(data = ddata_x, mapping = aes_(
       x = ~x, xend = ~xend,
@@ -982,7 +984,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
   if (!is.null(hc_y_result)) {
     # Arrange y dendrogram
-    ddata_y <- segment(dendro_data(hc_y_result))
+    ddata_y <- ggdendro::segment(ggdendro::dendro_data(hc_y_result))
 
     dendro_vertical <- p_raw + geom_segment(data = ddata_y, mapping = aes_(
       x = ~ length(unique(data.to.plot[, 2])) + 0.5 - y,
@@ -1004,19 +1006,19 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     final.plot.list[[5]] <- p
   } else if (!is.null(hc_x_result)) {
     final.plot.list[[1]] <- dendro_horizontal
-    final.plot.list[[3]] <- grob()
+    final.plot.list[[3]] <- grid::grob()
     final.plot.list[[5]] <- p
 
     widths[1] <- 0
   } else if (!is.null(hc_y_result)) {
-    final.plot.list[[1]] <- grob()
+    final.plot.list[[1]] <- grid::grob()
     final.plot.list[[3]] <- dendro_vertical
     final.plot.list[[5]] <- p
 
     heigths[1] <- 0
   } else {
-    final.plot.list[[1]] <- grob()
-    final.plot.list[[3]] <- grob()
+    final.plot.list[[1]] <- grid::grob()
+    final.plot.list[[3]] <- grid::grob()
     final.plot.list[[5]] <- p
 
     heigths[1] <- 0
@@ -1037,7 +1039,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       if (!no_size_legend) {
         final.plot.list[[7]] <- size_leg
       } else {
-        final.plot.list[[7]] <- grob()
+        final.plot.list[[7]] <- grid::grob()
         widths[5] <- 0
       }
 
@@ -1045,7 +1047,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       if (length(shape) == nrow(data.to.plot)) {
         final.plot.list[[8]] <- shape_leg
       } else {
-        final.plot.list[[8]] <- grob()
+        final.plot.list[[8]] <- grid::grob()
         widths[6] <- 0
       }
 
@@ -1053,19 +1055,19 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       if (!no_color_legend) {
         final.plot.list[[9]] <- col_leg
       } else {
-        final.plot.list[[9]] <- grob()
+        final.plot.list[[9]] <- grid::grob()
         widths[7] <- 0
       }
     } else {
       final.plot.list[[7]] <- dot_plot_legend
-      final.plot.list[[8]] <- grob()
-      final.plot.list[[9]] <- grob()
+      final.plot.list[[8]] <- grid::grob()
+      final.plot.list[[9]] <- grid::grob()
       widths[6:7] <- 0
     }
   } else {
-    final.plot.list[[7]] <- grob()
-    final.plot.list[[8]] <- grob()
-    final.plot.list[[9]] <- grob()
+    final.plot.list[[7]] <- grid::grob()
+    final.plot.list[[8]] <- grid::grob()
+    final.plot.list[[9]] <- grid::grob()
     widths[5:7] <- 0
   }
 
@@ -1073,7 +1075,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   ### 4.4 Render plot ----
   # return(final.plot.list) # for debug
 
-  final_plot <- arrangeGrob(grobs = final.plot.list, layout_matrix = layout, widths = widths, heights = heigths)
+  final_plot <- gridExtra::arrangeGrob(grobs = final.plot.list, layout_matrix = layout, widths = widths, heights = heigths)
 
   if (do.plot) {
     grid.arrange(final_plot)

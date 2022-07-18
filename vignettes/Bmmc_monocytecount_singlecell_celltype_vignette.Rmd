@@ -338,3 +338,7 @@ dev.off()
 ```
 
 <img src="E:\RPakage\scPagwas\vignettes\figures\estimate_Plot_00.png" width="60%" />
+
+```{r}
+sessionInfo()
+```
