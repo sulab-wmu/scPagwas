@@ -84,7 +84,7 @@ pearson methods for each gene expression and gPAS score in each cells.</p>
   color_high <span class="op">=</span> <span class="st">"#F32424"</span>,
   color_mid <span class="op">=</span> <span class="st">"white"</span>,
   text_size <span class="op">=</span> <span class="fl">3</span>,
-  do_plot <span class="op">=</span> <span class="cn">T</span>,
+  do_plot <span class="op">=</span> <span class="cn">TRUE</span>,
   max.overlaps <span class="op">=</span> <span class="fl">10</span>,
   figurenames <span class="op">=</span> <span class="cn">NULL</span>,
   width <span class="op">=</span> <span class="fl">7</span>,
@@ -129,16 +129,18 @@ pearson methods for each gene expression and gPAS score in each cells.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pagwas_data.RData"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">heritability_cor_scatterplot</span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
-<span class="r-in">                            topn_genes_label<span class="op">=</span><span class="fl">10</span>,</span>
-<span class="r-in">                            color_low<span class="op">=</span><span class="st">"#035397"</span>,</span>
-<span class="r-in">                            color_high <span class="op">=</span><span class="st">"#F32424"</span>,</span>
-<span class="r-in">                           color_mid <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span class="r-in">                            text_size<span class="op">=</span><span class="fl">2</span>,</span>
-<span class="r-in">                            do_plot<span class="op">=</span><span class="cn">T</span>,</span>
-<span class="r-in">                            max.overlaps <span class="op">=</span><span class="fl">20</span>,</span>
-<span class="r-in">                            width <span class="op">=</span> <span class="fl">7</span>,</span>
-<span class="r-in">                            height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">heritability_cor_scatterplot</span><span class="op">(</span></span>
+<span class="r-in">  gene_heri_cor <span class="op">=</span> <span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
+<span class="r-in">  topn_genes_label <span class="op">=</span> <span class="fl">10</span>,</span>
+<span class="r-in">  color_low <span class="op">=</span> <span class="st">"#035397"</span>,</span>
+<span class="r-in">  color_high <span class="op">=</span> <span class="st">"#F32424"</span>,</span>
+<span class="r-in">  color_mid <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span class="r-in">  text_size <span class="op">=</span> <span class="fl">2</span>,</span>
+<span class="r-in">  do_plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span class="r-in">  max.overlaps <span class="op">=</span> <span class="fl">20</span>,</span>
+<span class="r-in">  width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">  height <span class="op">=</span> <span class="fl">7</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-plt img"><img src="heritability_cor_scatterplot-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>

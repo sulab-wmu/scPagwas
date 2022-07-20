@@ -87,64 +87,47 @@ false discovery rate) when that particular test is called significant.</p>
     <dl><dt>p</dt>
 <dd><p>A vector of p-values (only necessary input).</p></dd>
 <dt>fdr.level</dt>
-<dd><p>A level at which to control the FDR. Must be in (0,1]. Optional; if this is
+<dd><p>A level at which to control the FDR. Must be in (0,1].
+Optional; if this is
 selected, a vector of TRUE and FALSE is returned that specifies
 whether each q-value is less than fdr.level or not.</p></dd>
 <dt>pfdr</dt>
 <dd><p>An indicator of whether it is desired to make the
-estimate more robust for small p-values and a direct finite sample estimate of pFDR -- optional.</p></dd>
+estimate more robust for small p-values and a direct finite sample
+estimate of pFDR -- optional.</p></dd>
 <dt>lfdr.out</dt>
-<dd><p>If TRUE then local false discovery rates are returned. Default is TRUE.</p></dd>
+<dd><p>If TRUE then local false discovery rates are returned.
+Default is TRUE.</p></dd>
 <dt>pi0</dt>
-<dd><p>It is recommended to not input an estimate of pi0. Experienced users can use their own methodology to estimate
+<dd><p>It is recommended to not input an estimate of pi0.
+Experienced users can use their own methodology to estimate
 the proportion of true nulls or set it equal to 1 for the BH procedure.</p></dd>
 <dt>...</dt>
-<dd><p>Additional arguments passed to <code><a href="pi0est.html">pi0est</a></code> and <code><a href="lfdr.html">lfdr</a></code>.</p></dd>
+<dd><p>Additional arguments passed to <code><a href="pi0est.html">pi0est</a></code>
+and <code><a href="lfdr.html">lfdr</a></code>.</p></dd>
 </dl></div>
-    <div id="value">
-    <h2>Value</h2>
-    
-    </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The function <code><a href="pi0est.html">pi0est</a></code> is called internally and calculates the estimate of \(\pi_0\),
-the proportion of true null hypotheses. The function <code><a href="lfdr.html">lfdr</a></code> is also called internally and
-calculates the estimated local FDR values.  Arguments for these functions can be included via <code>...</code> and
-will be utilized in the internal calls made in <code>qvalue</code>. See <a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a>
+    <p>The function <code><a href="pi0est.html">pi0est</a></code> is called internally and calculates
+the estimate of \(\pi_0\),
+the proportion of true null hypotheses. The function <code><a href="lfdr.html">lfdr</a></code>
+is also called internally and
+calculates the estimated local FDR values.  Arguments for these
+functions can be included via <code>...</code> and
+will be utilized in the internal calls made in <code>qvalue</code>.
+See <a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a>
 for a brief introduction to FDRs and q-values.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Storey JD. (2011) False discovery rates. In <em>International Encyclopedia of Statistical Science</em>. <br><a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a> <br><a href="http://www.springer.com/statistics/book/978-3-642-04897-5" class="external-link">http://www.springer.com/statistics/book/978-3-642-04897-5</a></p>
+    <p>Storey JD. (2011) False discovery rates. In <em>International
+Encyclopedia of Statistical Science</em>. <br><a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a> <br><a href="http://www.springer.com/statistics/book/978-3-642-04897-5" class="external-link">http://www.springer.com/statistics/book/978-3-642-04897-5</a></p>
     </div>
     <div id="author">
     <h2>Author</h2>
     <p>John D. Storey</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># import data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hedenfalk</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'hedenfalk' not found</span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">hedenfalk</span><span class="op">$</span><span class="va">p</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'hedenfalk' not found</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># get q-value object</span></span>
-<span class="r-in"><span class="va">qobj</span> <span class="op">&lt;-</span> <span class="fu">qvalue</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in qvalue(p):</span> object 'p' not found</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">qobj</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in plot(qobj):</span> object 'qobj' not found</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">qobj</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in hist(qobj):</span> object 'qobj' not found</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># options available</span></span>
-<span class="r-in"><span class="va">qobj</span> <span class="op">&lt;-</span> <span class="fu">qvalue</span><span class="op">(</span><span class="va">p</span>, lambda <span class="op">=</span> <span class="fl">0.5</span>, pfdr <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in qvalue(p, lambda = 0.5, pfdr = TRUE):</span> object 'p' not found</span>
-<span class="r-in"><span class="va">qobj</span> <span class="op">&lt;-</span> <span class="fu">qvalue</span><span class="op">(</span><span class="va">p</span>, fdr.level <span class="op">=</span> <span class="fl">0.05</span>, pi0.method <span class="op">=</span> <span class="st">"bootstrap"</span>, adj <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in qvalue(p, fdr.level = 0.05, pi0.method = "bootstrap", adj = 1.2):</span> object 'p' not found</span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

@@ -86,18 +86,22 @@
   lowColor <span class="op">=</span> <span class="st">"#000957"</span>,
   highColor <span class="op">=</span> <span class="st">"#EBE645"</span>,
   size <span class="op">=</span> <span class="fl">0.5</span>,
-  do_plot <span class="op">=</span> <span class="cn">F</span>
+  do_plot <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>Single_data</dt>
-<dd><p>Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE</p></dd>
+<dd><p>Single_data in seruat format ,the save with
+scPagwas_main(), you'd better to run reduction of UMAP AND TSNE</p></dd>
 <dt>p_thre</dt>
-<dd><p>(numeric),default is 0.1, Threshold for pecent(&lt;1) of Positive cells for level of scPagwas_score.</p></dd>
+<dd><p>(numeric),default is 0.1, Threshold for pecent(&lt;1) of
+Positive cells for level of scPagwas_score.</p></dd>
 <dt>output.dirs</dt>
-<dd><p>(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.</p></dd>
+<dd><p>(character)default is NULL.the file folder name
+for save the figures.NULL means no folder is created, no pdf figure
+output.</p></dd>
 <dt>FigureType</dt>
 <dd><p>(character)"tsne" or "umap</p></dd>
 <dt>width</dt>
@@ -127,17 +131,21 @@
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pagwas_data.RData"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">scPagwas_Visualization</span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas_data</span>,</span>
-<span class="r-in">                      p_thre <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span class="r-in">                      FigureType <span class="op">=</span> <span class="st">"umap"</span>,</span>
-<span class="r-in">                      width <span class="op">=</span> <span class="fl">7</span>,</span>
-<span class="r-in">                      height <span class="op">=</span> <span class="fl">7</span>,</span>
-<span class="r-in">                      lowColor <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span class="r-in">                      highColor <span class="op">=</span> <span class="st">"red"</span>,</span>
-<span class="r-in">                     output.dirs<span class="op">=</span><span class="st">"figure"</span>,</span>
-<span class="r-in">                      size <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span class="r-in">                      do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in registerNames(names, package, ".__global__", add):</span> The namespace for package "scPagwas" is locked; no changes in the global variables list may be made.</span>
+<span class="r-in"><span class="fu">scPagwas_Visualization</span><span class="op">(</span></span>
+<span class="r-in">  Single_data <span class="op">=</span> <span class="va">Pagwas_data</span>,</span>
+<span class="r-in">  p_thre <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span class="r-in">  FigureType <span class="op">=</span> <span class="st">"umap"</span>,</span>
+<span class="r-in">  width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">  height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">  lowColor <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span class="r-in">  highColor <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span class="r-in">  output.dirs <span class="op">=</span> <span class="st">"figure"</span>,</span>
+<span class="r-in">  size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span class="r-in">  do_plot <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-plt img"><img src="scPagwas_Visualization-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="scPagwas_Visualization-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="scPagwas_Visualization-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

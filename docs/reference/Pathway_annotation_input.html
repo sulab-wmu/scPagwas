@@ -85,27 +85,18 @@ Initial the pathway blocks for mapping the pathway to snp.</p>
     <dl><dt>Pagwas</dt>
 <dd><p>Pagwas format data list inherit from other functions.</p></dd>
 <dt>block_annotation</dt>
-<dd></dd>
-<dt>n.cores</dt>
-<dd><p>Parallel cores,default is 1. use detectCores() to check the cores in computer.</p></dd>
+<dd><p>Start and end points for block traits,
+usually genes.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>list for pathway blocks</p>
     </div>
     <div id="author">
     <h2>Author</h2>
     <p>Chunyu Deng</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()</span></span>
-<span class="r-in"><span class="va">Pagwas_data</span> <span class="op">&lt;-</span> <span class="fu">Pathway_annotation_input</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas_data</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Pathway_annotation_input(Pagwas = Pagwas_data):</span> object 'Pagwas_data' not found</span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

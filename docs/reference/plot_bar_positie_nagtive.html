@@ -90,7 +90,7 @@ Generate a percentage barplot that shows the composition of each identity
   vec_group_colors <span class="op">=</span> <span class="cn">NULL</span>,
   f_color <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">11</span>, name <span class="op">=</span>
     <span class="st">"RdYlBu"</span><span class="op">)</span><span class="op">)</span>,
-  do_plot <span class="op">=</span> <span class="cn">F</span>,
+  do_plot <span class="op">=</span> <span class="cn">FALSE</span>,
   title <span class="op">=</span> <span class="cn">NULL</span>,
   p_thre <span class="op">=</span> <span class="fl">0.05</span>,
   fontsize_title <span class="op">=</span> <span class="fl">24</span>,
@@ -111,58 +111,64 @@ Generate a percentage barplot that shows the composition of each identity
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>seurat_obj</dt>
-<dd><p>Seurat object (Seurat ^3.0)</p></dd>
+<dd><p>Seurat object (Seurat ^3.0).</p></dd>
 <dt>var_ident</dt>
-<dd><p>the identify variable, character</p></dd>
+<dd><p>the identify variable, character.</p></dd>
 <dt>var_group</dt>
-<dd><p>the group variable, character</p></dd>
+<dd><p>the group variable, character.</p></dd>
 <dt>vec_group_colors</dt>
-<dd><p>a vector of colors, named by corresponding group. Length must match number of groups. Character</p></dd>
+<dd><p>a vector of colors, named by corresponding group.
+Length must match number of groups. Character.</p></dd>
 <dt>f_color</dt>
-<dd><p>if vec_group_colors is not provided, the user may instead provide a function f_color() that takes as its only argument the number of colors to generate</p></dd>
+<dd><p>if vec_group_colors is not provided, the user may instead provide a
+function f_color() that takes as its only argument the number of colors to generate.</p></dd>
 <dt>do_plot</dt>
-<dd><p>Whether to plot, logical</p></dd>
+<dd><p>Whether to plot, logical.</p></dd>
 <dt>title</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
+<dt>p_thre</dt>
+<dd><p>threshold for p value.</p></dd>
 <dt>fontsize_title</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_axistitle_x</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_axistitle_y</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_axistext_x</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_axistext_y</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_legendtitle</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
 <dt>fontsize_legendtext</dt>
-<dd><p>NULL to leave out</p></dd>
+<dd><p>NULL to leave out.</p></dd>
+<dt>aspect.ratio</dt>
+<dd><p>default is 1.2.</p></dd>
+<dt>output.prefix</dt>
+<dd><p>prefix for output files.</p></dd>
+<dt>output.dirs</dt>
+<dd><p>directory for files.</p></dd>
 <dt>width</dt>
-<dd><p>figure width</p></dd>
+<dd><p>figure width.</p></dd>
 <dt>height</dt>
-<dd><p>figure height</p></dd>
-<dt>figurenames</dt>
-<dd><p>The filename and address of the output plot,</p></dd>
+<dd><p>figure height.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>a ggplot2 object</p>
     </div>
-    <div id="author">
-    <h2>Author</h2>
-    <p>Chunyu Deng</p>
-    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pagwas_data.RData"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot_bar_positie_nagtive</span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_data</span>,</span>
-<span class="r-in">var_ident<span class="op">=</span><span class="st">"anno"</span>,</span>
-<span class="r-in">var_group<span class="op">=</span><span class="st">"positiveCells"</span>,</span>
-<span class="r-in">vec_group_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E8D0B3"</span>,<span class="st">"#7EB5A6"</span><span class="op">)</span>,</span>
-<span class="r-in">do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in registerNames(names, package, ".__global__", add):</span> The namespace for package "scPagwas" is locked; no changes in the global variables list may be made.</span>
+<span class="r-in"><span class="fu">plot_bar_positie_nagtive</span><span class="op">(</span></span>
+<span class="r-in">  seurat_obj <span class="op">=</span> <span class="va">Pagwas_data</span>,</span>
+<span class="r-in">  var_ident <span class="op">=</span> <span class="st">"anno"</span>,</span>
+<span class="r-in">  var_group <span class="op">=</span> <span class="st">"positiveCells"</span>,</span>
+<span class="r-in">  vec_group_colors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E8D0B3"</span>, <span class="st">"#7EB5A6"</span><span class="op">)</span>,</span>
+<span class="r-in">  do_plot <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NAs introduced by coercion</span>
 </code></pre></div>
     </div>
   </div>

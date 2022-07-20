@@ -81,7 +81,8 @@
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>snp</dt>
-<dd><p>(char) PLINK bim file (only CHR, SNP, and BP columns considered).</p></dd>
+<dd><p>(char) PLINK bim file (only CHR, SNP, and BP columns
+considered).</p></dd>
 <dt>refGene</dt>
 <dd><p>(char) refseq table with header.</p></dd>
 <dt>marg</dt>
@@ -89,7 +90,7 @@
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>data frame for snp mapping to gene.</p>
     </div>
     <div id="note">
     <h2>Note</h2>
@@ -101,20 +102,28 @@ given unknown strand assignment for SNP array-based genotyping info</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Pagwas</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,</span>
+<span class="r-in">  <span class="st">"GWAS_summ_example.txt"</span>,</span>
+<span class="r-in">  package <span class="op">=</span> <span class="st">"scPagwas"</span></span>
+<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span></span>
-<span class="r-in"> Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
-<span class="r-in"> gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,</span>
-<span class="r-in"> maf_filter <span class="op">=</span> <span class="fl">0.1</span></span>
+<span class="r-in">  Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span class="r-in">  gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,</span>
+<span class="r-in">  maf_filter <span class="op">=</span> <span class="fl">0.1</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Input gwas summary data frame!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No "chr" from chrom!, now pasting it!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering out SNPs with MAF criterion</span>
-<span class="r-in"><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu">Snp2Gene</span><span class="op">(</span>snp <span class="op">=</span> <span class="va">Pagwas_data</span><span class="op">$</span><span class="va">gwas_data</span>,</span>
-<span class="r-in">refGene <span class="op">=</span> <span class="va">block_annotation</span>,</span>
-<span class="r-in">marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in DataFrame(..., check.names = FALSE):</span> object 'Pagwas_data' not found</span>
+<span class="r-in"><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu">Snp2Gene</span><span class="op">(</span></span>
+<span class="r-in">  snp <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span>,</span>
+<span class="r-in">  refGene <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span class="r-in">  marg <span class="op">=</span> <span class="fl">10000</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * Computing distances between SNPs and genes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5332 SNPs not inside gene domain</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ** Computing distance to domain starts</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ** Computing distance to domain ends</span>
 </code></pre></div>
     </div>
   </div>

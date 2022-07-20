@@ -81,7 +81,8 @@
   <span class="va">chrom_gwas_list</span>,
   ncores <span class="op">=</span> <span class="fl">1</span>,
   singlecell <span class="op">=</span> <span class="cn">T</span>,
-  celltype <span class="op">=</span> <span class="cn">T</span>
+  celltype <span class="op">=</span> <span class="cn">T</span>,
+  <span class="va">chrom_ld</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -91,12 +92,20 @@
 <dd><p>NULL</p></dd>
 <dt>Pachrom_block_list</dt>
 <dd><p>result for chrome block</p></dd>
+<dt>chrom_gwas_list</dt>
+<dd><p>list of gwas block in chrom</p></dd>
 <dt>ncores</dt>
 <dd><p>cores</p></dd>
+<dt>singlecell</dt>
+<dd><p>whether to run singlecell progress</p></dd>
+<dt>celltype</dt>
+<dd><p>whether to run celltype progress</p></dd>
+<dt>chrom_ld</dt>
+<dd><p>default is block_annotation</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>Pagwas result list including Pathway block.</p>
     </div>
 
   </div>

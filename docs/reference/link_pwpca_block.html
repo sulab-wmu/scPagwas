@@ -90,12 +90,21 @@ Requires rownames that are identitcal to block labels loaded previously.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>Pagwas</dt>
-<dd><p>Pagwas format, deault is NULL.</p></dd>
+    <dl><dt>pa_block</dt>
+<dd><p>snp blocks for pathway.</p></dd>
+<dt>pca_cell_df</dt>
+<dd><p>pca matrix for cell types.</p></dd>
+<dt>merge_scexpr</dt>
+<dd><p>mean expression for merged cell types of single cell
+data.</p></dd>
+<dt>snp_gene_df</dt>
+<dd><p>Data frame of snp mapping to gene.</p></dd>
+<dt>rawPathway_list</dt>
+<dd><p>Raw pathway list before filter</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>pathway block including "x" "y" "snps" "include_in_inference"</p>
     </div>
 
   </div>

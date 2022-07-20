@@ -109,12 +109,14 @@ does not involve edge effects of the c(0,1) interval in which the p-values lie.<
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A vector of estimated local FDR values, with each entry corresponding to the entries of the input p-value vector <code>p</code>.</p>
+    <p>A vector of estimated local FDR values, with each entry corresponding to
+the entries of the input p-value vector <code>p</code>.</p>
     </div>
     <div id="references">
     <h2>References</h2>
-    <p>Efron B, Tibshirani R, Storey JD, and Tisher V. (2001) Empirical Bayes analysis
-of a microarray experiment. Journal of the American Statistical Association, 96: 1151-1160. <br><a href="http://www.tandfonline.com/doi/abs/10.1198/016214501753382129" class="external-link">http://www.tandfonline.com/doi/abs/10.1198/016214501753382129</a></p>
+    <p>Efron B, Tibshirani R, Storey JD, and Tisher V. (2001) Empirical Bayes
+analysis of a microarray experiment. Journal of the American Statistical
+Association, 96: 1151-1160. <br><a href="http://www.tandfonline.com/doi/abs/10.1198/016214501753382129" class="external-link">http://www.tandfonline.com/doi/abs/10.1198/016214501753382129</a></p>
 <p>Storey JD. (2003) The positive false discovery rate: A Bayesian
 interpretation and the q-value. Annals of Statistics, 31: 2013-2035. <br><a href="http://projecteuclid.org/DPubS/Repository/1.0/Disseminate?view=body&amp;id=pdf_1&amp;handle=euclid.aos/1074290335" class="external-link">http://projecteuclid.org/DPubS/Repository/1.0/Disseminate?view=body&amp;id=pdf_1&amp;handle=euclid.aos/1074290335</a></p>
 <p>Storey JD. (2011) False discovery rates. In <em>International Encyclopedia of Statistical Science</em>. <br><a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a> <br><a href="http://www.springer.com/statistics/book/978-3-642-04897-5" class="external-link">http://www.springer.com/statistics/book/978-3-642-04897-5</a></p>
@@ -124,23 +126,6 @@ interpretation and the q-value. Annals of Statistics, 31: 2013-2035. <br><a href
     <p>John D. Storey</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># import data</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">hedenfalk</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'hedenfalk' not found</span>
-<span class="r-in"><span class="va">p</span> <span class="op">&lt;-</span> <span class="va">hedenfalk</span><span class="op">$</span><span class="va">p</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'hedenfalk' not found</span>
-<span class="r-in"><span class="va">lfdrVals</span> <span class="op">&lt;-</span> <span class="fu">lfdr</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lfdr(p):</span> could not find function "lfdr"</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># plot local FDR values</span></span>
-<span class="r-in"><span class="va">qobj</span> <span class="op">&lt;-</span> <span class="fu"><a href="qvalue.html">qvalue</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in qvalue(p):</span> object 'p' not found</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">qobj</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in hist(qobj):</span> object 'qobj' not found</span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

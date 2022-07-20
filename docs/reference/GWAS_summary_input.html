@@ -92,7 +92,9 @@ filter the maf and the sex chrom data</p>
     <dl><dt>Pagwas</dt>
 <dd><p>Pagwas format, deault is NULL.</p></dd>
 <dt>gwas_data</dt>
-<dd><p>A data set object, need a data frame format, There must be have colomue with 'chrom', 'pos', 'rsid', 'beta', 'se', 'maf'</p></dd>
+<dd><p>A data set object, need a data frame format,
+There must be have colomue with 'chrom', 'pos', 'rsid', 'beta', 'se',
+'maf'</p></dd>
 <dt>maf_filter</dt>
 <dd><p>Filter the maf, default is &lt;0.01</p></dd>
 <dt>Sex_filter</dt>
@@ -117,7 +119,10 @@ filter the maf and the sex chrom data</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>,</span>
+<span class="r-in">  <span class="st">"GWAS_summ_example.txt"</span>,</span>
+<span class="r-in">  package <span class="op">=</span> <span class="st">"scPagwas"</span></span>
+<span class="r-in"><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">GWAS_summary_input</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas</span>, gwas_data <span class="op">=</span> <span class="va">gwas_data</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Input gwas summary data frame!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No "chr" from chrom!, now pasting it!</span>
@@ -130,13 +135,13 @@ filter the maf and the sex chrom data</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  chr1 2369498  rs4592207 0.0399954 8.822031e-02 0.41790</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  chr1 3259369  rs2483286 0.0352555 1.541813e-03 0.30470</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6  chr1 3811790 rs12085743 0.0405247 2.465163e-05 0.18500</span>
-<span class="r-in"><span class="co">#chrom     pos       rsid        se         beta     maf</span></span>
-<span class="r-in"><span class="co">#1  chr1 1138913  rs3819001 0.0724484 4.774317e-01 0.06761</span></span>
-<span class="r-in"><span class="co">#2  chr1 1691050 rs35672141 0.0368296 1.108626e-01 0.48200</span></span>
-<span class="r-in"><span class="co">#3  chr1 1722932  rs3737628 0.0324817 7.881858e-02 0.48820</span></span>
-<span class="r-in"><span class="co">#4  chr1 2369498  rs4592207 0.0399954 8.822031e-02 0.41790</span></span>
-<span class="r-in"><span class="co">#5  chr1 3259369  rs2483286 0.0352555 1.541813e-03 0.30470</span></span>
-<span class="r-in"><span class="co">#6  chr1 3811790 rs12085743 0.0405247 2.465163e-05 0.18500</span></span>
+<span class="r-in"><span class="co"># chrom     pos       rsid        se         beta     maf</span></span>
+<span class="r-in"><span class="co"># 1  chr1 1138913  rs3819001 0.0724484 4.774317e-01 0.06761</span></span>
+<span class="r-in"><span class="co"># 2  chr1 1691050 rs35672141 0.0368296 1.108626e-01 0.48200</span></span>
+<span class="r-in"><span class="co"># 3  chr1 1722932  rs3737628 0.0324817 7.881858e-02 0.48820</span></span>
+<span class="r-in"><span class="co"># 4  chr1 2369498  rs4592207 0.0399954 8.822031e-02 0.41790</span></span>
+<span class="r-in"><span class="co"># 5  chr1 3259369  rs2483286 0.0352555 1.541813e-03 0.30470</span></span>
+<span class="r-in"><span class="co"># 6  chr1 3811790 rs12085743 0.0405247 2.465163e-05 0.18500</span></span>
 </code></pre></div>
     </div>
   </div>

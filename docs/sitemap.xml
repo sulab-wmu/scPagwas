@@ -70,6 +70,30 @@
     <loc>https://github.com/dengchunyu/scPagwas/reference/fortify.Seurat.umap.html</loc>
   </url>
   <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.celltype.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.gobp.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.hallmark.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.immunesigdb.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.immunologic.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.reactome.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.regulatory.pathway.html</loc>
+  </url>
+  <url>
+    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.tft.pathway.html</loc>
+  </url>
+  <url>
     <loc>https://github.com/dengchunyu/scPagwas/reference/Genes_by_pathway_hallmark.html</loc>
   </url>
   <url>

@@ -7,8 +7,6 @@ data.
 
 <img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
 
-
-
 The methodology and benchmarking performance are described in:
 
 Polygenic regression identifies trait-relevant cell subpopulations
@@ -57,7 +55,7 @@ quick-start example:
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      chrom_ld = chrom_ld,# The LD data is provided by package.
-                     singlecell=T, # Whether to run the singlecell process.
+                     singlecell=F, # Whether to run the singlecell process.
                      celltype=T,# Whether to run the celltype process.
                      seruat_return=T,#Whether to return seruat format result.
                      ncores = 1 ) #The numbers of cores to run.

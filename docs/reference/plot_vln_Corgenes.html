@@ -91,7 +91,7 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
   f_color <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu">RColorBrewer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">11</span>, name <span class="op">=</span>
     <span class="st">"RdYlBu"</span><span class="op">)</span><span class="op">)</span>,
   flip <span class="op">=</span> <span class="cn">T</span>,
-  do_plot <span class="op">=</span> <span class="cn">F</span>,
+  do_plot <span class="op">=</span> <span class="cn">FALSE</span>,
   pt.size <span class="op">=</span> <span class="fl">0</span>,
   feature_fontface <span class="op">=</span> <span class="st">"bold.italic"</span>,
   fontsize_axistext_x <span class="op">=</span> <span class="fl">12</span>,
@@ -125,6 +125,14 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 <dd><p>Whether to plot, logical</p></dd>
 <dt>pt.size</dt>
 <dd><p>size of jitter in the violin plots. Set to 0 (default) to omit</p></dd>
+<dt>feature_fontface</dt>
+<dd><p>"bold.italic"</p></dd>
+<dt>fontsize_axistext_x</dt>
+<dd><p>12, font size for x axis</p></dd>
+<dt>fontsize_axistext_y</dt>
+<dd><p>12, font size for y axis</p></dd>
+<dt>aspect.ratio</dt>
+<dd><p>NULL</p></dd>
 <dt>figurenames</dt>
 <dd><p>The filename and address of the output plot,</p></dd>
 <dt>width</dt>
@@ -139,7 +147,23 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pagwas_data.RData"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">top5genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span></span>
+<span class="r-in">  <span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
+<span class="r-in">  decreasing <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span class="r-in"><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
+<span class="r-in"><span class="fu">plot_vln_Corgenes</span><span class="op">(</span></span>
+<span class="r-in">  seurat_obj <span class="op">=</span> <span class="va">Pagwas_data</span>,</span>
+<span class="r-in">  assay <span class="op">=</span> <span class="st">"RNA"</span>, slot <span class="op">=</span> <span class="st">"data"</span>,</span>
+<span class="r-in">  var_group <span class="op">=</span> <span class="st">"anno"</span>,</span>
+<span class="r-in">  vec_features <span class="op">=</span> <span class="va">top5genes</span>,</span>
+<span class="r-in">  do_plot <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using aspect ratio 3</span>
+<span class="r-plt img"><img src="plot_vln_Corgenes-1.png" alt="" width="700" height="433"></span>
+</code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

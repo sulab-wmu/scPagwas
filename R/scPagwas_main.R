@@ -164,7 +164,8 @@
 #' split your data into several sub-data and run the merge_pagwas
 #' to merge them.
 #' @references
-#'
+#' Polygenic regression identifies trait-relevant cell subpopulations
+#' through pathway activity transformed single-cell RNA sequencing data.(2022)
 #' @export
 #'
 #' @examples
