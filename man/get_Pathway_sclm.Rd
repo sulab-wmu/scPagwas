@@ -14,20 +14,20 @@ get_Pathway_sclm(
 )
 }
 \arguments{
-\item{pca_scCell_mat}{Element in Pagwas}
+\item{pa_block}{single pathway blocks.}
 
-\item{data_mat}{Element in Pagwas}
+\item{pca_scCell_mat}{Element in Pagwas.}
 
-\item{rawPathway_list}{Element in Pagwas}
+\item{data_mat}{Element in Pagwas.}
 
-\item{snp_gene_df}{Element in Pagwas}
+\item{ncores}{Parallel cores.}
 
-\item{Pathway_ld_gwas_data}{Element in Pagwas}
+\item{rawPathway_list}{Element in Pagwas..}
 
-\item{split_n}{number of times to compute the singlecell result}
+\item{snp_gene_df}{Element in Pagwas.}
 }
 \value{
-
+lm result for pathway in single cell.
 }
 \description{
 get_Pathway_sclm

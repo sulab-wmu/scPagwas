@@ -2,21 +2,25 @@
 #' @description Input the Single data in seruat format
 #'
 #' @param Pagwas Pagwas format
-#' @param Single_data Input the Single data in seruat format, Idents should be
-#' the celltypes annotation. mainly used the Single_data@assays$RNA@data
+#' @param Single_data Input the Single data in seruat format, Idents should
+#' be the celltypes annotation. mainly used the Single_data@assays$RNA@data
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param nfeatures The parameter for FindVariableFeatures,
 #' NULL means select all genes
 #' @param min_clustercells Threshold for total cells fo each cluster.
+#' @param assay assay data of your single cell data to use,default is "RNA".
 #'
-#' @return Pagwas
+#' @return Pagwas list including:
+#' "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
 #' Pagwas <- list()
-#' #Start to read the single cell data
-#' Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+#' # Start to read the single cell data
+#' Single_data <- readRDS(system.file("extdata", "scRNAexample.rds",
+#'   package = "scPagwas"
+#' ))
 #' Pagwas <- Single_data_input(
 #'   Pagwas = Pagwas,
 #'   assay = "RNA",
@@ -47,9 +51,13 @@ Single_data_input <- function(Pagwas,
 
   Afterre_cell_types <- table(Celltype_anno$annotation) > min_clustercells
   Afterre_cell_types <- names(Afterre_cell_types)[Afterre_cell_types]
-  message(length(Afterre_cell_types), " cell types are remain, after filter!")
+  message(
+    length(Afterre_cell_types),
+    " cell types are remain, after filter!"
+  )
 
-  Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in% Afterre_cell_types, ]
+  Celltype_anno <- Celltype_anno[Celltype_anno$annotation %in%
+    Afterre_cell_types, ]
   Single_data <- Single_data[, Celltype_anno$cellnames]
 
   Pagwas$Celltype_anno <- Celltype_anno
@@ -58,7 +66,6 @@ Single_data_input <- function(Pagwas,
 
   merge_scexpr <- Seurat::AverageExpression(Single_data, assays = assay)[[assay]]
 
-  # message(4)
   # 5.VariableFeatures
   if (!is.null(nfeatures)) {
     if (nfeatures < nrow(Single_data)) {
@@ -78,9 +85,13 @@ Single_data_input <- function(Pagwas,
   }
   rm(Single_data)
 
-  pagene <- intersect(unique(unlist(Pathway_list)), rownames(Pagwas$data_mat))
+  pagene <- intersect(
+    unique(unlist(Pathway_list)),
+    rownames(Pagwas$data_mat)
+  )
   if (length(pagene) < 100) {
-    stop("There are little match between rownames of Single_data and pathway genes!")
+    stop("There are little match between rownames of Single_data and
+         pathway genes!")
   }
 
   Pagwas$VariableFeatures <- intersect(Pagwas$VariableFeatures, pagene)

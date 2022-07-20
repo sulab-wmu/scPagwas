@@ -13,18 +13,22 @@ link_pwpca_block(
 )
 }
 \arguments{
-\item{Pagwas}{Pagwas format, deault is NULL.}
+\item{pa_block}{snp blocks for pathway.}
+
+\item{pca_cell_df}{pca matrix for cell types.}
+
+\item{merge_scexpr}{mean expression for merged cell types of single cell
+data.}
+
+\item{snp_gene_df}{Data frame of snp mapping to gene.}
+
+\item{rawPathway_list}{Raw pathway list before filter}
 }
 \value{
-
+pathway block including "x" "y" "snps" "include_in_inference"
 }
 \description{
 Link the pca score and expression for each pathway genes
 for each block
 Requires rownames that are identitcal to block labels loaded previously.
-}
-\examples{
-library(scPagwas)
-# Pagwas should have inhibit data
-Pagwas <- link_pwpca_block(Pagwas)
 }

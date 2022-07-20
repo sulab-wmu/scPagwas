@@ -12,8 +12,9 @@ Get_Pathway_heritability_contributions(pca_cell_df, parameters)
 \item{parameters}{parameter fit}
 }
 \value{
-
+vector for pathway heritability contributions
 }
 \description{
-Caclulate predicted block values based on block information and model fit.
+Caclulate predicted block values based on block
+information and model fit.
 }

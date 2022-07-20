@@ -4,13 +4,7 @@
 \alias{reduce_pathway}
 \title{reduce_pathway}
 \usage{
-reduce_pathway(
- 
-    pathway_seed = names(Genes_by_pathway_kegg)[sample(seq_len(length(Genes_by_pathway_kegg)),
-    20)],
-  pathway_list = Genes_by_pathway_kegg,
-  remove_proporion = 0.7
-)
+reduce_pathway(pathway_seed, pathway_list, remove_proporion = 0.7)
 }
 \arguments{
 \item{pathway_seed}{randome select the seed pathways, sometimes can be the
@@ -21,13 +15,29 @@ unredundant pathway set.}
 \item{remove_proporion}{the propotion of pathways after reduce.}
 }
 \value{
-
+reduced pathway gene list
 }
 \description{
-reduce_pathway
+Sometimes, the gene lists for pathways are duplicated,
+it needs a lot of times to running scPagwas.
+We can used reduce_pathway to reduce them.
 }
 \examples{
-reduce_pathway(pathway_seed = names(Genes_by_pathway_kegg)[sample(1:length(Genes_by_pathway_kegg), 20)],
-                           pathway_list = Genes_by_pathway_kegg,
-                           remove_proporion = 0.7)
+reduce_pathway(
+  pathway_seed = names(Genes_by_pathway_kegg)[sample(
+    1:length(Genes_by_pathway_kegg), 20
+  )],
+  pathway_list = Genes_by_pathway_kegg,
+  remove_proporion = 0.7
+)
 }
+\author{
+Chunyu Deng
+}
+\keyword{gene}
+\keyword{list.}
+\keyword{pathway}
+\keyword{reduce}
+\keyword{reduce_pathway,}
+\keyword{replicated}
+\keyword{the}

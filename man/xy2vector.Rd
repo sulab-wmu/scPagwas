@@ -7,11 +7,13 @@
 xy2vector(Pathway_ld_gwas_data = NULL)
 }
 \arguments{
-\item{Pathway_ld_gwas_data}{the list of block information from Pagwas object}
+\item{Pathway_ld_gwas_data}{the list of block information from Pagwas
+object}
 }
 \value{
-
+vector for x and y values.
 }
 \description{
-Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
+Take a list of Pagwas - Pathway_ld_gwas_data and vectorize
+it.
 }

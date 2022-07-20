@@ -16,18 +16,21 @@ Single_data_input(
 \arguments{
 \item{Pagwas}{Pagwas format}
 
-\item{Single_data}{Input the Single data in seruat format, Idents should be
-the celltypes annotation. mainly used the Single_data@assays$RNA@data}
+\item{Single_data}{Input the Single data in seruat format, Idents should
+be the celltypes annotation. mainly used the Single_data@assays$RNA@data}
 
 \item{nfeatures}{The parameter for FindVariableFeatures,
 NULL means select all genes}
 
 \item{Pathway_list}{(list,character) pathway gene sets list}
 
+\item{assay}{assay data of your single cell data to use,default is "RNA".}
+
 \item{min_clustercells}{Threshold for total cells fo each cluster.}
 }
 \value{
-Pagwas
+Pagwas list including:
+"Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"
 }
 \description{
 Input the Single data in seruat format
@@ -35,8 +38,10 @@ Input the Single data in seruat format
 \examples{
 library(scPagwas)
 Pagwas <- list()
-#Start to read the single cell data
-Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+# Start to read the single cell data
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds",
+  package = "scPagwas"
+))
 Pagwas <- Single_data_input(
   Pagwas = Pagwas,
   assay = "RNA",

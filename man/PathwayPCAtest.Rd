@@ -12,7 +12,7 @@ PathwayPCAtest(Pathway_list, scCounts)
 \item{scCounts}{single cell Counts pathway}
 }
 \value{
-
+list of pca score
 }
 \description{
 Calculate pca score

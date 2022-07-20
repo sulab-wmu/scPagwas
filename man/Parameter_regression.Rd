@@ -10,7 +10,7 @@ Parameter_regression(vectorized_Pagwas_data)
 \item{vectorized_Pagwas_data}{Pagwas data that has been vectorized}
 }
 \value{
-
+regression for vectorized block data.
 }
 \description{
 Find parameter estimates for the data.

@@ -92,36 +92,24 @@
     <dl><dt>p</dt>
 <dd><p>A vector of p-values (only necessary input).</p></dd>
 <dt>pi0</dt>
-<dd><p>Estimated proportion of true null p-values. If NULL, then <code><a href="pi0est.html">pi0est</a></code> is called.</p></dd>
+<dd><p>Estimated proportion of true null p-values.</p></dd>
 <dt>trunc</dt>
 <dd><p>If TRUE, local FDR values &gt;1 are set to 1. Default is TRUE.</p></dd>
 <dt>monotone</dt>
 <dd><p>If TRUE, local FDR values are non-decreasing with increasing p-values. Default is TRUE; this is recommended.</p></dd>
 <dt>transf</dt>
 <dd><p>Either a "probit" or "logit" transformation is applied to the p-values so that a local FDR estimate can be formed that
-does not involve edge effects of the 0,1 interval in which the p-values lie.</p></dd>
+does not involve edge effects of the c(0,1) interval in which the p-values lie.</p></dd>
 <dt>adj</dt>
 <dd><p>Numeric value that is applied as a multiple of the smoothing bandwidth used in the density estimation. Default is <code>adj=1.0</code>.</p></dd>
 <dt>eps</dt>
 <dd><p>Numeric value that is threshold for the tails of the empirical p-value distribution. Default is 10^-8.</p></dd>
 <dt>...</dt>
-<dd><p>Additional arguments, passed to <code><a href="pi0est.html">pi0est</a></code>.</p></dd>
+<dd><p>Additional arguments.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
     <p>A vector of estimated local FDR values, with each entry corresponding to the entries of the input p-value vector <code>p</code>.</p>
-    </div>
-    <div id="details">
-    <h2>Details</h2>
-    <p>It is assumed that null p-values follow a Uniform(0,1) distribution.
-The estimated proportion of true null hypotheses \(\hat{\pi}_0\) is either
-a user-provided value or the value calculated via <code><a href="pi0est.html">pi0est</a></code>.
-This function works by forming an estimate of the marginal density of the
-observed p-values, say \(\hat{f}(p)\). Then the local FDR is estimated as
-\({\rm lFDR}(p) = \hat{\pi}_0/\hat{f}(p)\), with
-adjustments for monotonicity and to guarantee that \({\rm lFDR}(p) \leq
-  1\).  See the Storey (2011) reference below for a concise
-mathematical definition of local FDR.</p>
     </div>
     <div id="references">
     <h2>References</h2>
@@ -130,10 +118,6 @@ of a microarray experiment. Journal of the American Statistical Association, 96:
 <p>Storey JD. (2003) The positive false discovery rate: A Bayesian
 interpretation and the q-value. Annals of Statistics, 31: 2013-2035. <br><a href="http://projecteuclid.org/DPubS/Repository/1.0/Disseminate?view=body&amp;id=pdf_1&amp;handle=euclid.aos/1074290335" class="external-link">http://projecteuclid.org/DPubS/Repository/1.0/Disseminate?view=body&amp;id=pdf_1&amp;handle=euclid.aos/1074290335</a></p>
 <p>Storey JD. (2011) False discovery rates. In <em>International Encyclopedia of Statistical Science</em>. <br><a href="http://genomine.org/papers/Storey_FDR_2011.pdf" class="external-link">http://genomine.org/papers/Storey_FDR_2011.pdf</a> <br><a href="http://www.springer.com/statistics/book/978-3-642-04897-5" class="external-link">http://www.springer.com/statistics/book/978-3-642-04897-5</a></p>
-    </div>
-    <div id="see-also">
-    <h2>See also</h2>
-    <div class="dont-index"><p><code><a href="qvalue.html">qvalue</a></code>, <code><a href="pi0est.html">pi0est</a></code>, <code>hist.qvalue</code></p></div>
     </div>
     <div id="author">
     <h2>Author</h2>

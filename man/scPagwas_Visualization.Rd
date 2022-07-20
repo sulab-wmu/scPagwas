@@ -15,15 +15,19 @@ scPagwas_Visualization(
   lowColor = "#000957",
   highColor = "#EBE645",
   size = 0.5,
-  do_plot = F
+  do_plot = TRUE
 )
 }
 \arguments{
-\item{Single_data}{Single_data in seruat format ,the save with scPagwas_main(), you'd better to run reduction of UMAP AND TSNE}
+\item{Single_data}{Single_data in seruat format ,the save with
+scPagwas_main(), you'd better to run reduction of UMAP AND TSNE}
 
-\item{p_thre}{(numeric),default is 0.1, Threshold for pecent(<1) of Positive cells for level of scPagwas_score.}
+\item{p_thre}{(numeric),default is 0.1, Threshold for pecent(<1) of
+Positive cells for level of scPagwas_score.}
 
-\item{output.dirs}{(character)default is NULL.the file folder name for save the figures.NULL means no folder is created, no pdf figure output.}
+\item{output.dirs}{(character)default is NULL.the file folder name
+for save the figures.NULL means no folder is created, no pdf figure
+output.}
 
 \item{FigureType}{(character)"tsne" or "umap}
 
@@ -42,20 +46,33 @@ scPagwas_Visualization(
 \item{do_plot}{Whether to plot, logical}
 }
 \value{
-
+figures for TRS score, gPas score,and p value reduction plot
 }
 \description{
 Visualize the scPagwas score in Umap and Tsne.
 }
 \examples{
-scPagwas_Visualization(Single_data=Pagwas_data,
-                       p_thre = 0.05,
-                       FigureType = "umap",
-                       width = 7,
-                       height = 7,
-                       lowColor = "white",
-                       highColor = "red",
-                       output.dirs="scPagwastest_output",
-                       size = 0.5,
-                       do_plot = T)
+load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+scPagwas_Visualization(
+  Single_data = Pagwas_data,
+  p_thre = 0.05,
+  FigureType = "umap",
+  width = 7,
+  height = 7,
+  lowColor = "white",
+  highColor = "red",
+  output.dirs = "figure",
+  size = 0.5,
+  do_plot = TRUE
+)
 }
+\author{
+Chunyu Deng
+}
+\keyword{for}
+\keyword{plot}
+\keyword{reduction}
+\keyword{result.}
+\keyword{scPagwas}
+\keyword{scPagwas_Visualization,}
+\keyword{the}

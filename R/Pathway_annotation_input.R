@@ -1,23 +1,21 @@
 
 #' Pathway_annotation_input
 #' @description Deal with the pathway genes with snp blocks
+#' Initial the pathway blocks for mapping the pathway to snp.
 #'
 #' @param Pagwas Pagwas format data list inherit from other functions.
-#' @param n.cores Parallel cores,default is 1. use detectCores() to check the cores in computer.
-#' @param block_annotation
+#' @param block_annotation Start and end points for block traits,
+#' usually genes.
 #'
-#' @return
+#' @return list for pathway blocks
 #' @export
 #'
-#' @examples
-#' library(scPagwas)
-#' data(Genes_by_pathway.kegg)
-#' # the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
-#' Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
+#' @author Chunyu Deng
+#' @aliases Pathway_annotation_input
+#' @keywords Pathway_annotation_input, Initial the pathway blocks
+#' for mapping the pathway to snp.
 Pathway_annotation_input <- function(Pagwas,
                                      block_annotation) {
-  # message("adding block annotations")
-
   if (class(Pagwas$Pathway_list) != "list") {
     stop("require list of Pathway_list")
   }
@@ -26,26 +24,38 @@ Pathway_annotation_input <- function(Pagwas,
     stop("require data frame of annotations")
   }
 
-  if (all(!(c("chrom", "start", "end", "label") %in% colnames(block_annotation)))) {
+  if (all(!(c("chrom", "start", "end", "label") %in%
+    colnames(block_annotation)))) {
     stop("require chrom, start, and end, cols")
   }
 
   if (any(duplicated(block_annotation$label))) {
-    block_annotation <- block_annotation[!duplicated(block_annotation$label), ]
+    block_annotation <- block_annotation[!duplicated(
+      block_annotation$label
+    ), ]
   }
 
-  proper.gene.names <- intersect(Pagwas$VariableFeatures, Pagwas$snp_gene_df$label)
+  proper.gene.names <- intersect(
+    Pagwas$VariableFeatures,
+    Pagwas$snp_gene_df$label
+  )
 
   if (length(intersect(unlist(Pagwas$Pathway_list), proper.gene.names)) < 1) {
     stop("no match for Pathway gene and VariableFeatures")
   }
 
-  chrom<-start<-NULL
+  chrom <- start <- NULL
   # sort and add a random partition label for bootstrap
-  Pathway_list <- lapply(Pagwas$Pathway_list, function(Pa) intersect(Pa, proper.gene.names))
+  Pathway_list <- lapply(
+    Pagwas$Pathway_list,
+    function(Pa) intersect(Pa, proper.gene.names)
+  )
 
-  a<-names(Pathway_list)[unlist(lapply(Pathway_list, function(Pa) length(Pa))) != 0]
-  Pa_index <-   intersect(a, rownames(Pagwas$pca_cell_df))
+  a <- names(Pathway_list)[unlist(lapply(
+    Pathway_list,
+    function(Pa) length(Pa)
+  )) != 0]
+  Pa_index <- intersect(a, rownames(Pagwas$pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
 

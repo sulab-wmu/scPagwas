@@ -13,12 +13,8 @@ scPagwas_perform_score(Pagwas, remove_outlier = TRUE)
 storage, you can set a large number to save time.}
 }
 \value{
-
+Pagwas result list including scPagwas.gPAS.score
 }
 \description{
 Get the scPagwas score for each cells
-}
-\examples{
-library(scPagwas)
-scPagwas_perform_score(Pagwas_data)
 }

@@ -12,9 +12,8 @@ scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp, ncores = 1)
 \item{Pagwas_y}{y parameter for lm}
 
 \item{noise_per_snp}{noise}
-}
-\value{
 
+\item{ncores}{cores for regression}
 }
 \description{
 Find parameter estimates for the data.

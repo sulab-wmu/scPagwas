@@ -9,13 +9,22 @@ Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5)
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
 
-\item{bootstrap_iters}{number of bootstrap iterations to run,default is 200}
+\item{bootstrap_iters}{number of bootstrap iterations to run,
+default is 200}
 
 \item{part}{number of bootstrap iterations to perform,default is 0.5}
 }
 \value{
-
+Data frame for bootstrap results
 }
 \description{
 Bootstrap to evaluate for confidence intervals.
 }
+\author{
+Chunyu Deng
+}
+\keyword{Boot_evaluate,}
+\keyword{Integrate}
+\keyword{bootstrap}
+\keyword{results.}
+\keyword{the}

@@ -101,10 +101,20 @@ given unknown strand assignment for SNP array-based genotyping info</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gtf_df</span><span class="op">)</span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'gtf_df' not found</span>
-<span class="r-in"><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu">Snp2Gene</span><span class="op">(</span>snp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span><span class="op">)</span>, refGene <span class="op">=</span> <span class="va">gtf_df</span>, marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in as.data.frame(Pagwas$gwas_data):</span> object 'Pagwas' not found</span>
+<span class="r-in"><span class="va">Pagwas</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span></span>
+<span class="r-in"> Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span class="r-in"> gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,</span>
+<span class="r-in"> maf_filter <span class="op">=</span> <span class="fl">0.1</span></span>
+<span class="r-in"><span class="op">)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Input gwas summary data frame!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No "chr" from chrom!, now pasting it!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering out SNPs with MAF criterion</span>
+<span class="r-in"><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu">Snp2Gene</span><span class="op">(</span>snp <span class="op">=</span> <span class="va">Pagwas_data</span><span class="op">$</span><span class="va">gwas_data</span>,</span>
+<span class="r-in">refGene <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span class="r-in">marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in DataFrame(..., check.names = FALSE):</span> object 'Pagwas_data' not found</span>
 </code></pre></div>
     </div>
   </div>

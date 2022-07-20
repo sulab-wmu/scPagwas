@@ -1,19 +1,23 @@
 
 #' Pathway_pcascore_run
-#' @description The function can calculate the pathway pcascore for celltypes and single cells.
+#' @description The function can calculate the pathway pcascore for
+#' celltypes and single cells.
 #' @param Pagwas Pagwas format
-#' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
+#' @param Pathway_list Pathawy gene list(gene symbol),list name is
+#' pathway name.
 #' @param min.pathway.size Threshold for min pathway gene size.
 #' @param max.pathway.size Threshold for max pathway gene size.
 #'
-#' @return
+#' @return pca score for pathway in single data and celltypes
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
 #' Pagwas <- list()
-#' #Start to read the single cell data
-#' Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+#' # Start to read the single cell data
+#' Single_data <- readRDS(system.file("extdata", "scRNAexample.rds",
+#'   package = "scPagwas"
+#' ))
 #' Pagwas <- Single_data_input(
 #'   Pagwas = Pagwas,
 #'   assay = "RNA",
@@ -21,20 +25,20 @@
 #'   Pathway_list = Genes_by_pathway_kegg
 #' )
 #' Single_data <- Single_data[, colnames(Pagwas$data_mat)]
-#' #Run pathway pca score!
+#' # Run pathway pca score!
 #' Pagwas <- Pathway_pcascore_run(
 #'   Pagwas = Pagwas,
 #'   Pathway_list = Genes_by_pathway_kegg
 #' )
 #' @author Chunyu Deng
 #' @aliases Pathway_pcascore_run
-#' @keywords Single_data_input, calculate the svd matrix for singlecell data.
+#' @keywords Pathway_pcascore_run, calculate the svd matrix for singlecell
+#' data.
 
 Pathway_pcascore_run <- function(Pagwas = NULL,
                                  Pathway_list = NULL,
                                  min.pathway.size = 10,
                                  max.pathway.size = 1000) {
-
   if (is.null(Pathway_list)) {
     stop("not loaded Pathway_list data")
   }
@@ -46,17 +50,28 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   # filter the pathway length
   Pa.len <- unlist(lapply(Pathway_list, function(Pa) length(Pa)))
 
-  Pathway_list <- Pathway_list[names(Pathway_list)[Pa.len >= min.pathway.size & Pa.len <= max.pathway.size]]
+  Pathway_list <- Pathway_list[names(Pathway_list)[Pa.len >= min.pathway.size &
+    Pa.len <= max.pathway.size]]
 
   # Valid the total genes of pathway.
   pa_gene <- unique(unlist(Pathway_list))
   if (length(intersect(Pagwas$VariableFeatures, pa_gene)) < length(pa_gene) * 0.1) {
-    stop("There are less 10% intersect genes between Single_data and Pathway_list, please check the gene names or change the nfeatures")
-    # return(Pagwas)
+    stop("There are less 10% intersect genes between Single_data and
+         Pathway_list, please check the gene names or change the nfeatures")
   }
 
   # filter the scarce pathway
-  pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, Pagwas$VariableFeatures)))) > 2)]
+  pana <- names(Pathway_list)[which(
+    unlist(lapply(
+      Pathway_list,
+      function(Pa) {
+        length(intersect(
+          Pa,
+          Pagwas$VariableFeatures
+        ))
+      }
+    )) > 2
+  )]
   Pathway_list <- Pathway_list[pana]
   # keep the raw pathway
   Pagwas$rawPathway_list <- Pathway_list
@@ -65,11 +80,25 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   celltypes <- as.vector(unique(Pagwas$Celltype_anno$annotation))
 
   pana_list <- lapply(celltypes, function(celltype) {
-    scCounts <- Pagwas$data_mat[, Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation == celltype]]
+    scCounts <- Pagwas$data_mat[
+      ,
+      Pagwas$Celltype_anno$cellnames[
+        Pagwas$Celltype_anno$annotation == celltype
+      ]
+    ]
     scCounts <- as_matrix(scCounts)
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
     proper.gene.names <- rownames(scCounts)
-    pana <- names(Pathway_list)[which(unlist(lapply(Pathway_list, function(Pa) length(intersect(Pa, proper.gene.names)))) > 2)]
+    pana <- names(Pathway_list)[which(
+      unlist(lapply(
+        Pathway_list,
+        function(Pa) {
+          length(intersect(
+            Pa, proper.gene.names
+          ))
+        }
+      )) > 2
+    )]
     return(pana)
   })
 
@@ -81,7 +110,12 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   message("* Start to get Pathway SVD socre!")
   pb <- txtProgressBar(style = 3)
   scPCAscore_list <- lapply(celltypes, function(celltype) {
-    scCounts <- Pagwas$data_mat[, Pagwas$Celltype_anno$cellnames[Pagwas$Celltype_anno$annotation == celltype]]
+    scCounts <- Pagwas$data_mat[
+      ,
+      Pagwas$Celltype_anno$cellnames[
+        Pagwas$Celltype_anno$annotation == celltype
+      ]
+    ]
     scCounts <- as_matrix(scCounts)
     #
     scPCAscore <- PathwayPCAtest(
@@ -94,21 +128,25 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   })
   close(pb)
   ## merge all PCAscore list
-  pca_df <- reshape::merge_all(lapply(seq_len(length(scPCAscore_list)), function(i) {
-    df <- scPCAscore_list[[i]][[1]]
-    df$celltype <- rep(celltypes[i], nrow(df))
-    # print(i)
-    return(df)
-  }))
+  pca_df <- reshape::merge_all(lapply(
+    seq_len(length(scPCAscore_list)), function(i) {
+      df <- scPCAscore_list[[i]][[1]]
+      df$celltype <- rep(celltypes[i], nrow(df))
+
+      return(df)
+    }
+  ))
 
   pca_df <- lapply(seq_len(length(scPCAscore_list)), function(i) {
     df <- scPCAscore_list[[i]][[1]]
     df$celltype <- rep(celltypes[i], nrow(df))
-    # print(i)
+
     return(df)
   })
   pca_df <- Reduce(function(dtf1, dtf2) rbind(dtf1, dtf2), pca_df)
-  pca_scoremat <- reshape2::dcast(pca_df[, c("name", "celltype", "score")], name ~ celltype)
+  pca_scoremat <- reshape2::dcast(
+    pca_df[, c("name", "celltype", "score")], name ~ celltype
+  )
   rm(pca_df)
 
   rownames(pca_scoremat) <- pca_scoremat$name
@@ -120,7 +158,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   }
   rownames(pca_cell_df) <- pca_scoremat$name
   colnames(pca_cell_df) <- colnames(pca_scoremat)[-1]
-  # colnames(Pagwas$merge_scexpr)<-colnames(pca_scoremat)[-1]
+
   rm(pca_scoremat)
 
   index <- !is.na(pca_cell_df[1, ])
@@ -141,8 +179,10 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   colnames(Pagwas$merge_scexpr) <- colnames(pca_cell_df)
 
-  Pagwas$VariableFeatures <- intersect(rownames(Pagwas$data_mat), Pagwas$VariableFeatures)
-  # Pagwas$Single_data<-NULL
+  Pagwas$VariableFeatures <- intersect(
+    rownames(Pagwas$data_mat),
+    Pagwas$VariableFeatures
+  )
 
   Pagwas$pca_cell_df <- pca_cell_df
 
@@ -155,7 +195,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 #' @param Pathway_list Pathawy gene list(gene symbol),list name is pathway name.
 #' @param scCounts single cell Counts pathway
 #'
-#' @return
+#' @return list of pca score
 #'
 PathwayPCAtest <- function(Pathway_list,
                            scCounts) {
@@ -176,25 +216,38 @@ PathwayPCAtest <- function(Pathway_list,
   ## filter pathway
   nPcs <- 1
   scCounts <- t(scCounts)
-  # scCounts <- as(scCounts, "dgCMatrix")
+
   cm <- Matrix::colMeans(scCounts)
   proper.gene.names <- colnames(scCounts)
-  # SOAR::Store(scCounts)
+
   ###### calculate the pca for each pathway terms.
   papca <- lapply(Pathway_list, function(Pa_id) {
     lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     mat <- scCounts[, lab]
-    # rm(scCounts)
-    pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"), nv = nPcs, nu = 0, center = cm[lab])
+
+    pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"),
+      nv = nPcs, nu = 0, center = cm[lab]
+    )
 
     pcs$d <- pcs$d / sqrt(nrow(mat))
     pcs$rotation <- pcs$v
     pcs$v <- NULL
-    # pcs$scores <- t(ff.tscCounts[, lab] %*% pcs$rotation) - as.numeric((cm[lab] %*% pcs$rotation))
 
-    pcs$scores <- Matrix::crossprod(pcs$rotation, t(mat)) - as.numeric((cm[lab] %*% pcs$rotation))
 
-    cs <- unlist(lapply(seq_len(nrow(pcs$scores)), function(i) sign(stats::cor(pcs$scores[i, ], colMeans(t(mat) * abs(pcs$rotation[, i]))))))
+    pcs$scores <- Matrix::crossprod(
+      pcs$rotation,
+      t(mat)
+    ) - as.numeric((cm[lab] %*% pcs$rotation))
+
+    cs <- unlist(lapply(
+      seq_len(nrow(pcs$scores)),
+      function(i) {
+        sign(stats::cor(
+          pcs$scores[i, ],
+          colMeans(t(mat) * abs(pcs$rotation[, i]))
+        ))
+      }
+    ))
 
     pcs$scores <- pcs$scores * cs
     pcs$rotation <- pcs$rotation * cs
@@ -208,7 +261,10 @@ PathwayPCAtest <- function(Pathway_list,
     result <- tryCatch(
       {
         vars <- as.numeric((papca[[i]]$xp$d))
-        cbind(i = i, var = vars, n = papca[[i]]$n, npc = seq(seq_len(ncol(papca[[i]]$xp$rotation))))
+        cbind(
+          i = i, var = vars, n = papca[[i]]$n,
+          npc = seq(seq_len(ncol(papca[[i]]$xp$rotation)))
+        )
       },
       error = function(e) {
         return(NULL)
@@ -222,9 +278,15 @@ PathwayPCAtest <- function(Pathway_list,
 
   n.cells <- nrow(scCounts)
 
-  vdf$exp <- RMTstat::qWishartMax(0.5, n.cells, vdf$n, var = 1, lower.tail = FALSE)
+  vdf$exp <- RMTstat::qWishartMax(0.5, n.cells, vdf$n,
+    var = 1, lower.tail = FALSE
+  )
   vdf$var <- (vdf$var) / (vdf$exp)
-  df <- data.frame(name = names(papca)[vdf$i], score = vdf$var, stringsAsFactors = FALSE)
+  df <- data.frame(
+    name = names(papca)[vdf$i],
+    score = vdf$var,
+    stringsAsFactors = FALSE
+  )
 
   rownames(vscore) <- names(papca)[vdf$i]
   colnames(vscore) <- rownames(scCounts)

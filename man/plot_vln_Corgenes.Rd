@@ -11,9 +11,10 @@ plot_vln_Corgenes(
   var_group,
   vec_features,
   vec_group_colors = NULL,
-  f_color = colorRampPalette(brewer.pal(n = 11, name = "RdYlBu")),
+  f_color = grDevices::colorRampPalette(RColorBrewer::brewer.pal(n = 11, name =
+    "RdYlBu")),
   flip = T,
-  do_plot = F,
+  do_plot = FALSE,
   pt.size = 0,
   feature_fontface = "bold.italic",
   fontsize_axistext_x = 12,
@@ -45,6 +46,14 @@ plot_vln_Corgenes(
 
 \item{pt.size}{size of jitter in the violin plots. Set to 0 (default) to omit}
 
+\item{feature_fontface}{"bold.italic"}
+
+\item{fontsize_axistext_x}{12, font size for x axis}
+
+\item{fontsize_axistext_y}{12, font size for y axis}
+
+\item{aspect.ratio}{NULL}
+
 \item{figurenames}{The filename and address of the output plot,}
 
 \item{width}{figure width}
@@ -62,13 +71,18 @@ https://github.com/CBMR-Single-Cell-Omics-Platform/SCOPfunctions/blob/main/R/plo
 produce a n_celltype * n_genes grid of violin plots
 }
 \examples{
-top5genes<-rownames(Pagwas_data@misc$gene_heritability_correlation)[order(Pagwas_data@misc$gene_heritability_correlation,decreasing = T)[1:5]]
-
-plot_vln_Corgenes(seurat_obj=Pagwas_data,
-                  assay="RNA", slot="data",
-                  var_group="anno",
-                  vec_features=top5genes,
-                  vec_group_colors= pal_d3(alpha =0.5)(10),
-                  do_plot = T
+load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+suppressMessages(library("ggsci"))
+suppressMessages(library("Seurat"))
+top5genes <- rownames(Pagwas_data@misc$gene_heritability_correlation)[order(
+  Pagwas_data@misc$gene_heritability_correlation,
+  decreasing = TRUE
+)[1:5]]
+plot_vln_Corgenes(
+  seurat_obj = Pagwas_data,
+  assay = "RNA", slot = "data",
+  var_group = "anno",
+  vec_features = top5genes,
+  do_plot = TRUE
 )
 }

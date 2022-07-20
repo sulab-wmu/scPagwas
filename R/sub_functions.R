@@ -1,12 +1,7 @@
-
-
-
 #' bh.adjust
 #' @description BH P-value adjustment with a log option
 #' @param x data
 #' @param log default is FALSE
-#'
-#' @return
 #'
 bh.adjust <- function(x, log = FALSE) {
   nai <- which(!is.na(x))
@@ -52,18 +47,19 @@ as_matrix <- function(mat) {
 #'
 #' @description Pearson correlation matrix between columns of X, Y
 #' modification the code from:
-#' http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-over-a-sparse-matrix-in-r
+#' http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-
+#' over-a-sparse-matrix-in-r
 #' https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
-#' @note Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
+#' @note Note that results larger than 1e4 x 1e4 will become very slow,
+#'  because the resulting matrix is not sparse anymore.
 #'
 #' @param X matrix
 #' @param Y matrix or vector
 #'
-#' @return
+#' @return correlation cofficient
 #'
 
 corSparse <- function(X, Y) {
-
   n <- nrow(X)
   muX <- colMeans(X)
 

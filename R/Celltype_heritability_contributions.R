@@ -1,10 +1,14 @@
 #' Pagwas_perform_regression
-#' @description Run regression
-#' @param Pathway_ld_gwas_data Pagwas format, deault is NULL.
+#' @description Run regression for each pathway block and gwas beta
+#' parameter
+#' @param Pathway_ld_gwas_data list of pathway block.
 #'
-#' @return
+#' @return regression results
 #' @export
-
+#' @author Chunyu Deng
+#' @aliases Pagwas_perform_regression
+#' @keywords Pagwas_perform_regression, Run regression function for
+#' vectorized pathway blocks.
 Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
   message("** Start inference")
   # fit model
@@ -19,7 +23,7 @@ Pagwas_perform_regression <- function(Pathway_ld_gwas_data) {
 #' @description Find parameter estimates for the data.
 #' @param vectorized_Pagwas_data Pagwas data that has been vectorized
 #'
-#' @return
+#' @return regression for vectorized block data.
 
 Parameter_regression <- function(vectorized_Pagwas_data) {
   lm_results <- list()
@@ -41,28 +45,41 @@ Parameter_regression <- function(vectorized_Pagwas_data) {
 #' Boot_evaluate
 #' @description Bootstrap to evaluate for confidence intervals.
 #' @param Pagwas Pagwas format, deault is NULL.
-#' @param bootstrap_iters number of bootstrap iterations to run,default is 200
+#' @param bootstrap_iters number of bootstrap iterations to run,
+#' default is 200
 #' @param part number of bootstrap iterations to perform,default is 0.5
 #' @export
-#' @return
+#' @return Data frame for bootstrap results
+#' @author Chunyu Deng
+#' @aliases Boot_evaluate
+#' @keywords Boot_evaluate, Integrate the bootstrap results.
 
 Boot_evaluate <- function(Pagwas,
                           bootstrap_iters = 200,
                           part = 0.5) {
 
   # run things in parallel if user specified
-  message(paste0("* starting bootstrap iteration for ", bootstrap_iters, " times"))
+  message(paste0(
+    "* starting bootstrap iteration for ",
+    bootstrap_iters, " times"
+  ))
 
   pb <- utils::txtProgressBar(style = 3)
   Boot_resultlist <-
     lapply(1:bootstrap_iters, function(i) {
       boot_results <- Parameter_regression(
         xy2vector(Pagwas$Pathway_ld_gwas_data[
-          sample(seq_len(length(Pagwas$Pathway_ld_gwas_data)), floor(length(Pagwas$Pathway_ld_gwas_data) * part))
+          sample(
+            seq_len(length(Pagwas$Pathway_ld_gwas_data)),
+            floor(length(Pagwas$Pathway_ld_gwas_data) * part)
+          )
         ])
       )
-      # boot_results <- para_names_adjust(Pagwas, lm_results = boot_results)
-      names(boot_results$parameters) <- c("Intercept", colnames(Pagwas$pca_cell_df))
+
+      names(boot_results$parameters) <- c(
+        "Intercept",
+        colnames(Pagwas$pca_cell_df)
+      )
 
       utils::setTxtProgressBar(pb, i / bootstrap_iters)
 
@@ -90,17 +107,22 @@ Boot_evaluate <- function(Pagwas,
 
 
 #' xy2vector
-#' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize it.
-#' @param Pathway_ld_gwas_data the list of block information from Pagwas object
+#' @description Take a list of Pagwas - Pathway_ld_gwas_data and vectorize
+#' it.
+#' @param Pathway_ld_gwas_data the list of block information from Pagwas
+#' object
 #'
-#' @return
+#' @return vector for x and y values.
 #'
 
 xy2vector <- function(Pathway_ld_gwas_data = NULL) {
   # use only blocks flagged for inference inclusion
-  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(Pathway_ld_gwas_data, function(block) {
-    block$include_in_inference
-  })]
+  Pathway_ld_gwas_data <- Pathway_ld_gwas_data[sapply(
+    Pathway_ld_gwas_data,
+    function(block) {
+      block$include_in_inference
+    }
+  )]
 
   # unpack Pathway_ld_gwas_data
   y <- do.call("c", lapply(Pathway_ld_gwas_data, function(block) {
@@ -129,20 +151,23 @@ xy2vector <- function(Pathway_ld_gwas_data = NULL) {
 
 
 #' Get_Pathway_heritability_contributions
-#' @description Caclulate predicted block values based on block information and model fit.
+#' @description Caclulate predicted block values based on block
+#' information and model fit.
 #' @param pca_cell_df pca score dataframe
 #' @param parameters parameter fit
 #'
-#' @return
+#' @return vector for pathway heritability contributions
 #'
-Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
+Get_Pathway_heritability_contributions <- function(pca_cell_df,
+                                                   parameters) {
   if (any(is.na(parameters))) {
     warning("NA pameters found!")
     parameters[is.na(parameters)] <- 0
   }
 
   # only include parameter for which we have block data
-  Pathway_block_info <- as.numeric(data.matrix(pca_cell_df) %*% parameters[colnames(pca_cell_df)])
+  Pathway_block_info <- as.numeric(data.matrix(pca_cell_df) %*%
+    parameters[colnames(pca_cell_df)])
   names(Pathway_block_info) <- rownames(pca_cell_df)
 
 
@@ -152,16 +177,17 @@ Get_Pathway_heritability_contributions <- function(pca_cell_df, parameters) {
 
 
 #' Get_bootresults_df
-#' @description Helper function to make a summary table of results from bootstrap data.
+#' @description Helper function to make a summary table of results from
+#' bootstrap data.
 #' @param value_collection collection of bootstrapped value estimates
 #' @param annotations vector of annotation names
 #' @param model_estimates estimates for bias parameter estimates
 #'
-#' @return
+#' @return data frame for bootstrap results.
 
-Get_bootresults_df <- function(value_collection, annotations, model_estimates) {
-
-  bootstrap_estimate<-bootstrap_error <- bt_value<-NULL
+Get_bootresults_df <- function(value_collection, annotations,
+                               model_estimates) {
+  bootstrap_estimate <- bootstrap_error <- bt_value <- NULL
   # in the case we're calculating single parameter estimates
   if (is.null(dim(value_collection))) {
     value_collection <- matrix(value_collection, nrow = 1)

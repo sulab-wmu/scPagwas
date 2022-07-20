@@ -100,17 +100,13 @@ to check the cores in computer.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
+    <p>list of blocks for snp to gene and pathway score.</p>
+    </div>
+    <div id="author">
+    <h2>Author</h2>
+    <p>Chunyu Deng</p>
     </div>
 
-    <div id="ref-examples">
-    <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">chrom_ld</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu">Link_pathway_blocks_gwas</span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas</span>, chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in lapply(Pagwas$pathway_blocks, function(pa_blocks) split(pa_blocks,     f = as.vector(pa_blocks$chrom))):</span> object 'Pagwas' not found</span>
-</code></pre></div>
-    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>

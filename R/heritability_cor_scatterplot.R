@@ -1,6 +1,7 @@
 
 #' heritability_cor_scatterplot
-#'
+#' @description Plot the scatterplot for the correlation coefficient for each genes.
+#' pearson methods for each gene expression and gPAS score in each cells.
 #' @param gene_heri_cor gene_heritability_correlation result for scPagwas.
 #' @param topn_genes_label 10, the number of top genes for correlation.
 #' @param color_low low color
@@ -13,37 +14,43 @@
 #' @param width figure width
 #' @param height figure height
 #'
-#' @return
+#' @return scatterplot
 #' @export
 #'
 #' @examples
-#'
-#' heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_correlation,
-#'                              topn_genes_label=10,
-#'                              color_low="#035397",
-#'                              color_high ="#F32424",
-#'                              color_mid = "white",
-#'                              text_size=2,
-#'                              do_plot=T,
-#'                              max.overlaps =20,
-#'                              width = 7,
-#'                              height = 7)
- heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
+#' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+#' heritability_cor_scatterplot(
+#'   gene_heri_cor = Pagwas_data@misc$gene_heritability_correlation,
+#'   topn_genes_label = 10,
+#'   color_low = "#035397",
+#'   color_high = "#F32424",
+#'   color_mid = "white",
+#'   text_size = 2,
+#'   do_plot = TRUE,
+#'   max.overlaps = 20,
+#'   width = 7,
+#'   height = 7
+#' )
+#' @author Chunyu Deng
+#' @aliases heritability_cor_scatterplot
+#' @keywords heritability_cor_scatterplot, plot the scatterplot for the correlation coefficient for each genes.
+heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
                                          topn_genes_label = 10,
                                          color_low = "#035397",
                                          color_high = "#F32424",
                                          color_mid = "white",
                                          text_size = 3,
-                                         do_plot = T,
+                                         do_plot = TRUE,
                                          max.overlaps = 10,
                                          figurenames = NULL,
                                          width = 7,
                                          height = 7) {
+  text <- NULL
   cor_df <- data.frame(genes = rownames(gene_heri_cor), cor = gene_heri_cor[, 1], text = rep(NA, nrow(gene_heri_cor)))
 
   cor_df <- cor_df[order(cor_df$cor, decreasing = T), ]
   cor_df$text[1:topn_genes_label] <- cor_df$genes[1:topn_genes_label]
-  # save(stage_df1,stage_df2,file="stage_df.RData")
+
   cor_df$order <- seq_len(nrow(cor_df))
 
   p <- ggplot(data = cor_df) +
@@ -65,8 +72,8 @@
 
   if (do_plot) print(p)
   if (!is.null(figurenames)) {
-    pdf(file = figurenames, width = width, height = height)
+    grDevices::pdf(file = figurenames, width = width, height = height)
     print(p)
-    dev.off()
+    grDevices::dev.off()
   }
 }

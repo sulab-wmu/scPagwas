@@ -11,7 +11,7 @@ heritability_cor_scatterplot(
   color_high = "#F32424",
   color_mid = "white",
   text_size = 3,
-  do_plot = T,
+  do_plot = TRUE,
   max.overlaps = 10,
   figurenames = NULL,
   width = 7,
@@ -42,21 +42,36 @@ heritability_cor_scatterplot(
 \item{height}{figure height}
 }
 \value{
-
+scatterplot
 }
 \description{
-heritability_cor_scatterplot
+Plot the scatterplot for the correlation coefficient for each genes.
+pearson methods for each gene expression and gPAS score in each cells.
 }
 \examples{
-
-heritability_cor_scatterplot(gene_heri_cor=Pagwas_data@misc$gene_heritability_correlation,
-                             topn_genes_label=10,
-                             color_low="#035397",
-                             color_high ="#F32424",
-                             color_mid = "white",
-                             text_size=2,
-                             do_plot=T,
-                             max.overlaps =20,
-                             width = 7,
-                             height = 7)
+load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+heritability_cor_scatterplot(
+  gene_heri_cor = Pagwas_data@misc$gene_heritability_correlation,
+  topn_genes_label = 10,
+  color_low = "#035397",
+  color_high = "#F32424",
+  color_mid = "white",
+  text_size = 2,
+  do_plot = TRUE,
+  max.overlaps = 20,
+  width = 7,
+  height = 7
+)
 }
+\author{
+Chunyu Deng
+}
+\keyword{coefficient}
+\keyword{correlation}
+\keyword{each}
+\keyword{for}
+\keyword{genes.}
+\keyword{heritability_cor_scatterplot,}
+\keyword{plot}
+\keyword{scatterplot}
+\keyword{the}

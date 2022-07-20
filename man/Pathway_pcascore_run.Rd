@@ -14,23 +14,27 @@ Pathway_pcascore_run(
 \arguments{
 \item{Pagwas}{Pagwas format}
 
-\item{Pathway_list}{Pathawy gene list(gene symbol),list name is pathway name.}
+\item{Pathway_list}{Pathawy gene list(gene symbol),list name is
+pathway name.}
 
 \item{min.pathway.size}{Threshold for min pathway gene size.}
 
 \item{max.pathway.size}{Threshold for max pathway gene size.}
 }
 \value{
-
+pca score for pathway in single data and celltypes
 }
 \description{
-The function can calculate the pathway pcascore for celltypes and single cells.
+The function can calculate the pathway pcascore for
+celltypes and single cells.
 }
 \examples{
 library(scPagwas)
 Pagwas <- list()
-#Start to read the single cell data
-Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+# Start to read the single cell data
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds",
+  package = "scPagwas"
+))
 Pagwas <- Single_data_input(
   Pagwas = Pagwas,
   assay = "RNA",
@@ -38,7 +42,7 @@ Pagwas <- Single_data_input(
   Pathway_list = Genes_by_pathway_kegg
 )
 Single_data <- Single_data[, colnames(Pagwas$data_mat)]
-#Run pathway pca score!
+# Run pathway pca score!
 Pagwas <- Pathway_pcascore_run(
   Pagwas = Pagwas,
   Pathway_list = Genes_by_pathway_kegg
@@ -47,7 +51,7 @@ Pagwas <- Pathway_pcascore_run(
 \author{
 Chunyu Deng
 }
-\keyword{Single_data_input,}
+\keyword{Pathway_pcascore_run,}
 \keyword{calculate}
 \keyword{data.}
 \keyword{for}

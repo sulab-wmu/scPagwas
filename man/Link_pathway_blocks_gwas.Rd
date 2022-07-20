@@ -17,19 +17,29 @@ Link_pathway_blocks_gwas(
 
 \item{chrom_ld}{LD data for 22 chromosome.}
 
+\item{singlecell}{whether to run singlecell progress}
+
+\item{celltype}{whether to run celltype progress}
+
 \item{ncores}{Parallel cores,default is 1. use detectCores()
 to check the cores in computer.}
 }
 \value{
-
+Pagwas list of blocks for snp to gene and pathway score.
 }
 \description{
 Link pathway blocks region and gwas summary snps
 Takes block information, potentially independent LD pathway_blocks
 or gene blocks,
 }
-\examples{
-library(scPagwas)
-data(chrom_ld)
-Pagwas <- Link_pathway_blocks_gwas(Pagwas = Pagwas, chrom_ld = chrom_ld)
+\author{
+Chunyu Deng
 }
+\keyword{Link_pathway_blocks_gwas,}
+\keyword{calculate}
+\keyword{data.}
+\keyword{for}
+\keyword{matrix}
+\keyword{singlecell}
+\keyword{svd}
+\keyword{the}

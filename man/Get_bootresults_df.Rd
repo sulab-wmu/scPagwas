@@ -14,8 +14,9 @@ Get_bootresults_df(value_collection, annotations, model_estimates)
 \item{model_estimates}{estimates for bias parameter estimates}
 }
 \value{
-
+data frame for bootstrap results.
 }
 \description{
-Helper function to make a summary table of results from bootstrap data.
+Helper function to make a summary table of results from
+bootstrap data.
 }

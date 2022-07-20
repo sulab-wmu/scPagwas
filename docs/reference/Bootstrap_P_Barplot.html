@@ -111,18 +111,23 @@ and have not pdf figure.</p></dd>
     <h2>Value</h2>
     <p>A figure of barplot in pdf format, red color is significant.</p>
     </div>
+    <div id="author">
+    <h2>Author</h2>
+    <p>Chunyu Deng</p>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Pagwas is the result of Pagwas_main()</span></span>
-<span class="r-in"><span class="fu">Bootstrap_P_Barplot</span><span class="op">(</span></span>
-<span class="r-in">  Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
-<span class="r-in">  title <span class="op">=</span> <span class="st">"Test scPagwas"</span>,</span>
-<span class="r-in">  figurenames <span class="op">=</span> <span class="st">"test_barplot.pdf"</span>,</span>
-<span class="r-in">  width <span class="op">=</span> <span class="fl">5</span>, height <span class="op">=</span> <span class="fl">7</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in Bootstrap_P_Barplot(Pagwas = Pagwas, title = "Test scPagwas",     figurenames = "test_barplot.pdf", width = 5, height = 7):</span> unused argument (Pagwas = Pagwas)</span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"Pagwas_data.RData"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="fu">Bootstrap_P_Barplot</span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span class="r-in">                   p_names<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_data</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span class="r-in">                   width <span class="op">=</span> <span class="fl">5</span>,</span>
+<span class="r-in">                   height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span class="r-in">                   do_plot<span class="op">=</span><span class="cn">TRUE</span>,</span>
+<span class="r-in">                   title <span class="op">=</span> <span class="st">"Test"</span><span class="op">)</span></span>
+<span class="r-plt img"><img src="Bootstrap_P_Barplot-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </div>

@@ -11,9 +11,6 @@ bh.adjust(x, log = FALSE)
 
 \item{log}{default is FALSE}
 }
-\value{
-
-}
 \description{
 BH P-value adjustment with a log option
 }

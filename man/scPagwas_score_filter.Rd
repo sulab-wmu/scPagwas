@@ -9,9 +9,6 @@ scPagwas_score_filter(scPagwas_score)
 \arguments{
 \item{scPagwas_score}{(data.frame)}
 }
-\value{
-
-}
 \description{
 filter the cPagwas_score for outliers.
 }

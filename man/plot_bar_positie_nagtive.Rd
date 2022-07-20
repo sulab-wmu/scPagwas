@@ -9,8 +9,9 @@ plot_bar_positie_nagtive(
   var_ident,
   var_group,
   vec_group_colors = NULL,
-  f_color = colorRampPalette(brewer.pal(n = 11, name = "RdYlBu")),
-  do_plot = F,
+  f_color = grDevices::colorRampPalette(RColorBrewer::brewer.pal(n = 11, name =
+    "RdYlBu")),
+  do_plot = FALSE,
   title = NULL,
   p_thre = 0.05,
   fontsize_title = 24,
@@ -28,39 +29,47 @@ plot_bar_positie_nagtive(
 )
 }
 \arguments{
-\item{seurat_obj}{Seurat object (Seurat ^3.0)}
+\item{seurat_obj}{Seurat object (Seurat ^3.0).}
 
-\item{var_ident}{the identify variable, character}
+\item{var_ident}{the identify variable, character.}
 
-\item{var_group}{the group variable, character}
+\item{var_group}{the group variable, character.}
 
-\item{vec_group_colors}{a vector of colors, named by corresponding group. Length must match number of groups. Character}
+\item{vec_group_colors}{a vector of colors, named by corresponding group.
+Length must match number of groups. Character.}
 
-\item{f_color}{if vec_group_colors is not provided, the user may instead provide a function f_color() that takes as its only argument the number of colors to generate}
+\item{f_color}{if vec_group_colors is not provided, the user may instead provide a
+function f_color() that takes as its only argument the number of colors to generate.}
 
-\item{do_plot}{Whether to plot, logical}
+\item{do_plot}{Whether to plot, logical.}
 
-\item{title}{NULL to leave out}
+\item{title}{NULL to leave out.}
 
-\item{fontsize_title}{NULL to leave out}
+\item{p_thre}{threshold for p value.}
 
-\item{fontsize_axistitle_x}{NULL to leave out}
+\item{fontsize_title}{NULL to leave out.}
 
-\item{fontsize_axistitle_y}{NULL to leave out}
+\item{fontsize_axistitle_x}{NULL to leave out.}
 
-\item{fontsize_axistext_x}{NULL to leave out}
+\item{fontsize_axistitle_y}{NULL to leave out.}
 
-\item{fontsize_axistext_y}{NULL to leave out}
+\item{fontsize_axistext_x}{NULL to leave out.}
 
-\item{fontsize_legendtitle}{NULL to leave out}
+\item{fontsize_axistext_y}{NULL to leave out.}
 
-\item{fontsize_legendtext}{NULL to leave out}
+\item{fontsize_legendtitle}{NULL to leave out.}
 
-\item{width}{figure width}
+\item{fontsize_legendtext}{NULL to leave out.}
 
-\item{height}{figure height}
+\item{aspect.ratio}{default is 1.2.}
 
-\item{figurenames}{The filename and address of the output plot,}
+\item{output.prefix}{prefix for output files.}
+
+\item{output.dirs}{directory for files.}
+
+\item{width}{figure width.}
+
+\item{height}{figure height.}
 }
 \value{
 a ggplot2 object
@@ -73,5 +82,19 @@ Generate a percentage barplot that shows the composition of each identity
 (e.g. sample)in terms of groups (e.g. positive and negative cells for scPagwas)
 }
 \examples{
-p <- plot_barIdentGroup(seurat_obj = seu, var_ident = "sample", var_group = "cluster")
+load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+plot_bar_positie_nagtive(
+  seurat_obj = Pagwas_data,
+  var_ident = "anno",
+  var_group = "positiveCells",
+  vec_group_colors = c("#E8D0B3", "#7EB5A6"),
+  do_plot = FALSE
+)
 }
+\keyword{bars}
+\keyword{cellytpes.}
+\keyword{for}
+\keyword{plot}
+\keyword{plot_bar_positie_nagtive,}
+\keyword{pvalue}
+\keyword{the}

@@ -18,13 +18,21 @@
 #'
 #' @examples
 #' library(scPagwas)
-#' # Pagwas is the result of Pagwas_main()
+#' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+#'
 #' Bootstrap_P_Barplot(
-#'   Pagwas = Pagwas,
-#'   title = "Test scPagwas",
-#'   figurenames = "test_barplot.pdf",
-#'   width = 5, height = 7
+#'   p_results = Pagwas_data@misc$bootstrap_results$bp_value[-1],
+#'   p_names = rownames(Pagwas_data@misc$bootstrap_results)[-1],
+#'   width = 5,
+#'   height = 7,
+#'   do_plot = TRUE,
+#'   title = "Test"
 #' )
+#' @author Chunyu Deng
+#' @aliases Bootstrap_P_Barplot
+#' @keywords Bootstrap_P_Barplot, plot the Barplot for scPagwas
+#' bootstrap celltypes result.
+
 Bootstrap_P_Barplot <- function(p_results,
                                 p_names,
                                 title = "Test scPagwas",
@@ -32,7 +40,6 @@ Bootstrap_P_Barplot <- function(p_results,
                                 width = 5,
                                 height = 7,
                                 do_plot = TRUE) {
-
   logp <- -log2(p_results)
   sig <- rep("b", length(p_results))
   sig[which(p_results < 0.05)] <- "a"
@@ -67,8 +74,6 @@ Bootstrap_P_Barplot <- function(p_results,
       labs(x = "", y = "-log2(p)", title = title) +
       coord_flip() +
       theme(legend.position = "none")
-    # scale_fill_discrete()+
-    # geom_hline(aes(yintercept=4.321), colour="#990000", linetype="dashed")+
   }
   if (do_plot) print(p1)
 
@@ -96,31 +101,38 @@ Bootstrap_P_Barplot <- function(p_results,
 #'
 #' @examples
 #' library(scPagwas)
+#' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
 #'
-#' # Pagwas is the result of Pagwas_main()
 #' Bootstrap_estimate_Plot(
-#'   Pagwas = Pagwas,
-#'   figurenames = "test_forest.pdf",
-#'   width = 9, height = 7
+#'   Pagwas = Pagwas_data,
+#'   width = 9,
+#'   height = 7,
+#'   do_plot = TRUE
 #' )
+#' @author Chunyu Deng
+#' @aliases Bootstrap_estimate_Plot
+#' @keywords Bootstrap_estimate_Plot, plot the forest for scPagwas
+#' bootstrap celltypes result.
 Bootstrap_estimate_Plot <- function(Pagwas,
                                     figurenames = NULL,
                                     width = 9,
                                     height = 7,
                                     do_plot = F) {
-
-  Index<-estimate<-lower<-upper<-label<-Pvalue<-NULL
+  Index <- estimate <- lower <- upper <- label <- Pvalue <- NULL
   bootstrap_results <- Pagwas@misc$bootstrap_results[-1, c(
     "bp_value",
     "bias_corrected_estimate",
     "CI_lo",
     "CI_hi"
   )]
-  bootstrap_results <- bootstrap_results[order(bootstrap_results$bias_corrected_estimate, decreasing = T), ]
+  bootstrap_results <- bootstrap_results[order(
+    bootstrap_results$bias_corrected_estimate,
+    decreasing = T
+  ), ]
 
 
   dat <- data.frame(
-    Index = seq_len(nrow(bootstrap_results)), ## This provides an order to the data
+    Index = seq_len(nrow(bootstrap_results)),
     label = rownames(bootstrap_results),
     estimate = bootstrap_results$bias_corrected_estimate,
     lower = bootstrap_results$CI_lo,

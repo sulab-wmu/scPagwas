@@ -7,7 +7,7 @@
 #' @param calculateQvalue TRUE
 #' @param pValueMethod "all"
 #'
-#' @return
+#' @return rank p value for expression matrix.
 #' @export
 rankPvalue <- function(datS, columnweights = NULL,
                        na.last = "keep",
@@ -15,7 +15,7 @@ rankPvalue <- function(datS, columnweights = NULL,
                        calculateQvalue = T,
                        pValueMethod = "rank") {
   no.rows <- dim(datS)[[1]]
-  #no.cols <- dim(datS)[[2]]
+
 
   if (pValueMethod != "scale") {
     percentilerank1 <- function(x) {
@@ -38,15 +38,16 @@ rankPvalue <- function(datS, columnweights = NULL,
     Zstatisticlow <- (observed.sumPercentileslow - expectedsum) / sqrt(varsum)
     datrankshigh <- apply(-datS, 2, percentilerank1)
 
-    observed.sumPercentileshigh <- as.numeric(rowSums(datrankshigh, na.rm = TRUE))
+    observed.sumPercentileshigh <- as.numeric(rowSums(datrankshigh,
+                                                      na.rm = TRUE))
     Zstatistichigh <- (observed.sumPercentileshigh - expectedsum) / sqrt(varsum)
-    pValueLow <- pnorm((Zstatisticlow))
-    pValueHigh <- pnorm((Zstatistichigh))
+    pValueLow <- stats::pnorm((Zstatisticlow))
+    pValueHigh <- stats::pnorm((Zstatistichigh))
     datoutrank <- data.frame(pValueLow, pValueHigh)
     if (calculateQvalue) {
       qValueLow <- rep(NA, dim(datS)[[1]])
       qValueHigh <- rep(NA, dim(datS)[[1]])
-      # qValueExtreme = rep(NA, dim(datS)[[1]])
+
       rest1 <- !is.na(pValueLow)
       qValueLow[rest1] <- qvalue(pValueLow[rest1])$qvalues
       rest1 <- !is.na(pValueHigh)
@@ -54,7 +55,7 @@ rankPvalue <- function(datS, columnweights = NULL,
       datq <- data.frame(qValueLow, qValueHigh)
       datoutrank <- data.frame(datoutrank, datq)
       names(datoutrank) <- paste(names(datoutrank), "Rank",
-                                 sep = ""
+        sep = ""
       )
     }
   }
@@ -70,13 +71,13 @@ rankPvalue <- function(datS, columnweights = NULL,
 
     observed.sumScaledminusdatS <- as.numeric(rowSums(scaled.minusdatS, na.rm = TRUE))
     Zstatistichigh <- (observed.sumScaledminusdatS - expected.value) / sqrt(varsum)
-    pValueLow <- pnorm((Zstatisticlow))
-    pValueHigh <- pnorm((Zstatistichigh))
+    pValueLow <- stats::pnorm((Zstatisticlow))
+    pValueHigh <- stats::pnorm((Zstatistichigh))
     datoutscale <- data.frame(pValueLow, pValueHigh)
     if (calculateQvalue) {
       qValueLow <- rep(NA, dim(datS)[[1]])
       qValueHigh <- rep(NA, dim(datS)[[1]])
-      # qValueExtreme = rep(NA, dim(datS)[[1]])
+
       rest1 <- !is.na(pValueLow)
       qValueLow[rest1] <- qvalue(pValueLow[rest1])$qvalues
       rest1 <- !is.na(pValueHigh)
@@ -107,43 +108,39 @@ rankPvalue <- function(datS, columnweights = NULL,
 #' false discovery rate) when that particular test is called significant.
 #'
 #' @details
-#' The function \code{\link{pi0est}} is called internally and calculates the estimate of \eqn{\pi_0}{pi_0},
-#' the proportion of true null hypotheses. The function \code{\link{lfdr}} is also called internally and
-#' calculates the estimated local FDR values.  Arguments for these functions can be included via \code{...} and
-#' will be utilized in the internal calls made in \code{\link{qvalue}}. See \url{http://genomine.org/papers/Storey_FDR_2011.pdf}
+#' The function \code{\link{pi0est}} is called internally and calculates
+#' the estimate of \eqn{\pi_0}{pi_0},
+#' the proportion of true null hypotheses. The function \code{\link{lfdr}}
+#' is also called internally and
+#' calculates the estimated local FDR values.  Arguments for these
+#' functions can be included via \code{...} and
+#' will be utilized in the internal calls made in \code{\link{qvalue}}.
+#' See \url{http://genomine.org/papers/Storey_FDR_2011.pdf}
 #' for a brief introduction to FDRs and q-values.
 #'
 #' @param p A vector of p-values (only necessary input).
-#' @param fdr.level A level at which to control the FDR. Must be in (0,1]. Optional; if this is
+#' @param fdr.level A level at which to control the FDR. Must be in (0,1].
+#' Optional; if this is
 #' selected, a vector of TRUE and FALSE is returned that specifies
 #' whether each q-value is less than fdr.level or not.
 #' @param pfdr An indicator of whether it is desired to make the
-#' estimate more robust for small p-values and a direct finite sample estimate of pFDR -- optional.
-#' @param lfdr.out If TRUE then local false discovery rates are returned. Default is TRUE.
-#' @param pi0 It is recommended to not input an estimate of pi0. Experienced users can use their own methodology to estimate
+#' estimate more robust for small p-values and a direct finite sample
+#' estimate of pFDR -- optional.
+#' @param lfdr.out If TRUE then local false discovery rates are returned.
+#' Default is TRUE.
+#' @param pi0 It is recommended to not input an estimate of pi0.
+#' Experienced users can use their own methodology to estimate
 #' the proportion of true nulls or set it equal to 1 for the BH procedure.
-#' @param \ldots Additional arguments passed to \code{\link{pi0est}} and \code{\link{lfdr}}.
+#' @param \ldots Additional arguments passed to \code{\link{pi0est}}
+#' and \code{\link{lfdr}}.
 #'
 #'
-#' @return
 #' @references
-#' Storey JD. (2011) False discovery rates. In \emph{International Encyclopedia of Statistical Science}. \cr
+#' Storey JD. (2011) False discovery rates. In \emph{International
+#' Encyclopedia of Statistical Science}. \cr
 #' \url{http://genomine.org/papers/Storey_FDR_2011.pdf} \cr
 #' \url{http://www.springer.com/statistics/book/978-3-642-04897-5}
 #'
-#' @examples
-#' # import data
-#' data(hedenfalk)
-#' p <- hedenfalk$p
-#'
-#' # get q-value object
-#' qobj <- qvalue(p)
-#' plot(qobj)
-#' hist(qobj)
-#'
-#' # options available
-#' qobj <- qvalue(p, lambda = 0.5, pfdr = TRUE)
-#' qobj <- qvalue(p, fdr.level = 0.05, pi0.method = "bootstrap", adj = 1.2)
 #' @author John D. Storey
 #' @keywords qvalue
 #' @aliases qvalue
@@ -165,9 +162,9 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
   if (is.null(pi0)) {
     pi0s <- pi0est(p, ...)
   } else {
-    if (pi0 > 0 && pi0 <= 1)  {
-      pi0s = list()
-      pi0s$pi0 = pi0
+    if (pi0 > 0 && pi0 <= 1) {
+      pi0s <- list()
+      pi0s$pi0 <- pi0
     } else {
       stop("pi0 is not (0,1]")
     }
@@ -179,9 +176,9 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
   o <- order(p, decreasing = TRUE)
   ro <- order(o)
   if (pfdr) {
-    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / (i * (1 - (1 - p[o]) ^ m))))[ro]
+    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / (i * (1 - (1 - p[o])^m))))[ro]
   } else {
-    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m /i ))[ro]
+    qvals <- pi0s$pi0 * pmin(1, cummin(p[o] * m / i))[ro]
   }
   qvals_out[rm_na] <- qvals
   # Calculate local FDR estimates
@@ -194,15 +191,19 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
 
   # Return results
   if (!is.null(fdr.level)) {
-    retval <- list(call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
-                   pvalues = p_in, lfdr = lfdr_out, fdr.level = fdr.level,
-                   significant = (qvals <= fdr.level),
-                   pi0.lambda = pi0s$pi0.lambda, lambda = pi0s$lambda,
-                   pi0.smooth = pi0s$pi0.smooth)
+    retval <- list(
+      call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
+      pvalues = p_in, lfdr = lfdr_out, fdr.level = fdr.level,
+      significant = (qvals <= fdr.level),
+      pi0.lambda = pi0s$pi0.lambda, lambda = pi0s$lambda,
+      pi0.smooth = pi0s$pi0.smooth
+    )
   } else {
-    retval <- list(call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
-                   pvalues = p_in, lfdr = lfdr_out, pi0.lambda = pi0s$pi0.lambda,
-                   lambda = pi0s$lambda, pi0.smooth = pi0s$pi0.smooth)
+    retval <- list(
+      call = match.call(), pi0 = pi0s$pi0, qvalues = qvals_out,
+      pvalues = p_in, lfdr = lfdr_out, pi0.lambda = pi0s$pi0.lambda,
+      lambda = pi0s$lambda, pi0.smooth = pi0s$pi0.smooth
+    )
   }
   class(retval) <- "qvalue"
   return(retval)
@@ -267,21 +268,6 @@ qvalue <- function(p, fdr.level = NULL, pfdr = FALSE, lfdr.out = TRUE, pi0 = NUL
 #' \url{http://genomine.org/papers/Storey_FDR_2011.pdf} \cr
 #' \url{http://www.springer.com/statistics/book/978-3-642-04897-5}
 #'
-#' @examples
-#' # import data
-#' data(hedenfalk)
-#' p <- hedenfalk$p
-#'
-#' # proportion of null p-values
-#' nullRatio <- pi0est(p)
-#' nullRatioS <- pi0est(p, lambda = seq(0.40, 0.95, 0.05), smooth.log.pi0 = "TRUE")
-#' nullRatioM <- pi0est(p, pi0.method = "bootstrap")
-#'
-#' # check behavior of estimate over lambda
-#' # also, pi0est arguments can be passed to qvalue
-#' qobj <- qvalue(p, lambda = seq(0.05, 0.95, 0.1), smooth.log.pi0 = "TRUE")
-#' hist(qobj)
-#' plot(qobj)
 #' @author John D. Storey
 #' @seealso \code{\link{qvalue}}
 #' @keywords pi0est, proportion true nulls
@@ -323,17 +309,17 @@ pi0est <- function(p, lambda = seq(0.05, 0.95, 0.05), pi0.method = c("smoother",
     if (pi0.method == "smoother") {
       if (smooth.log.pi0) {
         pi0 <- log(pi0)
-        spi0 <- smooth.spline(lambda, pi0, df = smooth.df)
-        pi0Smooth <- exp(predict(spi0, x = lambda)$y)
+        spi0 <- stats::smooth.spline(lambda, pi0, df = smooth.df)
+        pi0Smooth <- exp(stats::predict(spi0, x = lambda)$y)
         pi0 <- min(pi0Smooth[ll], 1)
       } else {
-        spi0 <- smooth.spline(lambda, pi0, df = smooth.df)
-        pi0Smooth <- predict(spi0, x = lambda)$y
+        spi0 <- stats::smooth.spline(lambda, pi0, df = smooth.df)
+        pi0Smooth <- stats::predict(spi0, x = lambda)$y
         pi0 <- min(pi0Smooth[ll], 1)
       }
     } else if (pi0.method == "bootstrap") {
       # Bootstrap method closed form solution by David Robinson
-      minpi0 <- quantile(pi0, prob = 0.1)
+      minpi0 <- stats::quantile(pi0, prob = 0.1)
       W <- sapply(lambda, function(l) sum(p >= l))
       mse <- (W / (m^2 * (1 - lambda)^2)) * (1 - W / m) + (pi0 - minpi0)^2
       pi0 <- min(pi0[mse == min(mse)], 1)
@@ -357,31 +343,24 @@ pi0est <- function(p, lambda = seq(0.05, 0.95, 0.05), pi0.method = c("smoother",
 #' Estimate the local FDR values from p-values.
 #'
 #' @param p A vector of p-values (only necessary input).
-#' @param pi0 Estimated proportion of true null p-values. If NULL, then \code{\link{pi0est}} is called.
+#' @param pi0 Estimated proportion of true null p-values.
 #' @param trunc If TRUE, local FDR values >1 are set to 1. Default is TRUE.
 #' @param monotone If TRUE, local FDR values are non-decreasing with increasing p-values. Default is TRUE; this is recommended.
 #' @param transf Either a "probit" or "logit" transformation is applied to the p-values so that a local FDR estimate can be formed that
-#' does not involve edge effects of the [0,1] interval in which the p-values lie.
+#' does not involve edge effects of the c(0,1) interval in which the p-values lie.
 #' @param adj Numeric value that is applied as a multiple of the smoothing bandwidth used in the density estimation. Default is \code{adj=1.0}.
 #' @param eps Numeric value that is threshold for the tails of the empirical p-value distribution. Default is 10^-8.
-#' @param \ldots Additional arguments, passed to \code{\link{pi0est}}.
+#' @param \ldots Additional arguments.
 #'
-#' @details It is assumed that null p-values follow a Uniform(0,1) distribution.
-#'   The estimated proportion of true null hypotheses \eqn{\hat{\pi}_0}{pi_0} is either
-#'   a user-provided value or the value calculated via \code{\link{pi0est}}.
-#'   This function works by forming an estimate of the marginal density of the
-#'   observed p-values, say \eqn{\hat{f}(p)}{f(p)}. Then the local FDR is estimated as
-#'   \eqn{{\rm lFDR}(p) = \hat{\pi}_0/\hat{f}(p)}{lFDR(p) = pi_0/f(p)}, with
-#'   adjustments for monotonicity and to guarantee that \eqn{{\rm lFDR}(p) \leq
-#'   1}{lFDR(p) <= 1}.  See the Storey (2011) reference below for a concise
-#'   mathematical definition of local FDR.
 #'
 #' @return
-#' A vector of estimated local FDR values, with each entry corresponding to the entries of the input p-value vector \code{p}.
+#' A vector of estimated local FDR values, with each entry corresponding to
+#' the entries of the input p-value vector \code{p}.
 #'
 #' @references
-#' Efron B, Tibshirani R, Storey JD, and Tisher V. (2001) Empirical Bayes analysis
-#' of a microarray experiment. Journal of the American Statistical Association, 96: 1151-1160. \cr
+#' Efron B, Tibshirani R, Storey JD, and Tisher V. (2001) Empirical Bayes
+#' analysis of a microarray experiment. Journal of the American Statistical
+#'  Association, 96: 1151-1160. \cr
 #' \url{http://www.tandfonline.com/doi/abs/10.1198/016214501753382129}
 #'
 #' Storey JD. (2003) The positive false discovery rate: A Bayesian
@@ -392,22 +371,12 @@ pi0est <- function(p, lambda = seq(0.05, 0.95, 0.05), pi0.method = c("smoother",
 #' \url{http://genomine.org/papers/Storey_FDR_2011.pdf} \cr
 #' \url{http://www.springer.com/statistics/book/978-3-642-04897-5}
 #'
-#' @examples
-#' # import data
-#' data(hedenfalk)
-#' p <- hedenfalk$p
-#' lfdrVals <- lfdr(p)
-#'
-#' # plot local FDR values
-#' qobj <- qvalue(p)
-#' hist(qobj)
 #' @author John D. Storey
-#' @seealso \code{\link{qvalue}}, \code{\link{pi0est}}, \code{\link{hist.qvalue}}
 #' @aliases lfdr
 #' @keywords local False Discovery Rate, lfdr
 
 lfdr <- function(p, pi0 = NULL, trunc = TRUE, monotone = TRUE,
-                 transf = c("probit", "logit"), adj = 1.5, eps = 10 ^ -8, ...) {
+                 transf = c("probit", "logit"), adj = 1.5, eps = 10^-8, ...) {
 
   # Check inputs
   lfdr_out <- p
@@ -418,23 +387,23 @@ lfdr <- function(p, pi0 = NULL, trunc = TRUE, monotone = TRUE,
   } else if (is.null(pi0)) {
     pi0 <- pi0est(p, ...)$pi0
   }
-  #n <- length(p)
+
   transf <- match.arg(transf)
   # Local FDR method for both probit and logit transformations
   if (transf == "probit") {
     p <- pmax(p, eps)
     p <- pmin(p, 1 - eps)
-    x <- qnorm(p)
-    myd <- density(x, adjust = adj)
-    mys <- smooth.spline(x = myd$x, y = myd$y)
-    y <- predict(mys, x)$y
-    lfdr <- pi0 * dnorm(x) / y
+    x <- stats::qnorm(p)
+    myd <- stats::density(x, adjust = adj)
+    mys <- stats::smooth.spline(x = myd$x, y = myd$y)
+    y <- stats::predict(mys, x)$y
+    lfdr <- pi0 * stats::dnorm(x) / y
   } else {
     x <- log((p + eps) / (1 - p + eps))
-    myd <- density(x, adjust = adj)
-    mys <- smooth.spline(x = myd$x, y = myd$y)
-    y <- predict(mys, x)$y
-    dx <- exp(x) / (1 + exp(x)) ^ 2
+    myd <- stats::density(x, adjust = adj)
+    mys <- stats::smooth.spline(x = myd$x, y = myd$y)
+    y <- stats::predict(mys, x)$y
+    dx <- exp(x) / (1 + exp(x))^2
     lfdr <- (pi0 * dx) / y
   }
   if (trunc) {

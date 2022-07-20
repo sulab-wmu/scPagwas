@@ -28,46 +28,156 @@
 NULL
 
 
-
-#' Genes_by_pathway_hallmark
+#' genes.by.celltype.pathway
 #'
-#' @description A hallmark pathway gene set from \code{
-#' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/h.all.v7.5.1.symbols.gmt")
+#' @description A celltype pathway gene set from \code{
+#' x <- readLines("c8.all.v7.5.1.symbols.gmt")
 #' res <- strsplit(x, "\t")
 #' names(res) <- vapply(res, function(y) y[1], character(1))
-#' Genes_by_pathway_hallmark <- lapply(res, "[", -c(1:2))
-#' save(Genes_by_pathway_hallmark,file="E:/RPakage/scPagwas/data/Genes_by_pathway.hallmark_RData")
-#' }
-#' @docType data
-#' @name Genes_by_pathway_hallmark
-#' @usage data(Genes_by_pathway_hallmark)
-#' @format a list.
-#' @keywords datasets
-#' @examples
-#' data(Genes_by_pathway_hallmark)
-#' str(Genes_by_pathway_hallmark)
-NULL
-
-#' Genes_by_pathway_reactome
-#'
-#' @description A reactome pathway gene set from \code{
-#' x <- readLines("E:/OneDrive/GWAS_Multiomics/tempdata/c2.cp.reactome.v7.5.1.symbols.gmt")
-#' res <- strsplit(x, "\t")
-#' names(res) <- vapply(res, function(y) y[1], character(1))
-#' Genes_by_pathway.reactome <- lapply(res, "[", -c(1:2))
-#' save(Genes_by_pathway.reactome,file="E:/RPakage/scPagwas/data/Genes_by_pathway.reactome.RData")
+#' genes.by.celltype.pathway <- lapply(res, "[", -c(1:2))
 #' }
 #'
 #' @docType data
-#' @name Genes_by_pathway_reactome
-#' @usage data(Genes_by_pathway_reactome)
+#' @name genes.by.celltype.pathway
+#' @usage data(genes.by.celltype.pathway)
 #' @format list
 #' @keywords datasets
-#' @examples data(Genes_by_pathway_reactome)
-#' str(Genes_by_pathway_reactome)
+#' @examples data(genes.by.celltype.pathway)
+#' str(genes.by.celltype.pathway)
 NULL
 
 
+
+#' genes.by.gobp.pathway
+#'
+#' @description A go term bp  gene set from \code{
+#' x <- readLines("c5.go.bp.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.gobp.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.gobp.pathway
+#' @usage data(genes.by.gobp.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.gobp.pathway)
+#' str(genes.by.gobp.pathway)
+NULL
+
+
+#' genes.by.hallmark.pathway
+#'
+#' @description A hallmark pathway gene set from \code{
+#' x <- readLines("h.all.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.hallmark.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.hallmark.pathway
+#' @usage data(genes.by.hallmark.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.hallmark.pathway)
+#' str(genes.by.hallmark.pathway)
+NULL
+
+
+#' genes.by.immunesigdb.pathway
+#'
+#' @description A immunesigdb pathway gene set from \code{
+#' x <- readLines("c7.immunesigdb.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.immunesigdb.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.immunesigdb.pathway
+#' @usage data(genes.by.immunesigdb.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.immunesigdb.pathway)
+#' str(genes.by.immunesigdb.pathway)
+NULL
+
+
+#' genes.by.immunologic.pathway
+#'
+#' @description A celltype pathway gene set from \code{
+#' x <- readLines("c7.all.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.immunologic.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.immunologic.pathway
+#' @usage data(genes.by.immunologic.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.immunologic.pathway)
+#' str(genes.by.immunologic.pathway)
+NULL
+
+#' genes.by.reactome.pathway
+#'
+#' @description A celltype pathway gene set from \code{
+#' x <- readLines("c2.cp.reactome.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.reactome.pathway <- lapply(res, "[", -c(1:2))
+#' save(genes.by.reactome.pathway,file = "genes.by.reactome.pathway.RData")
+#' }
+#'
+#' @docType data
+#' @name genes.by.reactome.pathway
+#' @usage data(genes.by.reactome.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.reactome.pathway)
+#' str(genes.by.reactome.pathway)
+NULL
+
+#' genes.by.regulatory.pathway
+#'
+#' @description A celltype pathway gene set from \code{
+#' x <- readLines("c3.all.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.regulatory.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.regulatory.pathway
+#' @usage data(genes.by.regulatory.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.regulatory.pathway)
+#' str(genes.by.regulatory.pathway)
+NULL
+
+
+#' genes.by.tft.pathway
+#'
+#' @description A celltype pathway gene set from \code{
+#' x <- readLines("c3.tft.v7.5.1.symbols.gmt")
+#' res <- strsplit(x, "\t")
+#' names(res) <- vapply(res, function(y) y[1], character(1))
+#' genes.by.tft.pathway <- lapply(res, "[", -c(1:2))
+#' }
+#'
+#' @docType data
+#' @name genes.by.tft.pathway
+#' @usage data(genes.by.tft.pathway)
+#' @format list
+#' @keywords datasets
+#' @examples data(genes.by.tft.pathway)
+#' str(genes.by.tft.pathway)
+NULL
 
 #' block_annotation
 #'

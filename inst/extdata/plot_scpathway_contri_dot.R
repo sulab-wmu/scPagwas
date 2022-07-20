@@ -1,26 +1,36 @@
 #' plot_scpathway_dot
 #'
 #' @param Pagwas
-#' @param topn_path_celltype number specific pahtways to select for each celltypes.
+#' @param topn_path_celltype number specific pahtways to select for each
+#' celltypes.
 #' @param filter_p 0.05 threshold for pvalues
-#' @param display_max_sizes Boolean : Display max shape size behind each shape ? (Default=TRUE)
+#' @param display_max_sizes Boolean : Display max shape size behind each
+#' shape ? (Default=TRUE)
 #' @param size_var
-#' If numeric : Column/List index which control shape sizes. This column/element has to
+#' If numeric : Column/List index which control shape sizes.
+#' This column/element has to
 #' be numeric.
-#' Can also be a column/element name or a vector of the same size than the input dataset.
+#' Can also be a column/element name or a vector of the same size than
+#' the input dataset.
 #' Set to NA if you don't want to control shape size.
 #' @param col_var
 #' If numeric : Column/List index which control shape colors.
-#' Can also be a column/element name or a vector of the same size than the input dataset.
+#' Can also be a column/element name or a vector of the same size than
+#' the input dataset.
 #' Set to NA if you don't want to control shape color.
 #' @param shape.scale Scale the size of the shapes, similar to cex.
-#' @param cols.use 1 color or a vector containing multiple colors to color shapes.
-#' @param dend_x_var A vector containing Column/List indexes or Column/List names to
+#' @param cols.use 1 color or a vector containing multiple colors to
+#' color shapes.
+#' @param dend_x_var A vector containing Column/List indexes or
+#' Column/List names to
 #' compute the x axis dendrogramm.
-#' @param dist_method The distance measure to be used. This must be one of "euclidean",
+#' @param dist_method The distance measure to be used. This must be
+#' one of "euclidean",
 #' "maximum", "manhattan", "canberra", "binary" or "minkowski".
-#' @param hclust_method The agglomeration method to be used. This must be one of
-#' "single", "complete", "average", "mcquitty", "ward.D", "ward.D2", "centroid" or "median".
+#' @param hclust_method The agglomeration method to be used. This must
+#' be one of
+#' "single", "complete", "average", "mcquitty", "ward.D", "ward.D2",
+#' "centroid" or "median".
 #' @param do_plot Boolean : whether to print the plot
 #' @param figurenames
 #' @param width
@@ -30,7 +40,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 plot_scpathway_dot <- function(Pagwas,
                                celltypes = unique(Idents(Pagwas))[1:5],
                                topn_path_celltype = 20,
@@ -49,17 +58,20 @@ plot_scpathway_dot <- function(Pagwas,
                                width = 7,
                                height = 7,
                                ...) {
-  paras_sum_mean<-NULL
+  paras_sum_mean <- NULL
   ############### proportion
   proportion_list <- tapply(
     as.vector(Idents(Pagwas)),
     Idents(Pagwas), function(x) {
-      scPagwasPaHeritability <- t(GetAssayData(Pagwas, assay ="scPagwasPaHeritability"))
-      a <- apply(scPagwasPaHeritability, 2, function(y) sum(y > 0) / length(y))
+      scPagwasPaHeritability <- t(GetAssayData(Pagwas,
+                                               assay = "scPagwasPaHeritability"))
+      a <- apply(scPagwasPaHeritability, 2,
+                 function(y) sum(y > 0) / length(y))
       return(unlist(a))
     }
   )
-  proportion_df <- Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2), proportion_list)
+  proportion_df <- Reduce(function(dtf1, dtf2) cbind(dtf1, dtf2),
+                          proportion_list)
   colnames(proportion_df) <- names(proportion_list)
   ############## rankp value
   scPathrankP <- -log10(Pagwas@misc$scPathways_rankPvalue + 1e-20)
@@ -90,7 +102,8 @@ plot_scpathway_dot <- function(Pagwas,
     return(d_spe)
   }
 
-  spe2 <- top_function(para_mat = scPathrankP, n_path_to_keep = topn_path_celltype)
+  spe2 <- top_function(para_mat = scPathrankP,
+                       n_path_to_keep = topn_path_celltype)
   spe2 <- spe2[spe2$celltypes %in% celltypes, ]
   spe <- unique(spe2$path)
 
@@ -105,8 +118,14 @@ plot_scpathway_dot <- function(Pagwas,
   proportion_df$pathways <- rownames(proportion_df)
   scPathrankP$pathways <- rownames(scPathrankP)
   # Prep for ggplots
-  gg_proportion <- reshape2::melt(proportion_df, id.vars = "pathways", variable.name = "celltypes", value.name = "proportion")
-  gg_rankp <- reshape2::melt(scPathrankP, id.vars = "pathways", variable.name = "celltypes", value.name = "logrankPvalue")
+  gg_proportion <- reshape2::melt(proportion_df,
+                                  id.vars = "pathways",
+                                  variable.name = "celltypes",
+                                  value.name = "proportion")
+  gg_rankp <- reshape2::melt(scPathrankP,
+                             id.vars = "pathways",
+                             variable.name = "celltypes",
+                             value.name = "logrankPvalue")
 
   gg_dot <- merge(gg_rankp, gg_proportion)
   p <- plot_scpathway_contri_dot(
@@ -141,58 +160,90 @@ plot_scpathway_dot <- function(Pagwas,
 
 #' Dot-plot - Pacman-plot function
 #'
-#' Create dotplots to represent two discrete factors (x & y) described by several other factors. Each combination of the two discrete factors (x & y) can be described with : 1 continuous factor (setting shape size), 3 continuous or discrete factors (setting shape type, shape color and text on shape).
+#' Create dotplots to represent two discrete factors (x & y)
+#' described by several other factors. Each combination of the two discrete factors (x & y) can be described with : 1 continuous factor (setting shape size), 3 continuous or discrete factors (setting shape type, shape color and text on shape).
 #'
 #' @encoding UTF-8
 #' @param data.to.plot Input data. Can be a list or a data.frame.
 #'   If data.frame : Column 1 = x axis (Factor); Col2= y axis (Factor).
-#'   If list : x and y axis are fixed by row and col names of list elements.
+#'   If list : x and y axis are fixed by row and col names of list
+#'   elements.
 #' @param size_var
-#'   If numeric : Column/List index which control shape sizes. This column/element has to be numeric.
-#'   Can also be a column/element name or a vector of the same size than the input dataset.
+#'   If numeric : Column/List index which control shape sizes.
+#'   This column/element has to be numeric.
+#'   Can also be a column/element name or a vector of the same
+#'   size than the input dataset.
 #'   Set to NA if you don't want to control shape size.
 #' @param col_var
 #'   If numeric : Column/List index which control shape colors.
-#'   Can also be a column/element name or a vector of the same size than the input dataset.
+#'   Can also be a column/element name or a vector of the same
+#'   size than the input dataset.
 #'   Set to NA if you don't want to control shape color.
 #' @param text_var
 #'   If numeric : Column/List index which control text to add on shapes.
-#'   Can also be a column/element name or a vector of the same size than the input dataset.
+#'   Can also be a column/element name or a vector of the same
+#'   size than the input dataset.
 #'   Set to NA if you don't want to add text.
 #' @param size_legend Custom name of shape legend.
 #' @param col_legend Custom name of shape color.
-#' @param cols.use 1 color or a vector containing multiple colors to color shapes.
-#'   If coloring is continuous, default colors are taken from a "lightgrey" to "blue" gradient.
-#'   If coloring is discrete, default colors are taken from the default ggplot2 palette.
+#' @param cols.use 1 color or a vector containing multiple colors
+#' to color shapes.
+#'   If coloring is continuous, default colors are taken from
+#'   a "lightgrey" to "blue" gradient.
+#'   If coloring is discrete, default colors are taken from the
+#'   default ggplot2 palette.
 #' @param shape.scale Scale the size of the shapes, similar to cex.
-#' @param display_max_sizes Boolean : Display max shape size behind each shape ? (Default=TRUE)
+#' @param display_max_sizes Boolean : Display max shape size behind
+#' each shape ? (Default=TRUE)
 #' @param scale.by Scale the size by size or radius.
 #' @param scale.min Set lower limit for scaling, use NA for default values.
 #' @param scale.max Set upper limit for scaling, use NA for default values.
 #' @param plot.legend Plot the legends ?
 #' @param do.return Return ggplot2 object ?
-#' @param x.lab.pos Where to display x axis labels. This must be one of "bottom","top","both" or "none".
-#' @param y.lab.pos Where to display y axis labels. This must be one of "left","right","both"or "none".
+#' @param x.lab.pos Where to display x axis labels. This must be one of
+#' "bottom","top","both" or "none".
+#' @param y.lab.pos Where to display y axis labels. This must be one of
+#' "left","right","both"or "none".
 #' @param x.lab.size.factor Factor resizing x-axis labels (default=1)
 #' @param y.lab.size.factor Factor resizing y-axis labels (default=1)
-#' @param shape_var If numeric = Similar to pch : square=15; circle=16; triangle=17. Can also be a column/element name or a vector of the same size than the input dataset.
-#' @param shape_use Shapes to uses (only when shape is controled by a discrete factor). Default shapes : \\u25A0 \\u25CF \\u25C6 \\u2BC8 \\u2BC7 \\u2BC6 \\u2BC5 \\u25D8 \\u25D9 \\u2726  \\u2605 \\u2736 \\u2737.
+#' @param shape_var If numeric = Similar to pch : square=15; circle=16;
+#' triangle=17. Can also be a column/element name or a vector of the same size than the input dataset.
+#' @param shape_use Shapes to uses (only when shape is controled by a
+#' discrete factor). Default shapes : \\u25A0 \\u25CF \\u25C6 \\u2BC8
+#' \\u2BC7 \\u2BC6 \\u2BC5 \\u25D8 \\u25D9 \\u2726  \\u2605 \\u2736
+#' \\u2737.
 #' @param shape_legend Name of the shape legend if shape_var is a vector.
 #' @param text.size Size of text to display on the shapes.
-#' @param text.vjust Vertical justification of text to display on the shapes. Default value = 0, which mean no justification. Recommended value is between -0.5 and 0.5.
+#' @param text.vjust Vertical justification of text to display on
+#' the shapes. Default value = 0, which mean no justification. Recommended value is between -0.5 and 0.5.
 #' @param vertical_coloring Which color use to color the plot vertically ? (colors are repeated untill the end of the plot). Setting vertical and horizontal coloring at the same time is not recommended !
-#' @param horizontal_coloring Which color use to color the plot horizontally ? (colors are repeated untill the end of the plot). Setting vertical and horizontal coloring at the same time is not recommended !
-#' @param size.breaks.number Number of shapes with different size to display in the legend. Not used if size.breaks.values is not NA.
-#' @param size.breaks.values Vector containing numerical labels for the size legend.
-#' @param color.breaks.number Number of labels for the color gradient legend. Not used if color.breaks.values is not NA.
-#' @param color.breaks.values Vector containing numerical labels for continuous color legend.
-#' @param shape.breaks.number Number of shapes to display in the legend. Used when shape is controled by a continuous factor only. Not used if shape.breaks.values is not NA.
-#' @param shape.breaks.values Vector containing numerical labels for continuous shape legend.
+#' @param horizontal_coloring Which color use to color the plot
+#' horizontally ? (colors are repeated untill the end of the plot).
+#' Setting vertical and horizontal coloring at the same time is not
+#' recommended !
+#' @param size.breaks.number Number of shapes with different size to
+#' display in the legend. Not used if size.breaks.values is not NA.
+#' @param size.breaks.values Vector containing numerical labels for
+#' the size legend.
+#' @param color.breaks.number Number of labels for the color gradient
+#' legend. Not used if color.breaks.values is not NA.
+#' @param color.breaks.values Vector containing numerical labels for
+#' continuous color legend.
+#' @param shape.breaks.number Number of shapes to display in the legend.
+#' Used when shape is controled by a continuous factor only. Not used if shape.breaks.values is not NA.
+#' @param shape.breaks.values Vector containing numerical labels for
+#' continuous shape legend.
 #' @param transpose Reverse x axis and y axis ?
-#' @param dend_x_var A vector containing Column/List indexes or Column/List names to compute the x axis dendrogramm.
-#' @param dend_y_var A vector containing Column/List indexes or Column/List names to compute the y axis dendrogramm.
-#' @param dist_method The distance measure to be used. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
-#' @param hclust_method The agglomeration method to be used. This must be one of "single", "complete", "average", "mcquitty", "ward.D", "ward.D2", "centroid" or "median".
+#' @param dend_x_var A vector containing Column/List indexes or
+#' Column/List names to compute the x axis dendrogramm.
+#' @param dend_y_var A vector containing Column/List indexes or
+#' Column/List names to compute the y axis dendrogramm.
+#' @param dist_method The distance measure to be used. This must
+#' be one of "euclidean", "maximum", "manhattan", "canberra",
+#' "binary" or "minkowski".
+#' @param hclust_method The agglomeration method to be used.
+#' This must be one of "single", "complete", "average", "mcquitty",
+#' "ward.D", "ward.D2", "centroid" or "median".
 #' @param do.plot Print the plot ? (default=TRUE)
 #'
 #' @import ggplot2
@@ -207,30 +258,24 @@ plot_scpathway_dot <- function(Pagwas,
 #' @importFrom grid textGrob grob gpar
 #' @importFrom sisal dynTextGrob
 #'
-#' @return Print the plot (if do.plot=TRUE) and return a list containing input data, executed command, resulting dot plot and computed dendrograms (if do.return=TRUE)
+#' @return Print the plot (if do.plot=TRUE) and return a list containing
+#' input data, executed command, resulting dot plot and computed
+#' dendrograms (if do.return=TRUE)
 #' @export
-#' @examples
-#' library(FlexDotPlot)
-#' data(CBMC8K_example_data)
-#' dotplot <- dot_plot(
-#'   data.to.plot = CBMC8K_example_data, size_var = "RNA.avg.exp.scaled",
-#'   col_var = "ADT.avg.exp.scaled", text_var = "ADT.pct.exp.sup.cutoff",
-#'   shape_var = "canonical_marker", shape_use = c("\u25CF", "\u2737"), x.lab.pos = "bottom",
-#'   y.lab.pos = "left", cols.use = c("lightgrey", "orange", "red", "darkred"),
-#'   size_legend = "RNA", col_legend = "ADT", shape_legend = "Canonical marker ?",
-#'   shape.scale = 12, text.size = 3, plot.legend = TRUE,
-#'   size.breaks.number = 4, color.breaks.number = 4, shape.breaks.number = 5,
-#'   dend_x_var = c("RNA.avg.exp.scaled", "ADT.avg.exp.scaled"),
-#'   dend_y_var = c("RNA.avg.exp.scaled", "ADT.avg.exp.scaled"),
-#'   dist_method = "euclidean", hclust_method = "ward.D", do.return = TRUE
-#' )
 #' @author Simon Leonard - simon.leonard@univ-rennes1.fr
-plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
-                                      text_var = NA, shape_var = 16,
-                                      size_legend = "", col_legend = "", shape_legend = "",
+plot_scpathway_contri_dot <- function(data.to.plot,
+                                      size_var = NA,
+                                      col_var = NA,
+                                      text_var = NA,
+                                      shape_var = 16,
+                                      size_legend = "",
+                                      col_legend = "",
+                                      shape_legend = "",
                                       cols.use = "default",
-                                      text.size = NA, text.vjust = 0,
-                                      shape_use = "default", shape.scale = 12,
+                                      text.size = NA,
+                                      text.vjust = 0,
+                                      shape_use = "default",
+                                      shape.scale = 12,
                                       scale.by = "radius",
                                       scale.min = NA, scale.max = NA,
                                       plot.legend = TRUE,
@@ -244,11 +289,13 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
                                       size.breaks.number = 4,
                                       color.breaks.number = 5,
                                       shape.breaks.number = 5,
-                                      size.breaks.values = NA, color.breaks.values = NA,
+                                      size.breaks.values = NA,
+                                      color.breaks.values = NA,
                                       shape.breaks.values = NA,
                                       display_max_sizes = TRUE,
                                       transpose = FALSE,
-                                      dend_x_var = NULL, dend_y_var = NULL,
+                                      dend_x_var = NULL,
+                                      dend_y_var = NULL,
                                       dist_method = c("euclidean", "maximum", "manhattan", "canberra", "binary", "minkowski"),
                                       hclust_method = c("ward.D", "single", "complete", "average", "mcquitty", "median", "centroid", "ward.D2"),
                                       do.plot = TRUE) {
@@ -272,18 +319,21 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   # hclust_method="ward.D2";
   # do.plot=TRUE
 
-  size_leg<-shape_leg<-col_leg<-NULL
+  size_leg <- shape_leg <- col_leg <- NULL
   x.lab.pos <- match.arg(x.lab.pos)
   y.lab.pos <- match.arg(y.lab.pos)
 
 
-  # If cowplot library is loaded, we have to disable the cowplot default theme and set the ggplot2 default theme
+  # If cowplot library is loaded, we have to disable the cowplot
+  # default theme and set the ggplot2 default theme
   if ("cowplot" %in% (.packages())) {
     theme_set(theme_gray())
   }
 
-  no_color_legend <- FALSE # Is TRUE if col_var=NA => one legend to not plot
-  no_size_legend <- FALSE # Is TRUE if size_var=NA => one legend to not plot
+  no_color_legend <- FALSE
+  # Is TRUE if col_var=NA => one legend to not plot
+  no_size_legend <- FALSE
+  # Is TRUE if size_var=NA => one legend to not plot
 
   if (!(class(data.to.plot) %in% c("data.frame", "list"))) {
     stop("data.to.plot argument has to be a list or a data.frame")
@@ -291,7 +341,9 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   if (all(is.na(c(size_var, col_var, text_var)))) {
     if (((length(shape_var) != nrow(data.to.plot)))) {
       if (length(shape_var) == 1 & all(is.numeric(shape_var))) {
-        stop("Nothing to plot. Modify at least one of the following arguments : Shape size, shape color, text on shape, shape type")
+        stop("Nothing to plot. Modify at least one of the following
+             arguments : Shape size, shape color, text on shape,
+             shape type")
       }
     }
   }
@@ -307,7 +359,8 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       stop("Provide a data.frame in each list element")
     }
 
-    # Check - All the list elements have the same col names and row names (it means they all have the same dimension too)
+    # Check - All the list elements have the same col names and row
+    #names (it means they all have the same dimension too)
     col_names <- lapply(data.to.plot, colnames)
     if (all(sapply(col_names, identical, col_names[[1]])) == FALSE) {
       stop("Provide data.frames with the same column names")
@@ -318,19 +371,25 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     }
 
     # Giving names to unnamed elements
-    names(data.to.plot) <- ifelse(names(data.to.plot) != "", names(data.to.plot), paste("Unnamed_column", seq_len(length(data.to.plot)), sep = "_"))
+    names(data.to.plot) <- ifelse(names(data.to.plot) != "",
+                                  names(data.to.plot),
+                                  paste("Unnamed_column",
+                                        seq_len(length(data.to.plot)),
+                                        sep = "_"))
 
     # d : Col 1 = row names; Col 2 = col names
-    d <- data.frame(row_names = rownames(data.to.plot[[1]])[row(data.to.plot[[1]])], col_names = colnames(data.to.plot[[1]])[col(data.to.plot[[1]])])
+    d <- data.frame(row_names = rownames(data.to.plot[[1]])[row(data.to.plot[[1]])],
+                    col_names = colnames(data.to.plot[[1]])[col(data.to.plot[[1]])])
     # d2 = all the list elements converted in columns
     d2 <- do.call(data.frame, lapply(lapply(data.to.plot, c), unlist))
 
     data.to.plot <- data.frame(d, d2)
-    row.names(data.to.plot) <- paste(data.to.plot$row_names, data.to.plot$col_names, sep = "_")
+    row.names(data.to.plot) <- paste(data.to.plot$row_names,
+                                     data.to.plot$col_names, sep = "_")
   }
 
   ### 1.2: Determine/check parameters to plot ----
-  # Input = dataframe
+
   if (ncol(data.to.plot) < 3) {
     stop("Provide a data.frame/list with at least 3 columns/elements")
   }
@@ -341,7 +400,10 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   cat("Using : ")
 
   if (!length(size_var) %in% c(1, nrow(data.to.plot))) {
-    stop(paste("Length of size_var argument has to be equal to 1 or ", nrow(data.to.plot), " (the input dataset size)", sep = ""))
+    stop(paste("Length of size_var argument has to be equal to 1 or ",
+               nrow(data.to.plot),
+               " (the input dataset size)",
+               sep = ""))
   }
   if (length(size_var) == 1) {
     if (!is.na(size_var)) {
@@ -355,14 +417,18 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
         }
       } else if (is.numeric(size_var) & size_var %in% seq_len(ncol(save.data))) {
         if (is.numeric(save.data[, size_var])) {
-          cat(paste("\n -", colnames(save.data)[size_var], "values to set shape size"))
+          cat(paste("\n -", colnames(save.data)[size_var],
+                    "values to set shape size"))
           data.to.plot[, 3] <- save.data[, size_var]
-          size_legend <- ifelse(size_legend == "", colnames(save.data)[size_var], size_legend)
+          size_legend <- ifelse(size_legend == "",
+                                colnames(save.data)[size_var],
+                                size_legend)
         } else {
           stop(paste("size_var column (", size_var, ") has to be numeric"))
         }
       } else {
-        stop("Size_var argument does not correspond to an element/column number or an element/column name")
+        stop("Size_var argument does not correspond to an element/
+             column number or an element/column name")
       }
     } else {
       data.to.plot[, 3] <- 1
@@ -379,20 +445,28 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   }
 
   if (!length(col_var) %in% c(1, nrow(data.to.plot))) {
-    stop(paste("Length of col_var argument has to be equal to 1 or ", nrow(data.to.plot), " (the input dataset size)", sep = ""))
+    stop(paste("Length of col_var argument has to be equal to 1 or ",
+               nrow(data.to.plot),
+               " (the input dataset size)",
+               sep = ""))
   }
   if (length(col_var) == 1) {
     if (!is.na(col_var)) {
       if (col_var %in% colnames(save.data)) {
-        cat(paste("\n -", col_var, "values to set shape color"))
+        cat(paste("\n -", col_var,
+                  "values to set shape color"))
         data.to.plot[, 4] <- save.data[, col_var]
-        col_legend <- ifelse(col_legend == "", col_var, col_legend)
+        col_legend <- ifelse(col_legend == "",
+                             col_var, col_legend)
       } else if (is.numeric(col_var) & col_var %in% seq_len(ncol(save.data))) {
-        cat(paste("\n -", colnames(save.data)[col_var], "values to set shape color"))
+        cat(paste("\n -", colnames(save.data)[col_var],
+                  "values to set shape color"))
         data.to.plot[, 4] <- save.data[, col_var]
-        col_legend <- ifelse(col_legend == "", colnames(save.data)[col_var], col_legend)
+        col_legend <- ifelse(col_legend == "",
+                             colnames(save.data)[col_var], col_legend)
       } else {
-        stop("Col_var argument does not correspond to an element/column number or an element/column name")
+        stop("Col_var argument does not correspond to an element/column
+             number or an element/column name")
       }
     } else {
       data.to.plot[, 4] <- "no_color"
@@ -411,7 +485,8 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   }
 
   if (!length(text_var) %in% c(1, nrow(data.to.plot))) {
-    stop(paste("Length of text_var argument has to be equal to 1 or ", nrow(data.to.plot), " (the input dataset size)", sep = ""))
+    stop(paste("Length of text_var argument has to be equal to 1 or ",
+               nrow(data.to.plot), " (the input dataset size)", sep = ""))
   }
   if (length(text_var) == 1) {
     if (!is.na(text_var)) {
@@ -419,10 +494,12 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
         cat(paste("\n -", text_var, "values to add text on shapes"))
         data.to.plot[, 5] <- save.data[, text_var]
       } else if (is.numeric(text_var) & text_var %in% seq_len(ncol(save.data))) {
-        cat(paste("\n -", colnames(save.data)[text_var], "values to add text on shapes"))
+        cat(paste("\n -", colnames(save.data)[text_var],
+                  "values to add text on shapes"))
         data.to.plot[, 5] <- save.data[, text_var]
       } else {
-        stop("Text_var argument does not correspond to an element/column number or an element/column name")
+        stop("Text_var argument does not correspond to an element/column
+             number or an element/column name")
       }
     } else {
       data.to.plot[, 5] <- ""
@@ -433,7 +510,8 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
   }
 
   if (!length(shape_var) %in% c(1, nrow(data.to.plot))) {
-    stop(paste("Length of shape_var argument has to be equal to 1 or ", nrow(data.to.plot), " (the input dataset size)", sep = ""))
+    stop(paste("Length of shape_var argument has to be equal to 1 or ",
+               nrow(data.to.plot), " (the input dataset size)", sep = ""))
   }
   if (length(shape_var) == 1) {
     if (shape_var %in% colnames(save.data)) {
@@ -449,14 +527,17 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     } else if (is.numeric(shape_var)) {
       shape <- shape_var
     } else {
-      stop("The shape_var argument is not numeric and does not correspond to a column name/list element name")
+      stop("The shape_var argument is not numeric and does not correspond
+           to a column name/list element name")
     }
   } else {
     shape <- shape_var
   }
 
-  data.to.plot[, 1] <- factor(data.to.plot[, 1], levels = levels(as.factor(data.to.plot[, 1])))
-  data.to.plot[, 2] <- factor(data.to.plot[, 2], levels = levels(as.factor(data.to.plot[, 2])))
+  data.to.plot[, 1] <- factor(data.to.plot[, 1],
+                              levels = levels(as.factor(data.to.plot[, 1])))
+  data.to.plot[, 2] <- factor(data.to.plot[, 2],
+                              levels = levels(as.factor(data.to.plot[, 2])))
   data.to.plot[, 5] <- as.character(data.to.plot[, 5])
 
   if (transpose) {
@@ -471,7 +552,8 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     out <- NULL
     if (!(is.vector(FAMD_var))) {
       # Input is not a vector
-      out$message <- paste("FAMD_", type, "_var arguement has to be a vector", sep = "")
+      out$message <- paste("FAMD_", type, "_var arguement has to be a
+                           vector", sep = "")
       out$success <- FALSE
     } else {
       if (is.vector(FAMD_var)) {
@@ -479,25 +561,29 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
           if (all(FAMD_var %in% colnames(save.data))) {
             FAMD_var <- which(colnames(save.data) %in% FAMD_var)
           } else {
-            out$message <- paste("FAMD_", type, "_var names are not in element/column names", sep = "")
+            out$message <- paste("FAMD_", type,
+                                 "_var names are not in element/column names", sep = "")
             out$success <- FALSE
           }
         }
         if (is.numeric(FAMD_var)) {
           if (all(FAMD_var %in% seq_len(ncol(save.data)))) {
             if (2 %in% FAMD_var) {} else {
-              print(paste("In FAMD_", type, "_var : Adding y index", sep = ""))
+              print(paste("In FAMD_", type, "_var : Adding y index",
+                          sep = ""))
               FAMD_var <- c(2, FAMD_var)
             }
             if (1 %in% FAMD_var) {} else {
-              print(paste("In FAMD_", type, "_var : Adding x index", sep = ""))
+              print(paste("In FAMD_", type, "_var : Adding x index",
+                          sep = ""))
               FAMD_var <- c(1, FAMD_var)
             }
 
             out$famd_input <- save.data[, FAMD_var]
             out$success <- TRUE
           } else {
-            out$message <- paste("FAMD_", type, "_var indexes are not in element/column indexes", sep = "")
+            out$message <- paste("FAMD_", type, "_var indexes are not in
+                                 element/column indexes", sep = "")
             out$success <- FALSE
           }
         }
@@ -512,12 +598,13 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     other_names <- colnames(FAMD_input)[!colnames(FAMD_input) %in% c(x_name, y_name)]
 
     list <- lapply(other_names, function(x) {
-      data <- data.frame(dcast(FAMD_input, list(x_name, y_name), value.var = x))
+      data <- data.frame(dcast(FAMD_input, list(x_name, y_name),
+                               value.var = x))
       rownames(data) <- data[, x_name]
       data[, x_name] <- NULL
       data[sapply(data, is.character)] <- lapply(data[sapply(data, is.character)], as.factor)
 
-      # return(data)
+
       if (type == "y") {
         return(data.frame(t(data)))
       } else {
@@ -534,13 +621,16 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     # Perform FAMD or PCA or MCA
     if (all(lapply(FAMD_final_input, class) %in% c("numeric", "integer"))) {
       # Quantitate factors only -> PCA
-      res.A <- FactoMineR::PCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::PCA(FAMD_final_input, graph = F,
+                               ncp = min(dim(FAMD_final_input)) - 1)
     } else if (all(!lapply(FAMD_final_input, class) %in% c("numeric", "integer"))) {
       # Qualitative factors only -> MCA
-      res.A <- FactoMineR::MCA(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::MCA(FAMD_final_input, graph = F,
+                               ncp = min(dim(FAMD_final_input)) - 1)
     } else {
       # Mixed data -> FAMD
-      res.A <- FactoMineR::FAMD(FAMD_final_input, graph = F, ncp = min(dim(FAMD_final_input)) - 1)
+      res.A <- FactoMineR::FAMD(FAMD_final_input, graph = F,
+                                ncp = min(dim(FAMD_final_input)) - 1)
     }
 
     # Get coordinates, calculate distance and perform hierarchical clustering
@@ -565,7 +655,6 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
   if (!is.null(dend_x_var)) {
     # x dendrogramm
-
     # For the PCA/MCA/FAMD, we change the factor names in factor_1, factor2 ... to avoid syntax problem
     if (class(save.data[, 1]) != "factor") {
       save.data[, 1] <- as.factor(save.data[, 1])
@@ -578,7 +667,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
       FAMD_x_input <- format_FAMD_input(check_x$famd_input, type = "x", save.data = save.data)
       hc_x_result <- run_FAMD_and_hclust(FAMD_x_input, metric = dist_method, method = hclust_method)
     } else {
-      # check_x$success==FALSE
+
       stop(check_x$message)
     }
 
@@ -627,7 +716,6 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
     radius = scale_radius,
     stop("'scale.by' must be either 'size' or 'radius'")
   )
-
   # Set theme function. Common function between classical dotplot and pacman plot
   # Transparent background, black border, no grid
   set_background <- function(p, xlims, ylims, vertical_coloring, horizontal_coloring) {
@@ -669,7 +757,7 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
         min = seq(from = 0.5, to = max(as.numeric(as.factor(data.to.plot[, 2]))), by = 1),
         max = seq(from = 1.5, to = max(as.numeric(as.factor(data.to.plot[, 2]))) + 0.5, by = 1)
       )
-      # shading$col = rep_len(x=c(NA,"gray80"),length.out=length(unique(data.to.plot[,2])))
+
       shading$col <- rep(horizontal_coloring, length.out = nrow(shading))
 
       p <- p + annotate(
@@ -730,12 +818,6 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
       shape_colors_labels$colors <- map2color(data.to.plot[, 4], pal = colorRampPalette(cols.use)(100))
 
-      # if (length(x = cols.use) == 2){
-      #   p <- p + scale_fill_gradient(low = cols.use[1], high = cols.use[2],
-      #                                breaks=color_breaks, labels=color_labels) # Gradient from the first color to the second
-      # } else {
-      #   p <- p + scale_fill_gradientn(colours=cols.use, breaks=color_breaks, labels=color_labels)
-      # }
     } else {
       # discrete colors
       if (all(cols.use != "default")) {
@@ -904,11 +986,6 @@ plot_scpathway_contri_dot <- function(data.to.plot, size_var = NA, col_var = NA,
 
 
   ### 4.1 Axis Labels ----
-
-  # x_coords=rescale(x = 1:length(levels(data.to.plot[,1])), to = c(0,1), from=c(0.5,length(levels(data.to.plot[,1]))+0.5))
-  # final.plot.list[[2]]=dynTextGrob(levels(data.to.plot[,1]), x=x_coords, rot=ifelse(x.lab.rot, 90, 0),just="bottom", y=0.05, width=ifelse(x.lab.rot, 1, 1/length(levels(data.to.plot[,1]))* x.lab.size.factor))
-  # final.plot.list[[10]]=dynTextGrob(levels(data.to.plot[,1]), x=x_coords, rot=ifelse(x.lab.rot, 90, 0),just="top", y=0.95, width=ifelse(x.lab.rot, 1, 1/length(levels(data.to.plot[,1]))* x.lab.size.factor))
-
   x_label_table <- data.frame(xtext = levels(data.to.plot[, 1]))
   final.plot.list[[2]] <- p_raw + geom_text(data = x_label_table, mapping = aes_(label = ~xtext), y = 0.05, x = seq_len(length(levels(data.to.plot[, 1]))), hjust = 0, vjust = 0.5, angle = 90, size = 3.88 * x.lab.size.factor)
   final.plot.list[[2]] <- final.plot.list[[2]] +

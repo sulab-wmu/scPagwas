@@ -10,7 +10,8 @@ Pathway_block_func(
   chrom_gwas_list,
   ncores = 1,
   singlecell = T,
-  celltype = T
+  celltype = T,
+  chrom_ld
 )
 }
 \arguments{
@@ -18,10 +19,18 @@ Pathway_block_func(
 
 \item{Pachrom_block_list}{result for chrome block}
 
+\item{chrom_gwas_list}{list of gwas block in chrom}
+
 \item{ncores}{cores}
+
+\item{singlecell}{whether to run singlecell progress}
+
+\item{celltype}{whether to run celltype progress}
+
+\item{chrom_ld}{default is block_annotation}
 }
 \value{
-
+Pagwas result list including Pathway block.
 }
 \description{
 Pathway_block_func

@@ -7,11 +7,23 @@
 Pagwas_perform_regression(Pathway_ld_gwas_data)
 }
 \arguments{
-\item{Pathway_ld_gwas_data}{Pagwas format, deault is NULL.}
+\item{Pathway_ld_gwas_data}{list of pathway block.}
 }
 \value{
-
+regression results
 }
 \description{
-Run regression
+Run regression for each pathway block and gwas beta
+parameter
 }
+\author{
+Chunyu Deng
+}
+\keyword{Pagwas_perform_regression,}
+\keyword{Run}
+\keyword{blocks.}
+\keyword{for}
+\keyword{function}
+\keyword{pathway}
+\keyword{regression}
+\keyword{vectorized}

@@ -40,11 +40,26 @@ using the ggplot packages
 }
 \examples{
 library(scPagwas)
-# Pagwas is the result of Pagwas_main()
+load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+
 Bootstrap_P_Barplot(
-  Pagwas = Pagwas,
-  title = "Test scPagwas",
-  figurenames = "test_barplot.pdf",
-  width = 5, height = 7
+  p_results = Pagwas_data@misc$bootstrap_results$bp_value[-1],
+  p_names = rownames(Pagwas_data@misc$bootstrap_results)[-1],
+  width = 5,
+  height = 7,
+  do_plot = TRUE,
+  title = "Test"
 )
 }
+\author{
+Chunyu Deng
+}
+\keyword{Barplot}
+\keyword{Bootstrap_P_Barplot,}
+\keyword{bootstrap}
+\keyword{celltypes}
+\keyword{for}
+\keyword{plot}
+\keyword{result.}
+\keyword{scPagwas}
+\keyword{the}

@@ -52,22 +52,6 @@ the smoother method described in Storey and Tibshirani (2003). The
 bootstrap method is described in Storey, Taylor & Siegmund (2004). A closed form solution of the
 bootstrap method is used in the package and is significantly faster.
 }
-\examples{
-# import data
-data(hedenfalk)
-p <- hedenfalk$p
-
-# proportion of null p-values
-nullRatio <- pi0est(p)
-nullRatioS <- pi0est(p, lambda = seq(0.40, 0.95, 0.05), smooth.log.pi0 = "TRUE")
-nullRatioM <- pi0est(p, pi0.method = "bootstrap")
-
-# check behavior of estimate over lambda
-# also, pi0est arguments can be passed to qvalue
-qobj <- qvalue(p, lambda = seq(0.05, 0.95, 0.1), smooth.log.pi0 = "TRUE")
-hist(qobj)
-plot(qobj)
-}
 \references{
 Storey JD. (2002) A direct approach to false discovery rates. Journal
 of the Royal Statistical Society, Series B, 64: 479-498. \cr

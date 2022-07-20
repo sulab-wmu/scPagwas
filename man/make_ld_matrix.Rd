@@ -4,15 +4,12 @@
 \alias{make_ld_matrix}
 \title{make_ld_matrix}
 \usage{
-make_ld_matrix(all_snps = snp_data$rsid, ld_data = sub_ld)
+make_ld_matrix(all_snps, ld_data)
 }
 \arguments{
 \item{all_snps}{The snps that were queried}
 
 \item{ld_data}{A returned LD matrix with SNP}
-}
-\value{
-
 }
 \description{
 construct the final matrix for regression in blocks

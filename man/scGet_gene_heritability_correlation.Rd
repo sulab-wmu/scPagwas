@@ -10,15 +10,8 @@ scGet_gene_heritability_correlation(Pagwas)
 \item{Pagwas}{result of scPagwas}
 }
 \value{
-
+Pagwas result list including gene heritability correlation
 }
 \description{
 scGet_gene_heritability_contributions
-}
-\examples{
-Single_data <- readRDS("E:/RPakage/scPagwas/inst/extdata/scRNAexample.rds")
-Pagwas$sparse_cor <- scGet_gene_heritability_contributions(
-  scPagwas_score = Pagwas$scPagwas_score,
-  data_mat = Seurat::GetAssayData(object = Single_data[, names(Pagwas$scPagwas_score)], slot = "data")
-)
 }

@@ -9,19 +9,25 @@ Pathway_annotation_input(Pagwas, block_annotation)
 \arguments{
 \item{Pagwas}{Pagwas format data list inherit from other functions.}
 
-\item{block_annotation}{}
-
-\item{n.cores}{Parallel cores,default is 1. use detectCores() to check the cores in computer.}
+\item{block_annotation}{Start and end points for block traits,
+usually genes.}
 }
 \value{
-
+list for pathway blocks
 }
 \description{
 Deal with the pathway genes with snp blocks
+Initial the pathway blocks for mapping the pathway to snp.
 }
-\examples{
-library(scPagwas)
-data(Genes_by_pathway.kegg)
-# the Pagwas should be after Single_data_input() and GWAS_summary_input(),Pathway_pcascore_run()
-Pagwas <- Pathway_annotation_input(Pagwas = Pagwas)
+\author{
+Chunyu Deng
 }
+\keyword{Initial}
+\keyword{Pathway_annotation_input,}
+\keyword{blocks}
+\keyword{for}
+\keyword{mapping}
+\keyword{pathway}
+\keyword{snp.}
+\keyword{the}
+\keyword{to}

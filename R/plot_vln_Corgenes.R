@@ -17,19 +17,29 @@
 #' @param pt.size size of jitter in the violin plots. Set to 0 (default) to omit
 #' @param figurenames The filename and address of the output plot,
 #' @param width figure width
+#' @param feature_fontface "bold.italic"
+#' @param fontsize_axistext_x 12, font size for x axis
+#' @param fontsize_axistext_y 12, font size for y axis
+#' @param aspect.ratio NULL
 #' @param height figure height
+#'
 #' @return ggplot2 object
 #' @export
 #'
 #' @examples
-#' top5genes<-rownames(Pagwas_data@misc$gene_heritability_correlation)[order(Pagwas_data@misc$gene_heritability_correlation,decreasing = T)[1:5]]
-#'
-#' plot_vln_Corgenes(seurat_obj=Pagwas_data,
-#'                   assay="RNA", slot="data",
-#'                   var_group="anno",
-#'                   vec_features=top5genes,
-#'                   vec_group_colors= pal_d3(alpha =0.5)(10),
-#'                   do_plot = T
+#' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
+#' suppressMessages(library("ggsci"))
+#' suppressMessages(library("Seurat"))
+#' top5genes <- rownames(Pagwas_data@misc$gene_heritability_correlation)[order(
+#'   Pagwas_data@misc$gene_heritability_correlation,
+#'   decreasing = TRUE
+#' )[1:5]]
+#' plot_vln_Corgenes(
+#'   seurat_obj = Pagwas_data,
+#'   assay = "RNA", slot = "data",
+#'   var_group = "anno",
+#'   vec_features = top5genes,
+#'   do_plot = TRUE
 #' )
 plot_vln_Corgenes <- function(seurat_obj,
                               assay,
@@ -37,9 +47,9 @@ plot_vln_Corgenes <- function(seurat_obj,
                               var_group,
                               vec_features,
                               vec_group_colors = NULL,
-                              f_color = colorRampPalette(brewer.pal(n = 11, name = "RdYlBu")),
+                              f_color = grDevices::colorRampPalette(RColorBrewer::brewer.pal(n = 11, name = "RdYlBu")),
                               flip = T,
-                              do_plot = F,
+                              do_plot = FALSE,
                               pt.size = 0,
                               feature_fontface = "bold.italic",
                               fontsize_axistext_x = 12,
@@ -52,7 +62,9 @@ plot_vln_Corgenes <- function(seurat_obj,
   # =============prepare group and colors==================
   seurat_obj_tmp <- seurat_obj
   SeuratObject::Idents(seurat_obj_tmp) <- var_group
-  levels(x = seurat_obj_tmp) <- sort(unique(seurat_obj_tmp@meta.data[[var_group]]), decreasing = if (flip) T else F)
+  levels(x = seurat_obj_tmp) <- sort(unique(seurat_obj_tmp@meta.data[[var_group]]),
+    decreasing = if (flip) T else F
+  )
 
   if (is.null(vec_group_colors)) {
     n_group <- length(levels(x = seurat_obj_tmp))
@@ -62,7 +74,7 @@ plot_vln_Corgenes <- function(seurat_obj,
 
   # =============generate plot list==================
   # produces a list of rows of violin plots, one per feature
-  list_plot <- VlnPlot(
+  list_plot <- Seurat::VlnPlot(
     object = seurat_obj_tmp,
     assay = assay,
     features = vec_features,
@@ -92,7 +104,10 @@ plot_vln_Corgenes <- function(seurat_obj,
     }
     plot_tmp <- plot_tmp +
       theme(
-        plot.title = element_text(face = feature_fontface, size = fontsize_axistext_y),
+        plot.title = element_text(
+          face = feature_fontface,
+          size = fontsize_axistext_y
+        ),
         axis.text.y = element_blank(),
         plot.margin = margin(b = 1, unit = "cm")
       )
@@ -132,9 +147,9 @@ plot_vln_Corgenes <- function(seurat_obj,
   if (do_plot) print(p)
   ## save the pdf figure
   if (!is.null(figurenames)) {
-    pdf(file = figurenames, width = width, height = height)
+    grDevices::pdf(file = figurenames, width = width, height = height)
     print(p)
-    dev.off()
+    grDevices::dev.off()
   }
-  # return(p)
+
 }

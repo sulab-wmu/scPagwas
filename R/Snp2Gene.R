@@ -4,32 +4,46 @@
 #' @note updated GenomicRanges to version 1.30.1 on 01/30/2018
 #' Requires ignore.strand=TRUE param to properly run distanceToNearest()
 #' given unknown strand assignment for SNP array-based genotyping info
-#' @param snp (char) PLINK bim file (only CHR, SNP, and BP columns considered).
+#' @param snp (char) PLINK bim file (only CHR, SNP, and BP columns
+#' considered).
 #' @param refGene (char) refseq table with header.
 #' @param marg (integer) region upstream and downstream(default=0).
 #'
-#' @return
+#' @return data frame for snp mapping to gene.
 #' @export
 #'
 #' @examples
 #' library(scPagwas)
-#' data(gtf_df)
-#' snp_gene_df <- Snp2Gene(snp = as.data.frame(Pagwas$gwas_data), refGene = gtf_df, marg = 10000)
+#' Pagwas <- list()
+#' gwas_data <- bigreadr::fread2(system.file("extdata",
+#'   "GWAS_summ_example.txt",
+#'   package = "scPagwas"
+#' ))
+#' Pagwas <- GWAS_summary_input(
+#'   Pagwas = Pagwas,
+#'   gwas_data = gwas_data,
+#'   maf_filter = 0.1
+#' )
+#' Pagwas$snp_gene_df <- Snp2Gene(
+#'   snp = Pagwas$gwas_data,
+#'   refGene = block_annotation,
+#'   marg = 10000
+#' )
 Snp2Gene <- function(snp, refGene, marg = 10000) {
   snp_GR <- GenomicRanges::GRanges(snp[, "chrom"],
-                                   IRanges::IRanges(
-                                     as.numeric(snp[, "pos"]),
-                                     as.numeric(snp[, "pos"])
-                                   ),
-                                   name = snp[, "rsid"]
+    IRanges::IRanges(
+      as.numeric(snp[, "pos"]),
+      as.numeric(snp[, "pos"])
+    ),
+    name = snp[, "rsid"]
   )
 
   gene_GR <- GenomicRanges::GRanges(refGene[, "chrom"],
-                                    IRanges::IRanges(
-                                      refGene[, "start"] + 1 - marg,
-                                      refGene[, "start"] + marg
-                                    ),
-                                    name = refGene[, "label"]
+    IRanges::IRanges(
+      refGene[, "start"] + 1 - marg,
+      refGene[, "start"] + marg
+    ),
+    name = refGene[, "label"]
   )
 
   start_GR <- GenomicRanges::resize(gene_GR, fix = "start", width = 1L)
@@ -37,7 +51,10 @@ Snp2Gene <- function(snp, refGene, marg = 10000) {
 
   cat("* Computing distances between SNPs and genes\n")
   # SNPs inside the gene domain
-  d0 <- GenomicRanges::distanceToNearest(snp_GR, gene_GR, ignore.strand = TRUE)
+  d0 <- GenomicRanges::distanceToNearest(snp_GR,
+    gene_GR,
+    ignore.strand = TRUE
+  )
   dbit <- d0@elementMetadata$distance
   d_in <- data.frame(
     queryHits = d0@from,
@@ -60,13 +77,19 @@ Snp2Gene <- function(snp, refGene, marg = 10000) {
   cat(sprintf("%i SNPs not inside gene domain\n", length(idx)))
 
   cat("** Computing distance to domain starts\n")
-  d1 <- GenomicRanges::distanceToNearest(snp2_GR, start_GR, ignore.strand = TRUE)
+  d1 <- GenomicRanges::distanceToNearest(snp2_GR,
+    start_GR,
+    ignore.strand = TRUE
+  )
   dbit <- d1@elementMetadata$distance
   d_start <- cbind(d1@from, d1@to, dbit)
   colnames(d_start)[1:2] <- c("queryHits", "subjectHits")
 
   cat("** Computing distance to domain ends\n")
-  d2 <- GenomicRanges::distanceToNearest(snp2_GR, end_GR, ignore.strand = TRUE)
+  d2 <- GenomicRanges::distanceToNearest(snp2_GR,
+    end_GR,
+    ignore.strand = TRUE
+  )
   dbit <- d2@elementMetadata$distance
   d_end <- cbind(d2@from, d2@to, dbit)
   colnames(d_end)[1:2] <- c("queryHits", "subjectHits")
@@ -101,4 +124,3 @@ Snp2Gene <- function(snp, refGene, marg = 10000) {
   out <- out[out$Disstance == "0", ]
   return(out)
 }
-

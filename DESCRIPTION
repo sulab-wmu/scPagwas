@@ -13,6 +13,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+lazydatacompression : xz.
 Suggests: 
     knitr,
     renv,
@@ -21,7 +22,17 @@ Suggests:
     WGCNA,
     igraph,
     tidygraph,
-    patchwork
+    patchwork,
+    scales,
+    ggrepel,
+    grDevices,
+    RColorBrewer,
+    FactoMineR,
+    ggdendro,
+    grImport2,
+    rhdf5,
+    sisal,
+    tidyverse
 Config/testthat/edition: 3
 Imports: 
     SeuratObject,
@@ -47,7 +58,8 @@ Imports:
     bigstatsr,
     IRanges,
     RMTstat,
-    gridExtra
+    gridExtra,
+    methods
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.0.0)

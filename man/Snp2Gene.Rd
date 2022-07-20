@@ -7,14 +7,15 @@
 Snp2Gene(snp, refGene, marg = 10000)
 }
 \arguments{
-\item{snp}{(char) PLINK bim file (only CHR, SNP, and BP columns considered).}
+\item{snp}{(char) PLINK bim file (only CHR, SNP, and BP columns
+considered).}
 
 \item{refGene}{(char) refseq table with header.}
 
 \item{marg}{(integer) region upstream and downstream(default=0).}
 }
 \value{
-
+data frame for snp mapping to gene.
 }
 \description{
 Maps SNPs to their nearest genes within TSS windows.
@@ -26,6 +27,19 @@ given unknown strand assignment for SNP array-based genotyping info
 }
 \examples{
 library(scPagwas)
-data(gtf_df)
-snp_gene_df <- Snp2Gene(snp = as.data.frame(Pagwas$gwas_data), refGene = gtf_df, marg = 10000)
+Pagwas <- list()
+gwas_data <- bigreadr::fread2(system.file("extdata",
+  "GWAS_summ_example.txt",
+  package = "scPagwas"
+))
+Pagwas <- GWAS_summary_input(
+  Pagwas = Pagwas,
+  gwas_data = gwas_data,
+  maf_filter = 0.1
+)
+Pagwas$snp_gene_df <- Snp2Gene(
+  snp = Pagwas$gwas_data,
+  refGene = block_annotation,
+  marg = 10000
+)
 }

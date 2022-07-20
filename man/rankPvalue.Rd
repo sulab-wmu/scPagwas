@@ -27,7 +27,7 @@ rankPvalue(
 \item{pValueMethod}{"all"}
 }
 \value{
-
+rank p value for expression matrix.
 }
 \description{
 rankPvalue

@@ -12,14 +12,16 @@ corSparse(X, Y)
 \item{Y}{matrix or vector}
 }
 \value{
-
+correlation cofficient
 }
 \description{
 Pearson correlation matrix between columns of X, Y
 modification the code from:
-http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-over-a-sparse-matrix-in-r
+http://stackoverflow.com/questions/5888287/running-cor-or-any-variant-
+over-a-sparse-matrix-in-r
 https://github.com/cysouw/qlcMatrix/blob/master/R/assoc.R
 }
 \note{
-Note that results larger than 1e4 x 1e4 will become very slow, because the resulting matrix is not sparse anymore.
+Note that results larger than 1e4 x 1e4 will become very slow,
+because the resulting matrix is not sparse anymore.
 }
