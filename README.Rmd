@@ -46,13 +46,12 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
 
-devtools::install_github("dengchunyu/scPagwas",build_vignettes = TRUE)
+devtools::install_github("dengchunyu/scPagwas")
 ```
 
 ## Usage 
 quick-start example: 
 ```{r message=FALSE, eval = FALSE}
-
  library(scPagwas)
  #library(Seurat)
  #1.start to run the wrapper functions for example.

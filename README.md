@@ -35,7 +35,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
 
-devtools::install_github("dengchunyu/scPagwas",build_vignettes = TRUE)
+devtools::install_github("dengchunyu/scPagwas")
 ```
 
 ## Usage
