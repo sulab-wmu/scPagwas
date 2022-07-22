@@ -49,7 +49,7 @@ get_Pathway_sclm <- function(pa_block,
 
     x <- x[rep(1, pa_block$n_snps), ]
     rownames(x) <- pa_block$snps$rsid
-    rownames(snp_gene_df) <- snp_gene_df$rsid
+
     x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
     x2 <- x2 * x
   } else {
@@ -60,7 +60,7 @@ get_Pathway_sclm <- function(pa_block,
     x <- matrix(x[rep(1, pa_block$n_snps), ], nrow = 1)
     rownames(x) <- pa_block$snps$rsid
 
-    rownames(snp_gene_df) <- snp_gene_df$rsid
+
     x <- matrix(as.numeric(x) * as.numeric(
       snp_gene_df[pa_block$snps$rsid, "slope"]
     ), nrow = 1)

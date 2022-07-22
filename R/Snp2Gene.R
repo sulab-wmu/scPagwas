@@ -122,5 +122,7 @@ Snp2Gene <- function(snp, refGene, marg = 10000) {
 
   out$slope <- rep(1, nrow(out))
   out <- out[out$Disstance == "0", ]
+  out <- out[!is.na(out$rsid),]
+  rownames(out) <- out$rsid
   return(out)
 }

@@ -211,7 +211,8 @@ Pagwas_data <- scPagwas_main(
 )
 }
 \references{
-
+Polygenic regression identifies trait-relevant cell subpopulations
+through pathway activity transformed single-cell RNA sequencing data.(2022)
 }
 \author{
 Chunyu Deng
