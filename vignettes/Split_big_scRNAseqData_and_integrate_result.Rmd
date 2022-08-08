@@ -112,7 +112,7 @@ if(length(SOAR::Objects())>0){
 Pagwas2<-scPagwas_main(Pagwas =Pagwas,
                      gwas_data =NULL,
                      Single_data =Example_splice2,
-                     output.prefix="splice2 ",
+                     output.prefix="splice2",
                      output.dirs="splice_scPagwas",
                      Pathway_list=Genes_by_pathway_kegg,
                      ncores=5,

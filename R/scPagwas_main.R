@@ -646,7 +646,7 @@ scPagwas_main <- function(Pagwas = NULL,
       file = paste0(
         "./", output.dirs, "/",
         output.prefix,
-        "_cellytpes_bootstrap_results.csv"
+        "_celltypes_bootstrap_results.csv"
       ),
       quote = F
     )
@@ -836,13 +836,14 @@ scPagwas_main <- function(Pagwas = NULL,
 merge_pagwas <- function(Pagwas_list = NULL,
                          n_topgenes = 1000) {
   if (length(Pagwas_list) < 2) {
-    stop("Pagwas_list is a list data format including Pagwas elememt in
-         seruat format")
+    stop("Pagwas_list should have more than two elements!")
   }
+
   ######### judge the format for Pagwas_list
   Pagwas_list <- lapply(Pagwas_list, function(Pagwas) {
-    if (class(Pagwas) != "Seurat") stop("The element in Pagwas_list should
-                                        all seruat format!")
+    if (class(Pagwas) != "Seurat") stop("Pagwas_list should be constituted by
+    the scPagwas result for single cell, not the celltypes result; The
+    celltypes result can integrate by hand!")
 
     return(Pagwas)
   })
@@ -866,7 +867,7 @@ merge_pagwas <- function(Pagwas_list = NULL,
   })
   ########### merge the seruat list
   Pagwas_merge <- merge(Pagwas_list[[1]],
-    y = Pagwas_list[[2:length(Pagwas_list)]],
+    y = Pagwas_list[2:length(Pagwas_list)],
     project = "merged", merge.data = TRUE
   )
   ########### get the gene_heritability_correlation
