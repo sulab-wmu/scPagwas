@@ -52,6 +52,7 @@
 #'    10 | 130566523 |  rs559109 | 0.033 | 0.045 |0.4047
 #'     5 | 133328825 | rs6893145 | 0.048 | 0.144 |0.1222
 #'     7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211
+#'
 #' @param output.prefix (character)output.prefix,prefix used for output
 #' tables;
 #' @param marg (integr) the distance to TSS site,default is 10000, then
@@ -321,14 +322,17 @@ scPagwas_main <- function(Pagwas = NULL,
     stop("Error:Pathway_list should be input!")
   }
 
-  Pagwas <- Single_data_input(
-    Pagwas = Pagwas,
-    assay = assay,
-    # nfeatures =nfeatures,
-    Single_data = Single_data,
-    Pathway_list = Pathway_list,
-    min_clustercells = min_clustercells
-  )
+  if(!("data_mat" %in% names(Pagwas))){
+    message("** Start to filter single cell data!")
+    Pagwas <- Single_data_input(
+      Pagwas = Pagwas,
+      assay = assay,
+      # nfeatures =nfeatures,
+      Single_data = Single_data,
+      Pathway_list = Pathway_list,
+      min_clustercells = min_clustercells
+    )
+  }
 
   Single_data <- Single_data[, colnames(Pagwas$data_mat)]
   # save the Single_data

@@ -23,14 +23,13 @@ The advantages is save a lot of times, for celltype only can omit many running p
 ```{r message=FALSE, warning=FALSE,results="hide"}
 library(scPagwas)
 Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
-                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     gwas_data =system.file("extdata", "GWAS_summ_example2.txt", package = "scPagwas"),
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                     output.prefix="monocytecount_scPagwas",
-                     output.dirs="monocytecount_bmmc",
+                     output.prefix="Test",
+                     output.dirs="Test",
                      Pathway_list=Genes_by_pathway_kegg,
-                     ncores=5,
                      assay="RNA",
-                     singlecell=F, 
+                     singlecell=T, 
                      celltype=T,
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
@@ -56,11 +55,11 @@ Because the parameters and input data are the same with celltypes function, we c
 run the `svd` code block, save a lot of time. 
 
 ```{r message=FALSE, warning=FALSE,results="hide"}
-Pagwas_singlecell<-scPagwas_main(Pagwas =Pagwas_celltypes, 
+Pagwas_singlecell<-scPagwas_main(Pagwas =NULL, 
                                  gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                                  Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
-                                 output.prefix="monocytecount_scPagwas",
-                                 output.dirs="monocytecount_bmmc",
+                                 output.prefix="Test",
+                                 output.dirs="Test",
                                  seruat_return=T,
                                  Pathway_list=Genes_by_pathway_kegg,
                                  ncores=5,

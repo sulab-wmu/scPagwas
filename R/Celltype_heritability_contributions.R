@@ -1,5 +1,5 @@
 #' Pagwas_perform_regression
-#' @description Run regression for each pathway block and gwas beta
+#' @description Run regression for each pathway block and gwas beta/stat
 #' parameter
 #' @param Pathway_ld_gwas_data list of pathway block.
 #'

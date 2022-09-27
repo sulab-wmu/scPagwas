@@ -1,0 +1,17 @@
+## 2022-09-22 16:45:59
+input gwas data files: 	D:/OneDrive/RPakage/scPagwas/inst/extdata/GWAS_summ_example2.txt
+Single_data files: D:/OneDrive/RPakage/scPagwas/inst/extdata/scRNAexample.rds
+assay in single data: 	RNA
+Pathway length: 	345
+marg distance from TSS: 	10000
+output directory is: 	Test
+Whether to run singlecell step: 	TRUE
+Whether to run celltype step: 	TRUE
+The number of top genes for TRS score: 	1000
+maf_filter: 	0.01
+min_clustercells: 	10
+min.pathway.size: 	5
+max.pathway.size: 	300
+remove_outlier: 	TRUE
+iters: 	200
+ncores: 	1

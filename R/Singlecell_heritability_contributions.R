@@ -70,6 +70,7 @@ get_Pathway_sclm <- function(pa_block,
   pa_block$x <- as(pa_block$ld_matrix_squared %*% x2, "dgCMatrix")
 
   pa_block$include_in_inference <- T
+
   noise_per_snp <- pa_block$snps$se**2
 
   if (!is.null(pa_block$x)) {

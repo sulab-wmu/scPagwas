@@ -51,7 +51,7 @@ GWAS_summary_input <- function(Pagwas = NULL,
   # try to control for maf
 
   if (all(!(necessary_cols %in% colnames(gwas_data)))) {
-    stop("There are missing the colomn for chrom, pos, beta, or se, maf")
+    stop("There are missing the colomn for chrom, pos, beta, se, maf")
   }
 
   if (class(gwas_data$pos)[1] != "numeric") {
@@ -96,7 +96,7 @@ GWAS_summary_input <- function(Pagwas = NULL,
     rm(gwas_data_6)
   }
 
-  if (gwas_z_filter > 0) {
+  if (gwas_z_filter > 0 ) {
     message(paste("removing SNPs with |z| > ", gwas_z_filter, sep = ""))
     gwas_data <- gwas_data %>%
       dplyr::mutate(abs_z = abs(beta / se)) %>%

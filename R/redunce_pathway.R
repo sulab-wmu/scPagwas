@@ -44,5 +44,6 @@ reduce_pathway <- function(pathway_seed,
   }))
   pre_pathways <- pre_pathways[p_pa]
   pathway_list <- pathway_list[c(pathway_seed, pre_pathways)]
+  pathway_list<-lapply(pathway_list,function(x) x)
   return(pathway_list)
 }

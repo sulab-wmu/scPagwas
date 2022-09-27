@@ -255,6 +255,18 @@ length(reduce_genes.by.reactome.pathway)
 #[1] 1045
 length(unlist(reduce_genes.by.reactome.pathway))
 #[1] 34980
+
+##C7: immunologic signature gene sets
+x <- readLines("c7.all.v2022.1.Hs.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.immunologic.pathway <- lapply(res, "[", -c(1:2))
+
+reduce_genes.by.immunologic.pathway<-genes.by.immunologic.pathway[unlist(lapply(genes.by.immunologic.pathway,function(x) length(x)>100))]
+reduce_genes.by.immunologic.pathway<-scPagwas::reduce_pathway(
+	pathway_seed=names(reduce_genes.by.immunologic.pathway)[sample(1:length(reduce_genes.by.immunologic.pathway),400)],
+	pathway_list=reduce_genes.by.immunologic.pathway,
+	remove_proporion=0.3)
 ```
 
 ## 4.Gene block annotation

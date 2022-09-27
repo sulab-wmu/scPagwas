@@ -169,7 +169,7 @@ dev.off()
 
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\monocyte_bmmc_dimplot_umap.png" width="50%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\monocyte_bmmc_dimplot_umap.png" width="50%" />
 
 scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
@@ -192,11 +192,11 @@ scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
 3) scPagwas.TRS.Score dimplot. 
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\scPagwas.TRS.Score_tsne.png" width="40%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\scPagwas.TRS.Score_tsne.png" width="40%" />
 
 4) scPagwas_CellScaleqValue dimplot. 
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\scPagwas_CellScaleqValue0.05_tsne.png" width="30%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\scPagwas_CellScaleqValue0.05_tsne.png" width="30%" />
 
 Positive cells(q value<0.05): red dot; Negative cells: other dot. 
 
@@ -211,7 +211,7 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas,
                          do_plot = T)
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\plot_bar_positie_nagtive.png" width="60%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\plot_bar_positie_nagtive.png" width="60%" />
 
 Plot the barplot of the proportion of celltypes in positive and negative Cells:
 
@@ -227,7 +227,7 @@ plot_bar_positie_nagtive(seurat_obj=Pagwas,
 dev.off()
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\plot_bar_positie_nagtive2.png" width="60%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\plot_bar_positie_nagtive2.png" width="60%" />
 
 
 ### 3.3 Visualize the heritability correlated Pathways
@@ -271,7 +271,7 @@ plot_scpathway_dot(Pagwas=Pagwas,
 dev.off()
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\plot_scpathway_dot.png" width="80%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\plot_scpathway_dot.png" width="80%" />
 
 ### 3.4 Plot the heritability correlated genes
 
@@ -290,7 +290,7 @@ heritability_cor_scatterplot(gene_heri_cor=Pagwas@misc$gene_heritability_correla
 dev.off()
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\heritability_cor_scatterplot.png" width="50%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\heritability_cor_scatterplot.png" width="50%" />
 
 ### 3.5 Show expression of the top heritability correlation genes in celltypes
 
@@ -309,7 +309,7 @@ plot_vln_Corgenes(seurat_obj=Pagwas,
 dev.off()
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\plot_vln_Corgenes.png" width="60%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\plot_vln_Corgenes.png" width="60%" />
 
 
 ### 3.6 celltypes bootstrap_results reuslt 
@@ -325,7 +325,7 @@ Bootstrap_P_Barplot(p_results=Pagwas@misc$bootstrap_results$bp_value[-1],
                     title = "monocytecount_bmmc")
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\Bootstrap_P_Barplot.png" width="40%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\Bootstrap_P_Barplot.png" width="40%" />
 
 Forest plot for estimate value. 
 ```{r eval = FALSE}
@@ -337,7 +337,7 @@ Bootstrap_estimate_Plot(Pagwas=Pagwas,
 dev.off()
 ```
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\estimate_Plot_00.png" width="60%" />
+<img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\estimate_Plot_00.png" width="60%" />
 
 ```{r}
 sessionInfo()

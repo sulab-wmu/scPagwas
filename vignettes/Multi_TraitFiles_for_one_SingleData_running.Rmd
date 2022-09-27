@@ -38,7 +38,7 @@ First, Run the `Single_data_input` and `Pathway_pcascore_run` for `Seu_Hema_data
 
 ```{r eval = FALSE}
 library(scPagwas)
-Single_data <- readRDS("Seu_Hema_data.rds")
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
 Pagwas <- list()
 Pagwas <- Single_data_input(Pagwas=Pagwas,
                             assay="RNA",
@@ -60,8 +60,8 @@ Second, Run the `scPagwas_main` for different trait files and take the single-ce
 ```{r eval = FALSE}
 #Pagwas is the result for last blocks.
 Pagwas_monocytecount<-scPagwas_main(Pagwas =Pagwas,
-                     gwas_data ="monocytecount_prune_gwas_data.txt",
-                     Single_data ="Seu_Hema_data.rds",
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      output.prefix="monocytecount_scPagwas",
                      output.dirs="monocytecount_bmmc",
                      Pathway_list=Genes_by_pathway_kegg,
@@ -71,7 +71,7 @@ Pagwas_monocytecount<-scPagwas_main(Pagwas =Pagwas,
                      chrom_ld = chrom_ld)
 
 Pagwas_Lymphocytecount<-scPagwas_main(Pagwas =Pagwas,
-                     gwas_data ="Lymphocytecount_gwas_data.txt",
+                     gwas_data ="D:/OneDrive/GWAS_Multiomics/gwas_data/Lymphocytecount_gwas_data.txt",
                      Single_data ="Seu_Hema_data.rds",
                      output.prefix="Lymphocytecountt_scPagwas",
                      output.dirs="Lymphocytecount_bmmc",
@@ -82,7 +82,7 @@ Pagwas_Lymphocytecount<-scPagwas_main(Pagwas =Pagwas,
                      chrom_ld = chrom_ld)
 
 Pagwas_MeanCorpusVolume<-scPagwas_main(Pagwas =Pagwas,
-                     gwas_data ="MeanCorpusVolume_prune_gwas_data.txt",
+                     gwas_data ="D:/OneDrive/GWAS_Multiomics/gwas_data/MeanCorpusVolume_prune_gwas_data.txt",
                      Single_data ="Seu_Hema_data.rds",
                      output.prefix="MeanCorpusVolume_scPagwas",
                      output.dirs="MeanCorpusVolume_bmmc",
@@ -91,5 +91,8 @@ Pagwas_MeanCorpusVolume<-scPagwas_main(Pagwas =Pagwas,
                      ncores=5,
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
+if(length(SOAR::Objects())>0){
+ SOAR::Remove(SOAR::Objects()) 
+}
 ```
 
