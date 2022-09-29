@@ -76,6 +76,7 @@ Pagwas <- GWAS_summary_input(
   )
 Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
 names(Pagwas)
+
 ```
 
 ### 2. Run scPagwas for sub-data

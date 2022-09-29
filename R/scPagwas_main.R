@@ -294,7 +294,12 @@ scPagwas_main <- function(Pagwas = NULL,
             Single_data_input and Pathway_pcascore_run function")
     Pagwas <- list()
   } else if (class(Pagwas) == "list" & is.null(Single_data) & singlecell) {
-    stop("Error:Single_data should be input!, the same as Pagwas")
+    if("data_mat" %in% names(Pagwas) & run_split){
+      message("The single cell data are in the preprocessed pagwas list!")
+    }else{
+      stop("Error:Single_data should be input!")
+    }
+
   } else if (class(Pagwas) == "list" & !is.null(Single_data)) {
     Pagwas$rawPathway_list <- Pathway_list
   } else if (class(Pagwas) != "list") {
@@ -317,13 +322,19 @@ scPagwas_main <- function(Pagwas = NULL,
     } else {
       stop("Error:There is need a data in `.rds` format ")
     }
+    if (!assay %in% Seurat::Assays(Single_data)) {
+      stop("Error:There is no need assays in your Single_data")
+    }
   } else if (class(Single_data) != "Seurat") {
-    stop("Error:There is need a Seurat class for Single_data")
+    if(run_split){
+      message("run_split is TRUE!")
+    }else{
+      stop("Error:When the run_split is FALSE! There is need a Seurat class for Single_data")
+    }
+
   }
 
-  if (!assay %in% Seurat::Assays(Single_data)) {
-    stop("Error:There is no need assays in your Single_data")
-  }
+
   if (is.null(Pathway_list)) {
     stop("Error:Pathway_list should be input!")
   }
@@ -346,9 +357,11 @@ scPagwas_main <- function(Pagwas = NULL,
    SOAR::Store(Single_data)
 
   }else{
-    Single_data <- Single_data[, colnames(Pagwas$data_mat)]
-    r_n <- colnames(Single_data)
-    rm(Single_data)
+    if(!is.null(Single_data)){
+      Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+      rm(Single_data)
+    }
+    r_n <- colnames(Pagwas$data_mat)
   }
   message("done!")
 
