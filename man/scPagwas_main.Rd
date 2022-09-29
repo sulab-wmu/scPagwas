@@ -14,6 +14,7 @@ scPagwas_main(
   assay = "RNA",
   Pathway_list = NULL,
   chrom_ld = NULL,
+  run_split = FALSE,
   marg = 10000,
   maf_filter = 0.01,
   min_clustercells = 10,
@@ -21,10 +22,10 @@ scPagwas_main(
   max.pathway.size = 300,
   iters = 200,
   n_topgenes = 1000,
-  singlecell = T,
-  celltype = T,
-  seruat_return = T,
-  remove_outlier = T,
+  singlecell = TRUE,
+  celltype = TRUE,
+  seruat_return = TRUE,
+  remove_outlier = TRUE,
   ncores = 1
 )
 }
@@ -46,11 +47,14 @@ chrom|    pos    |   rsid    |   se  |  beta |  maf
 7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211}
 
 \item{output.prefix}{(character)output.prefix,prefix used for output
-tables;}
+tables; If the run_split if TRUE, the output.dirs should be identical for
+different sub-data,and the output.prefix should be different.}
 
 \item{output.dirs}{(character)output directory for result; If the
 directory is nonexistence,
-the function will create it;}
+the function will create it;
+If the run_split if TRUE, the output.dirs should be identical for
+different sub-data,and the output.prefix should be different.}
 
 \item{block_annotation}{(data.frame) Start and end points for block
 traits, usually genes.}
@@ -64,6 +68,9 @@ default is "RNA"}
 \item{Pathway_list}{(list,character) pathway gene sets list}
 
 \item{chrom_ld}{(list,numeric)LD data for 22 chromosome.}
+
+\item{run_split}{(logical) Whether the input single cell data is a split sub-data, if TRUE,
+one result(gPas score) is return, if FALSE, the whole function is running. default is FALSE.}
 
 \item{marg}{(integr) the distance to TSS site,default is 10000, then
 gene-TSS-window size is 20000.}

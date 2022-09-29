@@ -1,0 +1,82 @@
+---
+title: "Prune_GwasSummaryFIles_plink"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Prune_GwasSummaryFIles_plink}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(scPagwas)
+```
+
+
+# Prune the gwas summary statistics file by plink
+
+The markdown is Under editing!!
+
+```{r message=FALSE, eval = FALSE}
+  GWAS_raw <-read_table(paste("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/",x,".gz",sep=""))
+  GWAS_raw<-GWAS_raw[,c(1,2,3,4,5,6,9,10)]
+  colnames(GWAS_raw)<-c("chrom","pos","REF","ALT","rsid","nearest_genes","beta","se")
+  GWAS_raw$maf<-0.1
+  write.table(GWAS_raw,file=paste("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/",tolower(x),".txt",sep=""),row.names=F,quote=F)
+mkdir tempfile
+for i in finngen_r7_c3_breast_exallc
+do
+awk  '{print $5 }' ${i}.txt  > /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/${i}_SNP_list.txt
+done
+
+```
+
+
+```
+for i in $(seq 1 22)  
+do 
+echo $i
+plink --bfile /share/pub/mayl/ABC_model/ldsc/data_ldsc/02_partitioned_LD_score_estimation/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i --extract /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/${j}_SNP_list.txt --noweb --make-bed --out /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/1000G.EUR.QC.${j}_${i}_filtered
+done 
+```
+
+```
+for i in $(seq 1 22)  
+do 
+echo $i
+plink --bfile /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/1000G.EUR.QC.${j}_${i}_filtered --indep-pairwise 50 5 0.8 --out  /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/${j}_${i}_plink_prune_EUR_filtered_LD0.8
+done 
+```
+
+
+
+```
+cat [${j}]*.prune.in > ${j}_EUR_LD0.8.prune
+```
+
+
+```{r message=FALSE, eval = FALSE}
+library(readr)
+library(dplyr)
+
+for (i in c("finngen_r7_c3_breast_herneg_exallc")) {
+    print(i)
+    gwas<-read_table(paste0("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/",i,".txt"))
+    SNP_prune<- read_table(paste0("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/tempfile/",i,"_EUR_LD0.8.prune"))
+    SNP_prune<-SNP_prune[!duplicated(unlist(SNP_prune)),]
+    colnames(SNP_prune)<-"rsid"
+    #### Left Join using inner_join function 
+   gwas= gwas %>% inner_join(SNP_prune,by="rsid")
+    print(nrow(gwas))
+   write.table(gwas,file= paste0("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/",i,"_prune.txt"),,row.names=F,quote=F)
+        print(i)
+#gc()
+}
+
+```

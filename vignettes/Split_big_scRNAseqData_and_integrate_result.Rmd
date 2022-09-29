@@ -26,17 +26,39 @@ library(scPagwas)
 `If your computer storage is enough, ignore this item`.
 Sometimes, the storage is limit for your analysis, you can splice the scRNA-seq data set by celltypes or in order. 
 
-scPagwas don't limit the way to cut the data set, but we advice to do it by cell types, because some clusters may be filtered for the minimum cell number. 
-
 
 ### 1. Splice scRNA-seq data 
-First, we splice the big scRNA-seq data for several sub-datas by cell types.
+Note, you can split the scRNA-seq data by celltypes or in random.
+When you split the scRNA-seq data in random, you should set the 
+`min_clustercells=1` 
 
-```{r}
+```{r eval = FALSE}
 library(Seurat)
 scRNAexample <-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
-Example_splice1<-subset(scRNAexample,idents=c("Celltype1","Celltype2","Celltype3","Celltype4", "Celltype5"))
-Example_splice2<-subset(scRNAexample,idents=c( "Celltype6","Celltype7","Celltype8","Celltype9","Celltype10" ))
+#set the output.dirs for any directory.
+set.dirs="D:/OneDrive/GWAS_Multiomics/Pagwas/test/"
+#set the number of split time, it depend on the size of your single cell data.
+#There have two form of spliting the data:
+
+#########
+###1.By Random
+#Create the random index number.
+n_split=2
+Split_index <- rep(1:n_split, time = ceiling(ncol(scRNAexample)/n_split), length = ncol(scRNAexample))
+
+for (i in 1:n_split) {
+  Example_splice <- scRNAexample[,Split_index==i]
+  saveRDS(Example_splice,file = paste0(set.dirs,"Example_splice",i,".rds"))
+}
+
+#########
+###1.By celltypes
+#Create the random index number.
+for (i in levels(Idents(scRNAexample))) {
+  Example_splice <- subset(scRNAexample,idents = i)
+  saveRDS(Example_splice,file = paste0(set.dirs,"Example_splice",i,".rds"))
+}
+
 ```
 
 ### 2. Run gwas data input 
@@ -44,7 +66,7 @@ Example_splice2<-subset(scRNAexample,idents=c( "Celltype6","Celltype7","Celltype
 Second, we run the `GWAS_summary_input` and `Snp2Gene` firstly, because the following function share the same gwas data.
 Sometimes, we need not run these functions for small gwas data, because a little time for these functions.
 
-```{r}
+```{r }
 Pagwas<-list()
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
 Pagwas <- GWAS_summary_input(
@@ -59,115 +81,40 @@ names(Pagwas)
 ### 2. Run scPagwas for sub-data
 
 ```{r eval = FALSE}
-Pagwas1<-scPagwas_main(Pagwas =Pagwas,
+
+setwd(set.dirs)
+
+for (i in 1:n_split) {
+ scPagwas_main(Pagwas =Pagwas,
                      gwas_data =NULL,
-                     Single_data =Example_splice1,
-                     output.prefix="splice1",
-                     output.dirs="splice_scPagwas",
+                     Single_data = paste0(set.dirs,"Example_splice",i,".rds"), #the 
+                     output.prefix=i, #the prefix can be the circulation coefficient i.
+                     output.dirs="splice_scPagwas", #the output.dirs shoukd be the same for each circulation
                      Pathway_list=Genes_by_pathway_kegg,
-                     ncores=5,
+                     run_split=TRUE, #You must set the key parameter.This parameter is set to run single result for each split result.
+                     ncores=1,
+                     min_clustercells=1, #the minimum cluster cell number should be 1.
                      assay="RNA",
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
-if(length(SOAR::Objects())>0){
- SOAR::Remove(SOAR::Objects()) 
-}
-# ##------ Thu Jul 14 12:48:37 2022 ------## ******* 1st: Single_data_input function start! ********
-# Input single cell data!
-# 5 cell types are remain, after filter!
-# done!
-# ##------ Thu Jul 14 12:48:40 2022 ------## ******* 2nd: Pathway_pcascore_run function start!! ********
-# * Start to get Pathway SVD socre!
-#   |=================                                                                    |  20%[1] "Celltype1"
-#   |==================================                                                   |  40%[1] "Celltype2"
-#   |===================================================                                  |  60%[1] "Celltype3"
-#   |====================================================================                 |  80%[1] "Celltype4"
-#   |=====================================================================================| 100%[1] "Celltype5"
-# 
-# Using score as value column: use value.var to override.
-# done!
-# ##------ Thu Jul 14 12:48:45 2022 ------## ******* 3rd: GWAS_summary_input function start! ********
-# ##------ Thu Jul 14 12:48:45 2022 ------## ******* 5th: Pathway_annotation_input function start! ********
-# obtain the pathway block information
-# done!
-# ##------ Thu Jul 14 12:48:47 2022 ------## ******* 6th: Link_pathway_blocks_gwas function start! ********
-# * Start to link gwas and pathway block annotations for 278 pathways!
-#   |=====================================================================================| 100%
-# done!
-# ##------ Thu Jul 14 12:49:12 2022 ------## ******* 7th: Celltype_heritability_contributions function start! ********
-# ** Start inference
-# * starting bootstrap iteration for 200 times
-#   |=====================================================================================| 100%
-# done!
-# ##------ Thu Jul 14 12:49:14 2022 ------## ******* 8th: scPagwas_perform_score function start! ********
-# * Get Pathways'rankPvalue for each celltypes!
-# * Get scPgwas score for each single cell
-# done!
-# ##------ Thu Jul 14 12:49:19 2022 ------## ******* 9th: scGet_gene_heritability_correlation function start! ********
-# done
-# * Get rankPvalue for each single cell
-```
-
-```{r eval = FALSE}
-Pagwas2<-scPagwas_main(Pagwas =Pagwas,
-                     gwas_data =NULL,
-                     Single_data =Example_splice2,
-                     output.prefix="splice2",
-                     output.dirs="splice_scPagwas",
-                     Pathway_list=Genes_by_pathway_kegg,
-                     ncores=5,
-                     assay="RNA",
-                     block_annotation = block_annotation,
-                     chrom_ld = chrom_ld)
-if(length(SOAR::Objects())>0){
- SOAR::Remove(SOAR::Objects()) 
+  gc()
 }
 
-# ##------ Thu Jul 14 11:19:59 2022 ------## ******* 1st: Single_data_input function start! ********
-# Input single cell data!
-# 5 cell types are remain, after filter!
-# done!
-# ##------ Thu Jul 14 11:20:00 2022 ------## ******* 2nd: Pathway_pcascore_run function start!! ********
-# * Start to get Pathway SVD socre!
-#   |=================                                                                     |  20%[1] "Celltype6"
-#   |==================================                                                    |  40%[1] "Celltype7"
-#   |====================================================                                  |  60%[1] "Celltype8"
-#   |=====================================================================                 |  80%[1] "Celltype9"
-#   |======================================================================================| 100%[1] "Celltype10"
-# 
-# Using score as value column: use value.var to override.
-# done!
-# ##------ Thu Jul 14 11:20:06 2022 ------## ******* 3rd: GWAS_summary_input function start! ********
-# ##------ Thu Jul 14 11:20:06 2022 ------## ******* 5th: Pathway_annotation_input function start! ********
-# obtain the pathway block information
-# done!
-# ##------ Thu Jul 14 11:20:07 2022 ------## ******* 6th: Link_pathway_blocks_gwas function start! ********
-# * Start to link gwas and pathway block annotations for 273 pathways!
-#   |======================================================================================| 100%
-# done!
-# ##------ Thu Jul 14 11:20:22 2022 ------## ******* 7th: Celltype_heritability_contributions function start! ********
-# ** Start inference
-# * starting bootstrap iteration for 200 times
-#   |======================================================================================| 100%
-# done!
-# ##------ Thu Jul 14 11:20:24 2022 ------## ******* 8th: scPagwas_perform_score function start! ********
-# * Get Pathways'rankPvalue for each celltypes!
-# * Get scPgwas score for each single cell
-# done!
-# ##------ Thu Jul 14 11:20:28 2022 ------## ******* 9th: scGet_gene_heritability_correlation function start! ********
-# done
-# * Get rankPvalue for each single cell
 ```
+
 
 ### 3. Integrate the result for splice data. 
 
 We integrate the splice result by `merge_pagwas` function. 
 
 ```{r eval = FALSE}
-Pagwas_integrate <- merge_pagwas(Pagwas_list = list(Pagwas1,Pagwas2),n_topgenes = 1000)
-print(Pagwas_integrate)
-# An object of class Seurat 
-# 39235 features across 1000 samples within 4 assays 
-# Active assay: SCT (18715 features, 0 variable features)
-#  3 other assays present: RNA, scPagwasPaHeritability, scPagwasPaPca
+setwd(set.dirs) #you must set the workfiles the same as before
+Pagwas_integrate <- merge_pagwas(Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas") ,# read the whole single cell data.
+                                 output.dirs="splice_scPagwas", #The same with scPagwas_main functionn_topgenes = 1000,
+                         assay='RNA',
+                         random=T,
+                         seed=1234,
+                         random_times=5,
+                         proportion=0.5)
+
 ```

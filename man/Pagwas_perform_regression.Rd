@@ -13,7 +13,7 @@ Pagwas_perform_regression(Pathway_ld_gwas_data)
 regression results
 }
 \description{
-Run regression for each pathway block and gwas beta
+Run regression for each pathway block and gwas beta/stat
 parameter
 }
 \author{

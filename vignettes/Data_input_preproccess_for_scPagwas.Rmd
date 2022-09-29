@@ -142,6 +142,8 @@ gwas_data<-gwas_data[,c("chrom","pos","rsid","beta","se","maf")]
 write.table(gwas_data,file="monocytecount_gwas_data.txt",row.names=F,quote=F)
 ```
 
+
+
 ## 3.Pathway gene list
 
 There are some processed pathway gene list provided by scPagwas package: all these pathway list are including gene symbols.
@@ -262,11 +264,17 @@ res <- strsplit(x, "\t")
 names(res) <- vapply(res, function(y) y[1], character(1))
 genes.by.immunologic.pathway <- lapply(res, "[", -c(1:2))
 
+###The length of Pathway will not lager than 1000 and not smaller than 100.
 reduce_genes.by.immunologic.pathway<-genes.by.immunologic.pathway[unlist(lapply(genes.by.immunologic.pathway,function(x) length(x)>100))]
-reduce_genes.by.immunologic.pathway<-scPagwas::reduce_pathway(
-	pathway_seed=names(reduce_genes.by.immunologic.pathway)[sample(1:length(reduce_genes.by.immunologic.pathway),400)],
+reduce_genes.by.immunologic.pathway<-genes.by.immunologic.pathway[unlist(lapply(genes.by.immunologic.pathway,function(x) length(x)<1000))]
+
+set.seed(1234)
+for (i in 1:30) {
+  reduce_genes.by.immunologic.pathway<-scPagwas::reduce_pathway(
+	pathway_seed=names(reduce_genes.by.immunologic.pathway)[sample(1:length(reduce_genes.by.immunologic.pathway),300)],
 	pathway_list=reduce_genes.by.immunologic.pathway,
-	remove_proporion=0.3)
+	remove_proporion=0.1)
+}
 ```
 
 ## 4.Gene block annotation
@@ -308,7 +316,7 @@ knitr::kable(head(chrom_ld[["chr1"]]))
 
 
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
-```{bash eval=FALSE}
+```
 ./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
 ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes
 ./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome
