@@ -13,6 +13,9 @@ PathwayPCAtest(Pathway_list, scCounts)
 }
 \value{
 list of pca score
+
+library(scPagwas)
+Pathway_list<-
 }
 \description{
 Calculate pca score

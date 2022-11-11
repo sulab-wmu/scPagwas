@@ -16,8 +16,8 @@ merge_pagwas(
 )
 }
 \arguments{
-\item{Single_data}{The Whole single cell data set. rds files in seruat format.
-The filesnames or seruat format data.}
+\item{Single_data}{The Whole single cell data set. rds files in seurat format.
+The filesnames or seurat format data.}
 
 \item{n_topgenes}{(integr)Number of top associated gene selected to
 calculate the scPagwas score;}
@@ -37,7 +37,7 @@ Using id when the Single_data is too big to run.}
 Single_data the less proportion for spliting, and the more times for random_times.}
 }
 \value{
-seruat format result for scPagwas.
+seurat format result for scPagwas.
 }
 \description{
 Merging several pagwas result to one result.When your single
@@ -47,7 +47,7 @@ in order of cellytpes.
 }
 \note{
 1.The rownames genes and gwas data must uniform.
-2.The merge_pagwas function only can use to merge the seruat format
+2.The merge_pagwas function only can use to merge the seurat format
 result.
 That is "singlecell = T;celltype =F" can use to all the split data,
 "singlecell = T;celltype = T" can be used only when the data is splited

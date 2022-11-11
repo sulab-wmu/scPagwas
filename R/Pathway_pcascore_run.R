@@ -197,6 +197,8 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 #'
 #' @return list of pca score
 #'
+#' library(scPagwas)
+#' Pathway_list<-
 PathwayPCAtest <- function(Pathway_list,
                            scCounts) {
   if (any(duplicated(rownames(scCounts)))) {

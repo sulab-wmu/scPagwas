@@ -212,7 +212,7 @@ Pathway_block_func <- function(Pagwas = NULL,
     )]
     Pathway_sclm_results <- data.matrix(as.data.frame(Pathway_sclm_results))
     rownames(Pathway_sclm_results) <- colnames(Pagwas$pca_scCell_mat)
-    Pagwas$Pathway_sclm_results <- as(Pathway_sclm_results, "dgCMatrix")
+    Pagwas$Pathway_sclm_results <- Pathway_sclm_results#, "dgCMatrix")
   }
   if (celltype) {
     names(Pathway_ld_gwas_data) <- names(Pachrom_block_list)
@@ -275,7 +275,7 @@ link_pwpca_block <- function(pa_block,
 
 
       rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      #x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
     } else {
       x2 <- x2[pa_block$snps$label, ]
@@ -286,7 +286,7 @@ link_pwpca_block <- function(pa_block,
 
 
       rownames(snp_gene_df) <- snp_gene_df$rsid
-      x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+      #x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
       x3 <- x2 * x
     }
   } else {
@@ -298,9 +298,9 @@ link_pwpca_block <- function(pa_block,
 
     rownames(snp_gene_df) <- snp_gene_df$rsid
 
-    x <- matrix(as.numeric(x) * as.numeric(
-      snp_gene_df[pa_block$snps$rsid, "slope"]
-    ), nrow = 1)
+    #x <- matrix(as.numeric(x) * as.numeric(
+    #  snp_gene_df[pa_block$snps$rsid, "slope"]
+    #), nrow = 1)
     x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
   }
 

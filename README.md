@@ -23,7 +23,7 @@ using also can be accessed using browseVignettes(“scPagwas”)
 ## Installation
 
 You can install the released version of scPagwas from
-[github](https://github.com/dengchunyu/scPagwas) with:
+[github](https://github.com/sulab-wmu/scPagwas) with:
 
 ``` r
 #install some dependence packages

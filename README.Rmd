@@ -34,7 +34,7 @@ For further usage on the scPagwas package, please refer to the [tutorials](https
 
 ## Installation
 
-You can install the released version of scPagwas from [github](https://github.com/dengchunyu/scPagwas) with: 
+You can install the released version of scPagwas from [github](https://github.com/sulab-wmu/scPagwas) with: 
 
 ``` r
 #install some dependence packages

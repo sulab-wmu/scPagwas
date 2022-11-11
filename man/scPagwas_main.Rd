@@ -24,7 +24,7 @@ scPagwas_main(
   n_topgenes = 1000,
   singlecell = TRUE,
   celltype = TRUE,
-  seruat_return = TRUE,
+  seurat_return = TRUE,
   remove_outlier = TRUE,
   ncores = 1
 )
@@ -34,7 +34,7 @@ scPagwas_main(
 Pagwas
 should be list class; Sometimes, It can inherit the result from
 "scPagwas_main" function
-last time, when you turn the "seruat_return" to FALSE; It is suitable
+last time, when you turn the "seurat_return" to FALSE; It is suitable
 for circulation
 running for the same single data.}
 
@@ -59,8 +59,8 @@ different sub-data,and the output.prefix should be different.}
 \item{block_annotation}{(data.frame) Start and end points for block
 traits, usually genes.}
 
-\item{Single_data}{(character or Seruat)Input the Single data in seruat
-format, or the Seruat data address for rds format.Idents should be the celltypes annotation.}
+\item{Single_data}{(character or seurat)Input the Single data in seurat
+format, or the seurat data address for rds format.Idents should be the celltypes annotation.}
 
 \item{assay}{(character)assay data of your single cell data to use,
 default is "RNA"}
@@ -95,7 +95,7 @@ calculate the scPagwas score;}
 
 \item{celltype}{(logical)Whether to produce the celltypes result;}
 
-\item{seruat_return}{(logical) Whether return the Seruat format result,
+\item{seurat_return}{(logical) Whether return the seurat format result,
 if not,will return a list result;}
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for
@@ -105,7 +105,7 @@ scPagwas score.}
 to check the cores in computer.}
 }
 \value{
-Returns a Seruat data with entries(seruat_return=T):
+Returns a seurat data with entries(seurat_return=T):
 \describe{
 \item{assay:}{
 {scPagwasPaPca:}{An assay for S4 type of data; the svd result
@@ -128,7 +128,7 @@ cell data}
 {lm_results:}{ the regression result for each cell.}
 {gene_heritability_correlation:}{
 heritability correlation value for each gene;}
-{scPathways_rankPvalue:}{pvaues for each pathway}
+{scPathways_scGene_rankP:}{pvaues for each pathway}
 {bootstrap_results:}{The bootstrap data frame results for celltypes
 including bootstrap pvalue and confidence interval.}
 }
@@ -150,7 +150,7 @@ interval}
 value("cor" for pearson) for each gene;}
 }
 
-Returns a list class with entries(seruat_return=F):
+Returns a list class with entries(seurat_return=F):
 \describe{
 {scPagwasPaPca:}{Assays for S4 type of data; the svd result for
 pathways in each cells;}

@@ -41,7 +41,7 @@ get_Pathway_sclm <- function(pa_block,
     rownames(x2) <- mg
   }
 
-  x2 <- as(x2, "dgCMatrix")
+  #x2 <- as(x2, "dgCMatrix")
 
   if (pa_block$n_snps > 1) {
     x2 <- x2[pa_block$snps$label, ]
@@ -50,7 +50,7 @@ get_Pathway_sclm <- function(pa_block,
     x <- x[rep(1, pa_block$n_snps), ]
     rownames(x) <- pa_block$snps$rsid
 
-    x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
+    #x <- x * snp_gene_df[pa_block$snps$rsid, "slope"]
     x2 <- x2 * x
   } else {
     x2 <- matrix(x2[pa_block$snps$label, ], nrow = 1)
@@ -61,13 +61,13 @@ get_Pathway_sclm <- function(pa_block,
     rownames(x) <- pa_block$snps$rsid
 
 
-    x <- matrix(as.numeric(x) * as.numeric(
-      snp_gene_df[pa_block$snps$rsid, "slope"]
-    ), nrow = 1)
+    #x <- matrix(as.numeric(x) * as.numeric(
+    #  snp_gene_df[pa_block$snps$rsid, "slope"]
+    #), nrow = 1)
     x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
-    x2 <- as(x2, "dgCMatrix")
+    #x2 <- as(x2, "dgCMatrix")
   }
-  pa_block$x <- as(pa_block$ld_matrix_squared %*% x2, "dgCMatrix")
+  pa_block$x <- pa_block$ld_matrix_squared %*% x2 #, "dgCMatrix")
 
   pa_block$include_in_inference <- T
 
@@ -145,7 +145,7 @@ scPagwas_perform_score <- function(Pagwas,
   ))
   Pathways_rankPvalue <- lapply(cl, function(ss) {
     tt <- Pagwas$Celltype_anno$annotation == ss
-    PathwayrankPvalue <- rankPvalue(Pagwas$Pathway_single_results[, tt])
+    PathwayrankPvalue <- scGene_rankP(Pagwas$Pathway_single_results[, tt])
     return(PathwayrankPvalue$pValueHigh)
   })
   Pagwas$scPathways_rankPvalue <- Reduce(

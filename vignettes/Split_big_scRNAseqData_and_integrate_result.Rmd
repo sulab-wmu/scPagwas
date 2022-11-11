@@ -71,8 +71,7 @@ Pagwas<-list()
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
 Pagwas <- GWAS_summary_input(
     Pagwas = Pagwas,
-    gwas_data = gwas_data,
-    maf_filter = 0.1
+    gwas_data = gwas_data
   )
 Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
 names(Pagwas)

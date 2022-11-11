@@ -282,6 +282,8 @@ for (i in 1:30) {
 Gene block annotation in chromosome is need to prepare for scPagwas.
 scPagwas can provide a block annotation data for protein-coding genes.
 
+File downloaded from MAGMA website [MAGMA | CTG (cncr.nl)](https://ctg.cncr.nl/software/magma)
+
 the processed block annotation data are show here:
 
 ```{r message=FALSE}
@@ -314,8 +316,8 @@ class(chrom_ld)
 knitr::kable(head(chrom_ld[["chr1"]]))
 ```
 
-
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
+
 ```
 ./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
 ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes

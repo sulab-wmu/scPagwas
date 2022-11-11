@@ -42,7 +42,7 @@
 #' Pagwas
 #' should be list class; Sometimes, It can inherit the result from
 #' "scPagwas_main" function
-#' last time, when you turn the "seruat_return" to FALSE; It is suitable
+#' last time, when you turn the "seurat_return" to FALSE; It is suitable
 #' for circulation
 #' running for the same single data.
 #' @param gwas_data (data.frame)GWAS summary data; It must have some
@@ -60,8 +60,8 @@
 #' gene-TSS-window size is 20000.
 #' @param block_annotation (data.frame) Start and end points for block
 #'  traits, usually genes.
-#' @param Single_data (character or Seruat)Input the Single data in seruat
-#' format, or the Seruat data address for rds format.Idents should be the celltypes annotation.
+#' @param Single_data (character or seurat)Input the Single data in seurat
+#' format, or the seurat data address for rds format.Idents should be the celltypes annotation.
 #' @param assay (character)assay data of your single cell data to use,
 #' default is "RNA"
 #' @param Pathway_list (list,character) pathway gene sets list
@@ -80,7 +80,7 @@
 #' scPagwas score.
 #' @param ncores (integr)Parallel cores,default is 1. use detectCores()
 #' to check the cores in computer.
-#' @param seruat_return (logical) Whether return the Seruat format result,
+#' @param seurat_return (logical) Whether return the seurat format result,
 #' if not,will return a list result;
 #' @param singlecell (logical)Whether to produce the singlecell result;
 #' @param celltype (logical)Whether to produce the celltypes result;
@@ -93,7 +93,7 @@
 #' calculate the scPagwas score;
 #'
 #' @return
-#' Returns a Seruat data with entries(seruat_return=T):
+#' Returns a seurat data with entries(seurat_return=T):
 #' \describe{
 #'   \item{assay:}{
 #'   {scPagwasPaPca:}{An assay for S4 type of data; the svd result
@@ -116,7 +116,7 @@
 #'   {lm_results:}{ the regression result for each cell.}
 #'   {gene_heritability_correlation:}{
 #'   heritability correlation value for each gene;}
-#'   {scPathways_rankPvalue:}{pvaues for each pathway}
+#'   {scPathways_scGene_rankP:}{pvaues for each pathway}
 #'   {bootstrap_results:}{The bootstrap data frame results for celltypes
 #'   including bootstrap pvalue and confidence interval.}
 #' }
@@ -139,7 +139,7 @@
 
 #' }
 #'
-#' Returns a list class with entries(seruat_return=F):
+#' Returns a list class with entries(seurat_return=F):
 #' \describe{
 #'   {scPagwasPaPca:}{Assays for S4 type of data; the svd result for
 #'   pathways in each cells;}
@@ -216,7 +216,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           n_topgenes = 1000,
                           singlecell = TRUE,
                           celltype = TRUE,
-                          seruat_return = TRUE,
+                          seurat_return = TRUE,
                           remove_outlier = TRUE,
                           ncores = 1) {
 
@@ -289,7 +289,7 @@ scPagwas_main <- function(Pagwas = NULL,
     SOAR::Store(Single_data)
     Pagwas$rawPathway_list <- Pathway_list
   } else if (class(Pagwas) == "Seurat" & !is.null(Single_data)) {
-    message("Warning:Single_data and Pagwas seruat class are redundant!
+    message("Warning:Single_data and Pagwas seurat class are redundant!
               we will keep the new Single_data and rerun the
             Single_data_input and Pathway_pcascore_run function")
     Pagwas <- list()
@@ -455,24 +455,24 @@ scPagwas_main <- function(Pagwas = NULL,
     )
 
     #############################
-    ## 4.Snp2Gene
+    ## 4.SnpToGene
     #############################
     message(paste(utils::timestamp(quiet = T),
-      " ******* 4th: Snp2Gene start!! ********",
+      " ******* 4th: SnpToGene start!! ********",
       sep = ""
     ))
 
     tt <- Sys.time()
     if (!is.null(block_annotation)) {
-      Pagwas$snp_gene_df <- Snp2Gene(
-        snp = Pagwas$gwas_data,
-        refGene = block_annotation,
+      Pagwas$snp_gene_df <- SnpToGene(
+        gwas_data = Pagwas$gwas_data,
+        block_annotation = block_annotation,
         marg = marg
       )
     } else if (!("snp_gene_df" %in% names(Pagwas))) {
       stop("Error: block_annotation should input!")
     }
-    cat("Snp2Gene: ",
+    cat("SnpToGene: ",
       file = paste0("./", output.dirs, "/scPagwas.run.log"),
       append = T
     )
@@ -680,11 +680,11 @@ scPagwas_main <- function(Pagwas = NULL,
       ),
       quote = F
     )
-    utils::write.csv(Pagwas$scPathways_rankPvalue,
+    utils::write.csv(Pagwas$scPathways_scGene_rankP,
       file = paste0(
         "./", output.dirs, "/",
         output.prefix,
-        "_singlecell_Pathways_rankPvalue.csv"
+        "_singlecell_Pathways_scGene_rankP.csv"
       ),
       quote = F
     )
@@ -709,15 +709,14 @@ scPagwas_main <- function(Pagwas = NULL,
       name = c("scPagwas.TRS.Score")
     )
 
-    message("* Get rankPvalue for each single cell")
-    CellScalepValue <- rankPvalue(
-      datS = t(data.matrix(
+    message("* Get scGene_rankP for each single cell")
+    CellScalepValue <- scGene_rankP(
+      Single_mat = t(data.matrix(
         GetAssayData(Single_data, assay = assay)[scPagwas_topgenes, ]
-      )),
-      pValueMethod = "scale"
+      ))
     )
 
-    if (!seruat_return) {
+
       Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
       Pagwas$CellScalepValue <- CellScalepValue
 
@@ -725,8 +724,8 @@ scPagwas_main <- function(Pagwas = NULL,
       a <- data.frame(
         scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
         scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
-        pValueHighScale = Pagwas$CellScalepValue$pValueHighScale,
-        qValueHighScale = Pagwas$CellScalepValue$qValueHighScale
+        pValueHighScale = Pagwas$CellScalepValue$pValueHighRank,
+        qValueHighScale = Pagwas$CellScalepValue$qValueHighRank
       )
       utils::write.csv(a,
         file = paste0(
@@ -736,7 +735,7 @@ scPagwas_main <- function(Pagwas = NULL,
         ),
         quote = F
       )
-
+      if (!seurat_return) {
       SOAR::Remove(SOAR::Objects())
       return(Pagwas)
     } else {
@@ -756,8 +755,8 @@ scPagwas_main <- function(Pagwas = NULL,
       rm(scPagwas_pca)
 
       Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
-      Single_data$CellScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHighScale"]
-      Single_data$CellScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHighScale"]
+      Single_data$CellpValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHighRank"]
+      Single_data$CellqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHighRank"]
       Pagwas[c(
         "scPagwas.gPAS.score", "Celltype_anno",
         "Pathway_single_results", "pca_scCell_mat"
@@ -766,7 +765,7 @@ scPagwas_main <- function(Pagwas = NULL,
       rm(Pagwas)
       utils::write.csv(Single_data@meta.data[, c(
         "scPagwas.gPAS.score",
-        "CellScalepValue",
+        "CellpValue",
         "scPagwas.TRS.Score1"
       )],
       file = paste0(
@@ -816,15 +815,15 @@ scPagwas_main <- function(Pagwas = NULL,
 #' split, then use this function to merge them. Split the data randomly or
 #' in order of cellytpes.
 #' @note 1.The rownames genes and gwas data must uniform.
-#' 2.The merge_pagwas function only can use to merge the seruat format
+#' 2.The merge_pagwas function only can use to merge the seurat format
 #' result.
 #' That is "singlecell = T;celltype =F" can use to all the split data,
 #' "singlecell = T;celltype = T" can be used only when the data is splited
 #' by celltypes.
 #' but "singlecell = F;celltype =T" can not be used.
 #'
-#' @param Single_data The Whole single cell data set. rds files in seruat format.
-#' The filesnames or seruat format data.
+#' @param Single_data The Whole single cell data set. rds files in seurat format.
+#' The filesnames or seurat format data.
 #' @param output.dirs The files names for the result of scPagwas_main function.
 #' @param n_topgenes (integr)Number of top associated gene selected to
 #' calculate the scPagwas score;
@@ -836,7 +835,7 @@ scPagwas_main <- function(Pagwas = NULL,
 #' @param proportion The proportion for spliting the Single_data; the bigger for
 #' Single_data the less proportion for spliting, and the more times for random_times.
 #'
-#' @return seruat format result for scPagwas.
+#' @return seurat format result for scPagwas.
 #' @export
 #'
 #' @examples
@@ -975,11 +974,10 @@ merge_pagwas <- function(Single_data = NULL,
 
   ########### get the CellScalepValue
 
-  CellScalepValue <- rankPvalue(
-    datS = t(data.matrix(
+  CellScalepValue <- scGene_rankP(
+    Single_mat = t(data.matrix(
       GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ]
-    )),
-    pValueMethod = "scale"
+    ))
   )
   Single_data$CellScalepValue <- CellScalepValue[, "pValueHighScale"]
   Single_data$CellScaleqValue <- CellScalepValue[, "qValueHighScale"]
@@ -1016,17 +1014,16 @@ merge_pagwas <- function(Single_data = NULL,
                                           name = c("scPagwas.TRS.Score")
     )
 
-    message("Start to run the rankPvalue function in random!")
+    message("Start to run the scGene_rankP function in random!")
     pv<-list()
     qv<-list()
     for (j in 1:random_times) {
       print(paste0("Randome Times: ",j))
       index<-sample(1:ncol(Single_data),ceiling(ncol(Single_data)*proportion))
-      CellScalepValue <- rankPvalue(
-        datS = t(data.matrix(
+      CellScalepValue <- scGene_rankP(
+        Single_mat = t(data.matrix(
         GetAssayData(Single_data[,index], assay = "RNA")[scPagwas_topgenes, ]
-         )),
-        pValueMethod = "scale"
+         ))
        )
       a<-CellScalepValue[, "pValueHighScale"]
       names(a)<-rownames(CellScalepValue)

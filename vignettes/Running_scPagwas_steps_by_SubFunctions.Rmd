@@ -23,19 +23,19 @@ The advantages is save a lot of times, for celltype only can omit many running p
 ```{r message=FALSE, warning=FALSE,results="hide"}
 library(scPagwas)
 Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
-                     gwas_data =system.file("extdata", "GWAS_summ_example2.txt", package = "scPagwas"),
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                      output.prefix="Test",
                      output.dirs="Test",
                      Pathway_list=Genes_by_pathway_kegg,
                      assay="RNA",
-                     singlecell=T, 
+                     singlecell=F, 
                      celltype=T,
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
 ```
 
-The reuslt of celltypes is list format(not seruat format).
+The reuslt of celltypes is list format(not seurat format).
 ```{r }
 names(Pagwas_celltypes)
 # [1] "Celltype_anno"     "data_mat"          "VariableFeatures" 
@@ -60,7 +60,6 @@ Pagwas_singlecell<-scPagwas_main(Pagwas =NULL,
                                  Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
                                  output.prefix="Test",
                                  output.dirs="Test",
-                                 seruat_return=T,
                                  Pathway_list=Genes_by_pathway_kegg,
                                  ncores=5,
                                  assay="RNA",
@@ -69,7 +68,7 @@ Pagwas_singlecell<-scPagwas_main(Pagwas =NULL,
                                  block_annotation = block_annotation,
                                  chrom_ld = chrom_ld)
 ```
-The result is seruat format.
+The result is seurat format.
 
 ## 3. Running scPagwas step by step
 
@@ -116,7 +115,7 @@ The result list including `pca_scCell_mat` single cell pca score matrix and `pca
 Read the GWAS summary data, remove the MHC and sex chromosome and filtered the maf of SNP.
 
 ```{r}
-gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example2.txt", package = "scPagwas"))
 Pagwas <- GWAS_summary_input(
     Pagwas = Pagwas,
     gwas_data = gwas_data,
@@ -130,7 +129,11 @@ names(Pagwas)
 We set the `marg` is 10KB, means the position for SNP is less 10KB distance to TSS of gene.
 
 ```{r}
-Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
+Pagwas$snp_gene_df <- SnpToGene(
+        gwas_data = Pagwas$gwas_data,
+        block_annotation = block_annotation,
+        marg = 10000
+      )
 ```
 SNP to gene dataframe:
 ```{r message=FALSE}
@@ -213,10 +216,11 @@ knitr::kable(head(Pagwas$gene_heritability_correlation))
 Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `rankPvalue`. 
 
 ```{r message=FALSE, warning=FALSE}
-scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
+scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[
+  order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
 Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 #run pvalue
-CellScalepValue <- rankPvalue(datS = t(data.matrix(Seurat::GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ])), pValueMethod = "scale")
+CellScalepValue <- scGene_rankP(Single_mat = t(data.matrix(Seurat::GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ])))
 ```
 
 All these sub-functions for scPagwas can running dependently, but need to run orderly. The `scPagwas_main` function is a wrapper functions for these sub-functions.
