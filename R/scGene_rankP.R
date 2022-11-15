@@ -1,4 +1,4 @@
-#' rankPvalue
+#' scGene_rankP
 #'
 #' @param Single_mat matrix or data.frame
 #' @param na.last "keep"
@@ -9,7 +9,6 @@
 scGene_rankP <- function(Single_mat,
                        na.last = "keep",
                        ties.method = "average") {
-  no.rows <- dim(Single_mat)[[1]]
 
     rank_function <- function(x) {
       x <- rank(x, ties.method = ties.method, na.last = na.last)
@@ -38,6 +37,52 @@ scGene_rankP <- function(Single_mat,
       )
     return(dat.rank)
 } # End of function
+
+
+#' scGene_scaleP
+#'
+#' @param Single_mat matrix or data.frame
+#' @param na.last "keep"
+#' @param ties.method "average"
+#'
+#' @return rank p value for expression matrix.
+#' @export
+#'
+scGene_scaleP <- function(Single_mat,
+                         na.last = "keep",
+                         ties.method = "average") {
+  no.rows = dim(Single_mat)[[1]]
+  no.cols = dim(Single_mat)[[2]]
+  Single_matpresent = !is.na(Single_mat) + 0
+  scaled.Single_mat = scale(Single_mat)
+
+  expected.value = rep(0, no.rows)
+  varsum = rowSums(Single_matpresent^2) * 1
+  observed.sumScaledSingle_mat = as.numeric(rowSums(scaled.Single_mat, na.rm = TRUE))
+  Zstatisticlow = (observed.sumScaledSingle_mat - expected.value)/sqrt(varsum)
+  scaled.minusSingle_mat = scale(-Single_mat)
+
+  observed.sumScaledminusSingle_mat = as.numeric(rowSums(scaled.minusSingle_mat, na.rm = TRUE))
+  Zstatistichigh = (observed.sumScaledminusSingle_mat - expected.value)/sqrt(varsum)
+  pValueLow = pnorm((Zstatisticlow))
+  pValueHigh = pnorm((Zstatistichigh))
+  datoutscale = data.frame(pValueLow, pValueHigh)
+  qValueLow = rep(NA, dim(Single_mat)[[1]])
+  qValueHigh = rep(NA, dim(Single_mat)[[1]])
+  #qValueExtreme = rep(NA, dim(Single_mat)[[1]])
+  rest1 = !is.na(pValueLow)
+  qValueLow[rest1] = qvalue(pValueLow[rest1])$qvalues
+  rest1 = !is.na(pValueHigh)
+  qValueHigh[rest1] = qvalue(pValueHigh[rest1])$qvalues
+  datq = data.frame(qValueLow, qValueHigh)
+  datoutscale = data.frame(datoutscale, datq)
+  names(datoutscale) = paste(names(datoutscale), "Scale",sep = "")
+  # }
+  datoutscale<-datoutscale[,c("pValueHighScale","qValueHighScale")]
+  colnames(datoutscale)<-c("pValueHigh","qValueHigh")
+  return(datoutscale)
+} # End of function
+
 
 #' @title
 #' Estimate the q-values for a given set of p-values

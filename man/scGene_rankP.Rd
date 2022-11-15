@@ -2,7 +2,7 @@
 % Please edit documentation in R/scGene_rankP.R
 \name{scGene_rankP}
 \alias{scGene_rankP}
-\title{rankPvalue}
+\title{scGene_rankP}
 \usage{
 scGene_rankP(Single_mat, na.last = "keep", ties.method = "average")
 }
@@ -17,5 +17,5 @@ scGene_rankP(Single_mat, na.last = "keep", ties.method = "average")
 rank p value for expression matrix.
 }
 \description{
-rankPvalue
+scGene_rankP
 }

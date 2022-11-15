@@ -8,7 +8,6 @@ get_Pathway_sclm(
   pa_block,
   pca_scCell_mat,
   data_mat,
-  ncores = 1,
   rawPathway_list,
   snp_gene_df
 )
@@ -20,11 +19,11 @@ get_Pathway_sclm(
 
 \item{data_mat}{Element in Pagwas.}
 
-\item{ncores}{Parallel cores.}
-
 \item{rawPathway_list}{Element in Pagwas..}
 
 \item{snp_gene_df}{Element in Pagwas.}
+
+\item{ncores}{Parallel cores.}
 }
 \value{
 lm result for pathway in single cell.

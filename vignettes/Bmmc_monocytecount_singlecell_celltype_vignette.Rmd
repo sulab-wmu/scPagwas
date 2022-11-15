@@ -188,7 +188,7 @@ scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
 2) scPagwas.gPAS.score dimplot. 
 
-<img src="E:\RPakage\scPagwas\vignettes\figures\scPagwas.gPAS.score_tsne.png" width="40%" />
+
 
 3) scPagwas.TRS.Score dimplot. 
 

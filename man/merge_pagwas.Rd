@@ -99,7 +99,6 @@ for (i in 1:n_split) {
                 output.dirs="splice_scPagwas", #the output.dirs shoukd be the same for each circulation
                 Pathway_list=Genes_by_pathway_kegg,
                 run_split=TRUE, #This parameter is set to run single result for each split result.
-                ncores=1,
                 min_clustercells=1, #the minimum cluster cell number should be 1.
                 assay="RNA",
                 block_annotation = block_annotation,

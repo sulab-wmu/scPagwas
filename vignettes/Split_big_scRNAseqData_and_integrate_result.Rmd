@@ -66,14 +66,15 @@ for (i in levels(Idents(scRNAexample))) {
 Second, we run the `GWAS_summary_input` and `Snp2Gene` firstly, because the following function share the same gwas data.
 Sometimes, we need not run these functions for small gwas data, because a little time for these functions.
 
-```{r }
+```{r eval = FALSE}
 Pagwas<-list()
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
 Pagwas <- GWAS_summary_input(
     Pagwas = Pagwas,
     gwas_data = gwas_data
   )
-Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
+Pagwas$snp_gene_df <- SnpToGene(gwas_data = Pagwas$gwas_data, 
+                                block_annotation = block_annotation, marg = 10000)
 names(Pagwas)
 
 ```
@@ -92,8 +93,7 @@ for (i in 1:n_split) {
                      output.dirs="splice_scPagwas", #the output.dirs shoukd be the same for each circulation
                      Pathway_list=Genes_by_pathway_kegg,
                      run_split=TRUE, #You must set the key parameter.This parameter is set to run single result for each split result.
-                     ncores=1,
-                     min_clustercells=1, #the minimum cluster cell number should be 1.
+                     min_clustercells=10, #the minimum cluster cell number should be 1.
                      assay="RNA",
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)

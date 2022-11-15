@@ -12,7 +12,6 @@
 get_Pathway_sclm <- function(pa_block,
                              pca_scCell_mat,
                              data_mat,
-                             ncores = 1,
                              rawPathway_list,
                              snp_gene_df) {
   pathway <- unique(pa_block$block_info$pathway)
@@ -82,8 +81,7 @@ get_Pathway_sclm <- function(pa_block,
       results <- scParameter_regression(
         Pagwas_x = pa_block$x[!na_elements, ],
         Pagwas_y = pa_block$y[!na_elements],
-        noise_per_snp = noise_per_snp[!na_elements],
-        ncores = ncores
+        noise_per_snp = noise_per_snp[!na_elements]
       )
 
 
@@ -126,35 +124,36 @@ scPagwas_perform_score <- function(Pagwas,
       return(b)
     }
   })
-  pathway_expr <- pathway_expr[!sapply(pathway_expr, is.null)]
-  Pathway_names <- Pathway_names[!sapply(pathway_expr, is.null)]
-  pathway_expr <- data.matrix(as.data.frame(pathway_expr))
+  a<-!sapply(pathway_expr, is.null)
+  pathway_expr <- data.matrix(as.data.frame(pathway_expr[a]))
+  Pathway_names <- Pathway_names[a]
 
   colnames(pathway_expr) <- Pathway_names
   pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
   rm(pathway_expr)
   Pagwas$Pathway_single_results <- Pathway_sclm_results[, Pathway_names] * pa_exp_mat
-
   rownames(Pagwas$Pathway_single_results) <- colnames(Pagwas$pca_scCell_mat)
-
   message("* Get Pathways'rankPvalue for each celltypes!")
   cl <- unique((Pagwas$Celltype_anno$annotation))
 
   Pagwas$Pathway_single_results <- t(data.matrix(
     Pagwas$Pathway_single_results
   ))
+
   Pathways_rankPvalue <- lapply(cl, function(ss) {
+    print(ss)
     tt <- Pagwas$Celltype_anno$annotation == ss
     PathwayrankPvalue <- scGene_rankP(Pagwas$Pathway_single_results[, tt])
     return(PathwayrankPvalue$pValueHigh)
   })
+
   Pagwas$scPathways_rankPvalue <- Reduce(
     function(dtf1, dtf2) cbind(dtf1, dtf2),
     Pathways_rankPvalue
   )
   Pagwas$scPathways_rankPvalue <- as.data.frame(Pagwas$scPathways_rankPvalue)
   colnames(Pagwas$scPathways_rankPvalue) <- cl
-  rownames(Pagwas$scPathways_rankPvalue) <- colnames(Pathway_sclm_results)
+  rownames(Pagwas$scPathways_rankPvalue) <- rownames(Pagwas$Pathway_single_results)
   rm(Pathways_rankPvalue)
   message("* Get scPgwas score for each single cell")
   scPagwas.gPAS.score <- colSums(Pagwas$Pathway_single_results)
@@ -163,7 +162,6 @@ scPagwas_perform_score <- function(Pagwas,
     Pagwas$scPagwas.gPAS.score <- scPagwas_score_filter(scPagwas_score = scPagwas.gPAS.score)
   }
   names(Pagwas$scPagwas.gPAS.score) <- colnames(Pagwas$pca_scCell_mat)
-
   return(Pagwas)
 }
 
@@ -182,43 +180,30 @@ scPagwas_perform_score <- function(Pagwas,
 
 scParameter_regression <- function(Pagwas_x,
                                    Pagwas_y,
-                                   noise_per_snp,
-                                   ncores = 1) {
-  if (bigmemory::is.big.matrix(Pagwas_x)) {
-    liear_m <- bigstatsr::big_univLinReg(
-      X = as_FBM(Pagwas_x[]),
-      y.train = Pagwas_y,
-      covar.train = bigstatsr::covar_from_df(data.frame(
-        stats::offset(noise_per_snp)
-      )),
-      ncores = ncores
-    )
-    parameters <- liear_m$estim
-  } else if (methods::is(Pagwas_x, "dgCMatrix")) {
-    Pagwas_x <- as_matrix(Pagwas_x)
-    liear_m <- bigstatsr::big_univLinReg(
-      X = as_FBM(Pagwas_x),
-      y.train = Pagwas_y,
-      covar.train = bigstatsr::covar_from_df(data.frame(
-        stats::offset(noise_per_snp)
-      )),
-      ncores = ncores
-    )
-    parameters <- liear_m$estim
-  } else {
-    # Pagwas_x<-as_matrix(Pagwas_x)
-    liear_m <- bigstatsr::big_univLinReg(
-      X = as_FBM(Pagwas_x),
-      y.train = Pagwas_y,
-      covar.train = bigstatsr::covar_from_df(
-        data.frame(offset(noise_per_snp))
-      ),
-      ncores = ncores
-    )
-    parameters <- liear_m$estim
-  }
+                                   noise_per_snp) {
 
-  return(parameters)
+    # #Pagwas_x<-as_matrix(Pagwas_x)
+    # liear_m <- bigstatsr::big_univLinReg(
+    #  X = bigstatsr::as_FBM(Pagwas_x),
+    #  y.train = Pagwas_y,
+    #  covar.train = bigstatsr::covar_from_df(
+    #    data.frame(offset(noise_per_snp))
+    #  ),
+    #  ncores = ncores
+    # )
+    # parameters1 <- liear_m$estim
+
+    #apply()
+    parameters_df<-biganalytics::apply(Pagwas_x, 2, function(ge) {
+      m <- stats::lm(Pagwas_y ~
+                       offset(noise_per_snp) +
+                       ge)
+      parameters <- as.vector(stats::coef(m)[-1])
+      return(parameters)
+    })
+
+
+  return(parameters_df)
 }
 
 

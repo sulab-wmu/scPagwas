@@ -6,3 +6,18 @@ SnpToGene: 0.2280049
 Pathway_annotation_input: 1.433227 
 Link_pathway_blocks_gwas: 45.69458 
 Celltype_heritability_contributions: 47.39785 
+Single_data import: 5.450794 
+Pathway_pcascore_run: 19.78428 
+GWAS_summary_input: 0.1894081 
+SnpToGene: 0.3348479 
+Pathway_annotation_input: 1.262111 
+Link_pathway_blocks_gwas: 3.586404 
+Celltype_heritability_contributions: 3.608116 
+scPagwas_perform_score: 5.932676 
+9.scGet_gene_heritability_correlation: 2.647819 
+Single_data import: 8.002361 
+Pathway_pcascore_run: 15.2584 
+GWAS_summary_input: 0.2175322 
+SnpToGene: 0.2355578 
+Pathway_annotation_input: 1.232216 
+Single_data import: 3.818466 

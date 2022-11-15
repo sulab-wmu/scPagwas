@@ -4,13 +4,7 @@
 \alias{Link_pathway_blocks_gwas}
 \title{Link_pathway_blocks_gwas}
 \usage{
-Link_pathway_blocks_gwas(
-  Pagwas,
-  chrom_ld = NULL,
-  singlecell = T,
-  celltype = T,
-  ncores = 1
-)
+Link_pathway_blocks_gwas(Pagwas, chrom_ld = NULL, singlecell = T, celltype = T)
 }
 \arguments{
 \item{Pagwas}{Pagwas format, deault is NULL.}
@@ -20,9 +14,6 @@ Link_pathway_blocks_gwas(
 \item{singlecell}{whether to run singlecell progress}
 
 \item{celltype}{whether to run celltype progress}
-
-\item{ncores}{Parallel cores,default is 1. use detectCores()
-to check the cores in computer.}
 }
 \value{
 Pagwas list of blocks for snp to gene and pathway score.

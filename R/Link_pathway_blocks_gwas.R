@@ -7,8 +7,6 @@
 #'
 #' @param Pagwas Pagwas format, deault is NULL.
 #' @param chrom_ld LD data for 22 chromosome.
-#' @param ncores Parallel cores,default is 1. use detectCores()
-#' to check the cores in computer.
 #' @param singlecell whether to run singlecell progress
 #' @param celltype whether to run celltype progress
 #'
@@ -22,8 +20,7 @@
 Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
                                      singlecell = T,
-                                     celltype = T,
-                                     ncores = 1) {
+                                     celltype = T) {
   options(bigmemory.allow.dimnames = TRUE)
   pos <- NULL
 
@@ -55,8 +52,7 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     chrom_ld = chrom_ld,
     chrom_gwas_list = chrom_gwas_list,
     singlecell = singlecell,
-    celltype = celltype,
-    ncores = ncores
+    celltype = celltype
   )
 
   rm(chrom_gwas_list)
@@ -71,7 +67,6 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 #'
 #' @param Pagwas NULL
 #' @param Pachrom_block_list result for chrome block
-#' @param ncores cores
 #' @param chrom_gwas_list list of gwas block in chrom
 #' @param singlecell whether to run singlecell progress
 #' @param celltype whether to run celltype progress
@@ -82,7 +77,6 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 Pathway_block_func <- function(Pagwas = NULL,
                                Pachrom_block_list,
                                chrom_gwas_list,
-                               ncores = 1,
                                singlecell = T,
                                celltype = T,
                                chrom_ld) {
@@ -180,8 +174,7 @@ Pathway_block_func <- function(Pagwas = NULL,
         pca_scCell_mat = Pagwas$pca_scCell_mat,
         data_mat = Pagwas$data_mat,
         rawPathway_list = Pagwas$rawPathway_list,
-        snp_gene_df = Pagwas$snp_gene_df,
-        ncores = ncores
+        snp_gene_df = Pagwas$snp_gene_df
       )
     }
 

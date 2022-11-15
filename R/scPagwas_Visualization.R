@@ -55,8 +55,8 @@ scPagwas_Visualization <- function(Single_data = NULL,
     stop("ERROR: scPagwas.gPAS.score is NULL. scPagwas_score can be
          calculated by scPagwas_perform_score function!")
   }
-  if (is.null(Single_data$CellScaleqValue)) {
-    stop("ERROR: CellScaleqValue is NULL.")
+  if (is.null(Single_data$CellqValue)) {
+    stop("ERROR: CellqValue is NULL.")
   }
   if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
@@ -119,14 +119,14 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellqValue > p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8,
         color = "gray"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellqValue <= p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
       ) +
       umap_theme() +
@@ -139,7 +139,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::pdf(
         file = paste0(
           "./", output.dirs,
-          "/scPagwas_CellScaleqValue",
+          "/scPagwas_CellqValue",
           p_thre, "_umap.pdf"
         ),
         height = height, width = width
@@ -206,7 +206,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellqValue > p_thre, ],
         aes(x = TSNE_1, y = TSNE_2),
         size = size, alpha = 0.8,
         color = "gray"
@@ -214,7 +214,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellScaleqValue <= p_thre, ],
+        data = all_fortify_can[all_fortify_can$CellqValue <= p_thre, ],
         aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
       ) +
       umap_theme() +
@@ -227,7 +227,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::pdf(
         file = paste0(
           "./", output.dirs,
-          "/scPagwas_CellScaleqValue",
+          "/scPagwas_CellqValue",
           p_thre, "_tsne.pdf"
         ),
         height = height, width = width

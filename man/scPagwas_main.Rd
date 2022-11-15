@@ -25,8 +25,7 @@ scPagwas_main(
   singlecell = TRUE,
   celltype = TRUE,
   seurat_return = TRUE,
-  remove_outlier = TRUE,
-  ncores = 1
+  remove_outlier = TRUE
 )
 }
 \arguments{
@@ -100,9 +99,6 @@ if not,will return a list result;}
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for
 scPagwas score.}
-
-\item{ncores}{(integr)Parallel cores,default is 1. use detectCores()
-to check the cores in computer.}
 }
 \value{
 Returns a seurat data with entries(seurat_return=T):
@@ -213,9 +209,7 @@ Pagwas_data <- scPagwas_main(
   Pathway_list = Genes_by_pathway_kegg,
   chrom_ld = chrom_ld,
   singlecell = TRUE,
-  celltype = TRUE,
-  ncores = 1
-)
+  celltype = TRUE)
 }
 \references{
 Polygenic regression identifies trait-relevant cell subpopulations
