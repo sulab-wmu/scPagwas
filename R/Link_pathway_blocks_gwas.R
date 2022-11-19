@@ -9,7 +9,8 @@
 #' @param chrom_ld LD data for 22 chromosome.
 #' @param singlecell whether to run singlecell progress
 #' @param celltype whether to run celltype progress
-#'
+#' @param n.cores cores for regression
+#' @param backingpath file address for bk files, no "/" in the end.
 #' @return Pagwas list of blocks for snp to gene and pathway score.
 #' @export
 #' @author Chunyu Deng
@@ -20,7 +21,9 @@
 Link_pathway_blocks_gwas <- function(Pagwas,
                                      chrom_ld = NULL,
                                      singlecell = T,
-                                     celltype = T) {
+                                     celltype = T,
+                                     backingpath,
+                                     n.cores=1) {
   options(bigmemory.allow.dimnames = TRUE)
   pos <- NULL
 
@@ -52,8 +55,11 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     chrom_ld = chrom_ld,
     chrom_gwas_list = chrom_gwas_list,
     singlecell = singlecell,
-    celltype = celltype
+    celltype = celltype,
+    backingpath=backingpath,
+    n.cores=n.cores
   )
+
 
   rm(chrom_gwas_list)
   rm(chrom_ld)
@@ -71,7 +77,8 @@ Link_pathway_blocks_gwas <- function(Pagwas,
 #' @param singlecell whether to run singlecell progress
 #' @param celltype whether to run celltype progress
 #' @param chrom_ld default is block_annotation
-#'
+#' @param n.cores cores for regression
+#' @param backingpath file address for bk files, no "/" in the end.
 #' @return Pagwas result list including Pathway block.
 #'
 Pathway_block_func <- function(Pagwas = NULL,
@@ -79,7 +86,9 @@ Pathway_block_func <- function(Pagwas = NULL,
                                chrom_gwas_list,
                                singlecell = T,
                                celltype = T,
-                               chrom_ld) {
+                               chrom_ld,
+                               backingpath,
+                               n.cores=1) {
   Pathway_sclm_results <- list()
   Pathway_ld_gwas_data <- list()
   SNP_A <- NULL
@@ -90,6 +99,13 @@ Pathway_block_func <- function(Pagwas = NULL,
   options(bigmemory.allow.dimnames = TRUE)
   pb <- txtProgressBar(style = 3)
 
+  Rn<-random::randomStrings(n=length(Pachrom_block_list),len=9,digits=TRUE,
+                            upperalpha=F,
+                            loweralpha=TRUE,
+                            unique=TRUE,
+                            check=F)
+  Rn<-Rn[,1]
+  names(Rn)<-names(Pachrom_block_list)
   for (pathway in names(Pachrom_block_list)) {
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
@@ -169,12 +185,16 @@ Pathway_block_func <- function(Pagwas = NULL,
 
     ## compute the single cell result
     if (singlecell) {
+
       Pathway_sclm_results[[pathway]] <- get_Pathway_sclm(
         pa_block = pa_block,
         pca_scCell_mat = Pagwas$pca_scCell_mat,
         data_mat = Pagwas$data_mat,
         rawPathway_list = Pagwas$rawPathway_list,
-        snp_gene_df = Pagwas$snp_gene_df
+        snp_gene_df = Pagwas$snp_gene_df,
+        backingpath=backingpath,
+        n.cores=n.cores,
+        Rns=Rn[pathway]
       )
     }
 

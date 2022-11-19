@@ -4,7 +4,14 @@
 \alias{scParameter_regression}
 \title{scParameter_regression}
 \usage{
-scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp)
+scParameter_regression(
+  Pagwas_x,
+  Pagwas_y,
+  noise_per_snp,
+  Rns,
+  n.cores = 1,
+  backingpath
+)
 }
 \arguments{
 \item{Pagwas_x}{x parameter for lm}
@@ -13,7 +20,9 @@ scParameter_regression(Pagwas_x, Pagwas_y, noise_per_snp)
 
 \item{noise_per_snp}{noise}
 
-\item{ncores}{cores for regression}
+\item{n.cores}{cores for regression}
+
+\item{backingpath}{file address for bk files, no "/" in the end.}
 }
 \description{
 Find parameter estimates for the data.

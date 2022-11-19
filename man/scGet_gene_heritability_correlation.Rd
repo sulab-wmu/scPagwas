@@ -4,13 +4,15 @@
 \alias{scGet_gene_heritability_correlation}
 \title{scGet_gene_heritability_contributions}
 \usage{
-scGet_gene_heritability_correlation(Pagwas)
+scGet_gene_heritability_correlation(scPagwas.gPAS.score, data_mat)
 }
 \arguments{
-\item{Pagwas}{result of scPagwas}
+\item{scPagwas.gPAS.score}{score of scPagwas pathway lm}
+
+\item{data_mat}{matrix for single cell data}
 }
 \value{
-Pagwas result list including gene heritability correlation
+result list including gene heritability correlation
 }
 \description{
 scGet_gene_heritability_contributions

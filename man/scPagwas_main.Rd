@@ -15,6 +15,7 @@ scPagwas_main(
   Pathway_list = NULL,
   chrom_ld = NULL,
   run_split = FALSE,
+  n.cores = 1,
   marg = 10000,
   maf_filter = 0.01,
   min_clustercells = 10,
@@ -70,6 +71,8 @@ default is "RNA"}
 
 \item{run_split}{(logical) Whether the input single cell data is a split sub-data, if TRUE,
 one result(gPas score) is return, if FALSE, the whole function is running. default is FALSE.}
+
+\item{n.cores}{cores for regression}
 
 \item{marg}{(integr) the distance to TSS site,default is 10000, then
 gene-TSS-window size is 20000.}

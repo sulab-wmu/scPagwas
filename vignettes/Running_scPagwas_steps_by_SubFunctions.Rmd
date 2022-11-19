@@ -55,6 +55,7 @@ Because the parameters and input data are the same with celltypes function, we c
 run the `svd` code block, save a lot of time. 
 
 ```{r eval = FALSE}
+system.time(
 Pagwas_singlecell<-scPagwas_main(Pagwas =NULL, 
                                  gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
                                  Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
@@ -63,9 +64,11 @@ Pagwas_singlecell<-scPagwas_main(Pagwas =NULL,
                                  Pathway_list=Genes_by_pathway_kegg,
                                  assay="RNA",
                                  singlecell=T, 
-                                 celltype=F,
+                                 celltype=T,
                                  block_annotation = block_annotation,
                                  chrom_ld = chrom_ld)
+)
+
 ```
 The result is seurat format.
 

@@ -9,7 +9,10 @@ get_Pathway_sclm(
   pca_scCell_mat,
   data_mat,
   rawPathway_list,
-  snp_gene_df
+  snp_gene_df,
+  n.cores = 1,
+  backingpath,
+  Rns
 )
 }
 \arguments{
@@ -23,7 +26,11 @@ get_Pathway_sclm(
 
 \item{snp_gene_df}{Element in Pagwas.}
 
-\item{ncores}{Parallel cores.}
+\item{n.cores}{cores for regression}
+
+\item{backingpath}{file address for bk files, no "/" in the end.}
+
+\item{Rns}{Random bk names}
 }
 \value{
 lm result for pathway in single cell.

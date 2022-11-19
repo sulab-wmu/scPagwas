@@ -10,7 +10,9 @@ Pathway_block_func(
   chrom_gwas_list,
   singlecell = T,
   celltype = T,
-  chrom_ld
+  chrom_ld,
+  backingpath,
+  n.cores = 1
 )
 }
 \arguments{
@@ -25,6 +27,10 @@ Pathway_block_func(
 \item{celltype}{whether to run celltype progress}
 
 \item{chrom_ld}{default is block_annotation}
+
+\item{backingpath}{file address for bk files, no "/" in the end.}
+
+\item{n.cores}{cores for regression}
 }
 \value{
 Pagwas result list including Pathway block.

@@ -5,15 +5,19 @@
 #' @param pca_scCell_mat Element in Pagwas.
 #' @param data_mat Element in Pagwas.
 #' @param rawPathway_list Element in Pagwas..
-#' @param ncores Parallel cores.
+#' @param n.cores cores for regression
+#' @param backingpath file address for bk files, no "/" in the end.
 #' @param snp_gene_df Element in Pagwas.
-#'
+#' @param Rns Random bk names
 #' @return lm result for pathway in single cell.
 get_Pathway_sclm <- function(pa_block,
                              pca_scCell_mat,
                              data_mat,
                              rawPathway_list,
-                             snp_gene_df) {
+                             snp_gene_df,
+                             n.cores=1,
+                             backingpath,
+                             Rns) {
   pathway <- unique(pa_block$block_info$pathway)
   x <- matrix(pca_scCell_mat[pathway, ], nrow = 1)
   rownames(x) <- pathway
@@ -40,7 +44,7 @@ get_Pathway_sclm <- function(pa_block,
     rownames(x2) <- mg
   }
 
-  #x2 <- as(x2, "dgCMatrix")
+  x2 <- as(x2, "CsparseMatrix")
 
   if (pa_block$n_snps > 1) {
     x2 <- x2[pa_block$snps$label, ]
@@ -64,9 +68,9 @@ get_Pathway_sclm <- function(pa_block,
     #  snp_gene_df[pa_block$snps$rsid, "slope"]
     #), nrow = 1)
     x2 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
-    #x2 <- as(x2, "dgCMatrix")
+    x2 <- as(x2, "CsparseMatrix")
   }
-  pa_block$x <- pa_block$ld_matrix_squared %*% x2 #, "dgCMatrix")
+  pa_block$x <- as(pa_block$ld_matrix_squared %*% x2 , "CsparseMatrix")
 
   pa_block$include_in_inference <- T
 
@@ -81,10 +85,11 @@ get_Pathway_sclm <- function(pa_block,
       results <- scParameter_regression(
         Pagwas_x = pa_block$x[!na_elements, ],
         Pagwas_y = pa_block$y[!na_elements],
-        noise_per_snp = noise_per_snp[!na_elements]
+        noise_per_snp = noise_per_snp[!na_elements],
+        Rns=Rns,
+        backingpath=backingpath,
+        n.cores=n.cores
       )
-
-
       results[is.na(results)] <- 0
       names(results) <- colnames(data_mat)
     } else {
@@ -172,40 +177,35 @@ scPagwas_perform_score <- function(Pagwas,
 #'
 #' @param Pagwas_x x parameter for lm
 #' @param Pagwas_y y parameter for lm
-#' @param ncores cores for regression
 #' @param noise_per_snp noise
-#'
+#' @param n.cores cores for regression
+#' @param backingpath file address for bk files, no "/" in the end.
 #' @export
 
 
 scParameter_regression <- function(Pagwas_x,
                                    Pagwas_y,
-                                   noise_per_snp) {
+                                   noise_per_snp,
+                                   Rns,
+                                   n.cores=1,
+                                   backingpath) {
 
-    # #Pagwas_x<-as_matrix(Pagwas_x)
-    # liear_m <- bigstatsr::big_univLinReg(
-    #  X = bigstatsr::as_FBM(Pagwas_x),
-    #  y.train = Pagwas_y,
-    #  covar.train = bigstatsr::covar_from_df(
-    #    data.frame(offset(noise_per_snp))
-    #  ),
-    #  ncores = ncores
-    # )
-    # parameters1 <- liear_m$estim
+    backingpath<- paste0(backingpath,"/",Rns)
 
-    #apply()
-    parameters_df<-biganalytics::apply(Pagwas_x, 2, function(ge) {
-      m <- stats::lm(Pagwas_y ~
-                       offset(noise_per_snp) +
-                       ge)
-      parameters <- as.vector(stats::coef(m)[-1])
-      return(parameters)
-    })
-
-
-  return(parameters_df)
+       #Pagwas_x<-(Pagwas_x)
+      liear_m <- bigstatsr::big_univLinReg(
+        X = bigstatsr::as_FBM(as_matrix(Pagwas_x),backingfile = backingpath),
+        y.train = Pagwas_y,
+        covar.train = bigstatsr::covar_from_df(
+          data.frame(offset(noise_per_snp))
+        ),
+        ncores = n.cores
+      )
+      parameters <- liear_m$estim
+      unlink(paste0(backingpath,".bk"),recursive = TRUE)
+   # rm(Pagwas_x)
+  return(parameters)
 }
-
 
 #' scPagwas_score_filter
 #' @description filter the cPagwas_score for outliers.
@@ -241,29 +241,29 @@ scPagwas_score_filter <- function(scPagwas_score) {
 
 #' scGet_gene_heritability_contributions
 #'
-#' @param Pagwas result of scPagwas
-#'
-#' @return Pagwas result list including gene heritability correlation
+#' @param scPagwas.gPAS.score score of scPagwas pathway lm
+#' @param data_mat matrix for single cell data
+#' @return result list including gene heritability correlation
 #' @export
 
-scGet_gene_heritability_correlation <- function(Pagwas) {
-  if (all(names(Pagwas$scPagwas.gPAS.score) == colnames(Pagwas$data_mat))) {
-    scPagwas.gPAS.score <- data.matrix(Pagwas$scPagwas.gPAS.score)
+scGet_gene_heritability_correlation <- function(scPagwas.gPAS.score,data_mat) {
+
+  if (all(names(scPagwas.gPAS.score) == colnames(data_mat))) {
+    scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(
-      X = t(as_matrix(Pagwas$data_mat)),
+      X = t(as_matrix(data_mat)),
       Y = scPagwas.gPAS.score
     )
   } else {
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(
-      X = t(as_matrix(Pagwas$data_mat)),
+      X = t(as_matrix(data_mat)),
       Y = scPagwas.gPAS.score
     )
   }
-  rownames(sparse_cor) <- rownames(Pagwas$data_mat)
+  rownames(sparse_cor) <- rownames(data_mat)
   colnames(sparse_cor) <- "gene_heritability_correlation"
   sparse_cor[is.nan(sparse_cor)] <- 0
-  Pagwas$gene_heritability_correlation <- sparse_cor
-
-  return(Pagwas)
+  #
+  return(sparse_cor)
 }

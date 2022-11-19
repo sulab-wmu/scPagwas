@@ -21,7 +21,9 @@
 #' @importFrom data.table setkey data.table as.data.table
 #' @importFrom bigreadr fread2 rbind_df
 #' @importFrom reshape2 dcast
+#' @importFrom Rcpp sourceCpp
 #' @importFrom bigmemory as.big.matrix is.big.matrix
+#' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
 #' @importFrom biganalytics apply
 #' @importFrom graphics text
 #' @importFrom grDevices colorRampPalette pdf dev.off
@@ -67,6 +69,7 @@
 #' @param chrom_ld (list,numeric)LD data for 22 chromosome.
 #' @param run_split (logical) Whether the input single cell data is a split sub-data, if TRUE,
 #' one result(gPas score) is return, if FALSE, the whole function is running. default is FALSE.
+#' @param n.cores cores for regression
 #' @param maf_filter (numeric)Filter the maf, default is 0.01
 #' @param min_clustercells (integr)Only use is when FilterSingleCell is
 #' TRUE.Threshold for total cells fo each cluster.default is 10
@@ -202,6 +205,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           Pathway_list = NULL,
                           chrom_ld = NULL,
                           run_split=FALSE,
+                          n.cores=1,
                           marg = 10000,
                           maf_filter = 0.01,
                           min_clustercells = 10,
@@ -227,6 +231,7 @@ scPagwas_main <- function(Pagwas = NULL,
   # chrom_ld = chrom_ld
   #  assay = "RNA"
   # run_split=FALSE
+  # n.cores=1
   # marg = 10000
   # maf_filter = 0.01
   # min_clustercells = 10
@@ -240,10 +245,13 @@ scPagwas_main <- function(Pagwas = NULL,
   #######
   ## initialize log-file
   ########
+
   if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
   }
-
+  if (!dir.exists(output.dirs)) {
+  dir.create(paste0("./", output.dirs, "/temp"))
+  }
   ## miximal file path lenght;
   ## Windows OS support max. 259 characters
 
@@ -457,13 +465,24 @@ scPagwas_main <- function(Pagwas = NULL,
 
   tt <- Sys.time()
   if (!is.null(chrom_ld)) {
+
     Pagwas <- Link_pathway_blocks_gwas(
       Pagwas = Pagwas,
       chrom_ld = chrom_ld,
       singlecell = singlecell,
-      celltype = celltype)
+      celltype = celltype,
+      backingpath=paste0("./", output.dirs, "/temp"),
+      n.cores=n.cores
+      )
 
     message("done!")
+
+    if (file.exists(paste0("./", output.dirs, "/temp"))) {
+      unlink(paste0("./", output.dirs, "/temp"),recursive = TRUE)
+      cat("bk files has been deleted")
+    }
+
+
   } else if (!("Pathway_sclm_results" %in% names(Pagwas))) {
     stop("Error: chrom_ld should input!")
   }
@@ -502,7 +521,6 @@ scPagwas_main <- function(Pagwas = NULL,
       " ******* 8th: scPagwas_perform_score function start! ********",
       sep = ""
     ))
-    tt <- Sys.time()
     Pagwas$Pathway_ld_gwas_data <- NULL
     Pagwas <- scPagwas_perform_score(
       Pagwas = Pagwas,
@@ -520,7 +538,10 @@ scPagwas_main <- function(Pagwas = NULL,
     ))
 
     tt <- Sys.time()
-    Pagwas <- scGet_gene_heritability_correlation(Pagwas = Pagwas)
+
+    Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+                                                                                data_mat=Pagwas$data_mat)
+
     scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
 
     message("done")
@@ -670,6 +691,9 @@ scPagwas_main <- function(Pagwas = NULL,
 
       }
     }
+  }
+  if (file.exists(paste0("./", output.dirs, "/scPagwas_cache"))) {
+    unlink(paste0("./", output.dirs, "/scPagwas_cache"),recursive = TRUE)
   }
 }
 

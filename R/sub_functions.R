@@ -20,6 +20,7 @@ bh.adjust <- function(x, log = FALSE) {
 }
 
 
+
 #' Convert a large sparse matrix into a dense matrix without errors
 #' @description
 #' Avoid the following error
@@ -29,15 +30,40 @@ bh.adjust <- function(x, log = FALSE) {
 #' @param mat a big sparse matrix of a type coercible to dense Matrix::Matrix
 #'
 #' @return a matrix
-#'
-as_matrix <- function(mat) {
-  tmp <- matrix(data = 0L, nrow = mat@Dim[1], ncol = mat@Dim[2])
-  row_pos <- mat@i + 1
-  col_pos <- findInterval(seq(mat@x) - 1, mat@p[-1]) + 1
-  val <- mat@x
-  for (i in seq_along(val)) {
-    tmp[row_pos[i], col_pos[i]] <- val[i]
+#' @export
+
+
+as_matrix <- function(mat){
+  Rcpp::sourceCpp(code='
+#include <Rcpp.h>
+using namespace Rcpp;
+
+
+// [[Rcpp::export]]
+IntegerMatrix asMatrix(NumericVector rp,
+                       NumericVector cp,
+                       NumericVector z,
+                       int nrows,
+                       int ncols){
+
+  int k = z.size() ;
+
+  IntegerMatrix  mat(nrows, ncols);
+
+  for (int i = 0; i < k; i++){
+      mat(rp[i],cp[i]) = z[i];
   }
+
+  return mat;
+}
+'
+  )
+  row_pos <- mat@i
+  col_pos <- findInterval(seq(mat@x)-1,mat@p[-1])
+
+  tmp <- asMatrix(rp = row_pos, cp = col_pos, z = mat@x,
+                  nrows =  mat@Dim[1], ncols = mat@Dim[2])
+
   row.names(tmp) <- mat@Dimnames[[1]]
   colnames(tmp) <- mat@Dimnames[[2]]
   return(tmp)
@@ -58,7 +84,7 @@ as_matrix <- function(mat) {
 #' @param Y matrix or vector
 #'
 #' @return correlation cofficient
-#'
+#' @export
 
 corSparse <- function(X, Y) {
   n <- nrow(X)
