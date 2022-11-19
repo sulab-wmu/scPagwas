@@ -58,7 +58,8 @@ Imports:
     IRanges,
     RMTstat,
     gridExtra,
-    methods
+    methods,
+    Rcpp
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.0.0)

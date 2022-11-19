@@ -35,7 +35,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
 
-devtools::install_github("dengchunyu/scPagwas")
+devtools::install_github("sulab-wmu/scPagwas")
 ```
 
 ## Usage
