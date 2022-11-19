@@ -22,6 +22,7 @@
 #' @importFrom bigreadr fread2 rbind_df
 #' @importFrom reshape2 dcast
 #' @importFrom Rcpp sourceCpp
+#' @importFrom random randomStrings
 #' @importFrom bigmemory as.big.matrix is.big.matrix
 #' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
 #' @importFrom biganalytics apply

@@ -59,7 +59,8 @@ Imports:
     RMTstat,
     gridExtra,
     methods,
-    Rcpp
+    Rcpp,
+    random
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.0.0)
