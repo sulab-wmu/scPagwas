@@ -226,7 +226,6 @@ PathwayPCAtest <- function(Pathway_list,
   papca <- lapply(Pathway_list, function(Pa_id) {
     lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     mat <- scCounts[, lab]
-
     pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"),
       nv = nPcs, nu = 0, center = cm[lab]
     )

@@ -26,7 +26,7 @@ bh.adjust <- function(x, log = FALSE) {
 #' Avoid the following error
 #' . Error in asMethod(object) :
 #' . Cholmod error 'problem too large' at file ../Core/cholmod_dense.c,
-#'
+#' the code comes from https://xuzhougeng.top/archives/R-Sparse-Matrix-Note
 #' @param mat a big sparse matrix of a type coercible to dense Matrix::Matrix
 #'
 #' @return a matrix
@@ -99,3 +99,67 @@ corSparse <- function(X, Y) {
   cormat <- covmat / tcrossprod(sdvecX, sdvecY)
   return(cormat)
 }
+
+##  random -- An R interface to the random.org service
+##
+##  Copyright (C) 2006 - 2015  Dirk Eddelbuettel <edd@debian.org>
+##
+##  This file is part of random
+##
+##  random is free software: you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation, either version 2 of the License, or
+##  (at your option) any later version.
+##
+##  random is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+##  GNU General Public License for more details.
+
+getConnection <- function(urltxt, ...) {
+  if (getRversion() >= "3.2.0" && capabilities()["libcurl"]) {
+    url(urltxt, ..., method="libcurl")
+  } else {
+    curl(urltxt, ...)
+  }
+}
+
+closeConnection <- function(con) {
+  if (getRversion() >= "3.2.0" && capabilities()["libcurl"]) {
+    close(con)
+  } else {
+    ## nothing to be done for curl()
+  }
+}
+
+randomStrings <- function(n=10, len=5, digits=TRUE,
+                          upperalpha=TRUE, loweralpha=TRUE,
+                          unique=TRUE, check=TRUE) {
+  if (n < 1 || n > 1e4)
+    stop("Random string requests must be between 1 and 10,000 numbers")
+  if (len < 1 || len > 20)
+    stop("Random string length must be between 1 and 20")
+  if (class(digits)!="logical" || class(upperalpha)!="logical" ||
+      class(loweralpha)!="logical" || class(unique)!="logical")
+    stop("The 'digits', '(lower|upper)alpha' and 'unique' arguments has to be logical")
+  if ( !digits && !upperalpha && !loweralpha)
+    stop("The 'digits', 'loweralpha' and 'loweralpha' cannot all be false at the same time")
+  if (check && !quotaCheck())
+    stop("random.org suggests to wait until tomorrow")
+  urlbase <- "https://www.random.org/strings/"
+  urltxt <- paste(urlbase,
+                  "?num=", n,
+                  "&len=", len,
+                  "&digits=", ifelse(digits, "on", "off"),
+                  "&upperalpha=", ifelse(upperalpha, "on", "off"),
+                  "&loweralpha=", ifelse(loweralpha, "on", "off"),
+                  "&unique=", ifelse(unique, "on", "off"),
+                  "&format=plain",
+                  "&rnd=new",
+                  sep="")
+  con <- getConnection(urltxt, open="r")
+  randStrings <- as.matrix(read.table(con))
+  closeConnection(con)
+  return(randStrings)
+}
+

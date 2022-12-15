@@ -51,6 +51,7 @@ Imports:
     bigreadr,
     biganalytics,
     bigmemory,
+    bigstatsr,
     ggpubr,
     ggtext,
     reshape2,
@@ -59,8 +60,7 @@ Imports:
     RMTstat,
     gridExtra,
     methods,
-    Rcpp,
-    random
+    Rcpp
 VignetteBuilder: knitr
 Depends: 
     R (>= 4.0.0)

@@ -20,6 +20,8 @@ scParameter_regression(
 
 \item{noise_per_snp}{noise}
 
+\item{Rns}{the names for bk temfiles}
+
 \item{n.cores}{cores for regression}
 
 \item{backingpath}{file address for bk files, no "/" in the end.}

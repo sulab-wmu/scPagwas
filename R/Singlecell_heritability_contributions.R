@@ -18,6 +18,7 @@ get_Pathway_sclm <- function(pa_block,
                              n.cores=1,
                              backingpath,
                              Rns) {
+
   pathway <- unique(pa_block$block_info$pathway)
   x <- matrix(pca_scCell_mat[pathway, ], nrow = 1)
   rownames(x) <- pathway
@@ -179,7 +180,9 @@ scPagwas_perform_score <- function(Pagwas,
 #' @param Pagwas_y y parameter for lm
 #' @param noise_per_snp noise
 #' @param n.cores cores for regression
+#' @param Rns the names for bk temfiles
 #' @param backingpath file address for bk files, no "/" in the end.
+#'
 #' @export
 
 

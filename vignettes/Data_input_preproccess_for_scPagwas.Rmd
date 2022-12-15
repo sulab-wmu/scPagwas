@@ -136,7 +136,7 @@ value_list<-lapply(1:nrow(GWAS_raw),function(i){
 #[1] "CHROM" "POS"   "ID"    "REF"   "ALT"   "ES"    "SE"    "LP"    "AF"   
 #[10] "SS"
 #change the colnames:
-colnames(gwas_data)<-c("chrom","pos","rsid","REF","ALT","beta","se","maf","N")
+colnames(gwas_data)<-c("chrom","pos","rsid","REF","ALT","beta","se","p","maf","N")
 #select the useful information for scPagwas.
 gwas_data<-gwas_data[,c("chrom","pos","rsid","beta","se","maf")]
 write.table(gwas_data,file="monocytecount_gwas_data.txt",row.names=F,quote=F)

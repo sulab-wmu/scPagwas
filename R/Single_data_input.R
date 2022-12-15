@@ -67,24 +67,9 @@ Single_data_input <- function(Pagwas,
   merge_scexpr <- Seurat::AverageExpression(Single_data, assays = assay)[[assay]]
 
   # 5.VariableFeatures
-  if (!is.null(nfeatures)) {
-    if (nfeatures < nrow(Single_data)) {
-      Single_data <- Seurat::FindVariableFeatures(Single_data,
-        assay = assay,
-        selection.method = "vst",
-        nfeatures = nfeatures
-      )
-      Pagwas$VariableFeatures <- Seurat::VariableFeatures(Single_data)
-    } else if (nfeatures == nrow(Single_data)) {
-      Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
-    } else {
-      stop("Error: nfeatures is too big")
-    }
-  } else {
-    Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
-  }
-  rm(Single_data)
 
+    Pagwas$VariableFeatures <- rownames(Pagwas$data_mat)
+  rm(Single_data)
   pagene <- intersect(
     unique(unlist(Pathway_list)),
     rownames(Pagwas$data_mat)
