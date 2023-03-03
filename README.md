@@ -5,19 +5,19 @@ trait-relevant cell subpopulations by incorporating pathway activity
 transformed scRNA-seq data with genome-wide association studies (GWAS)
 data.
 
-<img src="./img/Figures_1.jpg" width="100%" style="display: block; margin: auto;" />
+<img src="./man/figures/Figure1.png" width="100%" style="display: block; margin: auto;" />
 
 The methodology and benchmarking performance are described in:
 
-Polygenic regression identifies trait-relevant cell subpopulations
-through pathway activity transformed single-cell RNA sequencing
-data.(2022)
+Polygenic regression uncovers trait-relevant cellular contexts through
+pathway activation transformation of single-cell RNA sequence
+data.(2023)
 
 Code for reproducing the analysis from the paper is available
 [here](https://github.com/dengchunyu/scPagwas_reproduce).
 
 For further usage on the scPagwas package, please refer to the
-[tutorials](https://dengchunyu.github.io/scPagwas/). A vignette for
+[tutorials](https://github.com/sulab-wmu/scPagwas/). A vignette for
 using also can be accessed using browseVignettes(“scPagwas”)
 
 ## Installation
@@ -35,7 +35,7 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
 
-devtools::install_github("sulab-wmu/scPagwas")
+devtools::install_github("sulab-wmu/scPagwass")
 ```
 
 ## Usage
@@ -44,7 +44,6 @@ quick-start example:
 
 ``` r
  library(scPagwas)
- #library(Seurat)
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
@@ -55,10 +54,9 @@ quick-start example:
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      chrom_ld = chrom_ld,# The LD data is provided by package.
-                     singlecell=F, # Whether to run the singlecell process.
-                     celltype=T,# Whether to run the celltype process.
-                     seruat_return=T,#Whether to return seruat format result.
-                     ncores = 1 ) #The numbers of cores to run.
+                     singlecell=T, # Whether to run the singlecell process.
+                     celltype=T# Whether to run the celltype process.
+)
 ```
 
 ## Tutorials

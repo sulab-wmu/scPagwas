@@ -23,77 +23,68 @@ There were three input resources for scPagwas: scRNA-seq dataset(seruat format),
 
 ## 1.Single cell data Input
 
-The healthy BMMC scRNA-seq dataset was downloaded from the website: <https://jeffgranja.s3.amazonaws.com/MPAL-10x/Supplementary_Data/Healthy-Data/scRNA-Healthy-Hematopoiesis-191120.rds>
+### 1.1.Downloading scRNA-seq dataset
+
+The example scRNA-seq data for T cells of melanoma was downloaded from the GEO [GSE115978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115978)
+Two data were download from this website:
+Single cell annotations data: [GSE115978_cell.annotations.csv.gz](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE115nnn/GSE115978/suppl/GSE115978_cell.annotations.csv.gz)
+
+Single cell count data:[GSE115978_counts.csv.gz](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE115nnn/GSE115978/suppl/GSE115978_counts.csv.gz)
+
+### 1.2.Progressing scRNA-seq dataset
 
 -   1). The scRNA-seq dataset should have Idents for cell types or clusters.
 -   2). The scRNA-seq dataset should be normalized.
 
-### 1.1.read the scRNA-seq dataset(seruat format)
+```{r eval=FALSE, include=FALSE}
+##read the data
+library(Seurat)
+library(SeuratObject)
+setwd("/share/pub/dengcy/Cancer_Gwas/CollectedData/SingleCelldata/Melanoma/GSE115978")
+counts <- read.csv("GSE115978_counts.csv.gz",row.names=1)
+Anno<- read.csv("GSE115978_cell.annotations.csv.gz")
+##create the SeuratObject
+Single_data<-Seurat::CreateSeuratObject(
+  counts,
+  assay = "RNA",
+  meta.data=Anno
+)
 
-```{r message=FALSE, eval = FALSE}
-library("scPagwas")
-library("Seurat")
-library("scRNAseq")
-library("SingleCellExperiment")
-library("stringr") 
-scRNA_Healthy_Hema<-readRDS("E:/OneDrive/SingleCell/data/PBMCscATAC-seq/scRNA-Healthy-Hematopoiesis-191120.rds")
+Idents(Single_data)<-Single_data$BioClassification
+
+Single_data <- ScaleData(Single_data)
+Single_data <- NormalizeData(Single_data, normalization.method = "LogNormalize", scale.factor = 10000)
+
 ```
 
-Because the Example data `scRNA_Healthy_Hema` is SingleCellExperiment format, here creating a seruat format data:
-
-```{r message=FALSE, eval = FALSE}
-counts <- assay(scRNA_Healthy_Hema, "counts")
-Seu_Healthy_Hema <- CreateSeuratObject(
-               counts = counts, 
-               meta.data=as.data.frame(colData(scRNA_Healthy_Hema)),
-               min.cells = 3, 
-               min.features = 200)
-```
-
-### 1.2.Set Idents
-
-```{r message=FALSE, eval = FALSE}
-Idents(Seu_Healthy_Hema)<-scRNA_Healthy_Hema@colData$BioClassification
-table(Idents(Seu_Healthy_Hema))
-
-        01_HSC 02_Early.Eryth  03_Late.Eryth  04_Early.Baso    05_CMP.LMPP       06_CLP.1 
-          1425           1653            446            111           2260            903 
-        07_GMP    08_GMP.Neut         09_pDC         10_cDC 11_CD14.Mono.1 12_CD14.Mono.2 
-          2097           1050            544            325           1800           4222 
-  13_CD16.Mono         14_Unk       15_CLP.2       16_Pre.B           17_B      18_Plasma 
-           292            520            377            710           1711             62 
-      19_CD8.N      20_CD4.N1      21_CD4.N2       22_CD4.M      23_CD8.EM      24_CD8.CM 
-          1521           2470           2364           3539            796           2080 
-         25_NK         26_Unk 
-          2143            161 
-```
-
-### 1.3.Normalized
-
-Scale and Normalize the dataset.
-
-```{r setup, eval = FALSE}
-Seu_Healthy_Hema <- ScaleData(Seu_Healthy_Hema)
-Seu_Healthy_Hema <- NormalizeData(Seu_Healthy_Hema, normalization.method = "LogNormalize", scale.factor = 10000)
-```
-
-The BMMC processed scRNA-seq data can download from here:
-https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ
 
 ## 2.GWAS summary data Input
 
-GWAS Summary statistics are download from: <ftp://ftp.sanger.ac.uk/pub/project/humgen/summary_statistics/UKBB_blood_cell_traits/> for UK Biobank.
+GWAS Summary statistics are download from figshare:
+[pgc.bip.full.2012-04.txt.gz](https://doi.org/10.6084/m9.figshare.14671995)
 
--   basophil cell count: ieu-b-29
--   eosinophil cell count : ieu-b-33
--   lymphocyte cell count: ebi-a-GCST004627
--   monocyte cell count: ieu-b-31
--   neutrophil cell count: ieu-b-34
--   white blood cell count: ieu-b-30
--   Lymphocyte percentage of white cells: ebi-a-GCST004632
--   Hemoglobin concentration: ebi-a-GCST90002311
--   Mean corpuscular hemoglobin concentration: ebi-a-GCST90002329
--   Mean corpuscular volume: ebi-a-GCST90002335
+### 2.1.Read and progrocess the example GWAS Summary statistics file
+
+In R environment, select the specific columns and output the result.
+
+```{r eval=FALSE, include=FALSE}
+#read the raw data
+GWAS_raw <-read_table("finngen_R7_C3_GBM_EXALLC.gz")
+#select the specific columns
+GWAS_raw<-GWAS_raw[,c(1,2,3,4,5,6,7,9,10,11,12,13)]
+colnames(GWAS_raw)<-c("chrom","pos","REF","ALT","rsid","nearest_genes","pval","beta","se","maf")
+x<-tolower(x)
+x<-str_replace(x,".gz","")
+#Output the data
+write.table(GWAS_raw,file="finngen_R7_C3_GBM_EXALLC.txt",row.names=F,quote=F)
+```
+
+There were more than 10M snp in the GWAS summary datasets. To facilitate the calculation of scPagwas, we prune the snp by plink.
+Here, we 
+```{shell eval=FALSE, include=FALSE}   
+awk  '{print $3 }' ${i}.txt  > /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/IEU_opengwas_project/tempfile/${i}_SNP_list.txt
+
+```
 
 The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited.
 
@@ -101,6 +92,8 @@ The GWAS Summary statistics file need to be processed into a "txt" file includin
 
 ```{r message=FALSE}
 library(scPagwas)
+gwas_data <- bigreadr::fread2("/share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/finngen_R7/finngen_R7_C3_GBM_EXALLC.gz")
+
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
 knitr::kable(head(gwas_data))
 ```

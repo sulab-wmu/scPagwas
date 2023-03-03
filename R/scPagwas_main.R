@@ -598,7 +598,7 @@ scPagwas_main <- function(Pagwas = NULL,
     message("* Get scGene_rankP for each single cell")
     CellScalepValue <- scGene_scaleP(
       Single_mat = t(data.matrix(
-        GetAssayData(Single_data, assay = assay)[scPagwas_topgenes, ]
+        Seurat::GetAssayData(Single_data, assay = assay)[scPagwas_topgenes, ]
       ))
     )
 

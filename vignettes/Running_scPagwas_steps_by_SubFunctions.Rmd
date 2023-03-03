@@ -29,7 +29,7 @@ Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
                      output.dirs="Test",
                      Pathway_list=Genes_by_pathway_kegg,
                      assay="RNA",
-                     singlecell=F, 
+                     singlecell=T, 
                      celltype=T,
                      block_annotation = block_annotation,
                      chrom_ld = chrom_ld)
@@ -161,8 +161,7 @@ Pagwas <- Link_pathway_blocks_gwas(
       chrom_ld = chrom_ld,
       singlecell = T,
       celltype = T,
-      ncores = 1
-    )
+      backingpath="./temp")
 ```
 
 The pathway regression result for single cell. 
@@ -204,7 +203,9 @@ knitr::kable(head(Pagwas$scPathways_rankPvalue))
 ### 3.9 Get the gene heritability correlation 
 Run heritability correlation for all genes.
 ```{r eval = FALSE}
-Pagwas <- scGet_gene_heritability_correlation(Pagwas = Pagwas)
+    Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+                                                                                data_mat=Pagwas$data_mat)
+
 ```
 
 The result for correlation: 
@@ -218,11 +219,16 @@ knitr::kable(head(Pagwas$gene_heritability_correlation))
 Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `rankPvalue`. 
 
 ```{r eval = FALSE,message=FALSE, warning=FALSE}
-scPagwas_topgenes <- names(Pagwas_singlecell@misc$gene_heritability_correlation[
-  order(Pagwas_singlecell@misc$gene_heritability_correlation, decreasing = T), ])[1:1000]
+    scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
+
 Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
 #run pvalue
-CellScalepValue <- scGene_rankP(Single_mat = t(data.matrix(Seurat::GetAssayData(Pagwas_singlecell, assay = "RNA")[scPagwas_topgenes, ])))
+    CellScalepValue <- scGene_scaleP(
+      Single_mat = t(data.matrix(
+        Seurat::GetAssayData(Single_data, assay = 'RNA')[scPagwas_topgenes, ]
+      ))
+    )
+    
 ```
 
 All these sub-functions for scPagwas can running dependently, but need to run orderly. The `scPagwas_main` function is a wrapper functions for these sub-functions.
@@ -242,7 +248,7 @@ All these sub-functions for scPagwas can running dependently, but need to run or
  suppressMessages(require("dplyr"))
  suppressMessages(require("ggplot2"))
  suppressMessages(require("ggpubr"))
- Seurat::DimPlot(Pagwas_singlecell,pt.size=1,reduction="umap",label = T, repel=TRUE)+
+ Seurat::DimPlot(Pagwas,pt.size=1,reduction="umap",label = T, repel=TRUE)+
  umap_theme()+ggtitle("Test")+labs(x="UMAP",y="")+theme(aspect.ratio=1)
 ```
 
@@ -250,7 +256,7 @@ All these sub-functions for scPagwas can running dependently, but need to run or
 scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
 ```{r eval = FALSE,message=FALSE, warning=FALSE}
- scPagwas_Visualization(Single_data=Pagwas_singlecell,
+ scPagwas_Visualization(Single_data=Pagwas,
                         p_thre = 0.05,
                         FigureType = "umap",
                         width = 7,
