@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,9 +60,11 @@
 <span>  <span class="va">pa_block</span>,</span>
 <span>  <span class="va">pca_scCell_mat</span>,</span>
 <span>  <span class="va">data_mat</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">rawPathway_list</span>,</span>
-<span>  <span class="va">snp_gene_df</span></span>
+<span>  <span class="va">snp_gene_df</span>,</span>
+<span>  n.cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">backingpath</span>,</span>
+<span>  <span class="va">Rns</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -80,16 +82,24 @@
 <dd><p>Element in Pagwas.</p></dd>
 
 
-<dt>ncores</dt>
-<dd><p>Parallel cores.</p></dd>
-
-
 <dt>rawPathway_list</dt>
 <dd><p>Element in Pagwas..</p></dd>
 
 
 <dt>snp_gene_df</dt>
 <dd><p>Element in Pagwas.</p></dd>
+
+
+<dt>n.cores</dt>
+<dd><p>cores for regression</p></dd>
+
+
+<dt>backingpath</dt>
+<dd><p>file address for bk files, no "/" in the end.</p></dd>
+
+
+<dt>Rns</dt>
+<dd><p>Random bk names</p></dd>
 
 </dl></div>
     <div class="section level2">

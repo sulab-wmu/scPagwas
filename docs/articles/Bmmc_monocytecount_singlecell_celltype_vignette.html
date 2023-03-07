@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,8 +71,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Bmmc_monocytecount_singlecell_celltype_vignette</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 29, 九月, 2022
-at 14:51</h4>
+            <h4 data-toc-skip class="date">Last Updated: 07, 三月, 2023
+at 20:55</h4>
       
       
       <div class="d-none name"><code>Bmmc_monocytecount_singlecell_celltype_vignette.Rmd</code></div>
@@ -108,7 +108,7 @@ singlecell and celltype process.</p>
 <span>                     Single_data <span class="op">=</span><span class="st">"Seu_Hema_data.rds"</span>,</span>
 <span>                     output.prefix<span class="op">=</span><span class="st">"monocytecount_scPagwas"</span>,</span>
 <span>                     output.dirs<span class="op">=</span><span class="st">"monocytecount_bmmc"</span>,</span>
-<span>                     seruat_return<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                     <span class="co">#seruat_return=T,</span></span>
 <span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
 <span>                     ncores<span class="op">=</span><span class="fl">5</span>,</span>
 <span>                     assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
@@ -265,11 +265,8 @@ dimplot.</p>
 <span>                        size <span class="op">=</span> <span class="fl">0.5</span>,</span>
 <span>                        do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <ol start="2" style="list-style-type: decimal">
-<li>scPagwas.gPAS.score dimplot.</li>
-</ol>
-<p><img src="../../../../../E:/RPakage/scPagwas/articles/figures/scPagwas.gPAS.score_tsne.png" width="40%"></p>
-<ol start="3" style="list-style-type: decimal">
-<li>scPagwas.TRS.Score dimplot.</li>
+<li><p>scPagwas.gPAS.score dimplot.</p></li>
+<li><p>scPagwas.TRS.Score dimplot.</p></li>
 </ol>
 <p><img src="figures/scPagwas.TRS.Score_tsne.png" width="40%"></p>
 <ol start="4" style="list-style-type: decimal">
@@ -407,9 +404,9 @@ celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top
 <p><img src="figures/estimate_Plot_00.png" width="60%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.2.1 (2022-06-23 ucrt)</span></span>
+<span><span class="co">#&gt; R version 4.2.2 (2022-10-31 ucrt)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-w64-mingw32/x64 (64-bit)</span></span>
-<span><span class="co">#&gt; Running under: Windows 10 x64 (build 22000)</span></span>
+<span><span class="co">#&gt; Running under: Windows 10 x64 (build 22621)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -424,20 +421,17 @@ celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top
 <span><span class="co">#&gt; [1] stats     graphics  grDevices datasets  utils     methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] knitr_1.39</span></span>
+<span><span class="co">#&gt; [1] knitr_1.40</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;  [1] rstudioapi_0.14     magrittr_2.0.3      R6_2.5.1           </span></span>
-<span><span class="co">#&gt;  [4] ragg_1.2.2          rlang_1.0.4         fastmap_1.1.0      </span></span>
-<span><span class="co">#&gt;  [7] stringr_1.4.1       tools_4.2.1         xfun_0.32          </span></span>
-<span><span class="co">#&gt; [10] cli_3.3.0           jquerylib_0.1.4     systemfonts_1.0.4  </span></span>
-<span><span class="co">#&gt; [13] htmltools_0.5.3     yaml_2.3.5          digest_0.6.29      </span></span>
-<span><span class="co">#&gt; [16] rprojroot_2.0.3     pkgdown_2.0.6       textshaping_0.3.6  </span></span>
-<span><span class="co">#&gt; [19] BiocManager_1.30.18 purrr_0.3.4         sass_0.4.2         </span></span>
-<span><span class="co">#&gt; [22] fs_1.5.2            memoise_2.0.1       cachem_1.0.6       </span></span>
-<span><span class="co">#&gt; [25] evaluate_0.16       rmarkdown_2.14      stringi_1.7.8      </span></span>
-<span><span class="co">#&gt; [28] compiler_4.2.1      bslib_0.4.0         desc_1.4.1         </span></span>
-<span><span class="co">#&gt; [31] jsonlite_1.8.0      renv_0.15.4</span></span></code></pre></div>
+<span><span class="co">#&gt;  [1] rstudioapi_0.14   magrittr_2.0.3    R6_2.5.1          ragg_1.2.4       </span></span>
+<span><span class="co">#&gt;  [5] rlang_1.0.6       fastmap_1.1.0     stringr_1.4.1     tools_4.2.2      </span></span>
+<span><span class="co">#&gt;  [9] xfun_0.34         cli_3.3.0         jquerylib_0.1.4   htmltools_0.5.3  </span></span>
+<span><span class="co">#&gt; [13] systemfonts_1.0.4 yaml_2.3.6        digest_0.6.30     rprojroot_2.0.3  </span></span>
+<span><span class="co">#&gt; [17] pkgdown_2.0.6     textshaping_0.3.6 purrr_0.3.4       sass_0.4.2       </span></span>
+<span><span class="co">#&gt; [21] fs_1.5.2          memoise_2.0.1     cachem_1.0.6      evaluate_0.18    </span></span>
+<span><span class="co">#&gt; [25] rmarkdown_2.18    stringi_1.7.8     compiler_4.2.2    bslib_0.4.1      </span></span>
+<span><span class="co">#&gt; [29] desc_1.4.2        jsonlite_1.8.3    renv_0.16.0</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

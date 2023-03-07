@@ -4,98 +4,78 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="scPagwas">
 <title>Running_scPagwas_steps_by_SubFunctions • scPagwas</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
-<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Running_scPagwas_steps_by_SubFunctions">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Running_scPagwas_steps_by_SubFunctions">
 <meta property="og:description" content="scPagwas">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=UA-12345678-0"></script><script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-12345678-0');
-</script>
+<![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-article">
-      <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">scPagwas</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.10.0</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="../reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li>
-      <a href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">Bmmc_monocytecount_singlecell_celltype_vignette</a>
-    </li>
-    <li>
-      <a href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
-    </li>
-    <li>
-      <a href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
-    </li>
-    <li>
-      <a href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
-    </li>
-    <li>
-      <a href="../articles/Split_big_scRNAseqData_and_integrate_result.html">Split_big_scRNAseqData_and_integrate_result</a>
-    </li>
-  </ul>
+<li class="active nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">Bmmc_monocytecount_singlecell_celltype_vignette</a>
+    <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
+    <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
+    <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
+    <a class="dropdown-item" href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
+    <a class="dropdown-item" href="../articles/Split_big_scRNAseqData_and_integrate_result.html">Split_big_scRNAseqData_and_integrate_result</a>
+  </div>
 </li>
-<li>
-  <a href="../news/index.html">Changelog</a>
+<li class="nav-item">
+  <a class="nav-link" href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav"></ul>
 </div>
-<!--/.nav-collapse -->
+
+    
   </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+</nav><div class="container template-article">
 
-      
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Running_scPagwas_steps_by_SubFunctions</h1>
+
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
+      <img src="" class="logo" alt=""><h1>Running_scPagwas_steps_by_SubFunctions</h1>
             
-            <h4 data-toc-skip class="date">Last Updated on 20 七月, 2022</h4>
+            <h4 data-toc-skip class="date">Last Updated on 07 三月,
+2023</h4>
       
       
-      <div class="hidden name"><code>Running_scPagwas_steps_by_SubFunctions.Rmd</code></div>
-
+      <div class="d-none name"><code>Running_scPagwas_steps_by_SubFunctions.Rmd</code></div>
     </div>
 
     
@@ -103,930 +83,385 @@
 <div class="section level2">
 <h2 id="only-run-celltypes-functions-">1. Only run celltypes functions.<a class="anchor" aria-label="anchor" href="#only-run-celltypes-functions-"></a>
 </h2>
-<p>The executive programs for celltypes and single cell are independent, If you only want to know the celtypes, set the <code>celltype=T</code> and <code>singlecell=F</code>. The advantages is save a lot of times, for celltype only can omit many running processes.</p>
+<p>The executive programs for celltypes and single cell are independent,
+If you only want to know the celtypes, set the <code>celltype=T</code>
+and <code>singlecell=F</code>. The advantages is save a lot of times,
+for celltype only can omit many running processes.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span>
-<span class="va">Pagwas_celltypes</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>,
-                     gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,
-                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,
-                     output.prefix<span class="op">=</span><span class="st">"monocytecount_scPagwas"</span>,
-                     output.dirs<span class="op">=</span><span class="st">"monocytecount_bmmc"</span>,
-                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
-                     ncores<span class="op">=</span><span class="fl">5</span>,
-                     assay<span class="op">=</span><span class="st">"RNA"</span>,
-                     singlecell<span class="op">=</span><span class="cn">F</span>, 
-                     celltype<span class="op">=</span><span class="cn">T</span>,
-                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
-                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></code></pre></div>
-<p>The reuslt of celltypes is list format(not seruat format).</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
+<span><span class="va">Pagwas_celltypes</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>                     gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     output.prefix<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                     output.dirs<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
+<span>                     assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
+<span>                     singlecell<span class="op">=</span><span class="cn">T</span>, </span>
+<span>                     celltype<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span></code></pre></div>
+<p>The reuslt of celltypes is list format(not seurat format).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas_celltypes</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "Celltype_anno"     "data_mat"          "VariableFeatures" </span>
-<span class="co">#&gt;  [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     </span>
-<span class="co">#&gt;  [7] "pca_scCell_mat"    "pca_cell_df"       "snp_gene_df"      </span>
-<span class="co">#&gt; [10] "lm_results"        "bootstrap_results"</span>
-<span class="co"># [1] "Celltype_anno"     "data_mat"          "VariableFeatures" </span>
-<span class="co"># [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     </span>
-<span class="co"># [7] "pca_scCell_mat"    "pca_cell_df"       "snp_gene_df"      </span>
-<span class="co">#[10] "lm_results"        "bootstrap_results</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas_celltypes</span><span class="op">)</span></span>
+<span><span class="co"># [1] "Celltype_anno"     "data_mat"          "VariableFeatures" </span></span>
+<span><span class="co"># [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     </span></span>
+<span><span class="co"># [7] "pca_scCell_mat"    "pca_cell_df"       "snp_gene_df"      </span></span>
+<span><span class="co">#[10] "lm_results"        "bootstrap_results</span></span></code></pre></div>
 <ul>
-<li><p>bootstrap_results: The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.</p></li>
-<li><p>pca_scCell_mat : a pahtway and cell data matrix for pathway svd(1’st pca) result for each cell;</p></li>
-<li><p>pca_cell_df : a pahtway and celltype data matrix for pathway svd(1’st pca) result for each celltype;</p></li>
+<li><p>bootstrap_results: The bootstrap data frame results for celltypes
+including bootstrap pvalue and confidence interval.</p></li>
+<li><p>pca_scCell_mat : a pahtway and cell data matrix for pathway
+svd(1’st pca) result for each cell;</p></li>
+<li><p>pca_cell_df : a pahtway and celltype data matrix for pathway
+svd(1’st pca) result for each celltype;</p></li>
 <li><p>Other elements are the intermediate data.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="continue-to-run-singlecell-functions">2. Continue to run singlecell functions<a class="anchor" aria-label="anchor" href="#continue-to-run-singlecell-functions"></a>
 </h2>
-<p>Because the parameters and input data are the same with celltypes function, we can take the celltypes result as the input data for single cell function. The advantage is there is no need to run the <code>svd</code> code block, save a lot of time.</p>
+<p>Because the parameters and input data are the same with celltypes
+function, we can take the celltypes result as the input data for single
+cell function. The advantage is there is no need to run the
+<code>svd</code> code block, save a lot of time.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas_singlecell</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas_celltypes</span>, 
-                                 gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,
-                                 Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,
-                                 output.prefix<span class="op">=</span><span class="st">"monocytecount_scPagwas"</span>,
-                                 output.dirs<span class="op">=</span><span class="st">"monocytecount_bmmc"</span>,
-                                 seruat_return<span class="op">=</span><span class="cn">T</span>,
-                                 Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,
-                                 ncores<span class="op">=</span><span class="fl">5</span>,
-                                 assay<span class="op">=</span><span class="st">"RNA"</span>,
-                                 singlecell<span class="op">=</span><span class="cn">T</span>, 
-                                 celltype<span class="op">=</span><span class="cn">F</span>,
-                                 block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,
-                                 chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></code></pre></div>
-<p>The result is seruat format.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
+<span><span class="va">Pagwas_singlecell</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>, </span>
+<span>                                 gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                                 Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                                 output.prefix<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                                 output.dirs<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                                 Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
+<span>                                 assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
+<span>                                 singlecell<span class="op">=</span><span class="cn">T</span>, </span>
+<span>                                 celltype<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                                 block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span>                                 chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>The result is seurat format.</p>
 </div>
 <div class="section level2">
 <h2 id="running-scpagwas-step-by-step">3. Running scPagwas step by step<a class="anchor" aria-label="anchor" href="#running-scpagwas-step-by-step"></a>
 </h2>
-<p>To utilize and understand scPagwas better, we run scPagwas flexibly step by step. In usual, we needn’t run these sub-functions one by one.</p>
+<p>To utilize and understand scPagwas better, we run scPagwas flexibly
+step by step. In usual, we needn’t run these sub-functions one by
+one.</p>
 <p>We use an example provided by scPagwas package.</p>
 <div class="section level3">
 <h3 id="single-data-input">3.1 Single data input<a class="anchor" aria-label="anchor" href="#single-data-input"></a>
 </h3>
-<p>Obtain the single cell expression matrix and filter the cluster for minimum cells.</p>
+<p>Obtain the single cell expression matrix and filter the cluster for
+minimum cells.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span>
-<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>
-<span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Single_data_input.html">Single_data_input</a></span><span class="op">(</span>
-      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
-      assay <span class="op">=</span> <span class="st">"RNA"</span>,
-      Single_data <span class="op">=</span> <span class="va">Single_data</span>,
-      Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span>
-    <span class="op">)</span>
-<span class="co">#&gt; Input single cell data!</span>
-<span class="co">#&gt; 10 cell types are remain, after filter!</span>
-<span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="va">Single_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"</span></code></pre></div>
-<p>The result list including single cell expression matrix and cell types mean expression matrix.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Single_data_input.html">Single_data_input</a></span><span class="op">(</span></span>
+<span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>      assay <span class="op">=</span> <span class="st">"RNA"</span>,</span>
+<span>      Single_data <span class="op">=</span> <span class="va">Single_data</span>,</span>
+<span>      Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="va">Single_data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
+<p>The result list including single cell expression matrix and cell
+types mean expression matrix.</p>
 </div>
 <div class="section level3">
 <h3 id="run-pathway-pca-score">3.2 Run pathway pca score<a class="anchor" aria-label="anchor" href="#run-pathway-pca-score"></a>
 </h3>
 <p>Obtain the pathway pca score matrix.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>Pagwas <span class="ot">&lt;-</span> <span class="fu">Pathway_pcascore_run</span>(</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">Pagwas =</span> Pagwas,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">Pathway_list =</span> Genes_by_pathway_kegg</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; * Start to get Pathway SVD socre!</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=======</span>                                                               <span class="er">|</span>  <span class="dv">10</span>%[<span class="dv">1</span>] <span class="st">"Celltype1"</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==============</span>                                                        <span class="er">|</span>  <span class="dv">20</span>%[<span class="dv">1</span>] <span class="st">"Celltype2"</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=====================</span>                                                 <span class="er">|</span>  <span class="dv">30</span>%[<span class="dv">1</span>] <span class="st">"Celltype3"</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="er">|============================</span>                                          <span class="er">|</span>  <span class="dv">40</span>%[<span class="dv">1</span>] <span class="st">"Celltype4"</span></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%[<span class="dv">1</span>] <span class="st">"Celltype5"</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="er">|==========================================</span>                            <span class="er">|</span>  <span class="dv">60</span>%[<span class="dv">1</span>] <span class="st">"Celltype6"</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="er">|=================================================</span>                     <span class="er">|</span>  <span class="dv">70</span>%[<span class="dv">1</span>] <span class="st">"Celltype7"</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="er">|========================================================</span>              <span class="er">|</span>  <span class="dv">80</span>%[<span class="dv">1</span>] <span class="st">"Celltype8"</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="er">|===============================================================</span>       <span class="er">|</span>  <span class="dv">90</span>%[<span class="dv">1</span>] <span class="st">"Celltype9"</span></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%[<span class="dv">1</span>] <span class="st">"Celltype10"</span></span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Using score as value column: use value.var to override.</span></span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Pagwas)</span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"    </span></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5] "rawPathway_list"  "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"</span></span></code></pre></div>
-<p>The result list including <code>pca_scCell_mat</code> single cell pca score matrix and <code>pca_cell_df</code> cell types pca score matrix.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_pcascore_run.html">Pathway_pcascore_run</a></span><span class="op">(</span></span>
+<span>        Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>        Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span></span>
+<span>      <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
+<p>The result list including <code>pca_scCell_mat</code> single cell pca
+score matrix and <code>pca_cell_df</code> cell types pca score
+matrix.</p>
 </div>
 <div class="section level3">
 <h3 id="gwas-summary-data-input">3.3 GWAS summary data input<a class="anchor" aria-label="anchor" href="#gwas-summary-data-input"></a>
 </h3>
-<p>Read the GWAS summary data, remove the MHC and sex chromosome and filtered the maf of SNP.</p>
+<p>Read the GWAS summary data, remove the MHC and sex chromosome and
+filtered the maf of SNP.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span>
-<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span>
-    Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
-    gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,
-    maf_filter <span class="op">=</span> <span class="fl">0.1</span>
-  <span class="op">)</span>
-<span class="co">#&gt; Input gwas summary data frame!</span>
-<span class="co">#&gt; No "chr" from chrom!, now pasting it!</span>
-<span class="co">#&gt; Filtering out SNPs with MAF criterion</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt; [1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"    </span>
-<span class="co">#&gt; [5] "rawPathway_list"  "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"     </span>
-<span class="co">#&gt; [9] "gwas_data"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span></span>
+<span>    Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>    gwas_data <span class="op">=</span> <span class="va">gwas_data</span>,</span>
+<span>    maf_filter <span class="op">=</span> <span class="fl">0.1</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="mapping-snps-to-genes">3.4 Mapping Snps to Genes<a class="anchor" aria-label="anchor" href="#mapping-snps-to-genes"></a>
 </h3>
-<p>We set the <code>marg</code> is 10KB, means the position for SNP is less 10KB distance to TSS of gene.</p>
+<p>We set the <code>marg</code> is 10KB, means the position for SNP is
+less 10KB distance to TSS of gene.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Snp2Gene.html">Snp2Gene</a></span><span class="op">(</span>snp <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span>, refGene <span class="op">=</span> <span class="va">block_annotation</span>, marg <span class="op">=</span> <span class="fl">10000</span><span class="op">)</span>
-<span class="co">#&gt; * Computing distances between SNPs and genes</span>
-<span class="co">#&gt; 5332 SNPs not inside gene domain</span>
-<span class="co">#&gt; ** Computing distance to domain starts</span>
-<span class="co">#&gt; ** Computing distance to domain ends</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SnpToGene.html">SnpToGene</a></span><span class="op">(</span></span>
+<span>        gwas_data <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span>,</span>
+<span>        block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span>        marg <span class="op">=</span> <span class="fl">10000</span></span>
+<span>      <span class="op">)</span></span></code></pre></div>
 <p>SNP to gene dataframe:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left">rsid</th>
-<th align="left">label</th>
-<th align="left">pos</th>
-<th align="left">Disstance</th>
-<th align="right">slope</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">rs35672141</td>
-<td align="left">MMP23A</td>
-<td align="left">1691050</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">rs3737628</td>
-<td align="left">SLC35E2A</td>
-<td align="left">1722932</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">rs4592207</td>
-<td align="left">AL513477.2</td>
-<td align="left">2369498</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">rs12085743</td>
-<td align="left">CEP104</td>
-<td align="left">3811790</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td align="left">rs10915548</td>
-<td align="left">Z98747.1</td>
-<td align="left">4558792</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td align="left">rs6426446</td>
-<td align="left">BX005132.1</td>
-<td align="left">4955862</td>
-<td align="left">0</td>
-<td align="right">1</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pathway-snp-annotation">3.5 Pathway-SNP annotation<a class="anchor" aria-label="anchor" href="#pathway-snp-annotation"></a>
 </h3>
 <p>Mapping SNPs to pahtways and getting block data.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_annotation_input.html">Pathway_annotation_input</a></span><span class="op">(</span>
-      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
-      block_annotation <span class="op">=</span> <span class="va">block_annotation</span>
-    <span class="op">)</span>
-<span class="co">#&gt; obtain the pathway block information</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"    </span>
-<span class="co">#&gt;  [5] "rawPathway_list"  "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"     </span>
-<span class="co">#&gt;  [9] "gwas_data"        "snp_gene_df"      "pathway_blocks"</span>
-<span class="va">Pagwas</span><span class="op">$</span><span class="va">pathway_blocks</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span>
-<span class="co">#&gt; $hsa00010</span>
-<span class="co">#&gt;   chrom     start       end label  pathway</span>
-<span class="co">#&gt; 1  chr2  74834127  74893359   HK2 hsa00010</span>
-<span class="co">#&gt; 2  chr7 107891162 107931730   DLD hsa00010</span>
-<span class="co">#&gt; 3  chr9 101420560 101449664 ALDOB hsa00010</span>
-<span class="co">#&gt; 4 chr17  44070735  44076344 G6PC3 hsa00010</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $hsa00020</span>
-<span class="co">#&gt;   chrom     start       end label  pathway</span>
-<span class="co">#&gt; 1  chr7 107891162 107931730   DLD hsa00020</span>
-<span class="co">#&gt; 2 chr10  49734641  49762379 OGDHL hsa00020</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $hsa00030</span>
-<span class="co">#&gt;   chrom     start       end label  pathway</span>
-<span class="co">#&gt; 1  chr1  10398592  10420511   PGD hsa00030</span>
-<span class="co">#&gt; 2  chr9 101420560 101449664 ALDOB hsa00030</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_annotation_input.html">Pathway_annotation_input</a></span><span class="op">(</span></span>
+<span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>      block_annotation <span class="op">=</span> <span class="va">block_annotation</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">pathway_blocks</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="link-the-pathway-blocks-to-pca-score">3.6 Link the pathway blocks to pca score<a class="anchor" aria-label="anchor" href="#link-the-pathway-blocks-to-pca-score"></a>
 </h3>
 <p>Also run the regression function for single cell.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Link_pathway_blocks_gwas.html">Link_pathway_blocks_gwas</a></span><span class="op">(</span>
-      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
-      chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span>,
-      singlecell <span class="op">=</span> <span class="cn">T</span>,
-      celltype <span class="op">=</span> <span class="cn">T</span>,
-      ncores <span class="op">=</span> <span class="fl">1</span>
-    <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Link_pathway_blocks_gwas.html">Link_pathway_blocks_gwas</a></span><span class="op">(</span></span>
+<span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>      chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span>,</span>
+<span>      singlecell <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>      celltype <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>      backingpath<span class="op">=</span><span class="st">"./temp"</span><span class="op">)</span></span></code></pre></div>
 <p>The pathway regression result for single cell.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_sclm_results</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="31%">
-<col width="14%">
-<col width="13%">
-<col width="14%">
-<col width="13%">
-<col width="11%">
-</colgroup>
-<thead><tr class="header">
-<th align="left"></th>
-<th align="right">hsa00010</th>
-<th align="right">hsa00051</th>
-<th align="right">hsa00052</th>
-<th align="right">hsa00190</th>
-<th align="right">hsa00230</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">P1TLH_TTGAACGCATGTCCTC_1</td>
-<td align="right">-16.387752</td>
-<td align="right">-1.0443798</td>
-<td align="right">-3.403756</td>
-<td align="right">0.3179494</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="even">
-<td align="left">P4TLH_AACTCAGTCCTACAGA_1</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-<td align="right">-0.6219132</td>
-<td align="right">0.287749</td>
-</tr>
-<tr class="odd">
-<td align="left">P3TLH_AGTAGTCTCCCTTGCA_1</td>
-<td align="right">-9.999499</td>
-<td align="right">1.4148745</td>
-<td align="right">16.197447</td>
-<td align="right">-1.8133190</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="even">
-<td align="left">P4TLH_CAAGTTGAGCAGGTCA_1</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="odd">
-<td align="left">P2TLH_TCACAAGGTGCAGTAG_1</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-<td align="right">0.1765400</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="even">
-<td align="left">P3TLH_TGTCCCAGTCTGGTCG_1</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-<td align="right">-0.1436159</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="odd">
-<td align="left">P3TLH_ATTGGACCAAGAAGAG_1</td>
-<td align="right">-242.840683</td>
-<td align="right">-3.0698399</td>
-<td align="right">-449.761483</td>
-<td align="right">0.3148817</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="even">
-<td align="left">P1TLH_CAGAGAGTCACGCATA_1</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-<td align="right">-0.0955698</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="odd">
-<td align="left">P3TLH_GTTCGGGTCCACGACG_1</td>
-<td align="right">11.008005</td>
-<td align="right">0.4595595</td>
-<td align="right">0.000000</td>
-<td align="right">-0.0827705</td>
-<td align="right">0.000000</td>
-</tr>
-<tr class="even">
-<td align="left">P4TLH_CGTGTCTTCTCCGGTT_1</td>
-<td align="right">14.853220</td>
-<td align="right">-8.1463055</td>
-<td align="right">0.000000</td>
-<td align="right">0.0000000</td>
-<td align="right">0.000000</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_sclm_results</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="perform-regression-for-celltypes">3.7 Perform regression for celltypes<a class="anchor" aria-label="anchor" href="#perform-regression-for-celltypes"></a>
 </h3>
 <p>Run the regression function for celltypes.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pagwas_perform_regression.html">Pagwas_perform_regression</a></span><span class="op">(</span>Pathway_ld_gwas_data <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span><span class="op">)</span>
-<span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Boot_evaluate.html">Boot_evaluate</a></span><span class="op">(</span><span class="va">Pagwas</span>, bootstrap_iters <span class="op">=</span> <span class="fl">200</span>, part <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>
-<span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pagwas_perform_regression.html">Pagwas_perform_regression</a></span><span class="op">(</span>Pathway_ld_gwas_data <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Boot_evaluate.html">Boot_evaluate</a></span><span class="op">(</span><span class="va">Pagwas</span>, bootstrap_iters <span class="op">=</span> <span class="fl">200</span>, part <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>Show the regression result for celltypes.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "Celltype_anno"        "data_mat"             "VariableFeatures"    </span>
-<span class="co">#&gt;  [4] "merge_scexpr"         "rawPathway_list"      "Pathway_list"        </span>
-<span class="co">#&gt;  [7] "pca_scCell_mat"       "pca_cell_df"          "snp_gene_df"         </span>
-<span class="co">#&gt; [10] "Pathway_sclm_results" "lm_results"           "bootstrap_results"</span>
-<span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span>
-<span class="co">#&gt; $parameters</span>
-<span class="co">#&gt;    Intercept    Celltype1   Celltype10    Celltype2    Celltype3    Celltype4 </span>
-<span class="co">#&gt;  0.014638805  0.055351014 -0.085736720 -0.005520364  0.013200030  0.073386350 </span>
-<span class="co">#&gt;    Celltype5    Celltype6    Celltype7    Celltype8    Celltype9 </span>
-<span class="co">#&gt; -0.019769098  0.007198077 -0.008827294 -0.007899788 -0.016384168 </span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; $model</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Call:</span>
-<span class="co">#&gt; stats::lm(formula = vectorized_Pagwas_data$y ~ offset(vectorized_Pagwas_data$noise_per_snp) + </span>
-<span class="co">#&gt;     vectorized_Pagwas_data$x)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Coefficients:</span>
-<span class="co">#&gt;                        (Intercept)   vectorized_Pagwas_data$xCelltype1  </span>
-<span class="co">#&gt;                           0.014639                            0.055351  </span>
-<span class="co">#&gt; vectorized_Pagwas_data$xCelltype10   vectorized_Pagwas_data$xCelltype2  </span>
-<span class="co">#&gt;                          -0.085737                           -0.005520  </span>
-<span class="co">#&gt;  vectorized_Pagwas_data$xCelltype3   vectorized_Pagwas_data$xCelltype4  </span>
-<span class="co">#&gt;                           0.013200                            0.073386  </span>
-<span class="co">#&gt;  vectorized_Pagwas_data$xCelltype5   vectorized_Pagwas_data$xCelltype6  </span>
-<span class="co">#&gt;                          -0.019769                            0.007198  </span>
-<span class="co">#&gt;  vectorized_Pagwas_data$xCelltype7   vectorized_Pagwas_data$xCelltype8  </span>
-<span class="co">#&gt;                          -0.008827                           -0.007900  </span>
-<span class="co">#&gt;  vectorized_Pagwas_data$xCelltype9  </span>
-<span class="co">#&gt;                          -0.016384</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span></code></pre></div>
-<table style="width:100%;" class="table">
-<colgroup>
-<col width="8%">
-<col width="8%">
-<col width="15%">
-<col width="12%">
-<col width="8%">
-<col width="8%">
-<col width="19%">
-<col width="8%">
-<col width="8%">
-</colgroup>
-<thead><tr class="header">
-<th align="left"></th>
-<th align="left">annotation</th>
-<th align="right">bootstrap_estimate</th>
-<th align="right">bootstrap_error</th>
-<th align="right">bt_value</th>
-<th align="right">bp_value</th>
-<th align="right">bias_corrected_estimate</th>
-<th align="right">CI_lo</th>
-<th align="right">CI_hi</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">Intercept</td>
-<td align="left">Intercept</td>
-<td align="right">0.0149314</td>
-<td align="right">0.0021393</td>
-<td align="right">6.9794410</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0143462</td>
-<td align="right">0.0111015</td>
-<td align="right">0.0192258</td>
-</tr>
-<tr class="even">
-<td align="left">Celltype1</td>
-<td align="left">Celltype1</td>
-<td align="right">0.0466548</td>
-<td align="right">0.0191843</td>
-<td align="right">2.4319321</td>
-<td align="right">0.0075093</td>
-<td align="right">0.0640472</td>
-<td align="right">0.0075680</td>
-<td align="right">0.0810034</td>
-</tr>
-<tr class="odd">
-<td align="left">Celltype10</td>
-<td align="left">Celltype10</td>
-<td align="right">-0.0936681</td>
-<td align="right">0.0318102</td>
-<td align="right">-2.9445916</td>
-<td align="right">0.9983831</td>
-<td align="right">-0.0778053</td>
-<td align="right">-0.1554323</td>
-<td align="right">-0.0369731</td>
-</tr>
-<tr class="even">
-<td align="left">Celltype2</td>
-<td align="left">Celltype2</td>
-<td align="right">-0.0042091</td>
-<td align="right">0.0086078</td>
-<td align="right">-0.4889923</td>
-<td align="right">0.6875764</td>
-<td align="right">-0.0068316</td>
-<td align="right">-0.0198114</td>
-<td align="right">0.0152738</td>
-</tr>
-<tr class="odd">
-<td align="left">Celltype3</td>
-<td align="left">Celltype3</td>
-<td align="right">0.0105636</td>
-<td align="right">0.0140914</td>
-<td align="right">0.7496464</td>
-<td align="right">0.2267339</td>
-<td align="right">0.0158365</td>
-<td align="right">-0.0183021</td>
-<td align="right">0.0347126</td>
-</tr>
-<tr class="even">
-<td align="left">Celltype4</td>
-<td align="left">Celltype4</td>
-<td align="right">0.0807930</td>
-<td align="right">0.0262848</td>
-<td align="right">3.0737542</td>
-<td align="right">0.0010569</td>
-<td align="right">0.0659797</td>
-<td align="right">0.0316483</td>
-<td align="right">0.1360450</td>
-</tr>
-<tr class="odd">
-<td align="left">Celltype5</td>
-<td align="left">Celltype5</td>
-<td align="right">-0.0186679</td>
-<td align="right">0.0109204</td>
-<td align="right">-1.7094550</td>
-<td align="right">0.9563167</td>
-<td align="right">-0.0208703</td>
-<td align="right">-0.0404518</td>
-<td align="right">0.0020056</td>
-</tr>
-<tr class="even">
-<td align="left">Celltype6</td>
-<td align="left">Celltype6</td>
-<td align="right">0.0077448</td>
-<td align="right">0.0033485</td>
-<td align="right">2.3129055</td>
-<td align="right">0.0103639</td>
-<td align="right">0.0066514</td>
-<td align="right">0.0006224</td>
-<td align="right">0.0137522</td>
-</tr>
-<tr class="odd">
-<td align="left">Celltype7</td>
-<td align="left">Celltype7</td>
-<td align="right">-0.0094579</td>
-<td align="right">0.0025570</td>
-<td align="right">-3.6988346</td>
-<td align="right">0.9998917</td>
-<td align="right">-0.0081967</td>
-<td align="right">-0.0150777</td>
-<td align="right">-0.0054844</td>
-</tr>
-<tr class="even">
-<td align="left">Celltype8</td>
-<td align="left">Celltype8</td>
-<td align="right">-0.0076952</td>
-<td align="right">0.0021117</td>
-<td align="right">-3.6441663</td>
-<td align="right">0.9998659</td>
-<td align="right">-0.0081043</td>
-<td align="right">-0.0120625</td>
-<td align="right">-0.0041933</td>
-</tr>
-<tr class="odd">
-<td align="left">Celltype9</td>
-<td align="left">Celltype9</td>
-<td align="right">-0.0150675</td>
-<td align="right">0.0068491</td>
-<td align="right">-2.1999307</td>
-<td align="right">0.9860941</td>
-<td align="right">-0.0177008</td>
-<td align="right">-0.0271894</td>
-<td align="right">-0.0010716</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
+<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="construct-the-scpagwas-score">3.8 Construct the scPagwas score<a class="anchor" aria-label="anchor" href="#construct-the-scpagwas-score"></a>
 </h3>
-<p>The gPAS scPagwas score mainly to deal with the single-cell regression result.</p>
+<p>The gPAS scPagwas score mainly to deal with the single-cell
+regression result.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scPagwas_perform_score.html">scPagwas_perform_score</a></span><span class="op">(</span>
-      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,
-      remove_outlier <span class="op">=</span> <span class="cn">TRUE</span>
-    <span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span>
-<span class="co">#&gt;  [1] "Celltype_anno"          "data_mat"               "VariableFeatures"      </span>
-<span class="co">#&gt;  [4] "merge_scexpr"           "rawPathway_list"        "Pathway_list"          </span>
-<span class="co">#&gt;  [7] "pca_scCell_mat"         "pca_cell_df"            "snp_gene_df"           </span>
-<span class="co">#&gt; [10] "Pathway_sclm_results"   "lm_results"             "bootstrap_results"     </span>
-<span class="co">#&gt; [13] "Pathway_single_results" "scPathways_rankPvalue"  "scPagwas.gPAS.score"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scPagwas_perform_score.html">scPagwas_perform_score</a></span><span class="op">(</span></span>
+<span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
+<span>      remove_outlier <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
 <p>Show result for Pathway pvalue for each cell types</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="co">#&gt; P1TLH_TTGAACGCATGTCCTC_1 P4TLH_AACTCAGTCCTACAGA_1 P3TLH_AGTAGTCTCCCTTGCA_1 </span>
-<span class="co">#&gt;                11.356963            -15850.761678                27.416376 </span>
-<span class="co">#&gt; P4TLH_CAAGTTGAGCAGGTCA_1 P2TLH_TCACAAGGTGCAGTAG_1 P3TLH_TGTCCCAGTCTGGTCG_1 </span>
-<span class="co">#&gt;                28.781626                34.520725                61.755698 </span>
-<span class="co">#&gt; P3TLH_ATTGGACCAAGAAGAG_1 P1TLH_CAGAGAGTCACGCATA_1 P3TLH_GTTCGGGTCCACGACG_1 </span>
-<span class="co">#&gt;                 8.383013                35.327060                 9.080160 </span>
-<span class="co">#&gt; P4TLH_CGTGTCTTCTCCGGTT_1 </span>
-<span class="co">#&gt;               105.183002</span>
-<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPathways_rankPvalue</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<colgroup>
-<col width="8%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-<col width="9%">
-</colgroup>
-<thead><tr class="header">
-<th align="left"></th>
-<th align="right">Celltype1</th>
-<th align="right">Celltype2</th>
-<th align="right">Celltype3</th>
-<th align="right">Celltype4</th>
-<th align="right">Celltype5</th>
-<th align="right">Celltype6</th>
-<th align="right">Celltype7</th>
-<th align="right">Celltype8</th>
-<th align="right">Celltype9</th>
-<th align="right">Celltype10</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">hsa00010</td>
-<td align="right">0.9640511</td>
-<td align="right">0.9583607</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9999884</td>
-<td align="right">0.9971219</td>
-<td align="right">0.7747613</td>
-<td align="right">0.9310937</td>
-<td align="right">1.0000000</td>
-<td align="right">0.3079556</td>
-<td align="right">0.9894158</td>
-</tr>
-<tr class="even">
-<td align="left">hsa00051</td>
-<td align="right">0.9976103</td>
-<td align="right">0.9348214</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9757190</td>
-<td align="right">0.9969120</td>
-<td align="right">0.7365362</td>
-<td align="right">0.2220478</td>
-<td align="right">1.0000000</td>
-<td align="right">0.7511294</td>
-<td align="right">0.9625629</td>
-</tr>
-<tr class="odd">
-<td align="left">hsa00052</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0292503</td>
-<td align="right">0.0000000</td>
-<td align="right">0.0017525</td>
-<td align="right">0.0002465</td>
-<td align="right">0.0923596</td>
-<td align="right">0.0182608</td>
-<td align="right">0.0009622</td>
-<td align="right">0.0000307</td>
-<td align="right">0.0000001</td>
-</tr>
-<tr class="even">
-<td align="left">hsa00190</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9961784</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9999166</td>
-<td align="right">1.0000000</td>
-<td align="right">0.9999942</td>
-</tr>
-<tr class="odd">
-<td align="left">hsa00230</td>
-<td align="right">0.3006467</td>
-<td align="right">0.0585901</td>
-<td align="right">0.7230221</td>
-<td align="right">0.0778422</td>
-<td align="right">0.0050175</td>
-<td align="right">0.2682913</td>
-<td align="right">0.1785115</td>
-<td align="right">0.1593690</td>
-<td align="right">0.0100703</td>
-<td align="right">0.1324711</td>
-</tr>
-<tr class="even">
-<td align="left">hsa00240</td>
-<td align="right">0.7033961</td>
-<td align="right">0.2597681</td>
-<td align="right">0.9999536</td>
-<td align="right">0.9434023</td>
-<td align="right">0.1619924</td>
-<td align="right">0.2682913</td>
-<td align="right">0.4653052</td>
-<td align="right">0.7230608</td>
-<td align="right">0.3301653</td>
-<td align="right">0.4855010</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPathways_rankPvalue</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="get-the-gene-heritability-correlation">3.9 Get the gene heritability correlation<a class="anchor" aria-label="anchor" href="#get-the-gene-heritability-correlation"></a>
 </h3>
 <p>Run heritability correlation for all genes.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGet_gene_heritability_correlation.html">scGet_gene_heritability_correlation</a></span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="va">Pagwas</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span>    <span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGet_gene_heritability_correlation.html">scGet_gene_heritability_correlation</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
+<span>                                                                                data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span></span></code></pre></div>
 <p>The result for correlation:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="left"></th>
-<th align="right">gene_heritability_correlation</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">RP11-34P13.7</td>
-<td align="right">0.0000000</td>
-</tr>
-<tr class="even">
-<td align="left">FO538757.2</td>
-<td align="right">-0.0209782</td>
-</tr>
-<tr class="odd">
-<td align="left">AP006222.2</td>
-<td align="right">-0.0161516</td>
-</tr>
-<tr class="even">
-<td align="left">RP4-669L17.10</td>
-<td align="right">-0.0065363</td>
-</tr>
-<tr class="odd">
-<td align="left">RP5-857K21.4</td>
-<td align="right">-0.0032932</td>
-</tr>
-<tr class="even">
-<td align="left">RP11-206L10.9</td>
-<td align="right">-0.0096444</td>
-</tr>
-</tbody>
-</table>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="calculate-the-trs-score-for-top-genes-">3.10 Calculate the TRS score for top genes.<a class="anchor" aria-label="anchor" href="#calculate-the-trs-score-for-top-genes-"></a>
 </h3>
-<p>Calculate the TRS score for top genes by <code>AddModuleScore</code> and running the p value for each cell by <code>rankPvalue</code>.</p>
+<p>Calculate the TRS score for top genes by <code>AddModuleScore</code>
+and running the p value for each cell by <code>rankPvalue</code>.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span>
-<span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#run pvalue</span>
-<span class="va">CellScalepValue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rankPvalue.html">rankPvalue</a></span><span class="op">(</span>datS <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span><span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span><span class="op">)</span><span class="op">[</span><span class="va">scPagwas_topgenes</span>, <span class="op">]</span><span class="op">)</span><span class="op">)</span>, pValueMethod <span class="op">=</span> <span class="st">"scale"</span><span class="op">)</span></code></pre></div>
-<p>All these sub-functions for scPagwas can running dependently, but need to run orderly. The <code>scPagwas_main</code> function is a wrapper functions for these sub-functions.</p>
+<code class="sourceCode R"><span>    <span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
+<span></span>
+<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#run pvalue</span></span>
+<span>    <span class="va">CellScalepValue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGene_scaleP.html">scGene_scaleP</a></span><span class="op">(</span></span>
+<span>      Single_mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span></span>
+<span>        <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">'RNA'</span><span class="op">)</span><span class="op">[</span><span class="va">scPagwas_topgenes</span>, <span class="op">]</span></span>
+<span>      <span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>    </span></code></pre></div>
+<p>All these sub-functions for scPagwas can running dependently, but
+need to run orderly. The <code>scPagwas_main</code> function is a
+wrapper functions for these sub-functions.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="result-visualization">4. Result Visualization<a class="anchor" aria-label="anchor" href="#result-visualization"></a>
 </h2>
 <div class="section level3">
-<h3 id="visualize-the-scpagwas-score-of-single-cell-data-in-umap-or-tsne-plot-">4.1 Visualize the scPagwas Score of single cell data in UMAP or TSNE plot.<a class="anchor" aria-label="anchor" href="#visualize-the-scpagwas-score-of-single-cell-data-in-umap-or-tsne-plot-"></a>
+<h3 id="visualize-the-scpagwas-score-of-single-cell-data-in-umap-or-tsne-plot-">4.1 Visualize the scPagwas Score of single cell data in UMAP or TSNE
+plot.<a class="anchor" aria-label="anchor" href="#visualize-the-scpagwas-score-of-single-cell-data-in-umap-or-tsne-plot-"></a>
 </h3>
 <ol style="list-style-type: decimal">
 <li>DimPlot of singlecell data.</li>
 </ol>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"RColorBrewer"</span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"SeuratObject"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://rpkgs.datanovia.com/ggpubr/" class="external-link">"ggpubr"</a></span><span class="op">)</span><span class="op">)</span>
- <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span>,pt.size<span class="op">=</span><span class="fl">1</span>,reduction<span class="op">=</span><span class="st">"umap"</span>,label <span class="op">=</span> <span class="cn">T</span>, repel<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span>
- <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Test"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"UMAP"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-20-1.png" width="700"></p>
-<p>scPagwas.TRS.Score1 and positive(p&lt;0.05) cells showing in dimplot.</p>
+<code class="sourceCode R"><span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"RColorBrewer"</span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mojaveazure.github.io/seurat-object/" class="external-link">"SeuratObject"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://rpkgs.datanovia.com/ggpubr/" class="external-link">"ggpubr"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/DimPlot.html" class="external-link">DimPlot</a></span><span class="op">(</span><span class="va">Pagwas</span>,pt.size<span class="op">=</span><span class="fl">1</span>,reduction<span class="op">=</span><span class="st">"umap"</span>,label <span class="op">=</span> <span class="cn">T</span>, repel<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span><span class="op">+</span></span>
+<span> <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Test"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"UMAP"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>scPagwas.TRS.Score1 and positive(p&lt;0.05) cells showing in
+dimplot.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"> <span class="fu"><a href="../reference/scPagwas_Visualization.html">scPagwas_Visualization</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-                        p_thre <span class="op">=</span> <span class="fl">0.05</span>,
-                        FigureType <span class="op">=</span> <span class="st">"umap"</span>,
-                        width <span class="op">=</span> <span class="fl">7</span>,
-                        height <span class="op">=</span> <span class="fl">7</span>,
-                        lowColor <span class="op">=</span> <span class="st">"white"</span>, 
-                        highColor <span class="op">=</span> <span class="st">"red"</span>,
-                        output.dirs<span class="op">=</span><span class="st">"figure"</span>,
-                        size <span class="op">=</span> <span class="fl">0.5</span>,
-                        do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-21-1.png" width="700"><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-21-2.png" width="700"><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-21-3.png" width="700"></p>
+<code class="sourceCode R"><span> <span class="fu"><a href="../reference/scPagwas_Visualization.html">scPagwas_Visualization</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas</span>,</span>
+<span>                        p_thre <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>                        FigureType <span class="op">=</span> <span class="st">"umap"</span>,</span>
+<span>                        width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                        height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                        lowColor <span class="op">=</span> <span class="st">"white"</span>, </span>
+<span>                        highColor <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>                        output.dirs<span class="op">=</span><span class="st">"figure"</span>,</span>
+<span>                        size <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                        do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-the-barplot-of-the-proportion-of-positive-cell-">4.2 Plot the barplot of the proportion of positive Cell.<a class="anchor" aria-label="anchor" href="#plot-the-barplot-of-the-proportion-of-positive-cell-"></a>
 </h3>
-<p>Plot the barplot of the proportion of positive Cells in celltypes:</p>
+<p>Plot the barplot of the proportion of positive Cells in
+celltypes:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-                         var_ident<span class="op">=</span><span class="st">"anno"</span>,
-                         var_group<span class="op">=</span><span class="st">"positiveCells"</span>,
-                         vec_group_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E8D0B3"</span>,<span class="st">"#7EB5A6"</span><span class="op">)</span>,
-                         do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-22-1.png" width="700"></p>
-<p>Plot the barplot of the proportion of celltypes in positive and negative Cells:</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
+<span>                         var_ident<span class="op">=</span><span class="st">"anno"</span>,</span>
+<span>                         var_group<span class="op">=</span><span class="st">"positiveCells"</span>,</span>
+<span>                         vec_group_colors<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#E8D0B3"</span>,<span class="st">"#7EB5A6"</span><span class="op">)</span>,</span>
+<span>                         do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<p>Plot the barplot of the proportion of celltypes in positive and
+negative Cells:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-                              var_ident<span class="op">=</span><span class="st">"positiveCells"</span>,
-                              var_group<span class="op">=</span><span class="st">"anno"</span>,
-                              p_thre <span class="op">=</span> <span class="fl">0.01</span>,
-                              vec_group_colors<span class="op">=</span><span class="cn">NULL</span>,
-                              f_color<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10</span>, name<span class="op">=</span><span class="st">"RdYlBu"</span><span class="op">)</span><span class="op">)</span>,
-                              do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-23-1.png" width="700"></p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
+<span>                              var_ident<span class="op">=</span><span class="st">"positiveCells"</span>,</span>
+<span>                              var_group<span class="op">=</span><span class="st">"anno"</span>,</span>
+<span>                              p_thre <span class="op">=</span> <span class="fl">0.01</span>,</span>
+<span>                              vec_group_colors<span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>                              f_color<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">colorRampPalette</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html" class="external-link">brewer.pal</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">10</span>, name<span class="op">=</span><span class="st">"RdYlBu"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                              do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualize-the-heritability-correlated-pathways">4.3 Visualize the heritability correlated Pathways<a class="anchor" aria-label="anchor" href="#visualize-the-heritability-correlated-pathways"></a>
 </h3>
 <p>Plot the specific genetics pathway for each celltypes</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/rhdf5" class="external-link">rhdf5</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grDevices</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape" class="external-link">reshape2</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrie/ggdendro" class="external-link">ggdendro</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/grimport/" class="external-link">grImport2</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mvkorpel/sisal" class="external-link">sisal</a></span><span class="op">)</span><span class="op">)</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"plot_scpathway_contri_dot.R"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span>
-<span class="fu">plot_scpathway_dot</span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-                   celltypes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://satijalab.org/seurat/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">)</span><span class="op">)</span>,
-                   topn_path_celltype<span class="op">=</span><span class="fl">5</span>,
-                   filter_p<span class="op">=</span><span class="fl">0.05</span>,
-                   max_logp<span class="op">=</span><span class="fl">15</span>,
-                   display_max_sizes<span class="op">=</span><span class="cn">F</span>,
-                   size_var <span class="op">=</span><span class="st">"logrankPvalue"</span> ,
-                   col_var<span class="op">=</span><span class="st">"proportion"</span>,
-                   shape.scale <span class="op">=</span> <span class="fl">8</span>,
-                   cols.use<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"#E45826"</span><span class="op">)</span>,
-                   dend_x_var <span class="op">=</span> <span class="st">"logrankPvalue"</span>,
-                   dist_method<span class="op">=</span><span class="st">"euclidean"</span>,
-                   hclust_method<span class="op">=</span><span class="st">"ward.D"</span>,
-                   do_plot <span class="op">=</span> <span class="cn">T</span>,
-                   <span class="co">#figurenames = "Pathway_plot.pdf",</span>
-                   width <span class="op">=</span> <span class="fl">7</span>,
-                   height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>
-<span class="co">#&gt; Using : </span>
-<span class="co">#&gt;  - logrankPvalue values to set shape size</span>
-<span class="co">#&gt;  - proportion values to set shape color</span>
-<span class="co">#&gt;  - Nothing to add text on shapes[1] "In FAMD_x_var : Adding y index"</span>
-<span class="co">#&gt; [1] "In FAMD_x_var : Adding x index"</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
-<pre><code><span class="co">#&gt; NULL</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/rhdf5" class="external-link">rhdf5</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grDevices</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape" class="external-link">reshape2</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrie/ggdendro" class="external-link">ggdendro</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/grimport/" class="external-link">grImport2</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mvkorpel/sisal" class="external-link">sisal</a></span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"plot_scpathway_contri_dot.R"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">plot_scpathway_dot</span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
+<span>                   celltypes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                   topn_path_celltype<span class="op">=</span><span class="fl">5</span>,</span>
+<span>                   filter_p<span class="op">=</span><span class="fl">0.05</span>,</span>
+<span>                   max_logp<span class="op">=</span><span class="fl">15</span>,</span>
+<span>                   display_max_sizes<span class="op">=</span><span class="cn">F</span>,</span>
+<span>                   size_var <span class="op">=</span><span class="st">"logrankPvalue"</span> ,</span>
+<span>                   col_var<span class="op">=</span><span class="st">"proportion"</span>,</span>
+<span>                   shape.scale <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>                   cols.use<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"#E45826"</span><span class="op">)</span>,</span>
+<span>                   dend_x_var <span class="op">=</span> <span class="st">"logrankPvalue"</span>,</span>
+<span>                   dist_method<span class="op">=</span><span class="st">"euclidean"</span>,</span>
+<span>                   hclust_method<span class="op">=</span><span class="st">"ward.D"</span>,</span>
+<span>                   do_plot <span class="op">=</span> <span class="cn">T</span>,</span>
+<span>                   <span class="co">#figurenames = "Pathway_plot.pdf",</span></span>
+<span>                   width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                   height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plot-the-heritability-correlated-genes">4.4 Plot the heritability correlated genes<a class="anchor" aria-label="anchor" href="#plot-the-heritability-correlated-genes"></a>
 </h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,
-                             topn_genes_label<span class="op">=</span><span class="fl">10</span>,
-                             color_low<span class="op">=</span><span class="st">"#035397"</span>,
-                             color_high <span class="op">=</span><span class="st">"#F32424"</span>,
-                             color_mid <span class="op">=</span> <span class="st">"white"</span>,
-                             text_size<span class="op">=</span><span class="fl">2</span>,
-                             do_plot<span class="op">=</span><span class="cn">T</span>,
-                             max.overlaps <span class="op">=</span><span class="fl">20</span>,
-                             width <span class="op">=</span> <span class="fl">7</span>,
-                             height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-25-1.png" width="700"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
+<span>                             topn_genes_label<span class="op">=</span><span class="fl">10</span>,</span>
+<span>                             color_low<span class="op">=</span><span class="st">"#035397"</span>,</span>
+<span>                             color_high <span class="op">=</span><span class="st">"#F32424"</span>,</span>
+<span>                             color_mid <span class="op">=</span> <span class="st">"white"</span>,</span>
+<span>                             text_size<span class="op">=</span><span class="fl">2</span>,</span>
+<span>                             do_plot<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                             max.overlaps <span class="op">=</span><span class="fl">20</span>,</span>
+<span>                             width <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                             height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="show-expression-of-the-top-heritability-correlation-genes-in-celltypes">4.5 Show expression of the top heritability correlation genes in celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top-heritability-correlation-genes-in-celltypes"></a>
+<h3 id="show-expression-of-the-top-heritability-correlation-genes-in-celltypes">4.5 Show expression of the top heritability correlation genes in
+celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top-heritability-correlation-genes-in-celltypes"></a>
 </h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span>
-<span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span>
-<span class="fu"><a href="../reference/plot_vln_Corgenes.html">plot_vln_Corgenes</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-             assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,
-             var_group<span class="op">=</span><span class="st">"anno"</span>,
-             vec_features<span class="op">=</span><span class="va">top5genes</span>,
-             do_plot <span class="op">=</span> <span class="cn">T</span>
-             <span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-26-1.png" width="700"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="fu"><a href="../reference/plot_vln_Corgenes.html">plot_vln_Corgenes</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
+<span>             assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,</span>
+<span>             var_group<span class="op">=</span><span class="st">"anno"</span>,</span>
+<span>             vec_features<span class="op">=</span><span class="va">top5genes</span>,</span>
+<span>             do_plot <span class="op">=</span> <span class="cn">T</span></span>
+<span>             <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="celltypes-bootstrap_results-reuslt">4.6 celltypes bootstrap_results reuslt<a class="anchor" aria-label="anchor" href="#celltypes-bootstrap_results-reuslt"></a>
 </h3>
 <p>Barplot for celltypes</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Bootstrap_P_Barplot.html">Bootstrap_P_Barplot</a></span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
-                    p_names<span class="op">=</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,
-                    width <span class="op">=</span> <span class="fl">5</span>,
-                    height <span class="op">=</span> <span class="fl">7</span>,
-                    do_plot<span class="op">=</span><span class="cn">T</span>,
-                    title <span class="op">=</span> <span class="st">"Test"</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-27-1.png" width="700"></p>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Bootstrap_P_Barplot.html">Bootstrap_P_Barplot</a></span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>                    p_names<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>                    width <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>                    height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                    do_plot<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                    title <span class="op">=</span> <span class="st">"Test"</span><span class="op">)</span></span></code></pre></div>
 <p>Forest plot for estimate value.</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/Bootstrap_estimate_Plot.html">Bootstrap_estimate_Plot</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,
-                        width <span class="op">=</span> <span class="fl">9</span>,
-                        height <span class="op">=</span> <span class="fl">7</span>,
-                        do_plot<span class="op">=</span><span class="cn">T</span><span class="op">)</span></code></pre></div>
-<p><img src="Running_scPagwas_steps_by_SubFunctions_files/figure-html/unnamed-chunk-28-1.png" width="700"></p>
-<pre><code><span class="co">#&gt; TableGrob (1 x 13) "arrange": 2 grobs</span>
-<span class="co">#&gt;   z         cells    name           grob</span>
-<span class="co">#&gt; 1 1 ( 1- 1, 1-10) arrange gtable[layout]</span>
-<span class="co">#&gt; 2 2 ( 1- 1,11-11) arrange gtable[layout]</span></code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/Bootstrap_estimate_Plot.html">Bootstrap_estimate_Plot</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
+<span>                        width <span class="op">=</span> <span class="fl">9</span>,</span>
+<span>                        height <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>                        do_plot<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Chunyu Deng.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 

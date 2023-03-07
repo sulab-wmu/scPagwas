@@ -1,210 +1,222 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html</loc>
+    <loc>/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Data_input_preproccess_for_scPagwas.html</loc>
+    <loc>/articles/Data_input_preproccess_for_scPagwas.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/index.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Multi_TraitFiles_for_one_SingleData_running.html</loc>
+    <loc>/articles/Multi_TraitFiles_for_one_SingleData_running.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/my-vignette.html</loc>
+    <loc>/articles/my-vignette.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Running_scPagwas_steps_by_SubFunctions.html</loc>
+    <loc>/articles/Prune_GwasSummaryFIles_plink.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/articles/Split_big_scRNAseqData_and_integrate_result.html</loc>
+    <loc>/articles/Running_scPagwas_steps_by_SubFunctions.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/authors.html</loc>
+    <loc>/articles/Split_big_scRNAseqData_and_integrate_result.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/index.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/LICENSE-text.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/LICENSE.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/news/index.html</loc>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/as_matrix.html</loc>
+    <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/bh.adjust.html</loc>
+    <loc>/reference/as_matrix.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/block_annotation.html</loc>
+    <loc>/reference/bh.adjust.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Bootstrap_estimate_Plot.html</loc>
+    <loc>/reference/block_annotation.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Bootstrap_P_Barplot.html</loc>
+    <loc>/reference/Bootstrap_estimate_Plot.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Boot_evaluate.html</loc>
+    <loc>/reference/Bootstrap_P_Barplot.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/chrom_ld.html</loc>
+    <loc>/reference/Boot_evaluate.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/corSparse.html</loc>
+    <loc>/reference/chrom_ld.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/fortify.Seurat.tsne.html</loc>
+    <loc>/reference/corSparse.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/fortify.Seurat.umap.html</loc>
+    <loc>/reference/fortify.Seurat.tsne.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.celltype.pathway.html</loc>
+    <loc>/reference/fortify.Seurat.umap.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.gobp.pathway.html</loc>
+    <loc>/reference/genes.by.celltype.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.hallmark.pathway.html</loc>
+    <loc>/reference/genes.by.gobp.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.immunesigdb.pathway.html</loc>
+    <loc>/reference/genes.by.hallmark.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.immunologic.pathway.html</loc>
+    <loc>/reference/genes.by.immunesigdb.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.reactome.pathway.html</loc>
+    <loc>/reference/genes.by.immunologic.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.regulatory.pathway.html</loc>
+    <loc>/reference/genes.by.reactome.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/genes.by.tft.pathway.html</loc>
+    <loc>/reference/genes.by.regulatory.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Genes_by_pathway_hallmark.html</loc>
+    <loc>/reference/genes.by.tft.pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Genes_by_pathway_kegg.html</loc>
+    <loc>/reference/Genes_by_pathway_hallmark.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Genes_by_pathway_reactome.html</loc>
+    <loc>/reference/Genes_by_pathway_kegg.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Get_bootresults_df.html</loc>
+    <loc>/reference/Genes_by_pathway_reactome.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Get_Pathway_heritability_contributions.html</loc>
+    <loc>/reference/Get_bootresults_df.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/get_Pathway_sclm.html</loc>
+    <loc>/reference/Get_Pathway_heritability_contributions.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/GWAS_summary_input.html</loc>
+    <loc>/reference/get_Pathway_sclm.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/heritability_cor_scatterplot.html</loc>
+    <loc>/reference/GWAS_summary_input.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/index.html</loc>
+    <loc>/reference/heritability_cor_scatterplot.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/lfdr.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Link_pathway_blocks_gwas.html</loc>
+    <loc>/reference/lfdr.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/link_pwpca_block.html</loc>
+    <loc>/reference/Link_pathway_blocks_gwas.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/make_ld_matrix.html</loc>
+    <loc>/reference/link_pwpca_block.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/merge_pagwas.html</loc>
+    <loc>/reference/make_ld_matrix.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pagwas_perform_regression.html</loc>
+    <loc>/reference/merge_pagwas.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Parameter_regression.html</loc>
+    <loc>/reference/Pagwas_perform_regression.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/PathwayPCAtest.html</loc>
+    <loc>/reference/Parameter_regression.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_annotation_input.html</loc>
+    <loc>/reference/PathwayPCAtest.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_block_func.html</loc>
+    <loc>/reference/Pathway_annotation_input.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Pathway_pcascore_run.html</loc>
+    <loc>/reference/Pathway_block_func.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/pi0est.html</loc>
+    <loc>/reference/Pathway_pcascore_run.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/plot_bar_positie_nagtive.html</loc>
+    <loc>/reference/pi0est.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/plot_pathway_contribution_network.html</loc>
+    <loc>/reference/plot_bar_positie_nagtive.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/plot_vln_Corgenes.html</loc>
+    <loc>/reference/plot_pathway_contribution_network.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/qvalue.html</loc>
+    <loc>/reference/plot_vln_Corgenes.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/rankPvalue.html</loc>
+    <loc>/reference/qvalue.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/reduce_pathway.html</loc>
+    <loc>/reference/rankPvalue.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scGet_gene_heritability_correlation.html</loc>
+    <loc>/reference/reduce_pathway.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_main.html</loc>
+    <loc>/reference/scGene_rankP.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_perform_score.html</loc>
+    <loc>/reference/scGene_scaleP.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_score_filter.html</loc>
+    <loc>/reference/scGet_gene_heritability_correlation.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scPagwas_Visualization.html</loc>
+    <loc>/reference/scPagwas_main.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/scParameter_regression.html</loc>
+    <loc>/reference/scPagwas_perform_score.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Single_data_input.html</loc>
+    <loc>/reference/scPagwas_score_filter.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Snp2Gene.html</loc>
+    <loc>/reference/scPagwas_Visualization.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/Tissue_eqtls_Input.html</loc>
+    <loc>/reference/scParameter_regression.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/umap_theme.html</loc>
+    <loc>/reference/Single_data_input.html</loc>
   </url>
   <url>
-    <loc>https://github.com/dengchunyu/scPagwas/reference/xy2vector.html</loc>
+    <loc>/reference/Snp2Gene.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SnpToGene.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Tissue_eqtls_Input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/umap_theme.html</loc>
+  </url>
+  <url>
+    <loc>/reference/xy2vector.html</loc>
   </url>
 </urlset>

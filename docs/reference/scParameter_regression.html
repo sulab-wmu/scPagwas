@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.10.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,14 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scParameter_regression</span><span class="op">(</span><span class="va">Pagwas_x</span>, <span class="va">Pagwas_y</span>, <span class="va">noise_per_snp</span>, ncores <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">scParameter_regression</span><span class="op">(</span></span>
+<span>  <span class="va">Pagwas_x</span>,</span>
+<span>  <span class="va">Pagwas_y</span>,</span>
+<span>  <span class="va">noise_per_snp</span>,</span>
+<span>  <span class="va">Rns</span>,</span>
+<span>  n.cores <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">backingpath</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,8 +80,16 @@
 <dd><p>noise</p></dd>
 
 
-<dt>ncores</dt>
+<dt>Rns</dt>
+<dd><p>the names for bk temfiles</p></dd>
+
+
+<dt>n.cores</dt>
 <dd><p>cores for regression</p></dd>
+
+
+<dt>backingpath</dt>
+<dd><p>file address for bk files, no "/" in the end.</p></dd>
 
 </dl></div>
 
