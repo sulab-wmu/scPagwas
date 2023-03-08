@@ -71,8 +71,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Data_input_preproccess_for_scPagwas</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 07, 三月, 2023
-at 20:55</h4>
+            <h4 data-toc-skip class="date">Last Updated: 08, 三月, 2023
+at 15:32</h4>
       
       
       <div class="d-none name"><code>Data_input_preproccess_for_scPagwas.Rmd</code></div>
@@ -108,6 +108,105 @@ clusters.</li>
 <li>2). The scRNA-seq dataset should be normalized.</li>
 </ul>
 </div>
+</div>
+<div class="section level3">
+<h3 id="gwas-summary-data-input">2.GWAS summary data Input<a class="anchor" aria-label="anchor" href="#gwas-summary-data-input"></a>
+</h3>
+<p>GWAS Summary statistics are download from figshare: <a href="https://doi.org/10.6084/m9.figshare.14671995" class="external-link">pgc.bip.full.2012-04.txt.gz</a></p>
+<div class="section level4">
+<h4 id="read-and-progrocess-the-example-gwas-summary-statistics-file">2.1.Read and progrocess the example GWAS Summary statistics
+file<a class="anchor" aria-label="anchor" href="#read-and-progrocess-the-example-gwas-summary-statistics-file"></a>
+</h4>
+<p>In R environment, select the specific columns and output the
+result.</p>
+<p>There were more than 10M snp in the GWAS summary datasets. To
+facilitate the calculation of scPagwas, we prune the snp by plink. Here,
+we</p>
+<p><code>awk  '{print $3 }' ${i}.txt  &gt; /share/pub/dengcy/Cancer_Gwas/CollectedData/Gwas_data/IEU_opengwas_project/tempfile/${i}_SNP_list.txt</code></p>
+<p>The GWAS Summary statistics file need to be processed into a “txt”
+file including six coloumn and tab-delimited.</p>
+</div>
+<div class="section level4">
+<h4 id="take-the-monocyte-count-as-real-example-and-deal-with-it-step-by-step">2.2.Take the monocyte count as real example and deal with it step by
+step:<a class="anchor" aria-label="anchor" href="#take-the-monocyte-count-as-real-example-and-deal-with-it-step-by-step"></a>
+</h4>
+<p>Preprogress the raw monocytecount GWAS Summary statistics file.
+Extract the useful information from raw files. Download the Raw gwas
+GWAS Summary statistics file: <a href="https://gwas.mrcieu.ac.uk/files/ieu-b-31/ieu-b-31.vcf.gz" class="external-link uri">https://gwas.mrcieu.ac.uk/files/ieu-b-31/ieu-b-31.vcf.gz</a></p>
+</div>
+</div>
+<div class="section level3">
+<h3 id="pathway-gene-list">3.Pathway gene list<a class="anchor" aria-label="anchor" href="#pathway-gene-list"></a>
+</h3>
+<p>There are some processed pathway gene list provided by scPagwas
+package: all these pathway list are including gene symbols.</p>
+<ul>
+<li>Genes_by_pathway_kegg</li>
+<li>genes.by.celltype.pathway</li>
+<li>genes.by.gpbp.pathway</li>
+<li>genes.by.reactome.pathway</li>
+<li>genes.by.regulatory.pathway</li>
+<li>genes.by.tft.pathway</li>
+<li>genes.by.hallmark.pathway</li>
+<li>genes.by.immunologic.pathway</li>
+<li>genes.by.immunesigdb.pathway</li>
+</ul>
+<p>There are some steps for get these pathway gene list: There is no
+need to repeat running these code.</p>
+<div class="section level4">
+<h4 id="kegg-pathway-list">KEGG pathway list<a class="anchor" aria-label="anchor" href="#kegg-pathway-list"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="other-pathway-list">Other pathway list<a class="anchor" aria-label="anchor" href="#other-pathway-list"></a>
+</h4>
+<p>These pathways data are download from <a href="https://www.gsea-msigdb.org/gsea/index.jsp" class="external-link">GSEA</a> website.</p>
+<p>Note:</p>
+<ol style="list-style-type: decimal">
+<li>Sometimes, there is no need to change the pathway list frequently
+once you choose a fitable pathway list.</li>
+<li>The summed number of genes in pathway list should not too much to
+cost a long time or memory.Once your pathway list is too big, you can
+choose some sub-pathway suitable for you analysisi or remove some
+redundance pathways.</li>
+</ol>
+</div>
+<div class="section level4">
+<h4 id="reduce-pathway-gene-list">Reduce pathway gene list<a class="anchor" aria-label="anchor" href="#reduce-pathway-gene-list"></a>
+</h4>
+<p>We set the <code>genes.by.reactome.pathway</code> for example, there
+are 1615 gene list and 89476 genes, a mount of resouces and time will be
+cost when running scPagwas, we provid <code>reduce_pathway</code> to
+reduce the pathway list:</p>
+<ul>
+<li>
+<code>pathway_seed</code> choose a list of pathway names as seed,
+which are some pahtways cann’t be remove.</li>
+<li>
+<code>remove_proporion</code> The propotion of duplicated between
+seed pathway and the others</li>
+</ul>
+</div>
+</div>
+<div class="section level3">
+<h3 id="gene-block-annotation">4.Gene block annotation<a class="anchor" aria-label="anchor" href="#gene-block-annotation"></a>
+</h3>
+<p>Gene block annotation in chromosome is need to prepare for scPagwas.
+scPagwas can provide a block annotation data for protein-coding
+genes.</p>
+<p>File downloaded from MAGMA website <a href="https://ctg.cncr.nl/software/magma" class="external-link">MAGMA | CTG (cncr.nl)</a></p>
+<p>Here is the procedure of obtaining the data:</p>
+</div>
+<div class="section level3">
+<h3 id="ld-data">5.LD data<a class="anchor" aria-label="anchor" href="#ld-data"></a>
+</h3>
+<p>The 1,000 Genomes Project Phase 3 Panel was applied to calculate the
+linkage disequilibrium (LD) among SNPs extracted from GWAS summary
+statistics. the processed LD data are show here:</p>
+<p>We use <code>vcftools</code> and <code>plink</code> to deal with the
+1,000 Genomes genotypes.</p>
+<p><code>./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes ./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome</code></p>
+<p>R environment to print out the scPagwas-needed data.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
