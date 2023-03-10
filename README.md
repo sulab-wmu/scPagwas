@@ -64,12 +64,12 @@ scPagwas provides a number of tutorials for various situation. Please
 also visit the documentation.
 
 -   The
-    [Data_input_preproccess_for_scPagwas](https://github.com/dengchunyu/scPagwas/blob/main/docs/articles/Data_input_preproccess_for_scPagwas.html)
+    [Data_input_preproccess_for_scPagwas](https://github.com/dengchunyu/BlogPagwas/blob/d3d5e30b57acba7cca8df18bef82b7c5c8a24512/content/post/2023-03-08-data-input-preproccess-for-scpagwas.md)
     tutorial provides the methods of data-input preproccess for
     scPagwas.
 
 -   The
-    [Bmmc_monocytecount_singlecell_celltype_vignette](https://github.com/dengchunyu/scPagwas/blob/main/docs/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html)
+    [Bmmc_monocytecount_singlecell_celltype_vignette](https://github.com/dengchunyu/BlogPagwas/blob/d3d5e30b57acba7cca8df18bef82b7c5c8a24512/content/post/2023-03-09-bmmc-monocytecount-singlecell-celltype-vignette.md)
     tutorial provides the usual procedure for scPagwas including the
     result interpretation are discussed, and visualizing their
     characteristics.
