@@ -48,7 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">Bmmc_monocytecount_singlecell_celltype_vignette</a>
+    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
     <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
     <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Split_big_scRNAseqData_and_integrate_result</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 10, 三月, 2023
-at 15:52</h4>
+            <h4 data-toc-skip class="date">Last Updated: 16, 三月, 2023
+at 09:47</h4>
       
       
       <div class="d-none name"><code>Split_big_scRNAseqData_and_integrate_result.Rmd</code></div>
@@ -92,7 +92,7 @@ at 15:52</h4>
 <div class="section level2">
 <h2 id="run-the-scpagwas-for-big-scrna-seq-data">Run the scPagwas for big scRNA-seq data<a class="anchor" aria-label="anchor" href="#run-the-scpagwas-for-big-scrna-seq-data"></a>
 </h2>
-<p><code>If your computer storage is enough, ignore this item</code>.
+<p><code>If your computer storage is enough, ignore this item</code>.<br>
 Sometimes, the storage is limit for your analysis, you can splice the
 scRNA-seq data set by celltypes or in order.</p>
 <div class="section level3">
@@ -117,14 +117,6 @@ When you split the scRNA-seq data in random, you should set the
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_split</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">Example_splice</span> <span class="op">&lt;-</span> <span class="va">scRNAexample</span><span class="op">[</span>,<span class="va">Split_index</span><span class="op">==</span><span class="va">i</span><span class="op">]</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">Example_splice</span>,file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">set.dirs</span>,<span class="st">"Example_splice"</span>,<span class="va">i</span>,<span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="co">#########</span></span>
-<span><span class="co">###1.By celltypes</span></span>
-<span><span class="co">#Create the random index number.</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">scRNAexample</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">Example_splice</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">scRNAexample</span>,idents <span class="op">=</span> <span class="va">i</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">Example_splice</span>,file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="va">set.dirs</span>,<span class="st">"Example_splice"</span>,<span class="va">i</span>,<span class="st">".rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>

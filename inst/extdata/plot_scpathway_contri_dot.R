@@ -46,11 +46,11 @@ plot_scpathway_dot <- function(Pagwas,
                                filter_p = 0.05,
                                max_logp = 10,
                                display_max_sizes = F,
-                               size_var = "logrankPvalue",
+                               size_var = "CellqValue",
                                col_var = "proportion",
                                shape.scale = 8,
                                cols.use = c("lightgrey", "#E45826"),
-                               dend_x_var = "logrankPvalue",
+                               dend_x_var = "CellqValue",
                                dist_method = "euclidean",
                                hclust_method = "ward.D",
                                do_plot = F,
@@ -58,6 +58,23 @@ plot_scpathway_dot <- function(Pagwas,
                                width = 7,
                                height = 7,
                                ...) {
+  # Pagwas=Pagwas_singlecell;
+  # celltypes=unique(Idents(Pagwas_singlecell));
+  # topn_path_celltype=5;
+  # filter_p=0.05;
+  # max_logp=15;
+  # display_max_sizes=F;
+  # size_var ="CellpValue";
+  # col_var="proportion";
+  # shape.scale = 8;
+  # cols.use=c("lightgrey", "#E45826");
+  # dend_x_var = "CellpValue";
+  # dist_method="euclidean";
+  # hclust_method="ward.D";
+  # do_plot = T;
+  # #figurenames = "Pathway_plot.pdf",
+  # width = 7;
+  # height = 7
   paras_sum_mean <- NULL
   ############### proportion
   proportion_list <- tapply(
@@ -125,7 +142,7 @@ plot_scpathway_dot <- function(Pagwas,
   gg_rankp <- reshape2::melt(scPathrankP,
                              id.vars = "pathways",
                              variable.name = "celltypes",
-                             value.name = "logrankPvalue")
+                             value.name = "CellqValue")
 
   gg_dot <- merge(gg_rankp, gg_proportion)
   p <- plot_scpathway_contri_dot(
@@ -318,6 +335,7 @@ plot_scpathway_contri_dot <- function(data.to.plot,
   # dist_method="euclidean";
   # hclust_method="ward.D2";
   # do.plot=TRUE
+
 
   size_leg <- shape_leg <- col_leg <- NULL
   x.lab.pos <- match.arg(x.lab.pos)

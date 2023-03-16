@@ -19,9 +19,7 @@ knitr::opts_chunk$set(
 
 # About scPagwas
 
-<img src="./man/figures/logo.png#pic_cencter" width="10%" style="display: block; margin: auto;" />
-
-**scPagwas** employing the polygenic regression model to uncover trait-relevant cell subpopulations by incorporating pathway activity transformed scRNA-seq data with genome-wide association studies (GWAS) data.
+**scPagwas** employs a polygenic regression model to prioritize a set of trait-relevant genes and uncover trait-relevant cell subpopulations by incorporating pathway activity transformed single-cell RNA sequencing (scRNA-seq) data with genome-wide association studies (GWAS) summary data.
 
 <img src="./man/figures/Figure1.1.png" width="100%" style="display: block; margin: auto;" />
  
@@ -32,7 +30,7 @@ Polygenic regression uncovers trait-relevant cellular contexts through pathway a
 
 Code for reproducing the analysis from the paper is available [here](https://github.com/dengchunyu/scPagwas_reproduce). 
 
-For further usage on the scPagwas package, please refer to the [tutorials](https://github.com/sulab-wmu/scPagwas/). A vignette for using also can be accessed using browseVignettes("scPagwas") 
+For further usage on the scPagwas package, you can visit the [tutorials](https://dengchunyu.github.io/scPagwas/) or [website](https://dengchunyu.github.io/about/). A vignette for using also can be accessed using browseVignettes("scPagwas")
 
 ## Installation
 
@@ -48,13 +46,14 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("GenomicRanges")
 BiocManager::install("IRanges")
 
-devtools::install_github("sulab-wmu/scPagwass")
+devtools::install_github("sulab-wmu/scPagwas")
 ```
 
 ## Usage 
 quick-start example: 
 ```{r message=FALSE, eval = FALSE}
  library(scPagwas)
+
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
@@ -68,19 +67,21 @@ quick-start example:
                      singlecell=T, # Whether to run the singlecell process.
                      celltype=T# Whether to run the celltype process.
 )
+
 ```
 
 ## Tutorials
 
-scPagwas provides a number of tutorials for various situation. Please also visit the documentation.
+scPagwas provides a number of tutorials for various situation.
 
-- The [Data_input_preproccess_for_scPagwas](https://dengchunyu.github.io/scPagwas/articles/Data_input_preproccess_for_scPagwas.html) tutorial provides the methods of data-input preproccess for scPagwas.
+- The [Data_input_preproccess_for_scPagwas](https://dengchunyu.github.io/dataprepare/2023/03/10/Data_input_preproccess_for_scPagwas.html) tutorial provides the methods of data-input preproccess for scPagwas.
 
-- The [Bmmc_monocytecount_singlecell_celltype_vignette](https://dengchunyu.github.io/scPagwas/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html) tutorial provides the usual procedure for scPagwas including the result interpretation are discussed, and visualizing their characteristics.
+- The [The-common-usage-and-result-explaination-for-scPagwas](https://dengchunyu.github.io/routineuse/2023/03/10/The-common-usage-and-result-explaination-for-scPagwas.html) tutorial provides the usual procedure for scPagwas including the result interpretation are discussed, and visualizing their characteristics.
 
-- The [Running_scPagwas_steps_by_SubFunctions](https://dengchunyu.github.io/scPagwas/articles/Running_scPagwas_steps_by_SubFunctions.html) tutorial provides the procedure for only cell types or single cell functions; Otherwise, a step by step introduction for scPgawas sub-functions also provided.
+- The [Running_scPagwas_steps_by_SubFunctions](https://dengchunyu.github.io/routineuse/2023/03/10/Running-scPagwas-steps-by-SubFunctions.html) tutorial provides the procedure for only cell types or single cell functions; Otherwise, a step by step introduction for scPgawas sub-functions is also provided.
 
-- The [Multi_TraitFiles_for_one_SingleData_running](https://dengchunyu.github.io/scPagwas/articles/Multi_TraitFiles_for_one_SingleData_running.html) tutorial provides the procedure that running scPagwas based on multiple trait files in one scRNA-seq data. 
+- The [Multi_TraitFiles_for_one_SingleData_running](https://dengchunyu.github.io/flexibleuse/2023/03/13/Multi-Traits-for-one-Single-cell-Data.html) tutorial provides the procedure that running scPagwas based on multiple trait files in one scRNA-seq dataset.
 
-- The [Split_big_scRNAseqData_and_integrate_result](https://dengchunyu.github.io/scPagwas/articles/Split_big_scRNAseqData_and_integrate_result.html) tutorial provides procedure that running scPagwas with several splited scRNA-seq data which the whole data is too big for running. 
+- The [Split_big_scRNAseqData_and_integrate_result](https://dengchunyu.github.io/flexibleuse/2023/03/13/Split-big-scRNAseqData-and-integrate_result.html) tutorial provides the procedure that running scPagwas with several splited scRNA-seq datasets while the whole dataset is too big to run.
 
+- The [Prune-GwasSummary-FIles-by-plink](https://dengchunyu.github.io/dataprepare/2023/03/13/Prune-GwasSummary-FIles-by-plink.html)tutorial provides the procedure that prune the big gwas summary files.

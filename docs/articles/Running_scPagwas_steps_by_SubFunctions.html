@@ -48,7 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">Bmmc_monocytecount_singlecell_celltype_vignette</a>
+    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
     <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
     <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Running_scPagwas_steps_by_SubFunctions</h1>
             
-            <h4 data-toc-skip class="date">Last Updated on 10 三月,
+            <h4 data-toc-skip class="date">Last Updated on 16 三月,
 2023</h4>
       
       
@@ -88,15 +88,15 @@
     
     
 <div class="section level2">
-<h2 id="only-run-celltypes-functions-">1. Only run celltypes functions.<a class="anchor" aria-label="anchor" href="#only-run-celltypes-functions-"></a>
+<h2 id="three-routine-running-situations">Three routine running situations<a class="anchor" aria-label="anchor" href="#three-routine-running-situations"></a>
 </h2>
-<p>The executive programs for celltypes and single cell are independent,
-If you only want to know the celtypes, set the <code>celltype=T</code>
-and <code>singlecell=F</code>. The advantages is save a lot of times,
-for celltype only can omit many running processes.</p>
+<p>There are some different situations for running scPagwas!</p>
+<div class="section level3">
+<h3 id="run-both-singlecell-and-celltypes-functions-">1.1. Run both singlecell and celltypes functions.<a class="anchor" aria-label="anchor" href="#run-both-singlecell-and-celltypes-functions-"></a>
+</h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span><span class="va">Pagwas_celltypes</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>,</span>
+<span><span class="va">Pagwas</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>,</span>
 <span>                     gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
 <span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
 <span>                     output.prefix<span class="op">=</span><span class="st">"Test"</span>,</span>
@@ -106,9 +106,66 @@ for celltype only can omit many running processes.</p>
 <span>                     singlecell<span class="op">=</span><span class="cn">T</span>, </span>
 <span>                     celltype<span class="op">=</span><span class="cn">T</span>,</span>
 <span>                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
+<span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">meta.data</span><span class="op">)</span></span>
+<span><span class="co"># [1] "orig.ident"          "nCount_RNA"          "nFeature_RNA"        "percent.mt"         </span></span>
+<span><span class="co"># [5] "S.Score"             "G2M.Score"           "Phase"               "old.ident"          </span></span>
+<span><span class="co"># [9] "nCount_SCT"          "nFeature_SCT"        "SCT_snn_res.0.5"     "seurat_clusters"    </span></span>
+<span><span class="co">#[13] "SCT_snn_res.0.4"     "SCT_snn_res.0.8"     "anno"                "scPagwas.TRS.Score1"</span></span>
+<span><span class="co">#[17] "scPagwas.gPAS.score" "CellpValue"          "CellqValue" </span></span></code></pre></div>
+<ul>
+<li>The colomn “scPagwas.TRS.Score1”,“scPagwas.gPAS.score” is the trait
+relavent score and genetic pathway score for each cells.</li>
+<li>The colomn “CellpValue” , “CellqValue” is the statistics p value for
+trait relavent score for each cells.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">)</span></span>
+<span><span class="co">#[1] "Pathway_list"                  "pca_cell_df"                  </span></span>
+<span><span class="co">#[3] "lm_results"                    "bootstrap_results"            </span></span>
+<span><span class="co">#[5] "scPathways_rankPvalue"         "gene_heritability_correlation"</span></span></code></pre></div>
+<ul>
+<li>“bootstrap_results” is the cell type results;
+“scPathways_rankPvalue” is the p value for each pahtway in each
+celltype; “gene_heritability_correlation” is the correlation result for
+each gene for genetic pathway score, the top genes were used for
+calculating the trait relavent score.</li>
+<li>“Pathway_list” ,“pca_cell_df” and “lm_results” are the intermediate
+results for scPagwas.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">assays</span><span class="op">)</span></span>
+<span><span class="co">#[1] "RNA"                    "SCT"                    "scPagwasPaHeritability"</span></span>
+<span><span class="co">#[4] "scPagwasPaPca"</span></span></code></pre></div>
+<p>the intermediate results “scPagwasPaHeritability” and “scPagwasPaPca”
+are the additional assays for scPagwas. - “scPagwasPaHeritability” is
+the Heritability score for each pahtway in each cell. - “scPagwasPaPca”
+is the pca score for each pahtway in each cell.</p>
+</div>
+<div class="section level3">
+<h3 id="only-run-celltypes-functions-">1.2. Only run celltypes functions.<a class="anchor" aria-label="anchor" href="#only-run-celltypes-functions-"></a>
+</h3>
+<p>The executive programs for celltypes and single cell are independent,
+If you only want to know the celtypes, set the <code>celltype=T</code>
+and <code>singlecell=F</code>. The advantages is save a lot of times,
+for celltype only can omit many running processes.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
+<span><span class="va">Pagwas_celltypes</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>,</span>
+<span>                     gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     output.prefix<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                     output.dirs<span class="op">=</span><span class="st">"Test"</span>,</span>
+<span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
+<span>                     assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
+<span>                     singlecell<span class="op">=</span><span class="cn">F</span>, </span>
+<span>                     celltype<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
 <span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span></code></pre></div>
 <p>The reuslt of celltypes is list format(not seurat format).</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas_celltypes</span><span class="op">)</span></span>
 <span><span class="co"># [1] "Celltype_anno"     "data_mat"          "VariableFeatures" </span></span>
 <span><span class="co"># [4] "merge_scexpr"      "rawPathway_list"   "Pathway_list"     </span></span>
@@ -124,16 +181,16 @@ svd(1’st pca) result for each celltype;</p></li>
 <li><p>Other elements are the intermediate data.</p></li>
 </ul>
 </div>
-<div class="section level2">
-<h2 id="continue-to-run-singlecell-functions">2. Continue to run singlecell functions<a class="anchor" aria-label="anchor" href="#continue-to-run-singlecell-functions"></a>
-</h2>
+<div class="section level3">
+<h3 id="only-run-singlecell-functions">1.3. Only run singlecell functions<a class="anchor" aria-label="anchor" href="#only-run-singlecell-functions"></a>
+</h3>
 <p>Because the parameters and input data are the same with celltypes
 function, we can take the celltypes result as the input data for single
 cell function. The advantage is there is no need to run the
 <code>svd</code> code block, save a lot of time.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
-<span><span class="va">Pagwas_singlecell</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="cn">NULL</span>, </span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">Pagwas_singlecell</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas_celltypes</span>, </span>
 <span>                                 gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
 <span>                                 Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
 <span>                                 output.prefix<span class="op">=</span><span class="st">"Test"</span>,</span>
@@ -141,25 +198,25 @@ cell function. The advantage is there is no need to run the
 <span>                                 Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
 <span>                                 assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
 <span>                                 singlecell<span class="op">=</span><span class="cn">T</span>, </span>
-<span>                                 celltype<span class="op">=</span><span class="cn">T</span>,</span>
+<span>                                 celltype<span class="op">=</span><span class="cn">F</span>,</span>
 <span>                                 block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
-<span>                                 chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span>                                 chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span></code></pre></div>
 <p>The result is seurat format.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="running-scpagwas-step-by-step">3. Running scPagwas step by step<a class="anchor" aria-label="anchor" href="#running-scpagwas-step-by-step"></a>
 </h2>
 <p>To utilize and understand scPagwas better, we run scPagwas flexibly
-step by step. In usual, we needn’t run these sub-functions one by
-one.</p>
+step by step. In usual, we needn’t run these sub-functions one by one.
+Most of the steps can founded in ‘scPagwas_main’ functions.</p>
 <p>We use an example provided by scPagwas package.</p>
 <div class="section level3">
 <h3 id="single-data-input">3.1 Single data input<a class="anchor" aria-label="anchor" href="#single-data-input"></a>
 </h3>
 <p>Obtain the single cell expression matrix and filter the cluster for
 minimum cells.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
@@ -178,7 +235,7 @@ types mean expression matrix.</p>
 <h3 id="run-pathway-pca-score">3.2 Run pathway pca score<a class="anchor" aria-label="anchor" href="#run-pathway-pca-score"></a>
 </h3>
 <p>Obtain the pathway pca score matrix.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_pcascore_run.html">Pathway_pcascore_run</a></span><span class="op">(</span></span>
 <span>        Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
 <span>        Pathway_list <span class="op">=</span> <span class="va">Genes_by_pathway_kegg</span></span>
@@ -193,7 +250,7 @@ matrix.</p>
 </h3>
 <p>Read the GWAS summary data, remove the MHC and sex chromosome and
 filtered the maf of SNP.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gwas_data</span> <span class="op">&lt;-</span> <span class="fu">bigreadr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bigreadr/man/fread2.html" class="external-link">fread2</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/GWAS_summary_input.html">GWAS_summary_input</a></span><span class="op">(</span></span>
 <span>    Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
@@ -207,21 +264,21 @@ filtered the maf of SNP.</p>
 </h3>
 <p>We set the <code>marg</code> is 10KB, means the position for SNP is
 less 10KB distance to TSS of gene.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/SnpToGene.html">SnpToGene</a></span><span class="op">(</span></span>
 <span>        gwas_data <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">gwas_data</span>,</span>
 <span>        block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
 <span>        marg <span class="op">=</span> <span class="fl">10000</span></span>
 <span>      <span class="op">)</span></span></code></pre></div>
 <p>SNP to gene dataframe:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">snp_gene_df</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pathway-snp-annotation">3.5 Pathway-SNP annotation<a class="anchor" aria-label="anchor" href="#pathway-snp-annotation"></a>
 </h3>
 <p>Mapping SNPs to pahtways and getting block data.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_annotation_input.html">Pathway_annotation_input</a></span><span class="op">(</span></span>
 <span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
 <span>      block_annotation <span class="op">=</span> <span class="va">block_annotation</span></span>
@@ -233,7 +290,7 @@ less 10KB distance to TSS of gene.</p>
 <h3 id="link-the-pathway-blocks-to-pca-score">3.6 Link the pathway blocks to pca score<a class="anchor" aria-label="anchor" href="#link-the-pathway-blocks-to-pca-score"></a>
 </h3>
 <p>Also run the regression function for single cell.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Link_pathway_blocks_gwas.html">Link_pathway_blocks_gwas</a></span><span class="op">(</span></span>
 <span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
 <span>      chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span>,</span>
@@ -241,19 +298,19 @@ less 10KB distance to TSS of gene.</p>
 <span>      celltype <span class="op">=</span> <span class="cn">T</span>,</span>
 <span>      backingpath<span class="op">=</span><span class="st">"./temp"</span><span class="op">)</span></span></code></pre></div>
 <p>The pathway regression result for single cell.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_sclm_results</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="perform-regression-for-celltypes">3.7 Perform regression for celltypes<a class="anchor" aria-label="anchor" href="#perform-regression-for-celltypes"></a>
 </h3>
 <p>Run the regression function for celltypes.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pagwas_perform_regression.html">Pagwas_perform_regression</a></span><span class="op">(</span>Pathway_ld_gwas_data <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Boot_evaluate.html">Boot_evaluate</a></span><span class="op">(</span><span class="va">Pagwas</span>, bootstrap_iters <span class="op">=</span> <span class="fl">200</span>, part <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Pathway_ld_gwas_data</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
 <p>Show the regression result for celltypes.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span><span class="op">$</span><span class="va">lm_results</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span></span></code></pre></div>
@@ -263,14 +320,14 @@ less 10KB distance to TSS of gene.</p>
 </h3>
 <p>The gPAS scPagwas score mainly to deal with the single-cell
 regression result.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scPagwas_perform_score.html">scPagwas_perform_score</a></span><span class="op">(</span></span>
 <span>      Pagwas <span class="op">=</span> <span class="va">Pagwas</span>,</span>
 <span>      remove_outlier <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">)</span></span></code></pre></div>
 <p>Show result for Pathway pvalue for each cell types</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPathways_rankPvalue</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -278,11 +335,11 @@ regression result.</p>
 <h3 id="get-the-gene-heritability-correlation">3.9 Get the gene heritability correlation<a class="anchor" aria-label="anchor" href="#get-the-gene-heritability-correlation"></a>
 </h3>
 <p>Run heritability correlation for all genes.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>    <span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGet_gene_heritability_correlation.html">scGet_gene_heritability_correlation</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
 <span>                                                                                data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span></span></code></pre></div>
 <p>The result for correlation:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -290,12 +347,12 @@ regression result.</p>
 </h3>
 <p>Calculate the TRS score for top genes by <code>AddModuleScore</code>
 and running the p value for each cell by <code>rankPvalue</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span>    <span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#run pvalue</span></span>
-<span>    <span class="va">CellScalepValue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGene_scaleP.html">scGene_scaleP</a></span><span class="op">(</span></span>
+<span><span class="va">CellScalepValue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGene_scaleP.html">scGene_scaleP</a></span><span class="op">(</span></span>
 <span>      Single_mat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.matrix.html" class="external-link">data.matrix</a></span><span class="op">(</span></span>
 <span>        <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/AssayData.html" class="external-link">GetAssayData</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">'RNA'</span><span class="op">)</span><span class="op">[</span><span class="va">scPagwas_topgenes</span>, <span class="op">]</span></span>
 <span>      <span class="op">)</span><span class="op">)</span></span>
@@ -316,7 +373,7 @@ plot.<a class="anchor" aria-label="anchor" href="#visualize-the-scpagwas-score-o
 <ol style="list-style-type: decimal">
 <li>DimPlot of singlecell data.</li>
 </ol>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"RColorBrewer"</span><span class="op">)</span><span class="op">)</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span></span>
 <span> <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mojaveazure.github.io/seurat-object/" class="external-link">"SeuratObject"</a></span><span class="op">)</span><span class="op">)</span></span>
@@ -328,8 +385,8 @@ plot.<a class="anchor" aria-label="anchor" href="#visualize-the-scpagwas-score-o
 <span> <span class="fu"><a href="../reference/umap_theme.html">umap_theme</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"Test"</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x<span class="op">=</span><span class="st">"UMAP"</span>,y<span class="op">=</span><span class="st">""</span><span class="op">)</span><span class="op">+</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>aspect.ratio<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>scPagwas.TRS.Score1 and positive(p&lt;0.05) cells showing in
 dimplot.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span> <span class="fu"><a href="../reference/scPagwas_Visualization.html">scPagwas_Visualization</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas</span>,</span>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span> <span class="fu"><a href="../reference/scPagwas_Visualization.html">scPagwas_Visualization</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
 <span>                        p_thre <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>                        FigureType <span class="op">=</span> <span class="st">"umap"</span>,</span>
 <span>                        width <span class="op">=</span> <span class="fl">7</span>,</span>
@@ -345,7 +402,7 @@ dimplot.</p>
 </h3>
 <p>Plot the barplot of the proportion of positive Cells in
 celltypes:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
 <span>                         var_ident<span class="op">=</span><span class="st">"anno"</span>,</span>
 <span>                         var_group<span class="op">=</span><span class="st">"positiveCells"</span>,</span>
@@ -353,7 +410,7 @@ celltypes:</p>
 <span>                         do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <p>Plot the barplot of the proportion of celltypes in positive and
 negative Cells:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/plot_bar_positie_nagtive.html">plot_bar_positie_nagtive</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
 <span>                              var_ident<span class="op">=</span><span class="st">"positiveCells"</span>,</span>
 <span>                              var_group<span class="op">=</span><span class="st">"anno"</span>,</span>
@@ -363,47 +420,9 @@ negative Cells:</p>
 <span>                              do_plot <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="visualize-the-heritability-correlated-pathways">4.3 Visualize the heritability correlated Pathways<a class="anchor" aria-label="anchor" href="#visualize-the-heritability-correlated-pathways"></a>
+<h3 id="plot-the-heritability-correlated-genes">4.3 Plot the heritability correlated genes<a class="anchor" aria-label="anchor" href="#plot-the-heritability-correlated-genes"></a>
 </h3>
-<p>Plot the specific genetics pathway for each celltypes</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org" class="external-link">tidyverse</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/grimbough/rhdf5" class="external-link">rhdf5</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grDevices</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">stats</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://factominer.free.fr" class="external-link">FactoMineR</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://scales.r-lib.org" class="external-link">scales</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/hadley/reshape" class="external-link">reshape2</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/andrie/ggdendro" class="external-link">ggdendro</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/grimport/" class="external-link">grImport2</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">grid</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mvkorpel/sisal" class="external-link">sisal</a></span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"plot_scpathway_contri_dot.R"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">plot_scpathway_dot</span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
-<span>                   celltypes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://mojaveazure.github.io/seurat-object/reference/Idents.html" class="external-link">Idents</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                   topn_path_celltype<span class="op">=</span><span class="fl">5</span>,</span>
-<span>                   filter_p<span class="op">=</span><span class="fl">0.05</span>,</span>
-<span>                   max_logp<span class="op">=</span><span class="fl">15</span>,</span>
-<span>                   display_max_sizes<span class="op">=</span><span class="cn">F</span>,</span>
-<span>                   size_var <span class="op">=</span><span class="st">"logrankPvalue"</span> ,</span>
-<span>                   col_var<span class="op">=</span><span class="st">"proportion"</span>,</span>
-<span>                   shape.scale <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>                   cols.use<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"lightgrey"</span>, <span class="st">"#E45826"</span><span class="op">)</span>,</span>
-<span>                   dend_x_var <span class="op">=</span> <span class="st">"logrankPvalue"</span>,</span>
-<span>                   dist_method<span class="op">=</span><span class="st">"euclidean"</span>,</span>
-<span>                   hclust_method<span class="op">=</span><span class="st">"ward.D"</span>,</span>
-<span>                   do_plot <span class="op">=</span> <span class="cn">T</span>,</span>
-<span>                   <span class="co">#figurenames = "Pathway_plot.pdf",</span></span>
-<span>                   width <span class="op">=</span> <span class="fl">7</span>,</span>
-<span>                   height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="plot-the-heritability-correlated-genes">4.4 Plot the heritability correlated genes<a class="anchor" aria-label="anchor" href="#plot-the-heritability-correlated-genes"></a>
-</h3>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
 <span>                             topn_genes_label<span class="op">=</span><span class="fl">10</span>,</span>
 <span>                             color_low<span class="op">=</span><span class="st">"#035397"</span>,</span>
@@ -416,13 +435,13 @@ negative Cells:</p>
 <span>                             height <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="show-expression-of-the-top-heritability-correlation-genes-in-celltypes">4.5 Show expression of the top heritability correlation genes in
+<h3 id="show-expression-of-the-top-heritability-correlation-genes-in-celltypes">4.4 Show expression of the top heritability correlation genes in
 celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top-heritability-correlation-genes-in-celltypes"></a>
 </h3>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://nanx.me/ggsci/" class="external-link">"ggsci"</a></span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://satijalab.org/seurat" class="external-link">"Seurat"</a></span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">]</span></span>
+<span><span class="va">top5genes</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>,<span class="fl">30</span>,<span class="fl">36</span>,<span class="fl">55</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_vln_Corgenes.html">plot_vln_Corgenes</a></span><span class="op">(</span>seurat_obj<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
 <span>             assay<span class="op">=</span><span class="st">"RNA"</span>, slot<span class="op">=</span><span class="st">"data"</span>,</span>
 <span>             var_group<span class="op">=</span><span class="st">"anno"</span>,</span>
@@ -434,7 +453,7 @@ celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top
 <h3 id="celltypes-bootstrap_results-reuslt">4.6 celltypes bootstrap_results reuslt<a class="anchor" aria-label="anchor" href="#celltypes-bootstrap_results-reuslt"></a>
 </h3>
 <p>Barplot for celltypes</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Bootstrap_P_Barplot.html">Bootstrap_P_Barplot</a></span><span class="op">(</span>p_results<span class="op">=</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">$</span><span class="va">bp_value</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                    p_names<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas_singlecell</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">bootstrap_results</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span>,</span>
 <span>                    width <span class="op">=</span> <span class="fl">5</span>,</span>
@@ -442,7 +461,7 @@ celltypes<a class="anchor" aria-label="anchor" href="#show-expression-of-the-top
 <span>                    do_plot<span class="op">=</span><span class="cn">T</span>,</span>
 <span>                    title <span class="op">=</span> <span class="st">"Test"</span><span class="op">)</span></span></code></pre></div>
 <p>Forest plot for estimate value.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/Bootstrap_estimate_Plot.html">Bootstrap_estimate_Plot</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas_singlecell</span>,</span>
 <span>                        width <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>                        height <span class="op">=</span> <span class="fl">7</span>,</span>

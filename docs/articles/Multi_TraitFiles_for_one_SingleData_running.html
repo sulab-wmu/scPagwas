@@ -48,7 +48,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">Bmmc_monocytecount_singlecell_celltype_vignette</a>
+    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
     <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
     <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
     <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Multi_TraitFiles_for_one_SingleData_running</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 10, 三月, 2023
-at 15:52</h4>
+            <h4 data-toc-skip class="date">Last Updated: 16, 三月, 2023
+at 09:46</h4>
       
       
       <div class="d-none name"><code>Multi_TraitFiles_for_one_SingleData_running.Rmd</code></div>
@@ -91,10 +91,10 @@ at 15:52</h4>
 running for one single cell data. In this case, we can running single
 cell function for prepare and save the result for the following traits’
 code program. The example trait files are:</p>
-<p>monocytecount_prune_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=wGAip7</a>
-Lymphocytecount_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ</a>
-MeanCorpusVolume_prune_gwas_data.txt: <a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3" class="external-link uri">https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3</a></p>
-<p>The BMMC processed scRNA-seq data can download from here: <a href="https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ" class="external-link uri">https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=3XsNnQ</a></p>
+<p><a href="https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=cb5Ihf" class="external-link">monocytecount</a>
+<a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ" class="external-link">Lymphocytecount</a>
+<a href="https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3" class="external-link">MeanCorpusVolume</a></p>
+<p>The BMMC processed scRNA-seq data can download from <a href="https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=4JiHRw" class="external-link">here</a></p>
 <div class="section level2">
 <h2 id="prepare-the-single-cell-data-in-the-early-stage-">Prepare the Single cell data in the early stage.<a class="anchor" aria-label="anchor" href="#prepare-the-single-cell-data-in-the-early-stage-"></a>
 </h2>
@@ -105,11 +105,10 @@ input files. First, Run the <code>Single_data_input</code> and
 <code>Seu_Hema_data.rds</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Single_data_input.html">Single_data_input</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,</span>
 <span>                            assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
-<span>                            Single_data<span class="op">=</span><span class="va">Single_data</span>,</span>
+<span>                            Single_data<span class="op">=</span><span class="st">'Seu_Hema_data.rds'</span>,</span>
 <span>                            Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span><span class="op">)</span></span>
 <span><span class="va">Pagwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/Pathway_pcascore_run.html">Pathway_pcascore_run</a></span><span class="op">(</span>Pagwas<span class="op">=</span><span class="va">Pagwas</span>,</span>
 <span>                               Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span><span class="op">)</span></span>
@@ -126,10 +125,10 @@ different traits which will save times.</p>
 <p>Second, Run the <code>scPagwas_main</code> for different trait files
 and take the single-cell result as input.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Pagwas is the result for last blocks.</span></span>
+<code class="sourceCode R"><span><span class="co">#Pagwas is the result for last blocks. It inherits the single cell result in the previous result</span></span>
 <span><span class="va">Pagwas_monocytecount</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,</span>
-<span>                     gwas_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"GWAS_summ_example.txt"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
-<span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     gwas_data <span class="op">=</span><span class="st">'monocytecount_gwas_data.txt'</span>,</span>
+<span>                     Single_data <span class="op">=</span><span class="st">'Seu_Hema_data.rds'</span>,</span>
 <span>                     output.prefix<span class="op">=</span><span class="st">"monocytecount_scPagwas"</span>,</span>
 <span>                     output.dirs<span class="op">=</span><span class="st">"monocytecount_bmmc"</span>,</span>
 <span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
@@ -138,8 +137,8 @@ and take the single-cell result as input.</p>
 <span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Pagwas_Lymphocytecount</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,</span>
-<span>                     gwas_data <span class="op">=</span><span class="st">"D:/OneDrive/GWAS_Multiomics/gwas_data/Lymphocytecount_gwas_data.txt"</span>,</span>
-<span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     gwas_data <span class="op">=</span><span class="st">"Lymphocytecount_gwas_data.txt"</span>,</span>
+<span>                     Single_data <span class="op">=</span><span class="st">'Seu_Hema_data.rds'</span>,</span>
 <span>                     output.prefix<span class="op">=</span><span class="st">"Lymphocytecountt_scPagwas"</span>,</span>
 <span>                     output.dirs<span class="op">=</span><span class="st">"Lymphocytecount_bmmc"</span>,</span>
 <span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
@@ -148,17 +147,14 @@ and take the single-cell result as input.</p>
 <span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">Pagwas_MeanCorpusVolume</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span><span class="va">Pagwas</span>,</span>
-<span>                     gwas_data <span class="op">=</span><span class="st">"D:/OneDrive/GWAS_Multiomics/gwas_data/MeanCorpusVolume_prune_gwas_data.txt"</span>,</span>
-<span>                     Single_data <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"scRNAexample.rds"</span>, package <span class="op">=</span> <span class="st">"scPagwas"</span><span class="op">)</span>,</span>
+<span>                     gwas_data <span class="op">=</span><span class="st">"MeanCorpusVolume_prune_gwas_data.txt"</span>,</span>
+<span>                     Single_data <span class="op">=</span><span class="st">'Seu_Hema_data.rds'</span>,</span>
 <span>                     output.prefix<span class="op">=</span><span class="st">"MeanCorpusVolume_scPagwas"</span>,</span>
 <span>                     output.dirs<span class="op">=</span><span class="st">"MeanCorpusVolume_bmmc"</span>,</span>
 <span>                     Pathway_list<span class="op">=</span><span class="va">Genes_by_pathway_kegg</span>,</span>
 <span>                     assay<span class="op">=</span><span class="st">"RNA"</span>,</span>
 <span>                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
-<span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">&gt;</span><span class="fl">0</span><span class="op">)</span><span class="op">{</span></span>
-<span> <span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Remove.html" class="external-link">Remove</a></span><span class="op">(</span><span class="fu">SOAR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SOAR/man/Objects.html" class="external-link">Objects</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> </span>
-<span><span class="op">}</span></span></code></pre></div>
+<span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
