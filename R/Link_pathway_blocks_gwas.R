@@ -60,12 +60,9 @@ Link_pathway_blocks_gwas <- function(Pagwas,
     n.cores=n.cores
   )
 
-
   rm(chrom_gwas_list)
   rm(chrom_ld)
-
-
-  gc()
+  #gc()
   return(Pagwas)
 }
 
@@ -99,6 +96,13 @@ Pathway_block_func <- function(Pagwas = NULL,
   options(bigmemory.allow.dimnames = TRUE)
   pb <- txtProgressBar(style = 3)
 
+  #Rn<-randomStrings(n=length(Pachrom_block_list),len=9,digits=TRUE,
+  #                          upperalpha=F,
+  #                          loweralpha=TRUE,
+  #                          unique=TRUE,
+  #                          check=F)
+  #Rn<-Rn[,1]
+  #names(Rn)<-names(Pachrom_block_list)
 
   for (pathway in names(Pachrom_block_list)) {
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
@@ -307,6 +311,9 @@ link_pwpca_block <- function(pa_block,
 
     rownames(snp_gene_df) <- snp_gene_df$rsid
 
+    #x <- matrix(as.numeric(x) * as.numeric(
+    #  snp_gene_df[pa_block$snps$rsid, "slope"]
+    #), nrow = 1)
     x3 <- matrix(as.numeric(x2) * as.numeric(x), nrow = 1)
   }
 

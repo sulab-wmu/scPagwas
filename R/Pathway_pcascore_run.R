@@ -75,18 +75,26 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   Pathway_list <- Pathway_list[pana]
   # keep the raw pathway
   Pagwas$rawPathway_list <- Pathway_list
+
   # filter the gene for no expression in single cells in pathway
   celltypes <- as.vector(unique(Pagwas$Celltype_anno$annotation))
 
   pana_list <- lapply(celltypes, function(celltype) {
-    a<-Pagwas$merge_scexpr[,celltype]
-    a<-names(a)[a != 0]
+    scCounts <- Pagwas$data_mat[
+      ,
+      Pagwas$Celltype_anno$cellnames[
+        Pagwas$Celltype_anno$annotation == celltype
+      ]
+    ]
+    scCounts <- as_matrix(scCounts)
+    scCounts <- scCounts[rowSums(scCounts) != 0, ]
+    proper.gene.names <- rownames(scCounts)
     pana <- names(Pathway_list)[which(
       unlist(lapply(
         Pathway_list,
         function(Pa) {
           length(intersect(
-            Pa, a
+            Pa, proper.gene.names
           ))
         }
       )) > 2
@@ -108,30 +116,29 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
         Pagwas$Celltype_anno$annotation == celltype
       ]
     ]
+    scCounts <- as_matrix(scCounts)
     #
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,
-      scCounts =  as_matrix(scCounts)
+      scCounts = scCounts
     )
     setTxtProgressBar(pb, which(celltypes == celltype) / length(celltypes))
     print(celltype)
     return(scPCAscore)
   })
   close(pb)
-  ## merge all PCAscore list
-  Pa_names <-lapply(
+  #remove pathway
+  pa_remove<-unique(unlist(lapply(
     seq_len(length(scPCAscore_list)), function(i) {
-      df <- scPCAscore_list[[i]][[1]]
-      return(df$name)
-    }
-  )
+      scPCAscore_list[[i]][[3]]
+    })))
 
-  Pa_names <- Reduce(intersect, Pa_names)
-
+  ## merge all PCAscore list
   pca_df <- lapply(seq_len(length(scPCAscore_list)), function(i) {
     df <- scPCAscore_list[[i]][[1]]
-    rownames(df)<-df$name
-    df<-df[Pa_names,]
+    if(length(pa_remove)!=0){
+      df<-df[df$name != pa_remove,]
+    }
     df$celltype <- rep(celltypes[i], nrow(df))
     return(df)
   })
@@ -161,9 +168,12 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   }
 
   pca_scCell_mat <- bigreadr::cbind_df(lapply(seq_len(length(scPCAscore_list)), function(i) {
-    scPCAscore_list[[i]][[2]][Pa_names,]
+    df<-scPCAscore_list[[i]][[2]]
+    if(length(pa_remove)!=0){
+      df<-df[df$name != pa_remove,]
+    }
+    return(df)
   }))
-
   rm(scPCAscore_list)
   colnames(pca_scCell_mat) <- colnames(Pagwas$data_mat)
 
@@ -178,8 +188,8 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   )
 
   Pagwas$pca_cell_df <- pca_cell_df
-  Pagwas$rawPathway_list<-Pagwas$rawPathway_list[Pa_names]
-  Pagwas$Pathway_list<-Pagwas$Pathway_list[Pa_names]
+  Pagwas$Pathway_list <- Pagwas$Pathway_list[rownames(pca_scCell_mat)]
+  Pagwas$rawPathway_list <- Pagwas$rawPathway_list[rownames(pca_scCell_mat)]
   return(Pagwas)
 }
 
@@ -218,17 +228,15 @@ PathwayPCAtest <- function(Pathway_list,
 
   ###### calculate the pca for each pathway terms.
   papca <- lapply(Pathway_list, function(Pa_id) {
-    lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     #print(id)
+    #Pa_id<-Pathway_list[[id]]
+    lab <- proper.gene.names %in% intersect(proper.gene.names, Pa_id)
     mat <- scCounts[, lab]
-    if(all(colSums(mat)==0)){
-      return(NULL)
-    }else{
-
+    result <- tryCatch(
+      {
     pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"),
       nv = nPcs, nu = 0, center = cm[lab]
     )
-
     pcs$d <- pcs$d / sqrt(nrow(mat))
     pcs$rotation <- pcs$v
     pcs$v <- NULL
@@ -254,10 +262,15 @@ PathwayPCAtest <- function(Pathway_list,
     rownames(pcs$rotation) <- colnames(mat)
 
     return(list(xp = pcs))
+      },
+    error = function(e) {
+      return(NULL)
     }
+    )
   })
 
-  papca<-papca[unlist(lapply(papca,function(x) !is.null(x)))]
+  pa_remove<-names(papca)[sapply(papca,is.null)]
+  papca<-papca[!sapply(papca,is.null)]
 
   vdf <- data.frame(do.call(rbind, lapply(seq_along(papca), function(i) {
     result <- tryCatch(
@@ -275,7 +288,7 @@ PathwayPCAtest <- function(Pathway_list,
   })))
 
   vscore <- data.frame(do.call(rbind, lapply(seq_along(papca), function(i) {
-           papca[[i]]$xp$scores
+    papca[[i]]$xp$scores
   })))
 
   n.cells <- nrow(scCounts)
@@ -293,5 +306,5 @@ PathwayPCAtest <- function(Pathway_list,
   rownames(vscore) <- names(papca)[vdf$i]
   colnames(vscore) <- rownames(scCounts)
 
-  return(list(df, vscore))
+  return(list(df, vscore,pa_remove))
 }

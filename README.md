@@ -46,7 +46,7 @@ quick-start example:
 
 ``` r
  library(scPagwas)
-
+system.time(
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
@@ -56,8 +56,15 @@ quick-start example:
                      block_annotation = block_annotation,# gene position in chromosome is provided by package.
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
+                     n.cores=1,
+                     iters_singlecell = 100,
+                     Correct_BG_p=TRUE,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
                      celltype=T# Whether to run the celltype process.
 )
+)
+#1. pa_method='SVD'
+# 用户   系统   流逝 
+#176.40   5.15 282.01 
 ```

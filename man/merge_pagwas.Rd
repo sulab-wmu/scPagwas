@@ -11,6 +11,8 @@ merge_pagwas(
   assay = "RNA",
   random = FALSE,
   seed = 1234,
+  Correct_BG_p = FALSE,
+  iters_singlecell = 1000,
   random_times = 10,
   proportion = 0.3
 )

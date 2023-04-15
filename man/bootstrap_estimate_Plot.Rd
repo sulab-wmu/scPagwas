@@ -5,7 +5,7 @@
 \title{Bootstrap_estimate_Plot}
 \usage{
 Bootstrap_estimate_Plot(
-  Pagwas,
+  bootstrap_results,
   figurenames = NULL,
   width = 9,
   height = 7,
@@ -13,7 +13,8 @@ Bootstrap_estimate_Plot(
 )
 }
 \arguments{
-\item{Pagwas}{Pagwas format of result from Pagwas_main()}
+\item{bootstrap_results}{result list of Pagwas from
+Pagwas$bootstrap_results or Pagwas@misc$bootstrap_results}
 
 \item{figurenames}{The filename and address of the output plot,
 default is "test_forest.pdf".IF figurenames= NULL,

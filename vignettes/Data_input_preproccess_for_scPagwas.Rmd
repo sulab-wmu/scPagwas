@@ -133,17 +133,18 @@ We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and
 -   `remove_proporion` The propotion of duplicated between seed pathway and the others
 
 ```{r eval=FALSE, include=FALSE}
-reduce_genes.by.reactome.pathway<-scPagwas::reduce_pathway(
-  pathway_seed=names(genes.by.reactome.pathway)[sample(1:length(genes.by.reactome.pathway),500)],
-                                                 
-  pathway_list=genes.by.reactome.pathway,
-                                                 
-  remove_proporion=0.6)
-length(reduce_genes.by.reactome.pathway)
-#[1] 1045
-length(unlist(reduce_genes.by.reactome.pathway))
-#[1] 34980
+set.seed(123)
+reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)>50]
+reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)<300]
 
+reduce_genes.by.reactome.pathway<-scPagwas::reduce_pathway(
+  pathway_seed=names(reduce_genes.by.reactome.pathway)[sample(1:length(reduce_genes.by.reactome.pathway),50)],
+                                                 pathway_list=reduce_genes.by.reactome.pathway,
+                                                 remove_proporion=0.5)
+length(reduce_genes.by.reactome.pathway)
+#214
+length(unique(unlist(reduce_genes.by.reactome.pathway)))
+#7667
 ```
 > Note.The summed genes for all pathways should not smaller than 1/2 of the number of genes in single cell data.
 

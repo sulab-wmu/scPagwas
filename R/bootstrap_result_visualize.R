@@ -88,7 +88,8 @@ Bootstrap_P_Barplot <- function(p_results,
 #' Bootstrap_estimate_Plot
 #' @description This forest plot shows the correct estimate values and
 #' 95% CI for different celltyppes, using the ggplot packages
-#' @param Pagwas Pagwas format of result from Pagwas_main()
+#' @param bootstrap_results result list of Pagwas from 
+#' Pagwas$bootstrap_results or Pagwas@misc$bootstrap_results
 #' @param figurenames The filename and address of the output plot,
 #' default is "test_forest.pdf".IF figurenames= NULL,
 #' only plot the figure and have not pdf figure.
@@ -113,13 +114,13 @@ Bootstrap_P_Barplot <- function(p_results,
 #' @aliases Bootstrap_estimate_Plot
 #' @keywords Bootstrap_estimate_Plot, plot the forest for scPagwas
 #' bootstrap celltypes result.
-Bootstrap_estimate_Plot <- function(Pagwas,
+Bootstrap_estimate_Plot <- function(bootstrap_results,
                                     figurenames = NULL,
                                     width = 9,
                                     height = 7,
                                     do_plot = F) {
   Index <- estimate <- lower <- upper <- label <- Pvalue <- NULL
-  bootstrap_results <- Pagwas@misc$bootstrap_results[-1, c(
+  bootstrap_results <- bootstrap_results[-1, c(
     "bp_value",
     "bias_corrected_estimate",
     "CI_lo",
@@ -129,7 +130,6 @@ Bootstrap_estimate_Plot <- function(Pagwas,
     bootstrap_results$bias_corrected_estimate,
     decreasing = T
   ), ]
-
 
   dat <- data.frame(
     Index = seq_len(nrow(bootstrap_results)),

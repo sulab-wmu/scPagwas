@@ -15,13 +15,15 @@ scPagwas_main(
   Pathway_list = NULL,
   chrom_ld = NULL,
   run_split = FALSE,
+  Correct_BG_p = FALSE,
   n.cores = 1,
   marg = 10000,
   maf_filter = 0.01,
   min_clustercells = 10,
   min.pathway.size = 5,
   max.pathway.size = 300,
-  iters = 200,
+  iters_celltype = 200,
+  iters_singlecell = 500,
   n_topgenes = 1000,
   singlecell = TRUE,
   celltype = TRUE,
@@ -88,8 +90,6 @@ default is 5}
 \item{max.pathway.size}{(integr)Threshold for max pathway gene size.
 default is 300}
 
-\item{iters}{(integr)number of bootstrap iterations to perform}
-
 \item{n_topgenes}{(integr)Number of top associated gene selected to
 calculate the scPagwas score;}
 
@@ -102,6 +102,8 @@ if not,will return a list result;}
 
 \item{remove_outlier}{(logical)Whether to remove the outlier for
 scPagwas score.}
+
+\item{iters}{(integr)number of bootstrap iterations to perform}
 }
 \value{
 Returns a seurat data with entries(seurat_return=T):
