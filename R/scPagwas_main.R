@@ -221,11 +221,11 @@ scPagwas_main <- function(Pagwas = NULL,
                           remove_outlier = TRUE) {
 
   # Pagwas =NULL
-  # gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas")
-  # Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas")
+  # gwas_data = "/share/pub/dengcy/GWAS_Multiomics/bloodtraits/monocytecount_prune_gwas_data.txt"
+  #Single_data ="/share/pub/dengcy/GWAS_Multiomics/modelgroudtruth/sim_data_8.16.rds"
   # output.prefix="Test"
   # output.dirs="Test"
-  # load("D:/tempdata/reduce_genes.by.regulatory.pathway.RData")
+  # #load("D:/tempdata/reduce_genes.by.regulatory.pathway.RData")
   # Pathway_list=reduce_genes.by.regulatory.pathway
   # assay="RNA"
   # singlecell=T
@@ -957,11 +957,11 @@ merge_pagwas <- function(Single_data = NULL,
 
   if(Correct_BG_p){
     message("* Get Random Correct background pvalue for each single cell!")
-    correct_pdf<-Get_CorrectBg_p(singledata=Single_data,
-                                 v_raw_score=Single_data$scPagwas.TRS.Score1,
-                                 n_iters=iters_singlecell,
-                                 n_genes=n_topgenes,
-                                 gene_list=scPagwas_topgenes
+    correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
+                                 scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
+                                 iters_singlecell=iters_singlecell,
+                                 n_topgenes=n_topgenes,
+                                 scPagwas_topgenes=scPagwas_topgenes
     )
     #Pagwas$Random_Correct_BG_pdf <- correct_pdf
     Single_data$Random_Correct_BG_p <- correct_pdf$pooled_p

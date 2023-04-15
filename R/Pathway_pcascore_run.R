@@ -170,7 +170,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   pca_scCell_mat <- bigreadr::cbind_df(lapply(seq_len(length(scPCAscore_list)), function(i) {
     df<-scPCAscore_list[[i]][[2]]
     if(length(pa_remove)!=0){
-      df<-df[df$name != pa_remove,]
+      df<-df[rownames(df) != pa_remove,]
     }
     return(df)
   }))
@@ -188,8 +188,10 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
   )
 
   Pagwas$pca_cell_df <- pca_cell_df
+  if(length(pa_remove)!=0){
   Pagwas$Pathway_list <- Pagwas$Pathway_list[rownames(pca_scCell_mat)]
   Pagwas$rawPathway_list <- Pagwas$rawPathway_list[rownames(pca_scCell_mat)]
+  }
   return(Pagwas)
 }
 
