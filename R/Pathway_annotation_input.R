@@ -58,10 +58,17 @@ Pathway_annotation_input <- function(Pagwas,
   Pa_index <- intersect(a, rownames(Pagwas$pca_cell_df))
 
   Pathway_list <- Pathway_list[Pa_index]
-
-
   message("obtain the pathway block information")
 
+  Pa_index <- unlist(lapply(names(Pathway_list), function(pa) {
+    paan <- sum(block_annotation$label %in% Pathway_list[[pa]])
+    if(paan<10){
+      return(NULL)
+    }else{
+      return(pa)
+    }
+  }))
+  Pathway_list <- Pathway_list[Pa_index]
   paan_df <- lapply(names(Pathway_list), function(pa) {
     paan <- block_annotation[block_annotation$label %in% Pathway_list[[pa]], ]
     paan$pathway <- rep(pa, nrow(paan))

@@ -77,9 +77,10 @@
 #' default is 5
 #' @param max.pathway.size (integr)Threshold for max pathway gene size.
 #' default is 300
-#' @param iters (integr)number of bootstrap iterations to perform
 #' @param remove_outlier (logical)Whether to remove the outlier for
 #' scPagwas score.
+#' @param iters_celltype (integr)number of bootstrap iterations for celltype
+#' @param iters_singlecell (integr)number of bootstrap iterations for singlecell
 #' @param seurat_return (logical) Whether return the seurat format result,
 #' if not,will return a list result;
 #' @param singlecell (logical)Whether to produce the singlecell result;
@@ -205,7 +206,6 @@ scPagwas_main <- function(Pagwas = NULL,
                           Pathway_list = NULL,
                           chrom_ld = NULL,
                           run_split=FALSE,
-                          Correct_BG_p=FALSE,
                           n.cores=1,
                           marg = 10000,
                           maf_filter = 0.01,
@@ -221,11 +221,11 @@ scPagwas_main <- function(Pagwas = NULL,
                           remove_outlier = TRUE) {
 
   # Pagwas =NULL
-  # gwas_data = "/share/pub/dengcy/GWAS_Multiomics/bloodtraits/monocytecount_prune_gwas_data.txt"
-  #Single_data ="/share/pub/dengcy/GWAS_Multiomics/modelgroudtruth/sim_data_8.16.rds"
+  # gwas_data = "D:/tempdata/monocytecount_prune_gwas_data.txt"
+  # Single_data ="D:/tempdata/sim_data_8.16.rds"
   # output.prefix="Test"
   # output.dirs="Test"
-  # #load("D:/tempdata/reduce_genes.by.regulatory.pathway.RData")
+  # load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.regulatory.pathway.RData")
   # Pathway_list=reduce_genes.by.regulatory.pathway
   # assay="RNA"
   # singlecell=T
@@ -242,7 +242,6 @@ scPagwas_main <- function(Pagwas = NULL,
   # min.pathway.size = 5
   # max.pathway.size = 300
   # iters_singlecell = 100
-  # Correct_BG_p=TRUE
   # iters_celltype = 200
   # n_topgenes = 1000
   # seurat_return = TRUE
@@ -590,9 +589,9 @@ scPagwas_main <- function(Pagwas = NULL,
   )
 
   message("* Get scaled P for each single cell")
-  CellScalepValue <- scGene_scaleP(
-    Single_mat = Pagwas$data_mat[scPagwas_topgenes, ]
-    )
+  #CellScalepValue <- scGene_scaleP(
+  #  Single_mat = Pagwas$data_mat[scPagwas_topgenes, ]
+  #  )
   Pagwas[c(
     "VariableFeatures", "merge_scexpr", "snp_gene_df",
     "rawPathway_list", "data_mat"
@@ -605,7 +604,6 @@ scPagwas_main <- function(Pagwas = NULL,
     name = c("scPagwas.TRS.Score")
   )
 
-  if(Correct_BG_p){
     message("* Get Random Correct background pvalue for each single cell!")
     correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
                                  scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
@@ -616,34 +614,23 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas$Random_Correct_BG_pdf <- correct_pdf
     message("* Get Merged pvalue for each celltype!")
     Pagwas$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$pooled_p,celltype=Pagwas$Celltype_anno$annotation)
-  }
+
   Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
-  Pagwas$CellScalepValue <- CellScalepValue
-    # CellScalepValue
-  if(!Correct_BG_p){
-    a <- data.frame(
-      scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
-      scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
-      pValueHighScale = Pagwas$CellScalepValue$pValueHigh,
-      qValueHighScale = Pagwas$CellScalepValue$qValueHigh
-    )
-  }else if(Correct_BG_p){
-    a <- data.frame(
-      scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
-      scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
-      pValueHighScale = Pagwas$CellScalepValue$pValueHigh,
-      qValueHighScale = Pagwas$CellScalepValue$qValueHigh,
+  #Pagwas$CellScalepValue <- CellScalepValue
+
+   a <- data.frame(
+    scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
+    scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
     Random_Correct_BG_p = correct_pdf$pooled_p,
-    Random_Correct_BG_adjp = correct_pdf$adj_p,
-    Random_Correct_BG_z = correct_pdf$pooled_z)
-    utils::write.csv(Pagwas$Merged_celltype_pvalue,
-                     file = paste0(
-                       "./", output.dirs, "/", output.prefix,
-                       "_Merged_celltype_pvalue.csv"
-                     ),
-                     quote = F
-    )
-  }
+  Random_Correct_BG_adjp = correct_pdf$adj_p,
+  Random_Correct_BG_z = correct_pdf$pooled_z)
+  utils::write.csv(Pagwas$Merged_celltype_pvalue,
+                   file = paste0(
+                     "./", output.dirs, "/", output.prefix,
+                     "_Merged_celltype_pvalue.csv"
+                   ),
+                   quote = F
+  )
 
 
     utils::write.csv(a,
@@ -660,7 +647,7 @@ scPagwas_main <- function(Pagwas = NULL,
   } else {
     Pagwas[c(
       "snp_gene_df",
-      "Pathway_sclm_results", "CellScalepValue",
+      "Pathway_sclm_results",
       "scPagwas.TRS.Score"
     )] <- NULL
     # Pagwas[c()] <- NULL
@@ -674,13 +661,13 @@ scPagwas_main <- function(Pagwas = NULL,
     rm(scPagwas_pca)
 
     Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
-    Single_data$ScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHigh"]
-    Single_data$ScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHigh"]
-      if(Correct_BG_p){
+    #Single_data$ScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHigh"]
+    #Single_data$ScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHigh"]
+
     Single_data$Random_Correct_BG_p <- correct_pdf$pooled_p
     Single_data$Random_Correct_BG_adjp <- correct_pdf$adj_p
     Single_data$Random_Correct_BG_z <- correct_pdf$pooled_z
-      }
+
     Pagwas[c(
       "scPagwas.gPAS.score", "Celltype_anno",
       "Pathway_single_results", "pca_scCell_mat"
@@ -748,6 +735,7 @@ scPagwas_main <- function(Pagwas = NULL,
 #' Using id when the Single_data is too big to run.
 #' @param seed The seed for random.
 #' @param random_times The times for random, default is 10.
+#' @param iters_singlecell (integr)number of bootstrap iterations for singlecell
 #' @param proportion The proportion for spliting the Single_data; the bigger for
 #' Single_data the less proportion for spliting, and the more times for random_times.
 #'
@@ -828,8 +816,7 @@ merge_pagwas <- function(Single_data = NULL,
                          assay='RNA',
                          random=FALSE,
                          seed=1234,
-                         Correct_BG_p=FALSE,
-                         iters_singlecell=1000,
+                         iters_singlecell=500,
                          random_times=10,
                          proportion=0.3) {
 
@@ -891,13 +878,13 @@ merge_pagwas <- function(Single_data = NULL,
 
   ########### get the CellScalepValue
 
-  CellScalepValue <- scGene_scaleP(
-    Single_mat = t(data.matrix(
-      GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ]
-    ))
-  )
-  Single_data$CellScalepValue <- CellScalepValue[, "pValueHigh"]
-  Single_data$CellScaleqValue <- CellScalepValue[, "qValueHigh"]
+  #CellScalepValue <- scGene_scaleP(
+  #  Single_mat = t(data.matrix(
+  #    GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ]
+  #  ))
+  #)
+  #Single_data$CellScalepValue <- CellScalepValue[, "pValueHigh"]
+  #Single_data$CellScaleqValue <- CellScalepValue[, "qValueHigh"]
 
   }else{
     message("Start to run the corSparse function in random!")
@@ -932,30 +919,30 @@ merge_pagwas <- function(Single_data = NULL,
     )
 
     message("Start to run the scGene_rankP function in random!")
-    pv<-list()
-    qv<-list()
-    for (j in 1:random_times) {
-      print(paste0("Randome Times: ",j))
-      index<-sample(1:ncol(Single_data),ceiling(ncol(Single_data)*proportion))
-      CellScalepValue <- scGene_scaleP(
-        Single_mat = t(data.matrix(
-        GetAssayData(Single_data[,index], assay = "RNA")[scPagwas_topgenes, ]
-         ))
-       )
-      a<-CellScalepValue[, "pValueHighScale"]
-      names(a)<-rownames(CellScalepValue)
-      pv[[j]]<-a
-      a<-CellScalepValue[, "qValueHighScale"]
-      names(a)<-rownames(CellScalepValue)
-      qv[[j]]<-a
-    }
+    #pv<-list()
+    #qv<-list()
+    #for (j in 1:random_times) {
+     # print(paste0("Randome Times: ",j))
+     # index<-sample(1:ncol(Single_data),ceiling(ncol(Single_data)*proportion))
+      #CellScalepValue <- scGene_scaleP(
+      #  Single_mat = t(data.matrix(
+      #  GetAssayData(Single_data[,index], assay = "RNA")[scPagwas_topgenes, ]
+      #   ))
+      # )
+      #a<-CellScalepValue[, "pValueHighScale"]
+      #names(a)<-rownames(CellScalepValue)
+      #pv[[j]]<-a
+      #a<-CellScalepValue[, "qValueHighScale"]
+      #names(a)<-rownames(CellScalepValue)
+      #qv[[j]]<-a
+    #}
 
-    Single_data$CellScalepValue <- unlist(pv)[colnames(Single_data)]
-    Single_data$CellScaleqValue <- unlist(qv)[colnames(Single_data)]
+    #Single_data$CellScalepValue <- unlist(pv)[colnames(Single_data)]
+    #Single_data$CellScaleqValue <- unlist(qv)[colnames(Single_data)]
 
   }
 
-  if(Correct_BG_p){
+  #if(Correct_BG_p){
     message("* Get Random Correct background pvalue for each single cell!")
     correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
                                  scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
@@ -969,7 +956,7 @@ merge_pagwas <- function(Single_data = NULL,
     Single_data$Random_Correct_BG_z <- correct_pdf$pooled_z
     Single_data@misc$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$adj_p,celltype=Pagwas$Celltype_anno$annotation)
 
-  }
+  #}
   ########### get the scPagwas.TRS.Score
   return(Single_data)
 }

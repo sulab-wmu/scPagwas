@@ -11,8 +11,7 @@ merge_pagwas(
   assay = "RNA",
   random = FALSE,
   seed = 1234,
-  Correct_BG_p = FALSE,
-  iters_singlecell = 1000,
+  iters_singlecell = 500,
   random_times = 10,
   proportion = 0.3
 )
@@ -32,6 +31,8 @@ calculate the scPagwas score;}
 Using id when the Single_data is too big to run.}
 
 \item{seed}{The seed for random.}
+
+\item{iters_singlecell}{(integr)number of bootstrap iterations for singlecell}
 
 \item{random_times}{The times for random, default is 10.}
 

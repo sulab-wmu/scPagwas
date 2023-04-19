@@ -55,8 +55,8 @@ scPagwas_Visualization <- function(Single_data = NULL,
     stop("ERROR: scPagwas.gPAS.score is NULL. scPagwas_score can be
          calculated by scPagwas_perform_score function!")
   }
-  if (is.null(Single_data$CellqValue)) {
-    stop("ERROR: CellqValue is NULL.")
+  if (is.null(Single_data$ScaleqValue)) {
+    stop("ERROR: ScaleqValue is NULL.")
   }
   if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
@@ -119,19 +119,19 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp > p_thre, ],
         aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8,
-        color = "gray"
+        color = "#E4DCCF"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellqValue <= p_thre, ],
-        aes(x = UMAP_1, y = UMAP_2), color = "#F90716", size = .2
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp <= p_thre, ],
+        aes(x = UMAP_1, y = UMAP_2), color = "#EA5455", size = .2
       ) +
       umap_theme() +
       # new_scale_color() +
-      ggtitle(paste0("p<", p_thre, " significant cells"))
+      ggtitle(paste0("Random_Correct_BG adj p<", p_thre, " significant cells"))
 
 
     if (do_plot) print(plots_sigp1)
@@ -139,14 +139,46 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::pdf(
         file = paste0(
           "./", output.dirs,
-          "/scPagwas_CellqValue",
+          "/scPagwas_Correct_BG_adjp",
           p_thre, "_umap.pdf"
         ),
-        height = height, width = width
+        height = height, width = width-1
       )
       print(plots_sigp1)
       grDevices::dev.off()
     }
+
+    plots_sigp1 <- ggplot() +
+      geom_point(
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp > p_thre, ],
+        aes(x = UMAP_1, y = UMAP_2), size = size, alpha = 0.8,
+        color = "#E4DCCF"
+      ) +
+      umap_theme() +
+      # new_scale_color() +
+      geom_point(
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp <= p_thre, ],
+        aes(x = UMAP_1, y = UMAP_2), color = "#EA5455", size = .2
+      ) +
+      umap_theme() +
+      # new_scale_color() +
+      ggtitle(paste0("Random_Correct_BG adj p<", p_thre, " significant cells"))
+
+
+    if (do_plot) print(plots_sigp1)
+    if (!is.null(output.dirs)) {
+      grDevices::pdf(
+        file = paste0(
+          "./", output.dirs,
+          "/scPagwas_Correct_BG_adjp",
+          p_thre, "_umap.pdf"
+        ),
+        height = height, width = width-1
+      )
+      print(plots_sigp1)
+      grDevices::dev.off()
+    }
+
   }
 
 
@@ -206,20 +238,20 @@ scPagwas_Visualization <- function(Single_data = NULL,
 
     plots_sigp1 <- ggplot() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellqValue > p_thre, ],
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp > p_thre, ],
         aes(x = TSNE_1, y = TSNE_2),
         size = size, alpha = 0.8,
-        color = "gray"
+        color = "#E4DCCF"
       ) +
       umap_theme() +
       # new_scale_color() +
       geom_point(
-        data = all_fortify_can[all_fortify_can$CellqValue <= p_thre, ],
-        aes(x = TSNE_1, y = TSNE_2), color = "#F90716", size = size
+        data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp <= p_thre, ],
+        aes(x = TSNE_1, y = TSNE_2), color = "#EA5455", size = size
       ) +
       umap_theme() +
       # new_scale_color() +
-      ggtitle(paste0("p<", p_thre, " significant cells"))
+      ggtitle(paste0("Random_Correct_BG_adjp<", p_thre, " significant cells"))
 
     if (do_plot) print(plots_sigp1)
 
@@ -227,10 +259,10 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::pdf(
         file = paste0(
           "./", output.dirs,
-          "/scPagwas_CellqValue",
+          "/scPagwas_Random_Correct_BG_adjp",
           p_thre, "_tsne.pdf"
         ),
-        height = height, width = width
+        height = height, width = width-1
       )
       print(plots_sigp1)
       grDevices::dev.off()
@@ -250,7 +282,7 @@ umap_theme <- function() {
       panel.background = element_rect(
         fill = "white",
         colour = "black",
-        size = 2
+        size = 1
       ),
       axis.text.x = element_blank(),
       axis.ticks.x = element_blank(),

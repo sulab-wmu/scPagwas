@@ -175,7 +175,7 @@ scPagwas_perform_score <- function(Pagwas,
 
 #' scParameter_regression
 #' @description Find parameter estimates for the data.
-#'
+#' In terms of settings, it can handle data from at least 10,000 cells in your computer.
 #' @param Pagwas_x x parameter for lm
 #' @param Pagwas_y y parameter for lm
 #' @param noise_per_snp noise
@@ -194,17 +194,27 @@ scParameter_regression <- function(Pagwas_x,
                                    backingpath) {
 
     backingpath<- paste0(backingpath,"/",Rns)
+    if(dim(Pagwas_x)[2] < 10000){
+      Pagwas_x<-as.matrix(Pagwas_x)
 
-       #Pagwas_x<-(Pagwas_x)
-      liear_m <- bigstatsr::big_univLinReg(
-        X = bigstatsr::as_FBM(as_matrix(Pagwas_x),backingfile = backingpath),
-        y.train = Pagwas_y,
-        covar.train = bigstatsr::covar_from_df(
-          data.frame(offset(noise_per_snp))
-        ),
-        ncores = n.cores
-      )
-      parameters <- liear_m$estim
+    }else if(dim(Pagwas_x)[2] > 10000){
+      # 将矩阵划分为n个块（按列划分）
+      n<- floor(ncol(Pagwas_x)/10000)
+      split_cols <- split(1:ncol(Pagwas_x), cut(1:ncol(Pagwas_x), n, labels = FALSE))
+      # 逐个块处理，并将它们合并
+      Pagwas_x <- do.call("cbind", lapply(split_cols, function(cols){
+        as.matrix(Pagwas_x[,cols])
+      }))
+    }
+    liear_m <- bigstatsr::big_univLinReg(
+      X=bigstatsr::as_FBM(Pagwas_x,backingfile = backingpath),
+      y.train=Pagwas_y,
+      covar.train = bigstatsr::covar_from_df(
+        data.frame(offset(noise_per_snp))
+      ),
+      ncores = n.cores
+    )
+    parameters <- liear_m$estim
       unlink(paste0(backingpath,".bk"),recursive = TRUE)
    # rm(Pagwas_x)
   return(parameters)

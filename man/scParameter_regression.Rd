@@ -28,4 +28,5 @@ scParameter_regression(
 }
 \description{
 Find parameter estimates for the data.
+In terms of settings, it can handle data from at least 10,000 cells in your computer.
 }
