@@ -169,9 +169,8 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
 
   pca_scCell_mat <- bigreadr::cbind_df(lapply(seq_len(length(scPCAscore_list)), function(i) {
     df<-scPCAscore_list[[i]][[2]]
-    if(length(pa_remove)!=0){
-      df<-df[rownames(df) != pa_remove,]
-    }
+    pa<-setdiff(rownames(df),pa_remove)
+    df<-df[pa,]
     return(df)
   }))
   rm(scPCAscore_list)

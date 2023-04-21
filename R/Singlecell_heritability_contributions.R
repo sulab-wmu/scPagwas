@@ -194,7 +194,7 @@ scParameter_regression <- function(Pagwas_x,
                                    backingpath) {
 
     backingpath<- paste0(backingpath,"/",Rns)
-    if(dim(Pagwas_x)[2] < 10000){
+    if(dim(Pagwas_x)[2] <= 10000){
       Pagwas_x<-as.matrix(Pagwas_x)
 
     }else if(dim(Pagwas_x)[2] > 10000){

@@ -220,13 +220,14 @@ scPagwas_main <- function(Pagwas = NULL,
                           seurat_return = TRUE,
                           remove_outlier = TRUE) {
 
+
   # Pagwas =NULL
   # gwas_data = "D:/tempdata/monocytecount_prune_gwas_data.txt"
   # Single_data ="D:/tempdata/sim_data_8.16.rds"
-  # output.prefix="Test"
-  # output.dirs="Test"
-  # load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.regulatory.pathway.RData")
-  # Pathway_list=reduce_genes.by.regulatory.pathway
+  # output.prefix="gobp"
+  # output.dirs="real_reduce_gobp"
+  # load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.gobp.pathway.RData")
+  # Pathway_list=reduce_genes.by.gobp.pathway
   # assay="RNA"
   # singlecell=T
   # celltype=F
