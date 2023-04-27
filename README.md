@@ -58,13 +58,13 @@ system.time(
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      n.cores=1,
                      iters_singlecell = 100,
-                     Correct_BG_p=TRUE,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
                      celltype=T# Whether to run the celltype process.
 )
 )
-#1. pa_method='SVD'
-# 用户   系统   流逝 
-#176.40   5.15 282.01 
 ```
+
+Note: In terms of settings, your computer at least can handle 10,000
+cells for memory need. Otherwise, an error of “cannot allocate vector of
+size …” may occur.
