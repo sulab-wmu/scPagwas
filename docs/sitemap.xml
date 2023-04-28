@@ -64,6 +64,9 @@
     <loc>/reference/chrom_ld.html</loc>
   </url>
   <url>
+    <loc>/reference/correct_background.html</loc>
+  </url>
+  <url>
     <loc>/reference/corSparse.html</loc>
   </url>
   <url>
@@ -109,10 +112,16 @@
     <loc>/reference/Get_bootresults_df.html</loc>
   </url>
   <url>
+    <loc>/reference/Get_CorrectBg_p.html</loc>
+  </url>
+  <url>
     <loc>/reference/Get_Pathway_heritability_contributions.html</loc>
   </url>
   <url>
     <loc>/reference/get_Pathway_sclm.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_p_from_empi_null.html</loc>
   </url>
   <url>
     <loc>/reference/GWAS_summary_input.html</loc>
@@ -134,6 +143,9 @@
   </url>
   <url>
     <loc>/reference/make_ld_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Merge_celltype_p.html</loc>
   </url>
   <url>
     <loc>/reference/merge_pagwas.html</loc>
@@ -167,6 +179,9 @@
   </url>
   <url>
     <loc>/reference/plot_vln_Corgenes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/p_merge.html</loc>
   </url>
   <url>
     <loc>/reference/qvalue.html</loc>
