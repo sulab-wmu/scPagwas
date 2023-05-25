@@ -137,6 +137,7 @@ Bootstrap_estimate_Plot <- function(bootstrap_results,
     estimate = bootstrap_results$bias_corrected_estimate,
     lower = bootstrap_results$CI_lo,
     upper = bootstrap_results$CI_hi,
+    #转化为科学计数法
     Pvalue = bootstrap_results$bp_value
   )
 

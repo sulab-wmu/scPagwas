@@ -508,11 +508,18 @@ scPagwas_main <- function(Pagwas = NULL,
       Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data
     )
     Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = iters_celltype, part = 0.5)
-
+    Pagwas$bootstrap_results$bp_value<-p.adjust(Pagwas$bootstrap_results$bp_value,method = "fdr")
     Pagwas$Pathway_ld_gwas_data <- NULL
 
     message("done!")
-
+    utils::write.csv(Pagwas$bootstrap_results,
+                     file = paste0(
+                       "./", output.dirs, "/",
+                       output.prefix,
+                       "_celltypes_bootstrap_results.csv"
+                     ),
+                     quote = F
+    )
     if (!singlecell) {
       SOAR::Remove(SOAR::Objects())
       return(Pagwas)
@@ -564,14 +571,7 @@ scPagwas_main <- function(Pagwas = NULL,
     ),
     quote = F, sep = "\t"
   )
-  utils::write.csv(Pagwas$bootstrap_results,
-    file = paste0(
-      "./", output.dirs, "/",
-      output.prefix,
-      "_celltypes_bootstrap_results.csv"
-    ),
-    quote = F
-  )
+
   utils::write.csv(Pagwas$scPathways_scGene_rankP,
     file = paste0(
       "./", output.dirs, "/",
@@ -920,26 +920,6 @@ merge_pagwas <- function(Single_data = NULL,
     )
 
     message("Start to run the scGene_rankP function in random!")
-    #pv<-list()
-    #qv<-list()
-    #for (j in 1:random_times) {
-     # print(paste0("Randome Times: ",j))
-     # index<-sample(1:ncol(Single_data),ceiling(ncol(Single_data)*proportion))
-      #CellScalepValue <- scGene_scaleP(
-      #  Single_mat = t(data.matrix(
-      #  GetAssayData(Single_data[,index], assay = "RNA")[scPagwas_topgenes, ]
-      #   ))
-      # )
-      #a<-CellScalepValue[, "pValueHighScale"]
-      #names(a)<-rownames(CellScalepValue)
-      #pv[[j]]<-a
-      #a<-CellScalepValue[, "qValueHighScale"]
-      #names(a)<-rownames(CellScalepValue)
-      #qv[[j]]<-a
-    #}
-
-    #Single_data$CellScalepValue <- unlist(pv)[colnames(Single_data)]
-    #Single_data$CellScaleqValue <- unlist(qv)[colnames(Single_data)]
 
   }
 

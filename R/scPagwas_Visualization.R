@@ -55,9 +55,7 @@ scPagwas_Visualization <- function(Single_data = NULL,
     stop("ERROR: scPagwas.gPAS.score is NULL. scPagwas_score can be
          calculated by scPagwas_perform_score function!")
   }
-  if (is.null(Single_data$ScaleqValue)) {
-    stop("ERROR: ScaleqValue is NULL.")
-  }
+
   if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
   }
