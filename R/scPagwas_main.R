@@ -397,7 +397,11 @@ scPagwas_main <- function(Pagwas = NULL,
     if (class(gwas_data) == "character") {
       message("** Start to read the gwas_data!")
       suppressMessages(gwas_data <- bigreadr::fread2(gwas_data))
-    } else {
+
+    } else if(class(gwas_data) == "data.frame"){
+      gwas_data$se<-as.numeric(gwas_data$se)
+      gwas_data$beta<-as.numeric(gwas_data$beta)
+    }else{
       stop("Error:There is need a filename and address for gwas_data")
     }
 
