@@ -20,7 +20,7 @@ genes.by.celltype.pathway &amp;lt;- lapply(res, "[", -c(1:2))
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,12 +34,12 @@ genes.by.celltype.pathway &amp;lt;- lapply(res, "[", -c(1:2))
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
-    <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
-    <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
-    <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
-    <a class="dropdown-item" href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
-    <a class="dropdown-item" href="../articles/Split_big_scRNAseqData_and_integrate_result.html">Split_big_scRNAseqData_and_integrate_result</a>
+    <a class="dropdown-item" href="../articles/Conventional%20Parameters%20and%20Usage%20Instructions%20with%20Demo%20Example%20Data.html">Conventional Parameters and Usage Instructions with Demo Example Data</a>
+    <a class="dropdown-item" href="../articles/Conventional%20result%20and%20visualization%20Instructions%20with%20Real-World%20Examples.html">Conventional result and visualization Instructions with Real-World Examples</a>
+    <a class="dropdown-item" href="../articles/Introduction%20to%20Data%20Input%20and%20Preprocessing%20in%20scPagwas.html">Introduction to Data Input and Preprocessing in scPagwas</a>
+    <a class="dropdown-item" href="../articles/Perform%20calculations%20for%20multiple%20traits%20based%20on%20a%20single-cell%20dataset.html">Perform calculations for multiple traits based on a single-cell dataset</a>
+    <a class="dropdown-item" href="../articles/Pruning%20Process%20for%20GWAS%20Summary%20Statistics%20File%20in%20scPagwas.html">Pruning Process for GWAS Summary Statistics File in scPagwas</a>
+    <a class="dropdown-item" href="../articles/Strategies%20for%20Large-scale%20Single-cell%20Data%20Subsetting%20and%20Computation.html">Strategies for Large-scale Single-cell Data Subsetting and Computation</a>
   </div>
 </li>
 <li class="nav-item">
@@ -82,108 +82,9 @@ genes.by.celltype.pathway &lt;- lapply(res, "[", -c(1:2))
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">genes.by.celltype.pathway</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'genes.by.celltype.pathway' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">genes.by.celltype.pathway</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 700</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_ESOPHAGEAL_QUIESCENT_BASAL_CELLS                               : chr [1:77] "CXCL14" "DST" "COL17A1" "KRT15" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_ESOPHAGEAL_PROLIFERATING_BASAL_CELLS                           : chr [1:70] "KRT14" "DST" "ASS1" "TOP2A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_ESOPHAGEAL_EARLY_SUPRABASAL_CELLS                              : chr [1:79] "MT2A" "STMN1" "CDK1" "KRT5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_ESOPHAGEAL_LATE_SUPRABASAL_CELLS                               : chr [1:140] "SPRR3" "CRNN" "MAL" "KRT4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_ESOPHAGEAL_DENDRITIC_CELLS                                     : chr [1:214] "CD74" "HLA-DRA" "HLA-DRB1" "HLA-DPA1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_CHIEF_CELLS                                            : chr [1:56] "PGA5" "LIPF" "CHIA" "PGC" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_PREZYMOGENIC_CELLS                                     : chr [1:60] "MUC6" "LIPF" "NR2F2" "LTF" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_NECK_CELLS                                             : chr [1:36] "MUC6" "TFF2" "GP2" "AQP5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_PPP1R1B_POSITIVE_CELLS                                 : chr [1:121] "LYZ" "ADH1C" "GATM" "KCNE3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_ISTHMUS_CELLS                                          : chr [1:458] "MUCL3" "S100A14" "KRT8" "CRIP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_METALLOTHIONEIN_CELLS                                  : chr [1:100] "MT1G" "MT1X" "MT2A" "SPINK1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_IMMATURE_PIT_CELLS                                     : chr [1:165] "GKN2" "TFF1" "MUCL3" "GKN1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_MATURE_PIT_CELLS                                       : chr [1:224] "GKN1" "GKN2" "PHGR1" "IFI27" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_PARIETAL_CELLS                                         : chr [1:254] "CBLIF" "ATP4A" "ATP4B" "CLIC6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_LYZ_POSITIVE_CELLS                                     : chr [1:111] "LYZ" "C6orf58" "REG1A" "AQP5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_REG3A_POSITIVE_CELLS                                   : chr [1:44] "REG3A" "HLA-DRA" "CD74" "HLA-DPA1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_D_CELLS                                                : chr [1:28] "SST" "ISL1" "PCSK1N" "TPPP3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_G_CELLS                                                : chr [1:98] "GAST" "TFF3" "PCSK1N" "PAX6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_X_CELLS                                                : chr [1:191] "GHRL" "ACSL1" "TM4SF4" "TTR" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_TUFT_CELLS                                             : chr [1:12] "SH2D6" "SPINK5" "IRAG2" "TRPM5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_OXYNTIC_ENTEROCHROMAFFIN_LIKE_CELLS                    : chr [1:85] "HDC" "CHGA" "CGA" "MAOB" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_ANTRAL_ECS                                             : chr [1:12] "PCSK1N" "DDC" "CACNA1A" "PAX6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_GASTRIC_IMMUNE_CELLS                                           : chr [1:1491] "CCL5" "CD2" "PTPRC" "LCP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_STEM_CELLS                                            : chr [1:311] "OLFM4" "REG3A" "SLC12A2" "RGMB" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_DIFFERENTIATING_STEM_CELLS                            : chr [1:305] "REG1A" "H4C3" "TUBA1B" "DMBT1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_TRANSIT_AMPLIFYING_CELLS                              : chr [1:194] "DMBT1" "MKI67" "CCL25" "KRT19" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_EARLY_IMMATURE_ENTEROCYTES                            : chr [1:113] "GSTA1" "RBP2" "FABP1" "GSTA2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_LATE_IMMATURE_ENTEROCYTES                             : chr [1:177] "ALDOB" "CYP3A4" "SI" "TM4SF4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_MATURE_ENTEROCYTES                                    : chr [1:259] "APOA1" "APOA4" "APOC3" "AQP10" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_PANETH_CELLS                                          : chr [1:15] "DEFA5" "DEFA6" "PLA2G2A" "CLCA1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_GOBLET_CELLS                                          : chr [1:16] "CLCA1" "FCGBP" "TFF3" "ITLN1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_BCHE_CELLS                                            : chr [1:43] "BEST4" "GUCA2B" "GUCA2A" "CA7" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_TUFT_CELLS                                            : chr [1:81] "SH2D6" "TRPM5" "IRAG2" "FYB1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_I_CELLS                                               : chr [1:16] "CCK" "SCG2" "GC" "PCSK1N" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_K_CELLS                                               : chr [1:20] "GIP" "DEPP1" "SCG5" "SOCS3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_MX_CELLS                                              : chr [1:13] "MLN" "GHRL" "DEPP1" "SCGN" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_EC_CELLS                                              : chr [1:31] "CHGA" "REG4" "LCN15" "FEV" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ BUSSLINGER_DUODENAL_IMMUNE_CELLS                                          : chr [1:910] "CCL5" "TMSB4X" "GZMA" "LCP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_CAJAL_RETZIUS                                : chr [1:499] "RELN" "WFIKKN2" "IGFBP5" "PRPH" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_BRAIN_ENDOTHELIAL                            : chr [1:365] "IGFBP7" "COL4A1" "ITM2A" "ITIH5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_EXCITATORY_NEURON                            : chr [1:47] "MEIS2" "ARPP21" "NEUROD6" "CAMK2B" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_GLIAL                                        : chr [1:133] "PLPP3" "EDNRB" "PTN" "CST3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_BRAIN_IMMUNE                                 : chr [1:148] "GZMA" "PTPRCAP" "PLAC8" "CD52" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_MICROGLIA                                    : chr [1:371] "VSIG4" "P2RY13" "P2RY12" "CX3CR1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BIG_GROUPS_INHIBITORY                                   : chr [1:12] "DLX5" "DLX1" "DLX2" "PLS3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_EX_1_EXCITATORY_NEURON                                  : chr [1:7] "ENC1" "PANTR1" "LINC01102" "MEIS2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_EX_2_EXCITATORY_NEURON                                  : chr [1:16] "NFIB" "PANTR1" "DDAH2" "ENC1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_EX_4_EXCITATORY_NEURON                                  : chr [1:165] "ANKRD36B" "SERPINB9" "LRRIQ1" "SPTBN4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_1_INTERNEURON                                        : chr [1:11] "DLX2" "MAF" "CXCR4" "PDE4DIP" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_2_INTERNEURON                                        : chr [1:7] "RBP1" "ACKR3" "BRINP2" "LHX6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_3_INTERNEURON                                        : chr [1:6] "PDE4DIP" "ERBB4" "GAD1" "MAF" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_4_INTERNEURON                                        : chr [1:10] "PDE4DIP" "PLS3" "ERBB4" "GAD1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_5_INTERNEURON                                        : chr [1:6] "DLX5" "DLX1" "SCGN" "CALB2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_IN_6_INTERNEURON                                        : chr [1:6] "TMEM161B-DT" "DLX1" "BTG1" "HSPA1A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_ASTROCYTE_1                                             : chr [1:79] "SPARCL1" "NCAN" "FAM107A" "ID2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_ASTROCYTE_2                                             : chr [1:153] "NTRK2" "AQP4" "GJA1" "CLU" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_NSC_1                                                   : chr [1:18] "PANTR1" "HNRNPA1" "CCND2" "VIM" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_NSC_2                                                   : chr [1:233] "PTTG1" "TROAP" "CENPF" "CCNB2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_OLIG                                                    : chr [1:754] "MOBP" "ERMN" "PLP1" "TF" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_OPC                                                     : chr [1:55] "PDGFRA" "EPN2" "SCRG1" "PLPPR1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_ENDOTHELIAL_1                                     : chr [1:440] "CLDN5" "ITM2A" "MFSD2A" "APCDD1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_ENDOTHELIAL_2                                     : chr [1:303] "RGS5" "PDGFRB" "CALD1" "NOTCH3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_MICROGLIA_1                                             : chr [1:155] "MKI67" "TOP2A" "UBE2C" "CENPF" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_MICROGLIA_2                                             : chr [1:9] "CCL3" "FOSB" "IL1B" "CD83" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_MICROGLIA_3                                             : chr [1:20] "CD68" "C1QC" "P2RY12" "C1QB" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_MYELOID                                           : chr [1:139] "S100A4" "S100A6" "FGL2" "HLA-DRA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_B_CELL                                            : chr [1:101] "HLA-DRA" "CD74" "CD52" "HLA-DPA1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_EFFECTOR_T_CELL                                   : chr [1:131] "IFITM2" "IFITM1" "NKG7" "KLRF1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ FAN_EMBRYONIC_CTX_BRAIN_NAIVE_LIKE_T_CELL                                 : chr [1:158] "IL7R" "CD52" "CD3D" "IL2RG" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_BASAL                                           : chr [1:79] "ACTB" "ACTG1" "ATF4" "ATP5F1B" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HENDO                                           : chr [1:888] "A2M" "AAMDC" "ABCA1" "ABCB1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HPERIC                                          : chr [1:795] "A2M" "AAMDC" "ABCA1" "ABCA9" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HMGL                                            : chr [1:577] "A2M" "ABCG1" "ABI3" "ACSF2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HOPC                                            : chr [1:366] "ACSS1" "ADAM22" "ADAMTS3" "ADAMTS6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRGL2C                                          : chr [1:326] "ABHD17A" "ACBD7" "ACSL6" "ACSS1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRGL2B                                          : chr [1:440] "AAMDC" "ABAT" "ACBD7" "ACSL6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRGL2A                                          : chr [1:600] "AASS" "ABAT" "ABCA5" "ABHD2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRGL3                                           : chr [1:574] "ABCA8" "ACSS1" "ACVR1" "ADAM9" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRGL1                                           : chr [1:364] "AASS" "ACSS1" "ADAMTS6" "AFF1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HPROGM                                          : chr [1:307] "ABCA8" "ACTL6A" "ACVR1" "ADSS2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HPROGBP                                         : chr [1:300] "AAMDC" "ACTL6A" "AJUBA" "ANLN" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HPROGFPL                                        : chr [1:323] "AASS" "ACVR2B" "ADAMTS6" "AJUBA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HPROGFPM                                        : chr [1:356] "ACTL6A" "ADAMTS5" "ADAMTS6" "AJUBA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HNPROG                                          : chr [1:229] "ABCA1" "ACTL6A" "ADAMTS5" "ADORA2A-AS1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HNBM                                            : chr [1:295] "ACVR2B" "ADAMTS5" "AFAP1" "AJAP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HNBML1                                          : chr [1:328] "ACTL6B" "ACVR1B" "ACVR2B" "AKR1C1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HRN                                             : chr [1:335] "ACSL6" "ACTL6B" "ACVR1B" "ACVR2A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HNBML5                                          : chr [1:465] "AASDHPPT" "AATK" "ABLIM3" "ACTL6B" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HDA                                             : chr [1:506] "ACOT7" "ACSL4" "ACSL5" "ACTL6B" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HDA1                                            : chr [1:584] "ABLIM3" "ACSL4" "ACSL6" "ACTL6B" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HDA2                                            : chr [1:513] "AATK" "ABCA3" "ABCC8" "ABLIM3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HNBGABA                                         : chr [1:703] "AATK" "ABLIM3" "ACSL4" "ACSL6" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HGABA                                           : chr [1:1106] "A2M-AS1" "AATK" "ABCA3" "ABCC5" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HSERT                                           : chr [1:450] "AATK" "ABHD17A" "ABLIM1" "ABR" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ MANNO_MIDBRAIN_NEUROTYPES_HOMTN                                           : chr [1:389] "AATK" "ABCA3" "ABCC8" "ABLIM1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ZHONG_PFC_MAJOR_TYPES_ASTROCYTES                                          : chr [1:325] "SPARCL1" "CST3" "AGT" "CLU" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ZHONG_PFC_MAJOR_TYPES_EXCITATORY_NEURON                                   : chr [1:8] "NEUROD6" "SLA" "CSRP2" "IGFBPL1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ZHONG_PFC_MAJOR_TYPES_INTERNEURON                                         : chr [1:18] "DLX5" "DLX1" "PLS3" "GAD2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ ZHONG_PFC_MAJOR_TYPES_MICROGLIA                                           : chr [1:438] "CCL3" "AIF1" "C3" "CCL4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   [list output truncated]</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in str(genes.by.celltype.pathway):</span> object 'genes.by.celltype.pathway' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,12 +48,12 @@
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
-    <a class="dropdown-item" href="articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
-    <a class="dropdown-item" href="articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
-    <a class="dropdown-item" href="articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
-    <a class="dropdown-item" href="articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
-    <a class="dropdown-item" href="articles/Split_big_scRNAseqData_and_integrate_result.html">Split_big_scRNAseqData_and_integrate_result</a>
+    <a class="dropdown-item" href="articles/Conventional%20Parameters%20and%20Usage%20Instructions%20with%20Demo%20Example%20Data.html">Conventional Parameters and Usage Instructions with Demo Example Data</a>
+    <a class="dropdown-item" href="articles/Conventional%20result%20and%20visualization%20Instructions%20with%20Real-World%20Examples.html">Conventional result and visualization Instructions with Real-World Examples</a>
+    <a class="dropdown-item" href="articles/Introduction%20to%20Data%20Input%20and%20Preprocessing%20in%20scPagwas.html">Introduction to Data Input and Preprocessing in scPagwas</a>
+    <a class="dropdown-item" href="articles/Perform%20calculations%20for%20multiple%20traits%20based%20on%20a%20single-cell%20dataset.html">Perform calculations for multiple traits based on a single-cell dataset</a>
+    <a class="dropdown-item" href="articles/Pruning%20Process%20for%20GWAS%20Summary%20Statistics%20File%20in%20scPagwas.html">Pruning Process for GWAS Summary Statistics File in scPagwas</a>
+    <a class="dropdown-item" href="articles/Strategies%20for%20Large-scale%20Single-cell%20Data%20Subsetting%20and%20Computation.html">Strategies for Large-scale Single-cell Data Subsetting and Computation</a>
   </div>
 </li>
 <li class="nav-item">
@@ -77,7 +77,7 @@
 </h1>
 </div>
 <p><strong>scPagwas</strong> employs a polygenic regression model to prioritize a set of trait-relevant genes and uncover trait-relevant cell subpopulations by incorporating pathway activity transformed single-cell RNA sequencing (scRNA-seq) data with genome-wide association studies (GWAS) summary data.</p>
-<p><img src="./reference/figures/Figure1.1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="./reference/figures/Figure1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>Reference paper:</p>
 <p>Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequence data.(2023)</p>
 <p>Code for reproducing the analysis from the paper is available <a href="https://github.com/dengchunyu/scPagwas_reproduce" class="external-link">here</a>.</p>
@@ -88,7 +88,6 @@
 <p>You can install the released version of scPagwas from <a href="https://github.com/sulab-wmu/scPagwas" class="external-link">github</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#install some dependence packages</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"SeuratObject"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"Seurat"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggpubr"</span><span class="op">)</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
@@ -121,7 +120,6 @@
 <span>                     celltype<span class="op">=</span><span class="cn">T</span><span class="co"># Whether to run the celltype process.</span></span>
 <span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Note: In terms of settings, your computer at least can handle 10,000 cells for memory need. Otherwise, an error of “cannot allocate vector of size …” may occur.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="license">

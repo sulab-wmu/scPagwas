@@ -20,7 +20,7 @@ genes.by.hallmark.pathway &amp;lt;- lapply(res, "[", -c(1:2))
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,12 +34,12 @@ genes.by.hallmark.pathway &amp;lt;- lapply(res, "[", -c(1:2))
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Bmmc_monocytecount_singlecell_celltype_vignette.html">The common usage and result explaination for scPagwas</a>
-    <a class="dropdown-item" href="../articles/Data_input_preproccess_for_scPagwas.html">Data_input_preproccess_for_scPagwas</a>
-    <a class="dropdown-item" href="../articles/Multi_TraitFiles_for_one_SingleData_running.html">Multi_TraitFiles_for_one_SingleData_running</a>
-    <a class="dropdown-item" href="../articles/Prune_GwasSummaryFIles_plink.html">Prune_GwasSummaryFIles_plink</a>
-    <a class="dropdown-item" href="../articles/Running_scPagwas_steps_by_SubFunctions.html">Running_scPagwas_steps_by_SubFunctions</a>
-    <a class="dropdown-item" href="../articles/Split_big_scRNAseqData_and_integrate_result.html">Split_big_scRNAseqData_and_integrate_result</a>
+    <a class="dropdown-item" href="../articles/Conventional%20Parameters%20and%20Usage%20Instructions%20with%20Demo%20Example%20Data.html">Conventional Parameters and Usage Instructions with Demo Example Data</a>
+    <a class="dropdown-item" href="../articles/Conventional%20result%20and%20visualization%20Instructions%20with%20Real-World%20Examples.html">Conventional result and visualization Instructions with Real-World Examples</a>
+    <a class="dropdown-item" href="../articles/Introduction%20to%20Data%20Input%20and%20Preprocessing%20in%20scPagwas.html">Introduction to Data Input and Preprocessing in scPagwas</a>
+    <a class="dropdown-item" href="../articles/Perform%20calculations%20for%20multiple%20traits%20based%20on%20a%20single-cell%20dataset.html">Perform calculations for multiple traits based on a single-cell dataset</a>
+    <a class="dropdown-item" href="../articles/Pruning%20Process%20for%20GWAS%20Summary%20Statistics%20File%20in%20scPagwas.html">Pruning Process for GWAS Summary Statistics File in scPagwas</a>
+    <a class="dropdown-item" href="../articles/Strategies%20for%20Large-scale%20Single-cell%20Data%20Subsetting%20and%20Computation.html">Strategies for Large-scale Single-cell Data Subsetting and Computation</a>
   </div>
 </li>
 <li class="nav-item">
@@ -82,58 +82,9 @@ genes.by.hallmark.pathway &lt;- lapply(res, "[", -c(1:2))
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">genes.by.hallmark.pathway</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>data set 'genes.by.hallmark.pathway' not found</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">genes.by.hallmark.pathway</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of 50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_TNFA_SIGNALING_VIA_NFKB          : chr [1:200] "JUNB" "CXCL2" "ATF3" "NFKBIA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_HYPOXIA                          : chr [1:200] "PGK1" "PDK1" "GBE1" "PFKL" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_CHOLESTEROL_HOMEOSTASIS          : chr [1:74] "FDPS" "CYP51A1" "IDI1" "FDFT1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_MITOTIC_SPINDLE                  : chr [1:199] "ARHGEF2" "CLASP1" "KIF11" "KIF23" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_WNT_BETA_CATENIN_SIGNALING       : chr [1:42] "MYC" "CTNNB1" "JAG2" "NOTCH1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_TGF_BETA_SIGNALING               : chr [1:54] "TGFBR1" "SMAD7" "TGFB1" "SMURF2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_IL6_JAK_STAT3_SIGNALING          : chr [1:87] "IL4R" "IL6ST" "STAT1" "IL1R1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_DNA_REPAIR                       : chr [1:150] "POLR2H" "POLR2A" "POLR2G" "POLR2E" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_G2M_CHECKPOINT                   : chr [1:200] "AURKA" "CCNA2" "TOP2A" "CCNB2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_APOPTOSIS                        : chr [1:161] "CASP3" "CASP9" "DFFA" "CASP7" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_NOTCH_SIGNALING                  : chr [1:32] "JAG1" "NOTCH3" "NOTCH2" "APH1A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ADIPOGENESIS                     : chr [1:200] "FABP4" "ADIPOQ" "PPARG" "LIPE" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ESTROGEN_RESPONSE_EARLY          : chr [1:200] "GREB1" "CA12" "SLC9A3R1" "MYB" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ESTROGEN_RESPONSE_LATE           : chr [1:200] "TFF1" "SLC9A3R1" "TPD52L1" "PRSS23" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ANDROGEN_RESPONSE                : chr [1:100] "KLK3" "KLK2" "ACSL3" "PIAS1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_MYOGENESIS                       : chr [1:200] "ACTA1" "TNNI2" "MYL1" "TNNC1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_PROTEIN_SECRETION                : chr [1:96] "ARCN1" "TMED10" "COPB2" "RAB14" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_INTERFERON_ALPHA_RESPONSE        : chr [1:97] "MX1" "ISG15" "OAS1" "IFIT3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_INTERFERON_GAMMA_RESPONSE        : chr [1:200] "STAT1" "ISG15" "IFIT1" "MX1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_APICAL_JUNCTION                  : chr [1:200] "ACTN1" "CLDN7" "ACTN3" "CLDN19" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_APICAL_SURFACE                   : chr [1:44] "B4GALT1" "RHCG" "MAL" "LYPD3" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_HEDGEHOG_SIGNALING               : chr [1:36] "SHH" "PTCH1" "NRCAM" "NRP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_COMPLEMENT                       : chr [1:200] "C2" "C1S" "CFB" "C1R" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_UNFOLDED_PROTEIN_RESPONSE        : chr [1:113] "ATF4" "HERPUD1" "PARN" "EXOSC4" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_PI3K_AKT_MTOR_SIGNALING          : chr [1:105] "MAPK8" "PIK3R3" "GRB2" "NFKBIB" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_MTORC1_SIGNALING                 : chr [1:200] "FADS1" "DDIT4" "CALR" "HK2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_E2F_TARGETS                      : chr [1:200] "AURKA" "BRCA2" "CCP110" "CENPE" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_MYC_TARGETS_V1                   : chr [1:200] "PCNA" "PSMD8" "PSMD7" "SET" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_MYC_TARGETS_V2                   : chr [1:58] "SLC19A1" "MRTO4" "TMEM97" "RRP9" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION: chr [1:200] "COL3A1" "COL5A2" "COL5A1" "FBN1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_INFLAMMATORY_RESPONSE            : chr [1:200] "CXCL10" "CCL2" "CCL5" "FPR1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_XENOBIOTIC_METABOLISM            : chr [1:200] "CYP1A1" "FAH" "DCXR" "CYP1A2" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_FATTY_ACID_METABOLISM            : chr [1:158] "ACAA1" "ACAA2" "ACADL" "ACADM" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_OXIDATIVE_PHOSPHORYLATION        : chr [1:200] "NDUFS3" "UQCRB" "NDUFS2" "SDHA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_GLYCOLYSIS                       : chr [1:200] "PGK1" "ALDOA" "ENO1" "TPI1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_REACTIVE_OXYGEN_SPECIES_PATHWAY  : chr [1:49] "GSR" "PRDX2" "TXNRD1" "SOD1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_P53_PATHWAY                      : chr [1:200] "CDKN1A" "BTG2" "MDM2" "CCNG1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_UV_RESPONSE_UP                   : chr [1:158] "NXF1" "SLC6A8" "BAK1" "CDC5L" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_UV_RESPONSE_DN                   : chr [1:144] "TJP1" "NFIB" "TGFBR3" "TFPI" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ANGIOGENESIS                     : chr [1:36] "VCAN" "POSTN" "FSTL1" "LRPAP1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_HEME_METABOLISM                  : chr [1:200] "ALAS2" "PPOX" "FECH" "HMBS" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_COAGULATION                      : chr [1:138] "F2" "PROC" "C1S" "MMP14" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_IL2_STAT5_SIGNALING              : chr [1:199] "SOCS2" "CISH" "PIM1" "IL2RA" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_BILE_ACID_METABOLISM             : chr [1:112] "SCP2" "ABCD3" "SLC27A2" "HSD3B7" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_PEROXISOME                       : chr [1:104] "ABCD3" "ACOT8" "ACOX1" "ACSL1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_ALLOGRAFT_REJECTION              : chr [1:200] "PTPRC" "IL12B" "TGFB1" "IL12A" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_SPERMATOGENESIS                  : chr [1:135] "PDHA2" "TSSK2" "TNP1" "ZPBP" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_KRAS_SIGNALING_UP                : chr [1:200] "ANGPTL4" "ITGA2" "SPRY2" "HBEGF" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_KRAS_SIGNALING_DN                : chr [1:200] "CDH16" "SPTBN2" "FGFR3" "NOS1" ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ HALLMARK_PANCREAS_BETA_CELLS              : chr [1:40] "PAX6" "NEUROD1" "ISL1" "NKX2-2" ...</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in str(genes.by.hallmark.pathway):</span> object 'genes.by.hallmark.pathway' not found</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

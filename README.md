@@ -6,7 +6,7 @@ incorporating pathway activity transformed single-cell RNA sequencing
 (scRNA-seq) data with genome-wide association studies (GWAS) summary
 data.
 
-<img src="./man/figures/Figure1.1.png" width="100%" style="display: block; margin: auto;" />
+<img src="./man/figures/Figure1.png" width="100%" style="display: block; margin: auto;" />
 
 Reference paper:
 
@@ -29,7 +29,6 @@ You can install the released version of scPagwas from
 
 ``` r
 #install some dependence packages
-install.packages("SeuratObject")
 install.packages("Seurat")
 install.packages("ggpubr")
 if (!require("BiocManager", quietly = TRUE))
@@ -64,7 +63,3 @@ system.time(
 )
 )
 ```
-
-Note: In terms of settings, your computer at least can handle 10,000
-cells for memory need. Otherwise, an error of “cannot allocate vector of
-size …” may occur.

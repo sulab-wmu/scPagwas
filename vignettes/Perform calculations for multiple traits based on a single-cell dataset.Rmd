@@ -3,7 +3,7 @@ title: "Perform calculations for multiple traits based on a single-cell dataset"
 date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Perform calculations for multiple traits based on a single-cell dataset.}
+  %\VignetteIndexEntry{Perform calculations for multiple traits based on a single-cell dataset}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

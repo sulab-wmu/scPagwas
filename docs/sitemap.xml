@@ -7,10 +7,22 @@
     <loc>/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html</loc>
   </url>
   <url>
+    <loc>/articles/Conventional Parameters and Usage Instructions with Demo Example Data.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Conventional result and visualization Instructions with Real-World Examples.html</loc>
+  </url>
+  <url>
     <loc>/articles/Data_input_preproccess_for_scPagwas.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Introduction to Data Input and Preprocessing in scPagwas.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Multi Trait Files for one SingleData.html</loc>
   </url>
   <url>
     <loc>/articles/Multi_TraitFiles_for_one_SingleData_running.html</loc>
@@ -19,13 +31,22 @@
     <loc>/articles/my-vignette.html</loc>
   </url>
   <url>
+    <loc>/articles/Perform calculations for multiple traits based on a single-cell dataset.html</loc>
+  </url>
+  <url>
     <loc>/articles/Prune_GwasSummaryFIles_plink.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Pruning Process for GWAS Summary Statistics File in scPagwas.html</loc>
   </url>
   <url>
     <loc>/articles/Running_scPagwas_steps_by_SubFunctions.html</loc>
   </url>
   <url>
     <loc>/articles/Split_big_scRNAseqData_and_integrate_result.html</loc>
+  </url>
+  <url>
+    <loc>/articles/Strategies for Large-scale Single-cell Data Subsetting and Computation.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -65,6 +86,9 @@
   </url>
   <url>
     <loc>/reference/correct_background.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Corr_Random.html</loc>
   </url>
   <url>
     <loc>/reference/corSparse.html</loc>
@@ -148,6 +172,9 @@
     <loc>/reference/Merge_celltype_p.html</loc>
   </url>
   <url>
+    <loc>/reference/Merge_gPas.html</loc>
+  </url>
+  <url>
     <loc>/reference/merge_pagwas.html</loc>
   </url>
   <url>
@@ -167,6 +194,9 @@
   </url>
   <url>
     <loc>/reference/Pathway_pcascore_run.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pa_meanexpr.html</loc>
   </url>
   <url>
     <loc>/reference/pi0est.html</loc>

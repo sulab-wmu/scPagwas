@@ -2,11 +2,17 @@ pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
-  Bmmc_monocytecount_singlecell_celltype_vignette: Bmmc_monocytecount_singlecell_celltype_vignette.html
-  Data_input_preproccess_for_scPagwas: Data_input_preproccess_for_scPagwas.html
-  Multi_TraitFiles_for_one_SingleData_running: Multi_TraitFiles_for_one_SingleData_running.html
-  Prune_GwasSummaryFIles_plink: Prune_GwasSummaryFIles_plink.html
-  Running_scPagwas_steps_by_SubFunctions: Running_scPagwas_steps_by_SubFunctions.html
-  Split_big_scRNAseqData_and_integrate_result: Split_big_scRNAseqData_and_integrate_result.html
-last_built: 2023-04-27T12:02Z
+  Conventional Parameters and Usage Instructions with Demo Example Data: Conventional
+    Parameters and Usage Instructions with Demo Example Data.html
+  Conventional result and visualization Instructions with Real-World Examples: Conventional
+    result and visualization Instructions with Real-World Examples.html
+  Introduction to Data Input and Preprocessing in scPagwas: Introduction to Data Input
+    and Preprocessing in scPagwas.html
+  Perform calculations for multiple traits based on a single-cell dataset: Perform
+    calculations for multiple traits based on a single-cell dataset.html
+  Pruning Process for GWAS Summary Statistics File in scPagwas: Pruning Process for
+    GWAS Summary Statistics File in scPagwas.html
+  Strategies for Large-scale Single-cell Data Subsetting and Computation: Strategies
+    for Large-scale Single-cell Data Subsetting and Computation.html
+last_built: 2023-05-31T01:26Z
 
