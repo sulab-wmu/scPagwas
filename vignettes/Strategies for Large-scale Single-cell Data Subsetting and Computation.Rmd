@@ -204,8 +204,9 @@ gene_heritability_correlation<-scPagwas::Corr_Random(Pagwas$data_mat,
                                                      scPagwas.gPAS.score,
                                                      seed=1234,
                                                      random=T,
-                                                     Nrandom=5,
-                                                     Nselect=200)
+                                                     Nrandom=5,# you need change this parameter based on your cell numbers.
+                                                     Nselect=200 # you need change this parameter based on your cell numbers.
+                                                     )
 scPagwas_topgenes <- names(gene_heritability_correlation[order(gene_heritability_correlation, decreasing = T)])[1:500]
 ```
 
@@ -299,7 +300,7 @@ Read all the "_singlecell_scPagwas.gPAS.score.Result.csv" result files and integ
 
 ```{r eval = FALSE}
 output.dirs="splice_scPagwas"
-oriDir <- paste0(getwd(),"./",output.dirs)
+oriDir <- paste0("./",output.dirs)
 files <- list.files(oriDir, pattern="*_singlecell_scPagwas.gPAS.score.Result.csv")
 #integrate the scPagwas.gPAS.score
 scPagwas.gPAS.score<-unlist(lapply( files,function(file){
@@ -322,8 +323,9 @@ gene_heritability_correlation<-scPagwas::Corr_Random(data_mat,
                                                      scPagwas.gPAS.score,
                                                      seed=1234,
                                                      random=T,
-                                                     Nrandom=5,
-                                                     Nselect=200)
+                                                     Nrandom=5, # you need change this parameter based on your cell numbers.
+                                                     Nselect=200 # you need change this parameter based on your cell numbers.
+                                                     )
 scPagwas_topgenes <- names(gene_heritability_correlation[order(gene_heritability_correlation, decreasing = T)])[1:500]
 Single_data <- Seurat::AddModuleScore(Single_data,
         assay = 'RNA',
