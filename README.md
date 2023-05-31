@@ -18,7 +18,6 @@ Code for reproducing the analysis from the paper is available
 [here](https://github.com/dengchunyu/scPagwas_reproduce).
 
 For further usage on the scPagwas package, you can visit the
-[tutorials](https://dengchunyu.github.io/scPagwas/) or
 [website](https://dengchunyu.github.io/about/). A vignette for using
 also can be accessed using browseVignettes(“scPagwas”)
 
