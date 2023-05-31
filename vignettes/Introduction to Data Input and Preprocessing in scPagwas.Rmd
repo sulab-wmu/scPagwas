@@ -1,0 +1,222 @@
+---
+title: "Introduction to Data Input and Preprocessing in scPagwas"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Data Input and Preprocessing in scPagwas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Data input
+
+- Resources1: There were tow input files for you must to prepare in scPagwas: scRNA-seq dataset(seruat format), a GWAS summary dataset(txt file);
+- Resources2: There were three input files for you choosing to prepare in scPagwas: an extensive panel of pathways or functional gene sets(gene symbol list); Gene block annotation nd LD data.
+
+## Resources1
+### 1.Single cell data Input
+
+#### 1.1.Downloading scRNA-seq dataset
+
+The example scRNA-seq data for T cells of melanoma was downloaded from the GEO [GSE115978](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE115978)
+Two data were download from this website:
+Single cell annotations data: [GSE115978_cell.annotations.csv.gz](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE115nnn/GSE115978/suppl/GSE115978_cell.annotations.csv.gz)
+
+Single cell count data:[GSE115978_counts.csv.gz](https://ftp.ncbi.nlm.nih.gov/geo/series/GSE115nnn/GSE115978/suppl/GSE115978_counts.csv.gz)
+
+#### 1.2.Progressing scRNA-seq dataset
+
+To analyze scRNA-seq data using scPagwas, it is essential to have an RNA assay included. If working with raw scRNA-seq data, further preprocessing steps such as clustering and annotation are required. After clustering, it is necessary to assign the annotated information to the "Idents" variable. Additionally, the gene names in scRNA-seq data should be represented using gene symbols.
+Since we have downloaded pre-annotated scRNA-seq data, we will skip the steps of clustering and annotation in this analysis. Therefore, we won't be performing any clustering or annotation on the dataset.
+-   1). The scRNA-seq dataset should have Idents for cell types or clusters.
+-   2). The scRNA-seq dataset should be normalized.
+
+```{r eval=FALSE, include=FALSE}
+library(Seurat)
+library(SeuratObject)
+counts <- read.csv("GSE115978_counts.csv.gz",row.names=1)
+Anno<- read.csv("GSE115978_cell.annotations.csv.gz")
+##create the SeuratObject
+Single_data<-Seurat::CreateSeuratObject(
+  counts,
+  assay = "RNA",
+  meta.data=Anno
+)
+
+Idents(Single_data)<-Single_data$BioClassification
+Single_data <- NormalizeData(Single_data, normalization.method = "LogNormalize", scale.factor = 10000)
+Single_data <- ScaleData(Single_data)
+```
+
+
+### 2.GWAS summary data Input
+
+GWAS Summary statistics are download from Finngen:
+[GBM_EXALLC](https://storage.googleapis.com/finngen-public-data-r7/summary_stats/finngen_R7_C3_GBM_EXALLC.gz)
+
+#### 2.1.Read and progrocess the example GWAS Summary statistics file
+
+In R environment, select the specific columns and output the result.
+
+The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited.
+
+```{r eval=FALSE, include=FALSE}
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+knitr::kable(head(gwas_data))
+```
+
+In the context of scPagwas software, the presence of specific columns in the GWAS summary file is generally required. However, there are situations where the obtained GWAS summary may not perfectly meet these requirements. In such cases, there are alternative approaches that can be employed.
+
+Among the six columns typically present in the GWAS summary file, the "maf" column is primarily used in scPagwas for SNP filtering purposes. It allows for the reduction of SNP quantity and computational burden. However, it does not play a critical role in the analysis. As a workaround, it is possible to customize this column to include any value above the minimum minor allele frequency (maf), essentially bypassing the maf filtering step. This modification has no significant impact on the results since scPagwas aims to integrate a larger number of SNP data, regardless of the magnitude of their effects.
+
+In GWAS summary data, the effect size (ES) and standard error (SE) for each SNP locus are typically provided. In cases where beta data is unavailable, it is possible to compute a conversion using the following formula:
+beta = ES / SE
+Here, beta represents the effect size of the SNP locus. Alternatively, the ES column itself can be used to represent the impact of the SNP locus on the target trait. Therefore, replacing the beta column with the ES values directly for scPagwas calculations is also acceptable. However, it is important to maintain consistent column names as per the example data. 
+
+Additionally, both TXT files and data frames are acceptable formats for input data.
+
+Please note that scPagwas analysis supports these adaptations to accommodate GWAS summary files that do not perfectly align with the standard requirements.
+
+
+## Resource2
+There were three input resources in scPagwas (Most of time need not prepare): an extensive panel of pathways or functional gene sets(gene symbol list); and LD data.
+
+### 3.Pathway gene list
+
+There are some processed pathway gene list provided by scPagwas package: all these pathway list are including gene ids; Gene block annotation(the same id with pathway list);
+
+-   Genes_by_pathway_kegg
+-   genes.by.gpbp.pathway
+-   genes.by.reactome.pathway
+-   genes.by.regulatory.pathway
+-   genes.by.tft.pathway
+-   reduce_genes.by.gpbp.pathway
+-   reduce_genes.by.reactome.pathway
+-   reduce_genes.by.regulatory.pathway
+-   reduce_genes.by.tft.pathway
+
+When selecting pathway data, there are several principles to consider based on the scPagwas software package. Firstly, it is recommended to prioritize pathways with higher universality and broader coverage, such as Genes_by_pathway_kegg and genes.by.gpbp.pathway. Single functional pathways like hallmark and immunologic have not been thoroughly tested for effectiveness. Secondly, the number of pathways included in the list affects both the result and time efficiency of the analysis. Too many pathways can significantly increase computation time, while too few may not provide sufficient coverage. Typically, a reasonable range is between 200 to 1000 pathways, with a gene coverage of at least 50% when compared to the genes in the single-cell expression profile data. It is advisable to use established pathways like Genes_by_pathway_kegg and genes.by.gpbp.pathway (or reduced_genes.by.gpbp.pathway with appropriate redundancy removal) to ensure result efficacy. The effectiveness of these pathways has been extensively validated in published scPagwas articles. 
+
+Examples of pathway acquisition and redundancy removal are provided below for reference.
+There is no need to repeat running these code.
+
+#### KEGG pathway list
+
+```{r eval=FALSE, include=FALSE}
+library(KEGGREST)
+pathways.list <- keggList("pathway", "hsa")
+# Pull all genes for each pathway
+pathway.codes <- sub("path:", "", names(pathways.list))	
+genes.by.pathway_kegg <- sapply(pathways.list,
+                           function(pwid){
+                             pw <- keggGet(pwid)
+                             if (is.null(pw[[1]]$GENE)) return(NA)
+                             pw2 <- pw[[1]]$GENE[c(FALSE,TRUE)] # may need to modify this to c(FALSE, TRUE) for other organisms
+                             pw2 <- unlist(lapply(strsplit(pw2, split = ";", fixed = T), function(x)x[1]))
+                             return(pw2)
+                           })
+```
+
+#### Other pathway list
+
+These pathways data are download from [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) website.
+
+```{r eval=FALSE, include=FALSE}
+#such as:
+x <- readLines("c8.all.v7.5.1.symbols.gmt")
+res <- strsplit(x, "\t")
+names(res) <- vapply(res, function(y) y[1], character(1))
+genes.by.celltype.pathway <- lapply(res, "[", -c(1:2))
+```
+
+Note:
+
+1.  Sometimes, there is no need to change the pathway list frequently once you choose a fitable pathway list.
+2.  The summed number of genes in pathway list should not too much to cost a long time or memory.Once your pathway list is too big, you can choose some sub-pathway suitable for you analysis or remove some redundance pathways.
+
+#### Reduce pathway gene list
+
+We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and 89476 genes, a mount of resouces and time will be cost when running scPagwas, we provid `reduce_pathway` to reduce the pathway list:
+
+-   `pathway_seed` choose a list of pathway names as seed, which are the pahtways cann't be remove.
+-   `remove_proporion` The propotion of duplicated between seed pathway and the others
+
+```{r eval=FALSE, include=FALSE}
+set.seed(123)
+reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)>50]
+reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)<300]
+
+reduce_genes.by.reactome.pathway<-scPagwas::reduce_pathway(
+  pathway_seed=names(reduce_genes.by.reactome.pathway)[sample(1:length(reduce_genes.by.reactome.pathway),50)],
+                                                 pathway_list=reduce_genes.by.reactome.pathway,
+                                                 remove_proporion=0.5)
+length(reduce_genes.by.reactome.pathway)
+#214
+length(unique(unlist(reduce_genes.by.reactome.pathway)))
+#7667
+```
+> Note.The summed genes for all pathways should not smaller than 1/2 of the number of genes in single cell data.
+
+
+### 4.Gene block annotation
+
+Gene block annotation in chromosome is need to prepare for scPagwas.
+scPagwas can provide a block annotation data for protein-coding genes.
+
+File downloaded from MAGMA website [MAGMA | CTG (cncr.nl)](https://ctg.cncr.nl/software/magma)
+
+Here is the procedure of obtaining the data:
+
+```{r eval=FALSE, include=FALSE}
+library("rtracklayer")
+gtf_df<- rtracklayer::import("gencode.v34.annotation.gtf.gz")
+gtf_df <- as.data.frame(gtf)
+gtf_df <- gtf_df[,c("seqnames","start","end","type","gene_name")]
+gtf_df <- gtf_df[gtf_df$type=="gene",]
+block_annotation<-gtf_df[,c(1,2,3,5)]
+colnames(block_annotation)<-c("chrom", "start","end","label")
+```
+
+The block_annotation data provided by scPagwas is used to obtain the precise coordinates of genes, which enables the determination of the TSS range of each gene based on the size of the window. However, this data is not optimized for long-range enhancer regulation, which is why other methods like sclinker attempt to incorporate this information into the analysis. While block_annotation can be customized to suit specific annotation data formats, we consider TSS regulation to be more reliable and therefore prefer this approach.
+
+### 5.LD data
+
+The LD data provided by the scPagwas software package is fixed and generally does not require modification.
+The 1,000 Genomes Project Phase 3 Panel was applied to calculate the linkage disequilibrium (LD) among SNPs extracted from GWAS summary statistics.
+the processed LD data are show here:
+
+We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
+
+
+`./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes
+./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes
+./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome`
+
+R environment to print out the scPagwas-needed data.
+
+```{r, eval=FALSE,include=FALSE}
+covid_ld<-read.delim("./ld_1000genome.ld")
+#remove sex chrome
+covid_ld<-covid_ld[!(covid_ld$ %in% 23),]
+colnames(covid_ld)[7]<-"R"
+#print out the result in chrom number
+lapply(unique(covid_ld$CHR_A), function(i){
+  a<-data.table(covid_ld[covid_ld$CHR_A == i,])
+  file_name <- paste0("./LD/",i,".Rds")
+  saveRDS(a, file = file_name)
+})
+#integrate the data
+chrom_ld<-lapply(as.character(1:22),function(chrom){
+  chrom_ld_file_path <- paste(ld_folder, '/', chrom, '.Rds', sep = '')
+ ld_data <- readRDS(chrom_ld_file_path)[(R**2 > r2_threshold), .(SNP_A, SNP_B, R)]
+  return(ld_data)
+})
+```

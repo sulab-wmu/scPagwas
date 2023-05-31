@@ -221,9 +221,9 @@ scParameter_regression <- function(Pagwas_x,
 }
 
 #' scPagwas_score_filter
-#' @description filter the cPagwas_score for outliers.
+#' @description filter the scPagwas_score for outliers.
 #' @param scPagwas_score (data.frame)
-#'
+#' @export
 
 scPagwas_score_filter <- function(scPagwas_score) {
   # remove the NAN!
@@ -279,4 +279,84 @@ scGet_gene_heritability_correlation <- function(scPagwas.gPAS.score,data_mat) {
   sparse_cor[is.nan(sparse_cor)] <- 0
   #
   return(sparse_cor)
+}
+
+
+#' pa_meanexpr
+#'
+#' @param Pagwas
+#'
+#' @return Pagwas
+#' @export
+#'
+#' @examples
+pa_meanexpr <- function(Pagwas){
+  Pathway_names <- names(Pagwas$Pathway_list)
+  pathway_expr <- lapply(Pathway_names, function(pa) {
+    a <- intersect(Pagwas$Pathway_list[[pa]], rownames(Pagwas$data_mat))
+    if (length(a) == 0) {
+      return(NULL)
+    } else if (length(a) == 1) {
+      return(Pagwas$data_mat[a, ])
+    } else {
+      b <- biganalytics::apply(Pagwas$data_mat[a, ], 2, mean)
+      return(b)
+    }
+  })
+
+  a<-!sapply(pathway_expr, is.null)
+  pathway_expr <- data.matrix(as.data.frame(pathway_expr[a]))
+  Pathway_names <- Pathway_names[a]
+
+  colnames(pathway_expr) <- Pathway_names
+  pa_exp_mat <- t(Pagwas$pca_scCell_mat[Pathway_names, ]) * pathway_expr
+  Pagwas$pa_exp_mat<-pa_exp_mat
+  return(Pagwas)
+}
+
+
+#' Corr_Random
+#' Split the large-scale single-cell data and perform random computations of correlation. Multiple iterations of random computations ensure the accuracy of the results.
+#' @param data_mat the expression matrix for single cell.
+#' @param scPagwas.gPAS.score the gPas score for scPagwas
+#' @param seed random seed.
+#' @param random whether to random, default is TRUE.
+#' @param Nrandom the number of random.
+#' @param Nselect the number of single cells for each random.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Corr_Random<-function(data_mat,scPagwas.gPAS.score,seed=1234,random=T,Nrandom=5,Nselect=10000){
+  set.seed(seed)
+  merg_m<-apply(matrix(seq(Nrandom)),1,function(x){
+    print(x)
+    ss=sample(seq(length(scPagwas.gPAS.score)),Nselect)
+    gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=scPagwas.gPAS.score[ss],data_mat=data_mat[,ss])
+    return(gene_heritability_correlation)
+  })
+  meancor<-apply(merg_m,1,mean)
+  names(meancor)<-rownames(data_mat)
+  return(meancor)
+}
+
+
+#' Merge_gPas
+#'
+#' @param Pagwas
+#' @param pmat_merge the merged sclm matrix
+#'
+#' @return
+#' @export
+#'
+#' @examples
+Merge_gPas <-function(Pagwas,pmat_merge){
+  pa_exp_mat <- t(Pagwas$pca_scCell_mat) * Pagwas$pa_exp_mat
+  Pathway_names<-intersect(colnames(pmat_merge),colnames(Pagwas$pa_exp_mat))
+  Pathway_single_results <- pmat_merge[, Pathway_names] * pa_exp_mat[, Pathway_names]
+  message("* Get scPgwas score for each single cell")
+  scPagwas.gPAS.score <- rowSums(Pathway_single_results)
+  scPagwas.gPAS.score <- scPagwas_score_filter(scPagwas_score = scPagwas.gPAS.score)
+  return(scPagwas.gPAS.score)
 }

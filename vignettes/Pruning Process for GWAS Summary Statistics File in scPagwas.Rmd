@@ -1,0 +1,87 @@
+---
+title: "Pruning Process for GWAS Summary Statistics File in scPagwas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Pruning Process for GWAS Summary Statistics File in scPagwas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(scPagwas)
+```
+
+
+# Pruning Process for GWAS Summary Statistics File in scPagwas
+
+The GWAS summary statistics file needs to be provided by users. However, in many cases, the number of SNPs in such files can reach ten millions, and this can significantly impact computing time. Therefore, it is recommended to preprocess the file using Plink software's prune function before inputting it. The prune function is a commonly used tool in Plink software that selects representative SNPs between LD loci, reduces the number of highly similar loci, and lowers the false-positive rate, thereby improving result reliability. Furthermore, this process does not significantly impact the final result. Hence, it is advisable to use this method if the GWAS file is too large.
+
+## Progressing gwas data
+To calculate plink, important information from the GWAS data needs to be extracted.
+
+```{r message=FALSE, eval = FALSE}
+  GWAS_raw <-read_table("./monocytecount.gz")
+  GWAS_raw<-GWAS_raw[,c(1,2,3,4,5,6,9,10)]
+  colnames(GWAS_raw)<-c("chrom","pos","REF","ALT","rsid","nearest_genes","beta","se")
+  write.table(GWAS_raw,file="./monocytecount.txt",row.names=F,quote=F)
+```
+
+## Extract SNPs
+```{bash, eval = FALSE }
+mkdir tempfile
+awk  '{print $5 }' monocytecount.txt  > ./tempfile/monocytecount_SNP_list.txt
+
+```
+
+
+## plink
+```{bash, eval = FALSE }
+for i in $(seq 1 22)  
+do 
+echo $i
+plink 
+--bfile ./02_partitioned_LD_score_estimation/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i 
+--extract ./tempfile/monocytecount_SNP_list.txt 
+--noweb --make-bed --out ./tempfile/1000G.EUR.QC.monocytecount_${i}_filtered
+done 
+```
+
+## filter LD information
+```{bash, eval = FALSE }
+for i in $(seq 1 22)  
+do 
+echo $i
+plink 
+--bfile ./tempfile/1000G.EUR.QC.monocytecount_${i}_filtered 
+--indep-pairwise 50 5 0.8 
+--out  ./tempfile/monocytecount_${i}_plink_prune_EUR_filtered_LD0.8
+done 
+```
+
+
+## Integrate the result files for 1-22 chrome
+```{bash, eval = FALSE }
+cat [monocytecount]*.prune.in > monocytecount_EUR_LD0.8.prune
+```
+
+## Intersect the snp for all gwas file
+```{r message=FALSE, eval = FALSE}
+library(readr)
+library(dplyr)
+gwas<-read_table("./monocytecount.txt")
+SNP_prune<- read_table("./tempfile/AD_EUR_LD0.8.prune")
+SNP_prune<-SNP_prune[!duplicated(unlist(SNP_prune)),]
+colnames(SNP_prune)<-"rsid"
+#### Left Join using inner_join function 
+gwas= gwas %>% inner_join(SNP_prune,by="rsid")
+print(nrow(gwas))
+write.table(gwas,file="./monocytecount_prune_gwas_data.txt",row.names=F,quote=F)
+
+```

@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 **scPagwas** employs a polygenic regression model to prioritize a set of trait-relevant genes and uncover trait-relevant cell subpopulations by incorporating pathway activity transformed single-cell RNA sequencing (scRNA-seq) data with genome-wide association studies (GWAS) summary data.
 
 <img src="./man/figures/Figure1.1.png" width="100%" style="display: block; margin: auto;" />
- 
+
 Reference paper: 
 
 Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequence data.(2023) 
@@ -56,7 +56,7 @@ quick-start example:
 system.time(
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
-                     gwas_data =gwas_data,#system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),# scRNA-seq data in seruat format with "RNA" assays and normalized.
                      output.prefix="test", # the prefix name for output files
                      output.dirs="scPagwastest_output",# the directory file's name for output

@@ -1,0 +1,93 @@
+---
+title: "Perform calculations for multiple traits based on a single-cell dataset"
+date: "Last Updated: `r format(Sys.time(), '%d, %B, %Y at %H:%M')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Perform calculations for multiple traits based on a single-cell dataset.}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+ collapse = TRUE,
+ comment = "#>",
+  fig.path = "figures/vignette-",
+ out.width = "60%"
+)
+```
+
+This vignette description a situation that multiple traits files are running for one single cell data. In this case, we can running single cell function for prepare and save the result for the following traits' code program. 
+The example trait files are:
+
+[monocytecount](https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=cb5Ihf)
+[Lymphocytecount](https://1drv.ms/t/s!As-aKqXDnDUHi9ouhlmLkzI2NZFR2Q?e=bSnwSQ)
+[MeanCorpusVolume](https://1drv.ms/t/s!As-aKqXDnDUHi9ovb0Z5RpBtH4y3CA?e=BKyCa3)
+
+The BMMC processed scRNA-seq data can download from [here](https://1drv.ms/u/s!As-aKqXDnDUHi9pNciEgQFbe-AHgLw?e=4JiHRw)
+
+## Prepare the Single cell data firstly 
+
+The single cell Intermediate data is immobile for the same `Single_data` input no matter the `gwas_data` input files. 
+First, Run the `Single_data_input` and `Pathway_pcascore_run` for `Seu_Hema_data.rds`.
+
+```{r eval = FALSE}
+library(scPagwas)
+Pagwas <- list()
+Pagwas <- Single_data_input(Pagwas=Pagwas,
+                            assay="RNA",
+                            Single_data='Seu_Hema_data.rds',
+                            Pathway_list=Genes_by_pathway_kegg)
+Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
+                               Pathway_list=Genes_by_pathway_kegg)
+```
+
+## Perform scPagwas calculations separately for each trait 
+
+We take the Pagwas as input for `scPagwas_main`, therefore, there is no need to run the Pathway_pcascore_run function for different traits which will save times. 
+
+Use the previous single-cell result data as input for scPagwas_main. By doing so, the intermediate results from the single-cell analysis will be carried over to the new computation, saving time and computational resources.
+
+```{r eval = FALSE}
+#Pagwas is the result for last blocks. It inherits the single cell result in the previous result
+Pagwas_monocytecount<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ='monocytecount_gwas_data.txt',
+                     Single_data ='Seu_Hema_data.rds',
+                     output.prefix="monocytecount_scPagwas",
+                     output.dirs="monocytecount_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     iters_singlecell = 100,
+                     chrom_ld = chrom_ld,# The LD data is provided by package.
+                     singlecell=T, # Whether to run the singlecell process.
+                     celltype=T)
+
+Pagwas_Lymphocytecount<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ="Lymphocytecount_gwas_data.txt",
+                     Single_data ='Seu_Hema_data.rds',
+                     output.prefix="Lymphocytecountt_scPagwas",
+                     output.dirs="Lymphocytecount_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     iters_singlecell = 100,
+                     chrom_ld = chrom_ld,# The LD data is provided by package.
+                     singlecell=T, # Whether to run the singlecell process.
+                     celltype=T)
+
+Pagwas_MeanCorpusVolume<-scPagwas_main(Pagwas =Pagwas,
+                     gwas_data ="MeanCorpusVolume_prune_gwas_data.txt",
+                     Single_data ='Seu_Hema_data.rds',
+                     output.prefix="MeanCorpusVolume_scPagwas",
+                     output.dirs="MeanCorpusVolume_bmmc",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     block_annotation = block_annotation,
+                     iters_singlecell = 100,
+                     chrom_ld = chrom_ld,# The LD data is provided by package.
+                     singlecell=T, # Whether to run the singlecell process.
+                     celltype=T)
+```
+

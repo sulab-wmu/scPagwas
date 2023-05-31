@@ -68,7 +68,7 @@ plot_bar_positie_nagtive <- function(seurat_obj,
   n_ident <- ident <- group <- N <- NULL
   # ===============seurat_obj p==================
   seurat_obj$positiveCells <- rep(0, ncol(seurat_obj))
-  seurat_obj$positiveCells[seurat_obj$CellqValue < p_thre] <- 1
+  seurat_obj$positiveCells[seurat_obj$Random_Correct_BG_adjp < p_thre] <- 1
 
   # ===============data.table with sums==================
   dt <- data.table(

@@ -1,0 +1,368 @@
+---
+title: "Conventional Parameters and Usage Instructions with Demo Example Data"
+date: "Last Updated on `r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Conventional Parameters and Usage Instructions with Demo Example Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+## 1.Paramers
+
+Parameters and their Descriptions in scPagwas:
+
+- Pagwas = NULL: This parameter is typically not required and does not need any input data. When seurat_return = FALSE, all intermediate data is stored in the "Pagwas" list and returned as the result. This result can be inherited and used as input for subsequent calculations. In certain scenarios, such as when performing two computations with the same single-cell data input but different GWAS data inputs, the result list obtained from the first computation can be used as the "Pagwas" parameter input for the second computation. This allows skipping the single-cell calculations, significantly expediting the process. However, when seurat_return = TRUE, the returned result cannot be manipulated in this manner, as it is the final Seurat result with many intermediate data removed.
+
+- **gwas_data** = NULL: The user needs to provide the address or dataframe of the GWAS data. Specific formatting requirements can be found in the "Introduction to Data Input and Preprocessing in scPagwas".
+
+- output.prefix = "Test": This parameter sets the prefix for the output result files.
+
+- output.dirs = "scPagwastest_output": This parameter specifies the directory for the output result files.
+
+- block_annotation = block_annotation: The genomic annotation file, typically provided by scPagwas unless otherwise specified.
+
+- **Single_data** = NULL: The single-cell data in Seurat format, with preprocessed and annotated information stored in the Idents. For specific processing steps, refer to the "Introduction to Data Input and Preprocessing in scPagwas".
+
+- assay = "RNA": The name of the assay for the single-cell data used in the computation.
+
+- Pathway_list = Genes_by_pathway_kegg: Pathway data, represented as a list containing multiple pathways with their respective gene sets. scPagwas provides various pathway data options, which can be found in the "Introduction to Data Input and Preprocessing in scPagwas".
+
+- chrom_ld = chrom_ld: LD (Linkage Disequilibrium) information file, typically provided by scPagwas.
+
+- run_split = FALSE: This parameter is used for data subsetting and computation. In scenarios where the server's memory is insufficient to handle large-scale single-cell data, the data can be split for computation. The results are then integrated for further analysis. This strategy will be further explained in the section titled "Strategies for Large-scale Single-cell Data Subsetting and Computation".
+
+- n.cores = 1: This parameter enables multi-core computation, specifically in the sixth step of scPagwas, the "Link_pathway_blocks_gwas" function.
+
+- marg = 10000: The boundary distance in base pairs from the Transcription Start Site (TSS) position. The default is set to 10 kb, resulting in a window size of 20 kb.
+
+- maf_filter = 0.01: Filtering threshold for Minor Allele Frequency (MAF) in GWAS data. This step helps filter out SNPs, reducing the total number of SNPs for computational efficiency. The MAF value has no impact on the final results.
+
+- min_clustercells = 10: Filtering criterion for clusters in single-cell annotation. Only clusters with a minimum number of cells specified by this parameter will be considered.
+
+- min.pathway.size = 5: Filtering criterion for pathway data. Only pathways with a gene count not less than 5 will be included in the analysis.
+
+- max.pathway.size = 300: Filtering criterion for pathway data. Only pathways with a gene count not greater than 300 will be included in the analysis.
+
+  Note that during the computation, the filtering criteria ensure that the number of expressed genes in a pathway is not less than 5 and not more than 300. This helps prevent abnormal pathway calculations. However, it means that for different single-cell datasets with the same pathway data, the pathways included in the analysis may vary. The filtered pathway data can be found in the "misc" section of the scPagwas results.
+
+- iters_celltype = 200: Number of iterations for bootstrap computation of cell-type p-values.
+
+- iters_singlecell = 100: Number of iterations for background-corrected single-cell p-value computation. Note that this parameter significantly affects the computation time.
+
+- n_topgenes = 1000: Number of top genes selected for calculating the Transcriptional Regulator Score (TRS). Here, we follow the common practice of selecting 1000 genes.
+
+- singlecell = TRUE: Whether to generate single-cell results.
+
+- celltype = TRUE: Whether to generate cell-type results.
+
+- seurat_return = TRUE: Whether to output results in the Seurat format. This parameter is only effective when singlecell = TRUE.
+
+- remove_outlier = TRUE: Whether to filter out outliers.
+
+Please note that the above descriptions are for the provided parameters in scPagwas.
+
+## 2.scPagwas Calculation Processes Based on Singlecell and Celltype Parameters
+
+There are some different situations for running scPagwas!
+
+### 2.1. Run both singlecell and celltypes functions.
+```{r eval = FALSE}
+library(scPagwas)
+Pagwas<-scPagwas_main(Pagwas =NULL,
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     output.prefix="Test",
+                     output.dirs="Test",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     singlecell=T, 
+                     iters_singlecell = 100,
+                     celltype=T,
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+```
+Interpretation of Results: Conventional Result and Visualization Instructions with Real-World Examples.
+
+### 2.2. Only run celltypes functions.
+
+The executive programs for celltypes and single cell are independent, If you only want to know the celtypes, set the `celltype=T` and `singlecell=F`.
+The advantages is save a lot of times, for celltype only can omit many running processes.
+
+```{r eval = FALSE}
+Pagwas_celltypes<-scPagwas_main(Pagwas =NULL,
+                     gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                     Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                     output.prefix="Test",
+                     output.dirs="Test",
+                     Pathway_list=Genes_by_pathway_kegg,
+                     assay="RNA",
+                     singlecell=F, 
+                     celltype=T,
+                     block_annotation = block_annotation,
+                     chrom_ld = chrom_ld)
+```
+
+The reuslt of celltypes is list format(not seurat format).
+```{r eval = FALSE}
+names(Pagwas_celltypes)
+ [1] "Celltype_anno"     "data_mat"          "VariableFeatures"  "merge_scexpr"     
+ [5] "rawPathway_list"   "Pathway_list"      "pca_scCell_mat"    "pca_cell_df"      
+ [9] "snp_gene_df"       "lm_results"        "bootstrap_results"
+```
+
+Pagwas_celltypes: A Result List with Distinct Characteristics and Inheritable Intermediate Data.
+
+- bootstrap_results: The bootstrap data frame results for celltypes including bootstrap pvalue and confidence interval.
+- pca_scCell_mat : a pahtway and cell data matrix for pathway svd(1'st pca) result for each cell;
+- pca_cell_df : a pahtway and celltype data matrix for pathway svd(1'st pca) result for each celltype;
+- Other elements are the intermediate data. 
+
+### 2.3. Only run singlecell functions  
+
+```{r eval = FALSE}
+Pagwas_singlecell<-scPagwas_main(Pagwas =NULL, 
+                                 gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                                 Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                                 output.prefix="Test",
+                                 output.dirs="Test",
+                                 Pathway_list=Genes_by_pathway_kegg,
+                                 assay="RNA",
+                                 singlecell=T, 
+                                 celltype=F,
+                                 block_annotation = block_annotation,
+                                 chrom_ld = chrom_ld)
+```
+
+Because the parameters and input data are the same with celltypes function, we also can take the celltypes result as the input data for single cell function. The advantage is there is no need to run the `svd` code block, save a lot of time. 
+
+```{r eval = FALSE}
+Pagwas_singlecell<-scPagwas_main(Pagwas =Pagwas_celltypes, 
+                                 gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"),
+                                 Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),
+                                 output.prefix="Test",
+                                 output.dirs="Test",
+                                 Pathway_list=Genes_by_pathway_kegg,
+                                 assay="RNA",
+                                 singlecell=T, 
+                                 celltype=F,
+                                 block_annotation = block_annotation,
+                                 chrom_ld = chrom_ld)
+```
+The result is seurat format.
+
+## 3. Running scPagwas step by step
+
+The main function, scPagwas_main, is actually a package of multiple sub-functions designed to simplify the process. However, in practical calculations, a more flexible approach may be required. Here, we will introduce each step one by one to better understand the entire computational workflow.
+
+We use an example provided by scPagwas package.
+
+### 3.1 Single data input
+
+The first step involves the reading and preprocessing of single cells, primarily aimed at filtering out clusters with very few cells and obtaining the intersection of genes between Genes_by_pathway_kegg and single-cell genes.
+
+```{r eval = FALSE}
+library(scPagwas)
+Pagwas <- list()
+Single_data <- readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
+Pagwas <- Single_data_input(
+      Pagwas = Pagwas,
+      assay = "RNA",
+      Single_data = Single_data,
+      Pathway_list = Genes_by_pathway_kegg
+    )
+Single_data <- Single_data[, colnames(Pagwas$data_mat)]
+names(Pagwas)
+#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"
+```
+
+- "Celltype_anno": Cell type annotation information.
+- "data_mat": Single-cell expression matrix.
+- "VariableFeatures": Information on variable genes in single cells.
+- "merge_scexpr": Average expression matrix of cell types.
+
+### 3.2 Run pathway pca score 
+
+The SVD method is used to compute the SVD results for single cells and cell types.
+
+```{r eval = FALSE}
+Pagwas <- Pathway_pcascore_run(
+        Pagwas = Pagwas,
+        Pathway_list = Genes_by_pathway_kegg
+      )
+names(Pagwas)
+#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"     "rawPathway_list" 
+#[6] "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"
+```
+
+- "rawPathway_list": Raw pathway data input.
+- "Pathway_list": Filtered pathway data.
+- "pca_scCell_mat": SVD results of pathways for single cells, with rows representing pathways and columns representing cells.
+- "pca_cell_df": SVD results of pathways for cell types, with rows representing pathways and columns representing cell types.
+
+### 3.3 GWAS summary data input
+
+Read the GWAS summary data, remove the MHC and sex chromosome and filtered the maf of SNP.
+
+```{r eval = FALSE}
+gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
+Pagwas <- GWAS_summary_input(
+    Pagwas = Pagwas,
+    gwas_data = gwas_data,
+    maf_filter = 0.1
+  )
+names(Pagwas)
+#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"     "rawPathway_list" 
+#[6] "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"      "gwas_data"
+```
+
+- "gwas_data"：Gwas data input.
+
+### 3.4 Mapping Snps to Genes
+
+We set the `marg` is 10KB, means the position for SNP is less 10KB distance to TSS of gene.
+
+```{r eval = FALSE}
+Pagwas$snp_gene_df <- SnpToGene(
+        gwas_data = Pagwas$gwas_data,
+        block_annotation = block_annotation,
+        marg = 10000
+      )
+```
+- snp_gene_df: Correspondence between SNPs and genes.
+
+### 3.5 Pathway-SNP annotation  
+Mapping SNPs to pathways and getting block data. 
+```{r eval = FALSE}
+Pagwas <- Pathway_annotation_input(
+      Pagwas = Pagwas,
+      block_annotation = block_annotation
+    )
+names(Pagwas)
+#[1] "Celltype_anno"    "data_mat"         "VariableFeatures" "merge_scexpr"     "rawPathway_list" 
+# [6] "Pathway_list"     "pca_scCell_mat"   "pca_cell_df"      "gwas_data"        "snp_gene_df"     
+#[11] "pathway_blocks" 
+```
+
+- pathway_blocks: Each pathway is treated as a block, showing the correspondence between genes and SNPs for each pathway.
+
+### 3.6 Link the pathway blocks to pca score 
+
+The regression analysis step requires a relatively long computation time.
+```{r eval = FALSE}
+Pagwas <- Link_pathway_blocks_gwas(
+      Pagwas = Pagwas,
+      chrom_ld = chrom_ld,
+      singlecell = T,
+      celltype = T,
+      backingpath="./temp")
+names(Pagwas)
+ #[1] "Celltype_anno"        "data_mat"             "VariableFeatures"     "merge_scexpr"        
+ #[5] "rawPathway_list"      "Pathway_list"         "pca_scCell_mat"       "pca_cell_df"         
+ #[9] "snp_gene_df"          "Pathway_sclm_results" "Pathway_ld_gwas_data"
+```
+
+- "Pathway_sclm_results": Matrix of regression parameters for single cells, with rows representing cells and columns representing pathways.
+
+- "Pathway_ld_gwas_data": Intermediate results of the regression calculation, including x and y information for each pathway.
+
+  In this step, a temporary file will be generated in the result folder to store intermediate data during the regression analysis, aiming to improve efficiency. Although the contents of this file will be deleted during the execution, sometimes it may not be completely removed. It is recommended to manually delete it after the program finishes running.
+
+### 3.7 Perform regression for celltypes 
+Run the regression function for celltypes. 
+```{r eval = FALSE}
+Pagwas$lm_results <- Pagwas_perform_regression(Pathway_ld_gwas_data = Pagwas$Pathway_ld_gwas_data)
+Pagwas <- Boot_evaluate(Pagwas, bootstrap_iters = 200, part = 0.5)
+names(Pagwas)
+# [1] "Celltype_anno"        "data_mat"             "VariableFeatures"     "merge_scexpr"        
+# [5] "rawPathway_list"      "Pathway_list"         "pca_scCell_mat"       "pca_cell_df"         
+# [9] "snp_gene_df"          "Pathway_sclm_results" "Pathway_ld_gwas_data" "lm_results"          
+#[13] "bootstrap_results"
+#remove the Pathway_ld_gwas_data, it takes a lot of memory.
+Pagwas$Pathway_ld_gwas_data <- NULL
+```
+
+- "lm_results": Regression results for cell types.
+- "bootstrap_results": p-value results of bootstrap random testing for cell types.
+
+### 3.8 Construct the scPagwas score
+The gPAS scPagwas score mainly to deal with the single-cell regression result.
+```{r eval = FALSE}
+Pagwas <- scPagwas_perform_score(
+      Pagwas = Pagwas,
+      remove_outlier = TRUE
+    )
+names(Pagwas)
+# [1] "Celltype_anno"          "data_mat"               "VariableFeatures"      
+# [4] "merge_scexpr"           "rawPathway_list"        "Pathway_list"          
+# [7] "pca_scCell_mat"         "pca_cell_df"            "snp_gene_df"           
+#[10] "Pathway_sclm_results"   "Pathway_ld_gwas_data"   "lm_results"            
+#[13] "bootstrap_results"      "Pathway_single_results" "scPathways_rankPvalue" 
+#[16] "scPagwas.gPAS.score" 
+```
+- "Pathway_single_results": Regression results matrix, with rows representing pathways and columns representing cells. The values in the matrix represent the genetic contributions of different pathways in each cell.
+- "scPathways_rankPvalue": Rows represent pathways, and columns represent cell types. The p-value indicates the significance level of the genetic contribution of that pathway in each cell type.
+- "scPagwas.gPAS.score": Genetic score for each cell, obtained by summing the columns of "Pathway_single_results". It represents the overall contribution of all pathways.
+
+
+### 3.9 Get the gene heritability correlation 
+Run heritability correlation for all genes.
+```{r eval = FALSE}
+Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+                                    data_mat=Pagwas$data_mat)
+
+```
+
+- gene_heritability_correlation: Correlation coefficient between each gene and the genetic score.
+
+
+### 3.10 Calculate the TRS score for top genes. 
+
+Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `Get_CorrectBg_p`. 
+
+```{r eval = FALSE,message=FALSE, warning=FALSE}
+#Obtain the top 1000 genes with the highest genetic correlation scores.
+scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
+
+#Single_data refers to the single-cell data initially inputted.
+Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))
+
+#Calculate the p-values of single cells after background correction.
+correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
+                             scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
+                             iters_singlecell=100,
+                             n_topgenes=1000,
+                             scPagwas_topgenes=scPagwas_topgenes)
+Pagwas$Random_Correct_BG_pdf <- correct_pdf
+
+#Merge the p-values of cells belonging to the same cell type into a single p-value for each cell type.
+Pagwas$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$pooled_p,celltype=Pagwas$Celltype_anno$annotation)
+
+#Integrate and output the results of single-cell analysis.
+a <- data.frame(
+     scPagwas.TRS.Score = Single_data$scPagwas.TRS.Score1,
+     scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
+     Random_Correct_BG_p = correct_pdf$pooled_p,
+     Random_Correct_BG_adjp = correct_pdf$adj_p,
+     Random_Correct_BG_z = correct_pdf$pooled_z)
+utils::write.csv(a,file = "_singlecell_scPagwas_score_pvalue.Result.csv",quote = F)
+```
+
+- Single_data$scPagwas.TRS.Score1 : Trait relevant score based on top trait relevant genes.
+
+- Random_Correct_BG_pdf : Dataframe containing the calculated results of p-values after background correction for each cell, including pooled_p, adj_p, pooled_z, and other results.
+- Merged_celltype_pvalue : P-value results of cell types after merging the p-values of single cells.
+
+All these sub-functions for scPagwas can running dependently, but need to run orderly. The `scPagwas_main` function is a wrapper functions for these sub-functions.
+
+
+
+
+
+

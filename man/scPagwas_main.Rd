@@ -9,11 +9,11 @@ scPagwas_main(
   gwas_data = NULL,
   output.prefix = "Test",
   output.dirs = "scPagwastest_output",
-  block_annotation = NULL,
+  block_annotation = block_annotation,
   Single_data = NULL,
   assay = "RNA",
-  Pathway_list = NULL,
-  chrom_ld = NULL,
+  Pathway_list = Genes_by_pathway_kegg,
+  chrom_ld = chrom_ld,
   run_split = FALSE,
   n.cores = 1,
   marg = 10000,
@@ -31,13 +31,7 @@ scPagwas_main(
 )
 }
 \arguments{
-\item{Pagwas}{(list)default is "NULL" when you first run the funciton;
-Pagwas
-should be list class; Sometimes, It can inherit the result from
-"scPagwas_main" function
-last time, when you turn the "seurat_return" to FALSE; It is suitable
-for circulation
-running for the same single data.}
+\item{Pagwas}{= NULL: This parameter is typically not required and does not need any input data. When seurat_return = FALSE, all intermediate data is stored in the "Pagwas" list and returned as the result. This result can be inherited and used as input for subsequent calculations. In certain scenarios, such as when performing two computations with the same single-cell data input but different GWAS data inputs, the result list obtained from the first computation can be used as the "Pagwas" parameter input for the second computation. This allows skipping the single-cell calculations, significantly expediting the process. However, when seurat_return = TRUE, the returned result cannot be manipulated in this manner, as it is the final Seurat result with many intermediate data removed.}
 
 \item{gwas_data}{(data.frame)GWAS summary data; It must have some
 colmuns such as:
@@ -47,15 +41,9 @@ chrom|    pos    |   rsid    |   se  |  beta |  maf
 5 | 133328825 | rs6893145 | 0.048 | 0.144 |0.1222
 7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211}
 
-\item{output.prefix}{(character)output.prefix,prefix used for output
-tables; If the run_split if TRUE, the output.dirs should be identical for
-different sub-data,and the output.prefix should be different.}
+\item{output.prefix}{= "Test": This parameter sets the prefix for the output result files.}
 
-\item{output.dirs}{(character)output directory for result; If the
-directory is nonexistence,
-the function will create it;
-If the run_split if TRUE, the output.dirs should be identical for
-different sub-data,and the output.prefix should be different.}
+\item{output.dirs}{= "scPagwastest_output": This parameter specifies the directory for the output result files.}
 
 \item{block_annotation}{(data.frame) Start and end points for block
 traits, usually genes.}
@@ -119,10 +107,9 @@ gPas matrix for pathways in each cells;}}
 for inheritance associated top genes.}
 {scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance
 regression effects for each cells}
-{CellScalepValue:}{ the column for "meta.data";CellScalepValue for
-each cells}
-{CellScaleqValue:}{ the column for "meta.data";CellScaleqValue for
-each cells}}
+{Random_Correct_BG_p}{: CellpValue for each cells;}
+{Random_Correct_BG_adjp}{: fdr for each cells, adjust p value.}
+{Random_Correct_BG_z}{: z score for eahc cells.}
 \item{misc: element in result,\code{Pagwas@misc }}{
 {Pathway_list:}{a list for pathway gene list intersecting with single
 cell data}
@@ -130,7 +117,6 @@ cell data}
 {lm_results:}{ the regression result for each cell.}
 {gene_heritability_correlation:}{
 heritability correlation value for each gene;}
-{scPathways_scGene_rankP:}{pvaues for each pathway}
 {bootstrap_results:}{The bootstrap data frame results for celltypes
 including bootstrap pvalue and confidence interval.}
 }

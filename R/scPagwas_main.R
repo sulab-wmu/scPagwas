@@ -39,13 +39,7 @@
 #' running log and parameter log for scPagwas, and construct the folder
 #' for output.
 #'
-#' @param Pagwas (list)default is "NULL" when you first run the funciton;
-#' Pagwas
-#' should be list class; Sometimes, It can inherit the result from
-#' "scPagwas_main" function
-#' last time, when you turn the "seurat_return" to FALSE; It is suitable
-#' for circulation
-#' running for the same single data.
+#' @param Pagwas = NULL: This parameter is typically not required and does not need any input data. When seurat_return = FALSE, all intermediate data is stored in the "Pagwas" list and returned as the result. This result can be inherited and used as input for subsequent calculations. In certain scenarios, such as when performing two computations with the same single-cell data input but different GWAS data inputs, the result list obtained from the first computation can be used as the "Pagwas" parameter input for the second computation. This allows skipping the single-cell calculations, significantly expediting the process. However, when seurat_return = TRUE, the returned result cannot be manipulated in this manner, as it is the final Seurat result with many intermediate data removed.
 #' @param gwas_data (data.frame)GWAS summary data; It must have some
 #' colmuns such as:
 #'  chrom|    pos    |   rsid    |   se  |  beta |  maf
@@ -54,9 +48,8 @@
 #'     5 | 133328825 | rs6893145 | 0.048 | 0.144 |0.1222
 #'     7 | 146652932 | rs13228798| 0.035 | 0.003 | 0.3211
 #'
-#' @param output.prefix (character)output.prefix,prefix used for output
-#' tables; If the run_split if TRUE, the output.dirs should be identical for
-#' different sub-data,and the output.prefix should be different.
+#' @param output.prefix = "Test": This parameter sets the prefix for the output result files.
+#' @param output.dirs = "scPagwastest_output": This parameter specifies the directory for the output result files.
 #' @param marg (integr) the distance to TSS site,default is 10000, then
 #' gene-TSS-window size is 20000.
 #' @param block_annotation (data.frame) Start and end points for block
@@ -85,11 +78,6 @@
 #' if not,will return a list result;
 #' @param singlecell (logical)Whether to produce the singlecell result;
 #' @param celltype (logical)Whether to produce the celltypes result;
-#' @param output.dirs (character)output directory for result; If the
-#' directory is nonexistence,
-#' the function will create it;
-#' If the run_split if TRUE, the output.dirs should be identical for
-#' different sub-data,and the output.prefix should be different.
 #' @param n_topgenes (integr)Number of top associated gene selected to
 #' calculate the scPagwas score;
 #'
@@ -106,10 +94,9 @@
 #'   for inheritance associated top genes.}
 #'   {scPagwas.gPAS.score:}{ the column for "meta.data";Inheritance
 #'   regression effects for each cells}
-#'   {CellScalepValue:}{ the column for "meta.data";CellScalepValue for
-#'   each cells}
-#'   {CellScaleqValue:}{ the column for "meta.data";CellScaleqValue for
-#'   each cells}}
+#'   {Random_Correct_BG_p}{: CellpValue for each cells;}
+#'   {Random_Correct_BG_adjp}{: fdr for each cells, adjust p value.}
+#'   {Random_Correct_BG_z}{: z score for eahc cells.}
 #'   \item{misc: element in result,\code{Pagwas@misc }}{
 #'   {Pathway_list:}{a list for pathway gene list intersecting with single
 #'   cell data}
@@ -117,7 +104,6 @@
 #'   {lm_results:}{ the regression result for each cell.}
 #'   {gene_heritability_correlation:}{
 #'   heritability correlation value for each gene;}
-#'   {scPathways_scGene_rankP:}{pvaues for each pathway}
 #'   {bootstrap_results:}{The bootstrap data frame results for celltypes
 #'   including bootstrap pvalue and confidence interval.}
 #' }
@@ -200,11 +186,11 @@ scPagwas_main <- function(Pagwas = NULL,
                           gwas_data = NULL,
                           output.prefix = "Test",
                           output.dirs = "scPagwastest_output",
-                          block_annotation = NULL,
+                          block_annotation = block_annotation,
                           Single_data = NULL,
                           assay = "RNA",
-                          Pathway_list = NULL,
-                          chrom_ld = NULL,
+                          Pathway_list = Genes_by_pathway_kegg,
+                          chrom_ld = chrom_ld,
                           run_split=FALSE,
                           n.cores=1,
                           marg = 10000,
@@ -576,14 +562,6 @@ scPagwas_main <- function(Pagwas = NULL,
     quote = F, sep = "\t"
   )
 
-  utils::write.csv(Pagwas$scPathways_scGene_rankP,
-    file = paste0(
-      "./", output.dirs, "/",
-      output.prefix,
-      "_singlecell_Pathways_scGene_rankP.csv"
-    ),
-    quote = F
-  )
   utils::write.csv(Pagwas$gene_heritability_correlation,
     file = paste0(
       "./", output.dirs, "/",
@@ -610,6 +588,7 @@ scPagwas_main <- function(Pagwas = NULL,
   )
 
     message("* Get Random Correct background pvalue for each single cell!")
+    if(iters_singlecell>0){
     correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
                                  scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
                                  iters_singlecell=iters_singlecell,
@@ -636,7 +615,15 @@ scPagwas_main <- function(Pagwas = NULL,
                    ),
                    quote = F
   )
+    }else{
+      Pagwas$Random_Correct_BG_pdf <-NA
+      Pagwas$Merged_celltype_pvalue <-NA
+      Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
+      a <- data.frame(
+        scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
+        scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score)
 
+}
 
     utils::write.csv(a,
       file = paste0(
@@ -668,14 +655,14 @@ scPagwas_main <- function(Pagwas = NULL,
     Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
     #Single_data$ScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHigh"]
     #Single_data$ScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHigh"]
-
+    if(iters_singlecell>0){
     Single_data$Random_Correct_BG_p <- correct_pdf$pooled_p
     Single_data$Random_Correct_BG_adjp <- correct_pdf$adj_p
     Single_data$Random_Correct_BG_z <- correct_pdf$pooled_z
-
+}
     Pagwas[c(
       "scPagwas.gPAS.score", "Celltype_anno",
-      "Pathway_single_results", "pca_scCell_mat"
+      "Pathway_single_results", "pca_scCell_mat","Random_Correct_BG_pdf"
     )] <- NULL
     Single_data@misc <- Pagwas
     rm(Pagwas)
@@ -714,235 +701,5 @@ scPagwas_main <- function(Pagwas = NULL,
   if (file.exists(paste0("./", output.dirs, "/scPagwas_cache"))) {
     unlink(paste0("./", output.dirs, "/scPagwas_cache"),recursive = TRUE)
   }
-}
-
-
-#' merge_pagwas
-#' @description Merging several pagwas result to one result.When your single
-#' cell data is too large to run, you can split your data into several
-#' split, then use this function to merge them. Split the data randomly or
-#' in order of cellytpes.
-#' @note 1.The rownames genes and gwas data must uniform.
-#' 2.The merge_pagwas function only can use to merge the seurat format
-#' result.
-#' That is "singlecell = T;celltype =F" can use to all the split data,
-#' "singlecell = T;celltype = T" can be used only when the data is splited
-#' by celltypes.
-#' but "singlecell = F;celltype =T" can not be used.
-#'
-#' @param Single_data The Whole single cell data set. rds files in seurat format.
-#' The filesnames or seurat format data.
-#' @param output.dirs The files names for the result of scPagwas_main function.
-#' @param n_topgenes (integr)Number of top associated gene selected to
-#' calculate the scPagwas score;
-#' @param assay The assay used for single cell data.
-#' @param random Whether split the Single_data in random.
-#' Using id when the Single_data is too big to run.
-#' @param seed The seed for random.
-#' @param random_times The times for random, default is 10.
-#' @param iters_singlecell (integr)number of bootstrap iterations for singlecell
-#' @param proportion The proportion for spliting the Single_data; the bigger for
-#' Single_data the less proportion for spliting, and the more times for random_times.
-#'
-#' @return seurat format result for scPagwas.
-#' @export
-#'
-#' @examples
-#' library(Seurat)
-#' scRNAexample <-readRDS(system.file("extdata", "scRNAexample.rds", package = "scPagwas"))
-#' #set the output.dirs for any directory.
-#' set.dirs="D:/OneDrive/GWAS_Multiomics/Pagwas/test/"
-#' #set the number of split time, it depend on the size of your single cell data.
-#' #There have two form of spliting the data:
-#'
-#' #########
-#' ##1.By Random
-#' #Create the random index number.
-#' n_split=2
-#' Split_index <- rep(1:n_split, time = ceiling(ncol(scRNAexample)/n_split), length = ncol(scRNAexample))
-#'
-#' for (i in 1:n_split) {
-#'   Example_splice <- scRNAexample[,Split_index==i]
-#'   saveRDS(Example_splice,file = paste0(set.dirs,"Example_splice",i,".rds"))
-#' }
-#'
-#' #########
-#' ###1.By celltypes
-#' #Create the random index number.
-#' for (i in levels(Idents(scRNAexample))) {
-#'   Example_splice <- subset(scRNAexample,idents = i)
-#'   saveRDS(Example_splice,file = paste0(set.dirs,"Example_splice",i,".rds"))
-#' }
-#' Pagwas<-list()
-#' gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
-#' Pagwas <- GWAS_summary_input(
-#'   Pagwas = Pagwas,
-#'   gwas_data = gwas_data,
-#'   maf_filter = 0.1
-#' )
-#' Pagwas$snp_gene_df <- Snp2Gene(snp = Pagwas$gwas_data, refGene = block_annotation, marg = 10000)
-#' names(Pagwas)
-#' setwd(set.dirs)
-#'
-#' for (i in 1:n_split) {
-#'   scPagwas_main(Pagwas =Pagwas,
-#'                 gwas_data =NULL,
-#'                 Single_data = paste0("Example_splice",i,".rds"), #the
-#'                 output.prefix=i, #the prefix can be the circulation coefficient i.
-#'                 output.dirs="splice_scPagwas", #the output.dirs shoukd be the same for each circulation
-#'                 Pathway_list=Genes_by_pathway_kegg,
-#'                 run_split=TRUE, #This parameter is set to run single result for each split result.
-#'                 min_clustercells=1, #the minimum cluster cell number should be 1.
-#'                 assay="RNA",
-#'                 block_annotation = block_annotation,
-#'                 chrom_ld = chrom_ld)
-#' }
-#' if(length(SOAR::Objects())>0){
-#'   SOAR::Remove(SOAR::Objects())
-#' }
-#'
-#' setwd(set.dirs) #you must set the workfiles the same as before
-#' Pagwas_integrate <- merge_pagwas(Single_data = system.file("extdata", "scRNAexample.rds", package = "scPagwas") ,# read the whole single cell data.
-#'                                 output.dirs="splice_scPagwas", #The same with scPagwas_main functionn_topgenes = 1000,
-#'                                 assay='RNA',
-#'                                 random=T,
-#'                                 seed=1234,
-#'                                 random_times=10,
-#'                                 proportion=0.3)
-#'
-#'
-#' @author Chunyu Deng
-#' @aliases merge_pagwas
-#' @keywords merge_pagwas, integrate the spliced scPagwas result.
-
-merge_pagwas <- function(Single_data = NULL,
-                         n_topgenes = 1000,
-                         output.dirs="splice_scPagwas",
-                         assay='RNA',
-                         random=FALSE,
-                         seed=1234,
-                         iters_singlecell=500,
-                         random_times=10,
-                         proportion=0.3) {
-
-  if (class(Single_data) == "character") {
-    if (grepl(".rds", Single_data)) {
-      message("** Start to read the single cell data!")
-      Single_data <- readRDS(Single_data)
-    } else {
-      stop("Error:There is need a data in `.rds` format ")
-    }
-  } else if (class(Single_data) != "Seurat") {
-    stop("Error:There is need a Seurat class for Single_data")
-  }
-
-  if (!assay %in% Seurat::Assays(Single_data)) {
-    stop("Error:There is no need assays in your Single_data")
-  }
-
-  oriDir <- paste0(getwd(),"./",output.dirs)
-  files <- list.files(oriDir, pattern="*_singlecell_scPagwas.gPAS.score.Result.csv")
-
-  scPagwas.gPAS.score<-unlist(lapply( files,function(file){
-    gs<-read.csv(file=paste0(oriDir,"/",file))
-    ga <- gs$scPagwas.gPAS.score
-    names(ga) <- gs$cellnames
-    return(ga)
-  }))
-  #colnames(Single_data)
-  ins<-intersect(names(scPagwas.gPAS.score),colnames(Single_data))
-
-  if(is.null(ins)){
-    stop("The names of scPagwas.gPAS.score are not the same with colnames of Single_data,
-         please check the names")
-  }
-  if(length(ins)<ncol(Single_data)){
-    warning("The total length of the result of scPagwas.gPAS.score for your splited single cell data
-            is not the same with your Single_data, Please check the code before or the min_clustercells
-            parameter(set to 1)")
-  }
-  Single_data <- Single_data[,names(scPagwas.gPAS.score)]
-  Single_data$scPagwas.gPAS.score<-scPagwas.gPAS.score
-
-  if(!random){
-  scPagwas.gPAS.score <- data.matrix(Single_data$scPagwas.gPAS.score)
-  sparse_cor <- corSparse(
-    X = t(as_matrix(GetAssayData(Single_data, slot = "data", assay = "RNA"))),
-    Y = scPagwas.gPAS.score
-  )
-  #rownames(sparse_cor) <- rownames(Single_data)
-  colnames(sparse_cor) <- "gene_heritability_correlation"
-  sparse_cor[is.nan(sparse_cor)] <- 0
-  Single_data@misc$gene_heritability_correlation <- sparse_cor
-  scPagwas_topgenes <- names(sparse_cor[order(sparse_cor, decreasing = T), ])[1:n_topgenes]
-  Single_data <- Seurat::AddModuleScore(Single_data,
-                                         assay = "RNA",
-                                         list(scPagwas_topgenes),
-                                         name = c("scPagwas.TRS.Score")
-  )
-
-  ########### get the CellScalepValue
-
-  #CellScalepValue <- scGene_scaleP(
-  #  Single_mat = t(data.matrix(
-  #    GetAssayData(Single_data, assay = "RNA")[scPagwas_topgenes, ]
-  #  ))
-  #)
-  #Single_data$CellScalepValue <- CellScalepValue[, "pValueHigh"]
-  #Single_data$CellScaleqValue <- CellScalepValue[, "qValueHigh"]
-
-  }else{
-    message("Start to run the corSparse function in random!")
-    set.seed(seed)
-    sparse_cor_list<-list()
-    for (j in 1:random_times) {
-      print(paste0("Randome Times: ",j))
-    index<-sample(1:ncol(Single_data),ceiling(ncol(Single_data)*proportion))
-    #Single_data[,index]
-
-    scPagwas.gPAS.score <- data.matrix(Single_data$scPagwas.gPAS.score[index])
-    sparse_cor <- corSparse(
-      X = t(as_matrix(GetAssayData(Single_data[,index], slot = "data", assay = "RNA"))),
-      Y = scPagwas.gPAS.score
-    )
-    #rownames(sparse_cor) <- colnames(Single_data)[index]
-    colnames(sparse_cor) <- "gene_heritability_correlation"
-    sparse_cor[is.nan(sparse_cor)] <- 0
-    sparse_cor_list[[j]]<-unlist(sparse_cor[,1])
-    }
-    sparse_cor_list<-as.data.frame(sparse_cor_list)
-    colnames(sparse_cor_list)<-paste0("Cor_coefficient.ramdom",1:random_times)
-    sparse_cor<- apply(sparse_cor_list,1,mean)
-    Single_data@misc$sparse_cor_df <- sparse_cor_list
-    Single_data@misc$gene_heritability_correlation <- data.matrix(sparse_cor)
-    colnames(Single_data@misc$gene_heritability_correlation)<-"gene_heritability_correlation"
-    scPagwas_topgenes <- names(sparse_cor[order(sparse_cor, decreasing = T)])[1:n_topgenes]
-    Single_data <- Seurat::AddModuleScore(Single_data,
-                                          assay = "RNA",
-                                          list(scPagwas_topgenes),
-                                          name = c("scPagwas.TRS.Score")
-    )
-
-    message("Start to run the scGene_rankP function in random!")
-
-  }
-
-  #if(Correct_BG_p){
-    message("* Get Random Correct background pvalue for each single cell!")
-    correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
-                                 scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
-                                 iters_singlecell=iters_singlecell,
-                                 n_topgenes=n_topgenes,
-                                 scPagwas_topgenes=scPagwas_topgenes
-    )
-    #Pagwas$Random_Correct_BG_pdf <- correct_pdf
-    Single_data$Random_Correct_BG_p <- correct_pdf$pooled_p
-    Single_data$Random_Correct_BG_adjp <- correct_pdf$adj_p
-    Single_data$Random_Correct_BG_z <- correct_pdf$pooled_z
-    Single_data@misc$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$adj_p,celltype=Pagwas$Celltype_anno$annotation)
-
-  #}
-  ########### get the scPagwas.TRS.Score
-  return(Single_data)
 }
 

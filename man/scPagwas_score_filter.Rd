@@ -10,5 +10,5 @@ scPagwas_score_filter(scPagwas_score)
 \item{scPagwas_score}{(data.frame)}
 }
 \description{
-filter the cPagwas_score for outliers.
+filter the scPagwas_score for outliers.
 }
