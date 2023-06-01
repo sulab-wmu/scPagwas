@@ -102,7 +102,7 @@ GWAS_summary_input <- function(Pagwas = NULL,
       dplyr::mutate(abs_z = abs(beta / se)) %>%
       dplyr::filter(abs_z < gwas_z_filter)
   }
-
+  gwas_data<-gwas_data[gwas_data$beta<1,]
   Pagwas$gwas_data <- gwas_data
   return(Pagwas)
 }
