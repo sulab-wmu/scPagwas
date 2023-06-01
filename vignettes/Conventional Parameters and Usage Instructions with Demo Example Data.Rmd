@@ -326,7 +326,7 @@ Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPa
 
 Calculate the TRS score for top genes by `AddModuleScore` and running the p value for each cell by `Get_CorrectBg_p`. 
 
-```{r eval = FALSE,message=FALSE, warning=FALSE}
+```{r eval = FALSE}
 #Obtain the top 1000 genes with the highest genetic correlation scores.
 scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
 

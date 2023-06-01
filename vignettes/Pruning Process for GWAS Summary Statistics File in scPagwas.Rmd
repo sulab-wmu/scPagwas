@@ -34,7 +34,7 @@ To calculate plink, important information from the GWAS data needs to be extract
 ```
 
 ## Extract SNPs
-```{bash, eval = FALSE }
+```
 mkdir tempfile
 awk  '{print $5 }' monocytecount.txt  > ./tempfile/monocytecount_SNP_list.txt
 
@@ -42,7 +42,7 @@ awk  '{print $5 }' monocytecount.txt  > ./tempfile/monocytecount_SNP_list.txt
 
 
 ## plink
-```{bash, eval = FALSE }
+```
 for i in $(seq 1 22)  
 do 
 echo $i
@@ -54,7 +54,7 @@ done
 ```
 
 ## filter LD information
-```{bash, eval = FALSE }
+```
 for i in $(seq 1 22)  
 do 
 echo $i
@@ -62,12 +62,11 @@ plink
 --bfile ./tempfile/1000G.EUR.QC.monocytecount_${i}_filtered 
 --indep-pairwise 50 5 0.8 
 --out  ./tempfile/monocytecount_${i}_plink_prune_EUR_filtered_LD0.8
-done 
+done
 ```
 
-
 ## Integrate the result files for 1-22 chrome
-```{bash, eval = FALSE }
+```
 cat [monocytecount]*.prune.in > monocytecount_EUR_LD0.8.prune
 ```
 
@@ -83,5 +82,4 @@ colnames(SNP_prune)<-"rsid"
 gwas= gwas %>% inner_join(SNP_prune,by="rsid")
 print(nrow(gwas))
 write.table(gwas,file="./monocytecount_prune_gwas_data.txt",row.names=F,quote=F)
-
 ```

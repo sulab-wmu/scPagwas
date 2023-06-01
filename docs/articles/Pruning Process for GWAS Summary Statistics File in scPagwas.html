@@ -114,37 +114,38 @@ be extracted.</p>
 <div class="section level3">
 <h3 id="extract-snps">Extract SNPs<a class="anchor" aria-label="anchor" href="#extract-snps"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> tempfile</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">awk</span>  <span class="st">'{print $5 }'</span> monocytecount.txt  <span class="op">&gt;</span> ./tempfile/monocytecount_SNP_list.txt</span></code></pre></div>
+<pre><code>mkdir tempfile
+awk  '{print $5 }' monocytecount.txt  &gt; ./tempfile/monocytecount_SNP_list.txt
+</code></pre>
 </div>
 <div class="section level3">
 <h3 id="plink">plink<a class="anchor" aria-label="anchor" href="#plink"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 22<span class="va">)</span>  </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$i</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="ex">plink</span> </span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">--bfile</span> ./02_partitioned_LD_score_estimation/1000G_EUR_Phase3_plink/1000G.EUR.QC.<span class="va">$i</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="ex">--extract</span> ./tempfile/monocytecount_SNP_list.txt </span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="ex">--noweb</span> <span class="at">--make-bed</span> <span class="at">--out</span> ./tempfile/1000G.EUR.QC.monocytecount_<span class="va">${i}</span>_filtered</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> </span></code></pre></div>
+<pre><code>for i in $(seq 1 22)  
+do 
+echo $i
+plink 
+--bfile ./02_partitioned_LD_score_estimation/1000G_EUR_Phase3_plink/1000G.EUR.QC.$i 
+--extract ./tempfile/monocytecount_SNP_list.txt 
+--noweb --make-bed --out ./tempfile/1000G.EUR.QC.monocytecount_${i}_filtered
+done </code></pre>
 </div>
 <div class="section level3">
 <h3 id="filter-ld-information">filter LD information<a class="anchor" aria-label="anchor" href="#filter-ld-information"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="va">$(</span><span class="fu">seq</span> 1 22<span class="va">)</span>  </span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="cf">do</span> </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="va">$i</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="ex">plink</span> </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="ex">--bfile</span> ./tempfile/1000G.EUR.QC.monocytecount_<span class="va">${i}</span>_filtered </span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="ex">--indep-pairwise</span> 50 5 0.8 </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="ex">--out</span>  ./tempfile/monocytecount_<span class="va">${i}</span>_plink_prune_EUR_filtered_LD0.8</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> </span></code></pre></div>
+<pre><code>for i in $(seq 1 22)  
+do 
+echo $i
+plink 
+--bfile ./tempfile/1000G.EUR.QC.monocytecount_${i}_filtered 
+--indep-pairwise 50 5 0.8 
+--out  ./tempfile/monocytecount_${i}_plink_prune_EUR_filtered_LD0.8
+done</code></pre>
 </div>
 <div class="section level3">
 <h3 id="integrate-the-result-files-for-1-22-chrome">Integrate the result files for 1-22 chrome<a class="anchor" aria-label="anchor" href="#integrate-the-result-files-for-1-22-chrome"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> [monocytecount]<span class="pp">*</span>.prune.in <span class="op">&gt;</span> monocytecount_EUR_LD0.8.prune</span></code></pre></div>
+<pre><code><span><span class="va">cat</span> <span class="op">[</span><span class="va">monocytecount</span><span class="op">]</span><span class="op">*</span><span class="va">.prune.in</span> <span class="op">&gt;</span> <span class="va">monocytecount_EUR_LD0.8.prune</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="intersect-the-snp-for-all-gwas-file">Intersect the snp for all gwas file<a class="anchor" aria-label="anchor" href="#intersect-the-snp-for-all-gwas-file"></a>

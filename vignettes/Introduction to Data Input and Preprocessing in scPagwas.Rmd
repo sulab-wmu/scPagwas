@@ -9,7 +9,7 @@ vignette: >
 ---
 
 
-```{r, include = FALSE}
+```{r include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -39,7 +39,7 @@ Since we have downloaded pre-annotated scRNA-seq data, we will skip the steps of
 -   1). The scRNA-seq dataset should have Idents for cell types or clusters.
 -   2). The scRNA-seq dataset should be normalized.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 library(Seurat)
 library(SeuratObject)
 counts <- read.csv("GSE115978_counts.csv.gz",row.names=1)
@@ -68,9 +68,8 @@ In R environment, select the specific columns and output the result.
 
 The GWAS Summary statistics file need to be processed into a "txt" file including six coloumn and tab-delimited.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 gwas_data <- bigreadr::fread2(system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"))
-knitr::kable(head(gwas_data))
 ```
 
 In the context of scPagwas software, the presence of specific columns in the GWAS summary file is generally required. However, there are situations where the obtained GWAS summary may not perfectly meet these requirements. In such cases, there are alternative approaches that can be employed.
@@ -110,7 +109,7 @@ There is no need to repeat running these code.
 
 #### KEGG pathway list
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 library(KEGGREST)
 pathways.list <- keggList("pathway", "hsa")
 # Pull all genes for each pathway
@@ -129,7 +128,7 @@ genes.by.pathway_kegg <- sapply(pathways.list,
 
 These pathways data are download from [GSEA](https://www.gsea-msigdb.org/gsea/index.jsp) website.
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 #such as:
 x <- readLines("c8.all.v7.5.1.symbols.gmt")
 res <- strsplit(x, "\t")
@@ -149,7 +148,7 @@ We set the `genes.by.reactome.pathway` for example, there are 1615 gene list and
 -   `pathway_seed` choose a list of pathway names as seed, which are the pahtways cann't be remove.
 -   `remove_proporion` The propotion of duplicated between seed pathway and the others
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 set.seed(123)
 reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)>50]
 reduce_genes.by.reactome.pathway<-reduce_genes.by.reactome.pathway[sapply(reduce_genes.by.reactome.pathway,length)<300]
@@ -175,7 +174,7 @@ File downloaded from MAGMA website [MAGMA | CTG (cncr.nl)](https://ctg.cncr.nl/s
 
 Here is the procedure of obtaining the data:
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 library("rtracklayer")
 gtf_df<- rtracklayer::import("gencode.v34.annotation.gtf.gz")
 gtf_df <- as.data.frame(gtf)
@@ -202,7 +201,7 @@ We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
 
 R environment to print out the scPagwas-needed data.
 
-```{r, eval=FALSE,include=FALSE}
+```{r eval=FALSE}
 covid_ld<-read.delim("./ld_1000genome.ld")
 #remove sex chrome
 covid_ld<-covid_ld[!(covid_ld$ %in% 23),]

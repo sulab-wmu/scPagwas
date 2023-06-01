@@ -32,9 +32,9 @@ If you want to run the deno data, please go to **Conventional Usage Instructions
 
 If we running scPagwas in multi-core in server environment, there may cause an error: `Error: Two levels of parallelism are used. See ?assert_cores\`\` add this code before call in R environment:
 
-```{bash eval = FALSE}
-export OPENBLAS_NUM_THREADS=1
-```
+
+`export OPENBLAS_NUM_THREADS=1`
+
 
 There is no need to run this code in window system.
 
