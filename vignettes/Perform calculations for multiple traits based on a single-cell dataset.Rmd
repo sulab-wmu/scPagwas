@@ -35,9 +35,10 @@ First, Run the `Single_data_input` and `Pathway_pcascore_run` for `Seu_Hema_data
 ```{r eval = FALSE}
 library(scPagwas)
 Pagwas <- list()
+Single_data<-readRDS('Seu_Hema_data.rds')
 Pagwas <- Single_data_input(Pagwas=Pagwas,
                             assay="RNA",
-                            Single_data='Seu_Hema_data.rds',
+                            Single_data=Single_data,
                             Pathway_list=Genes_by_pathway_kegg)
 Pagwas <- Pathway_pcascore_run(Pagwas=Pagwas,
                                Pathway_list=Genes_by_pathway_kegg)

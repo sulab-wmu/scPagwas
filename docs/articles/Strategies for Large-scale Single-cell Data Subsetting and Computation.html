@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Strategies for Large-scale Single-cell Data Subsetting and Computation</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 31, 五月, 2023
-at 09:28</h4>
+            <h4 data-toc-skip class="date">Last Updated: 01, 六月, 2023
+at 14:26</h4>
       
       
       <div class="d-none name"><code>Strategies for Large-scale Single-cell Data Subsetting and Computation.Rmd</code></div>
@@ -297,8 +297,9 @@ available.</p>
 <span>                                                     <span class="va">scPagwas.gPAS.score</span>,</span>
 <span>                                                     seed<span class="op">=</span><span class="fl">1234</span>,</span>
 <span>                                                     random<span class="op">=</span><span class="cn">T</span>,</span>
-<span>                                                     Nrandom<span class="op">=</span><span class="fl">5</span>,</span>
-<span>                                                     Nselect<span class="op">=</span><span class="fl">200</span><span class="op">)</span></span>
+<span>                                                     Nrandom<span class="op">=</span><span class="fl">5</span>,<span class="co"># you need change this parameter based on your cell numbers.</span></span>
+<span>                                                     Nselect<span class="op">=</span><span class="fl">200</span> <span class="co"># you need change this parameter based on your cell numbers.</span></span>
+<span>                                                     <span class="op">)</span></span>
 <span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level4">
@@ -393,7 +394,7 @@ gwas data, because a little time for these functions.</p>
 files and integrate them together.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">output.dirs</span><span class="op">=</span><span class="st">"splice_scPagwas"</span></span>
-<span><span class="va">oriDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"./"</span>,<span class="va">output.dirs</span><span class="op">)</span></span>
+<span><span class="va">oriDir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"./"</span>,<span class="va">output.dirs</span><span class="op">)</span></span>
 <span><span class="va">files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">oriDir</span>, pattern<span class="op">=</span><span class="st">"*_singlecell_scPagwas.gPAS.score.Result.csv"</span><span class="op">)</span></span>
 <span><span class="co">#integrate the scPagwas.gPAS.score</span></span>
 <span><span class="va">scPagwas.gPAS.score</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span> <span class="va">files</span>,<span class="kw">function</span><span class="op">(</span><span class="va">file</span><span class="op">)</span><span class="op">{</span></span>
@@ -415,8 +416,9 @@ files and integrate them together.</p>
 <span>                                                     <span class="va">scPagwas.gPAS.score</span>,</span>
 <span>                                                     seed<span class="op">=</span><span class="fl">1234</span>,</span>
 <span>                                                     random<span class="op">=</span><span class="cn">T</span>,</span>
-<span>                                                     Nrandom<span class="op">=</span><span class="fl">5</span>,</span>
-<span>                                                     Nselect<span class="op">=</span><span class="fl">200</span><span class="op">)</span></span>
+<span>                                                     Nrandom<span class="op">=</span><span class="fl">5</span>, <span class="co"># you need change this parameter based on your cell numbers.</span></span>
+<span>                                                     Nselect<span class="op">=</span><span class="fl">200</span> <span class="co"># you need change this parameter based on your cell numbers.</span></span>
+<span>                                                     <span class="op">)</span></span>
 <span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span><span class="op">]</span></span>
 <span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>,</span>
 <span>        assay <span class="op">=</span> <span class="st">'RNA'</span>,</span>

@@ -312,7 +312,7 @@ scPagwas_main <- function(Pagwas = NULL,
   } else if (class(Single_data) != "Seurat") {
     if(run_split){
       message("run_split is TRUE!")
-    }else{
+    }else if(singlecell){
       stop("Error:When the run_split is FALSE! There is need a Seurat class for Single_data")
     }
 
