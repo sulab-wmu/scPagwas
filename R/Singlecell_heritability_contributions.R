@@ -252,14 +252,14 @@ scPagwas_score_filter <- function(scPagwas_score) {
 
 
 
-#' scGet_gene_heritability_contributions
+#' scGet_GEI
 #'
 #' @param scPagwas.gPAS.score score of scPagwas pathway lm
 #' @param data_mat matrix for single cell data
 #' @return result list including gene heritability correlation
 #' @export
 
-scGet_gene_heritability_correlation <- function(scPagwas.gPAS.score,data_mat) {
+scGet_GEI <- function(scPagwas.gPAS.score,data_mat) {
 
   if (all(names(scPagwas.gPAS.score) == colnames(data_mat))) {
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
@@ -275,7 +275,7 @@ scGet_gene_heritability_correlation <- function(scPagwas.gPAS.score,data_mat) {
     )
   }
   rownames(sparse_cor) <- rownames(data_mat)
-  colnames(sparse_cor) <- "gene_heritability_correlation"
+  colnames(sparse_cor) <- "GEI"
   sparse_cor[is.nan(sparse_cor)] <- 0
   #
   return(sparse_cor)
@@ -333,8 +333,8 @@ Corr_Random<-function(data_mat,scPagwas.gPAS.score,seed=1234,random=T,Nrandom=5,
   merg_m<-apply(matrix(seq(Nrandom)),1,function(x){
     print(x)
     ss=sample(seq(length(scPagwas.gPAS.score)),Nselect)
-    gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=scPagwas.gPAS.score[ss],data_mat=data_mat[,ss])
-    return(gene_heritability_correlation)
+    GeneticExpressionIndex <- scGet_GEI(scPagwas.gPAS.score=scPagwas.gPAS.score[ss],data_mat=data_mat[,ss])
+    return(GeneticExpressionIndex)
   })
   meancor<-apply(merg_m,1,mean)
   names(meancor)<-rownames(data_mat)

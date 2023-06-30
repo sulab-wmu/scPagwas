@@ -1,8 +1,8 @@
 
 #' heritability_cor_scatterplot
-#' @description Plot the scatterplot for the correlation coefficient for each genes.
+#' @description Plot the scatterplot for the Genetic Expression Index(GEI) for each genes.
 #' pearson methods for each gene expression and gPAS score in each cells.
-#' @param gene_heri_cor gene_heritability_correlation result for scPagwas.
+#' @param gene_heri_cor Genetic Expression Index result for scPagwas.
 #' @param topn_genes_label 10, the number of top genes for correlation.
 #' @param color_low low color
 #' @param color_high high color
@@ -20,7 +20,7 @@
 #' @examples
 #' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
 #' heritability_cor_scatterplot(
-#'   gene_heri_cor = Pagwas_data@misc$gene_heritability_correlation,
+#'   gene_heri_cor = Pagwas_data@misc$GeneticExpressionIndex,
 #'   topn_genes_label = 10,
 #'   color_low = "#035397",
 #'   color_high = "#F32424",
@@ -46,15 +46,15 @@ heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
                                          width = 7,
                                          height = 7) {
   text <- NULL
-  cor_df <- data.frame(genes = rownames(gene_heri_cor), cor = gene_heri_cor[, 1], text = rep(NA, nrow(gene_heri_cor)))
+  cor_df <- data.frame(genes = rownames(gene_heri_cor), GEI = gene_heri_cor[, 1], text = rep(NA, nrow(gene_heri_cor)))
 
-  cor_df <- cor_df[order(cor_df$cor, decreasing = T), ]
+  cor_df <- cor_df[order(cor_df$GEI, decreasing = T), ]
   cor_df$text[1:topn_genes_label] <- cor_df$genes[1:topn_genes_label]
 
   cor_df$order <- seq_len(nrow(cor_df))
 
   p <- ggplot(data = cor_df) +
-    geom_point(mapping = aes(x = order, y = cor, color = cor)) +
+    geom_point(mapping = aes(x = order, y = GEI, color = GEI)) +
     scale_colour_gradient2(
       low = color_low,
       mid = color_mid,
@@ -63,7 +63,7 @@ heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
     ) +
     theme_classic() +
     ggrepel::geom_text_repel(aes(
-      x = order, y = cor,
+      x = order, y = GEI,
       label = text
     ),
     max.overlaps = max.overlaps,

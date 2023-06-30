@@ -19,7 +19,7 @@ heritability_cor_scatterplot(
 )
 }
 \arguments{
-\item{gene_heri_cor}{gene_heritability_correlation result for scPagwas.}
+\item{gene_heri_cor}{Genetic Expression Index result for scPagwas.}
 
 \item{topn_genes_label}{10, the number of top genes for correlation.}
 
@@ -45,13 +45,13 @@ heritability_cor_scatterplot(
 scatterplot
 }
 \description{
-Plot the scatterplot for the correlation coefficient for each genes.
+Plot the scatterplot for the Genetic Expression Index(GEI) for each genes.
 pearson methods for each gene expression and gPAS score in each cells.
 }
 \examples{
 load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
 heritability_cor_scatterplot(
-  gene_heri_cor = Pagwas_data@misc$gene_heritability_correlation,
+  gene_heri_cor = Pagwas_data@misc$GeneticExpressionIndex,
   topn_genes_label = 10,
   color_low = "#035397",
   color_high = "#F32424",

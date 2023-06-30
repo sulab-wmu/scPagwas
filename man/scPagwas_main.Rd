@@ -115,7 +115,7 @@ regression effects for each cells}
 cell data}
 {pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
 {lm_results:}{ the regression result for each cell.}
-{gene_heritability_correlation:}{
+{GeneticExpressionIndex:}{
 heritability correlation value for each gene;}
 {bootstrap_results:}{The bootstrap data frame results for celltypes
 including bootstrap pvalue and confidence interval.}
@@ -134,7 +134,7 @@ lm and top gene score}
 {\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame
 results for celltypes including bootstrap pvalue and confidence
 interval}
-{}_gene_heritability_correlation.csv:}{ heritability correlation
+{}_GeneticExpressionIndex.csv:}{ heritability correlation
 value("cor" for pearson) for each gene;}
 }
 
@@ -149,7 +149,7 @@ effects for each cells}
 {Pathway_list:}{ The number of Lanczos iterations carried out}
 {pca_cell_df:}{ The total number of matrix vector products carried out}
 {sclm_results:}{ The total number of matrix vector products carried out}
-{allsnp_gene_heritability_correlation:}{ The total number of
+{GeneticExpressionIndex:}{ The total number of
 matrix vector products carried out}
 {Pathway_ctlm_results:}{ The total number of matrix vector products
 carried out}

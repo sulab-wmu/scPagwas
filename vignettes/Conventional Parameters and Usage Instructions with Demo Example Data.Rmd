@@ -314,12 +314,12 @@ names(Pagwas)
 ### 3.9 Get the gene heritability correlation 
 Run heritability correlation for all genes.
 ```{r eval = FALSE}
-Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+Pagwas$GeneticExpressionIndex <- scGet_GEI(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
                                     data_mat=Pagwas$data_mat)
 
 ```
 
-- gene_heritability_correlation: Correlation coefficient between each gene and the genetic score.
+- GeneticExpressionIndex: Correlation index between each gene and the genetic score.
 
 
 ### 3.10 Calculate the TRS score for top genes. 
@@ -328,7 +328,7 @@ Calculate the TRS score for top genes by `AddModuleScore` and running the p valu
 
 ```{r eval = FALSE}
 #Obtain the top 1000 genes with the highest genetic correlation scores.
-scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:1000]
+scPagwas_topgenes <- names(Pagwas$GeneticExpressionIndex[order(Pagwas$GeneticExpressionIndex, decreasing = T), ])[1:1000]
 
 #Single_data refers to the single-cell data initially inputted.
 Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes), name = c("scPagwas.TRS.Score"))

@@ -102,7 +102,7 @@
 #'   cell data}
 #'   {pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
 #'   {lm_results:}{ the regression result for each cell.}
-#'   {gene_heritability_correlation:}{
+#'   {GeneticExpressionIndex:}{
 #'   heritability correlation value for each gene;}
 #'   {bootstrap_results:}{The bootstrap data frame results for celltypes
 #'   including bootstrap pvalue and confidence interval.}
@@ -121,7 +121,7 @@
 #'   {*_celltypes_bootstrap_results.csv:}{The bootstrap data frame
 #'   results for celltypes including bootstrap pvalue and confidence
 #'   interval}
-#'   {*_gene_heritability_correlation.csv:}{ heritability correlation
+#'   {*_GeneticExpressionIndex.csv:}{ heritability correlation
 #'   value("cor" for pearson) for each gene;}
 
 #' }
@@ -137,7 +137,7 @@
 #'   {Pathway_list:}{ The number of Lanczos iterations carried out}
 #'   {pca_cell_df:}{ The total number of matrix vector products carried out}
 #'   {sclm_results:}{ The total number of matrix vector products carried out}
-#'   {allsnp_gene_heritability_correlation:}{ The total number of
+#'   {GeneticExpressionIndex:}{ The total number of
 #'   matrix vector products carried out}
 #'   {Pathway_ctlm_results:}{ The total number of matrix vector products
 #'   carried out}
@@ -532,20 +532,20 @@ scPagwas_main <- function(Pagwas = NULL,
     message("done!")
 
   #############################
-  ## 9.scGet_gene_heritability_correlation
+  ## 9.scGet_GEI
   #############################
   if(!run_split){
   message(paste(utils::timestamp(quiet = T),
-    " ******* 9th: scGet_gene_heritability_correlation function start! ********",
+    " ******* 9th: scGet_GEI function start! ********",
     sep = ""
   ))
 
   tt <- Sys.time()
 
-  Pagwas$gene_heritability_correlation <- scGet_gene_heritability_correlation(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+  Pagwas$GeneticExpressionIndex <- scGet_GEI(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
                                                                               data_mat=Pagwas$data_mat)
 
-  scPagwas_topgenes <- names(Pagwas$gene_heritability_correlation[order(Pagwas$gene_heritability_correlation, decreasing = T), ])[1:n_topgenes]
+  scPagwas_topgenes <- names(Pagwas$GeneticExpressionIndex[order(Pagwas$GeneticExpressionIndex, decreasing = T), ])[1:n_topgenes]
 
   message("done")
 
@@ -562,11 +562,11 @@ scPagwas_main <- function(Pagwas = NULL,
     quote = F, sep = "\t"
   )
 
-  utils::write.csv(Pagwas$gene_heritability_correlation,
+  utils::write.csv(Pagwas$GeneticExpressionIndex,
     file = paste0(
       "./", output.dirs, "/",
       output.prefix,
-      "_gene_heritability_correlation.csv"
+      "_GeneticExpressionIndex.csv"
     ),
     quote = F
   )

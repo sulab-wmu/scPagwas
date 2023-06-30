@@ -10,27 +10,22 @@
 Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_topgenes,scPagwas_topgenes){
     gene_matrix <- GetAssayData(Single_data, slot = "data", assay = 'RNA')
     mat_ctrl_raw_score <- matrix(0, nrow =ncol(gene_matrix), ncol = iters_singlecell)
-    #随机100次抽取基因集，计算每个样本的control分数
     dic_ctrl_list <- list()
     pb <- txtProgressBar(style = 3)
     for (i in 1:iters_singlecell) {
-        #随机抽取基因集
         #print(i)
         set.seed(i)
         dic_ctrl_list[[i]] <- sample(rownames(Single_data), n_topgenes)
-        #计算每个样本的control分数
         Single_data<-Seurat::AddModuleScore(Single_data,
             assay = 'RNA',
             list(dic_ctrl_list[[i]]),
             name = c("contr_genes")
             )
-        #将每个样本的control分数放入矩阵中
         mat_ctrl_raw_score[, i] <-Single_data$contr_genes1
         Single_data$contr_genes1<-NULL
         setTxtProgressBar(pb, i/iters_singlecell)
     }
     close(pb)
-    #获得基因表达的方差
     genes<-intersect(rownames(Single_data),rownames(gene_matrix))
     scPagwas_topgenes<-intersect(scPagwas_topgenes,genes)
     gene_matrix<-gene_matrix[genes,]
@@ -82,7 +77,6 @@ correct_background <- function(scPagwas.TRS.Score, mat_ctrl_raw_score, v_var_rat
     mat_ctrl_norm_score[ind_zero_ctrl_score] <- norm_score_min
     flatten_mat_ctrl_norm_score <- as.vector(t(mat_ctrl_norm_score))
         pooled_p = get_p_from_empi_null(v_norm_score, flatten_mat_ctrl_norm_score)
-    #校正pvalue
     adj_p <- p.adjust(pooled_p, method = "BH")
 
     nlog10_pooled_p <- -log10(pooled_p)
