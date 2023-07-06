@@ -42,9 +42,9 @@ In many cases, installing packages using `devtools::install_github` may
 fail. In such situations, an alternative approach is to download the
 package from a provided source URL and install it locally. Source
 package download from
-[here](https://1drv.ms/u/s!As-aKqXDnDUHjtxIQWKP8Df-Lp3_FA?e=8AgORU).
-Before a successful installation, it is necessary to install many
-dependency packages based on the error messages.
+[here](https://github.com/dengchunyu/scPagwas_source). Before a
+successful installation, it is necessary to install many dependency
+packages based on the error messages.
 
 ``` r
 install.packages("scPagwas_1.2.0.tar.gz",repos=NULL,type="source")

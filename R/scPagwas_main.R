@@ -73,7 +73,8 @@
 #' @param remove_outlier (logical)Whether to remove the outlier for
 #' scPagwas score.
 #' @param iters_celltype (integr)number of bootstrap iterations for celltype
-#' @param iters_singlecell (integr)number of bootstrap iterations for singlecell
+#' @param iters_singlecell (integr)number of bootstrap iterations for singlecell；
+#' The parameter "iters_singlecell" is used to calculate the significance p-value for individual cells. However, we have observed that this step requires a significant amount of computational memory. Therefore, we do not recommend selecting a large value for this parameter initially.If you do not want to waste time calculating the p-value, you can choose to set it as 0.
 #' @param seurat_return (logical) Whether return the seurat format result,
 #' if not,will return a list result;
 #' @param singlecell (logical)Whether to produce the singlecell result;
@@ -199,7 +200,7 @@ scPagwas_main <- function(Pagwas = NULL,
                           min.pathway.size = 5,
                           max.pathway.size = 300,
                           iters_celltype = 200,
-                          iters_singlecell = 500,
+                          iters_singlecell = 100,
                           n_topgenes = 1000,
                           singlecell = TRUE,
                           celltype = TRUE,

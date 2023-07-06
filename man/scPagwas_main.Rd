@@ -22,7 +22,7 @@ scPagwas_main(
   min.pathway.size = 5,
   max.pathway.size = 300,
   iters_celltype = 200,
-  iters_singlecell = 500,
+  iters_singlecell = 100,
   n_topgenes = 1000,
   singlecell = TRUE,
   celltype = TRUE,
@@ -79,7 +79,8 @@ default is 300}
 
 \item{iters_celltype}{(integr)number of bootstrap iterations for celltype}
 
-\item{iters_singlecell}{(integr)number of bootstrap iterations for singlecell}
+\item{iters_singlecell}{(integr)number of bootstrap iterations for singlecell；
+The parameter "iters_singlecell" is used to calculate the significance p-value for individual cells. However, we have observed that this step requires a significant amount of computational memory. Therefore, we do not recommend selecting a large value for this parameter initially.}
 
 \item{n_topgenes}{(integr)Number of top associated gene selected to
 calculate the scPagwas score;}
