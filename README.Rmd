@@ -72,7 +72,7 @@ system.time(
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      n.cores=1,
-                     iters_singlecell = 100,
+                     iters_singlecell = 10,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
                      celltype=T# Whether to run the celltype process.
