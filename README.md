@@ -15,7 +15,8 @@ pathway activation transformation of single-cell RNA sequence
 data.(2023)
 
 Code for reproducing the analysis from the paper is available
-[here](https://github.com/dengchunyu/scPagwas_reproduce).
+[here](https://github.com/dengchunyu/scPagwas_reproduce), or
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8137370.svg)](https://doi.org/10.5281/zenodo.8137370)
 
 For further usage on the scPagwas package, you can visit the
 [website](https://dengchunyu.github.io/about/). A vignette for using
