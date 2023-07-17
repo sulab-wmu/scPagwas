@@ -73,7 +73,7 @@
 <span>  min.pathway.size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  max.pathway.size <span class="op">=</span> <span class="fl">300</span>,</span>
 <span>  iters_celltype <span class="op">=</span> <span class="fl">200</span>,</span>
-<span>  iters_singlecell <span class="op">=</span> <span class="fl">500</span>,</span>
+<span>  iters_singlecell <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  n_topgenes <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  singlecell <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  celltype <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -167,7 +167,8 @@ default is 300</p></dd>
 
 
 <dt>iters_singlecell</dt>
-<dd><p>(integr)number of bootstrap iterations for singlecell</p></dd>
+<dd><p>(integr)number of bootstrap iterations for singlecell；
+The parameter "iters_singlecell" is used to calculate the significance p-value for individual cells. However, we have observed that this step requires a significant amount of computational memory. Therefore, we do not recommend selecting a large value for this parameter initially.If you do not want to waste time calculating the p-value, you can choose to set it as 0.</p></dd>
 
 
 <dt>n_topgenes</dt>
@@ -216,8 +217,8 @@ Pathway_list:a list for pathway gene list intersecting with single
 cell data
 pca_cell_df: a data frame for pathway pca result for each celltype.
 lm_results: the regression result for each cell.
-gene_heritability_correlation:
-heritability correlation value for each gene;
+PCC:
+heritability correlation value for each gene;In the previous version, we referred to it as Pearson correlation coefficients.
 bootstrap_results:The bootstrap data frame results for celltypes
 including bootstrap pvalue and confidence interval.</p></dd>
 
@@ -233,7 +234,7 @@ lm and top gene score
 <em>_celltypes_bootstrap_results.csv:</em>The bootstrap data frame
 results for celltypes including bootstrap pvalue and confidence
 interval
-_gene_heritability_correlation.csv: heritability correlation
+_gene_PCC.csv: heritability correlation
 value("cor" for pearson) for each gene;
 
 
@@ -248,8 +249,8 @@ effects for each cells
 Pathway_list: The number of Lanczos iterations carried out
 pca_cell_df: The total number of matrix vector products carried out
 sclm_results: The total number of matrix vector products carried out
-allsnp_gene_heritability_correlation: The total number of
-matrix vector products carried out
+PCC: The total number of
+matrix vector products carried out;In the previous version, we referred to it as Pearson correlation coefficients
 Pathway_ctlm_results: The total number of matrix vector products
 carried out
 lm_results: The total number of matrix vector products carried out

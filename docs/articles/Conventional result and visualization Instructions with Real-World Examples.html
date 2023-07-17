@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Conventional result and visualization Instructions with Real-World Examples</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 01, 六月, 2023
-at 15:39</h4>
+            <h4 data-toc-skip class="date">Last Updated: 17, 七月, 2023
+at 11:41</h4>
       
       
       <div class="d-none name"><code>Conventional result and visualization Instructions with Real-World Examples.Rmd</code></div>
@@ -157,17 +157,17 @@ results.</li>
 <div class="section level3">
 <h3 id="pagwas">3.1 Pagwas<a class="anchor" aria-label="anchor" href="#pagwas"></a>
 </h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">print</span>(Pagwas)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>An object of class Seurat </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="dv">16478</span> features across <span class="dv">35582</span> samples within <span class="dv">3</span> assays </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>Active assay<span class="sc">:</span> <span class="fu">RNA</span> (<span class="dv">15860</span> features, <span class="dv">5000</span> variable features)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a> <span class="dv">2</span> other assays present<span class="sc">:</span> scPagwasPaHeritability, scPagwasPaPca</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a> <span class="dv">3</span> dimensional reductions calculated<span class="sc">:</span> pca, tsne, umap</span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">names</span>(Pagwas<span class="sc">@</span>misc)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Pathway_list"</span>                  <span class="st">"pca_cell_df"</span>                   <span class="st">"lm_results"</span>                   </span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>[<span class="dv">4</span>] <span class="st">"bootstrap_results"</span>             <span class="st">"scPathways_rankPvalue"</span>         <span class="st">"gene_heritability_correlation"</span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>[<span class="dv">7</span>] <span class="st">"Merged_celltype_pvalue"</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">print</span>(Pagwas)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>An object of class Seurat </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="dv">16478</span> features across <span class="dv">35582</span> samples within <span class="dv">3</span> assays </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>Active assay<span class="sc">:</span> <span class="fu">RNA</span> (<span class="dv">15860</span> features, <span class="dv">5000</span> variable features)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a> <span class="dv">2</span> other assays present<span class="sc">:</span> scPagwasPaHeritability, scPagwasPaPca</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a> <span class="dv">3</span> dimensional reductions calculated<span class="sc">:</span> pca, tsne, umap</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">names</span>(Pagwas<span class="sc">@</span>misc)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>[<span class="dv">1</span>] <span class="st">"Pathway_list"</span>                  <span class="st">"pca_cell_df"</span>                   <span class="st">"lm_results"</span>                   </span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>[<span class="dv">4</span>] <span class="st">"bootstrap_results"</span>             <span class="st">"scPathways_rankPvalue"</span>         <span class="st">"GeneticExpressionIndex"</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>[<span class="dv">7</span>] <span class="st">"Merged_celltype_pvalue"</span></span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li>
 <p>In this Seruat result, two new assays were added:</p>
@@ -220,8 +220,8 @@ list;</p></li>
 for pathway svd(1’st pca) result for each celltype;</p></li>
 <li><p><strong>lm_results</strong>: the regression result for each
 celltype;</p></li>
-<li><p><strong>gene_heritability_correlation</strong>: heritability
-correlation value for each gene;</p></li>
+<li><p><strong>GeneticExpressionIndex</strong>: heritability correlation
+value for each gene;</p></li>
 <li><p><strong>bootstrap_results</strong>: The bootstrap data frame
 results for celltypes including bootstrap pvalue and confidence
 interval.</p></li>
@@ -261,16 +261,16 @@ option.</p>
 <div class="section level3">
 <h3 id="pagwas-output-files-result">3.2 Pagwas : output files result<a class="anchor" aria-label="anchor" href="#pagwas-output-files-result"></a>
 </h3>
-<div class="figure">
-<img src="figures/resultfiles.png" alt=""><p class="caption">image-20230526142322858</p>
+<div class="float">
+<img src="figures/resultfiles.png" alt="image-20230526142322858"><div class="figcaption">image-20230526142322858</div>
 </div>
 <p>In <strong>monocytecount_bmmc</strong> folder, There is several
 result files :</p>
 <ul>
 <li><p><strong>*_cellytpes_bootstrap_results.csv</strong> : The result
 of cellytpes for bootstrap p results;</p></li>
-<li><p><strong>*_gene_heritability_correlation.csv</strong> : The result
-of gene heritability correlation with gPAS score.</p></li>
+<li><p><strong>*_GeneticExpressionIndex.csv</strong> : The result of
+gene heritability correlation with gPAS score.</p></li>
 <li><p><strong>*_Pathway_singlecell_lm_results.txt</strong> : The
 regression result for all pahtway and single cell matrix;</p></li>
 <li><p><strong>*_singlecell_scPagwas_score_pvalue.Result.csv</strong> :
@@ -368,7 +368,7 @@ negative Cells:</p>
 <h3 id="plot-the-heritability-correlated-genes">4.3 Plot the heritability correlated genes<a class="anchor" aria-label="anchor" href="#plot-the-heritability-correlated-genes"></a>
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>,</span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/heritability_cor_scatterplot.html">heritability_cor_scatterplot</a></span><span class="op">(</span>gene_heri_cor<span class="op">=</span><span class="va">Pagwas</span><span class="op">@</span><span class="va">misc</span><span class="op">$</span><span class="va">GeneticExpressionIndex</span>,</span>
 <span>                             topn_genes_label<span class="op">=</span><span class="fl">10</span>,</span>
 <span>                             color_low<span class="op">=</span><span class="st">"#035397"</span>,</span>
 <span>                             color_high <span class="op">=</span><span class="st">"#F32424"</span>,</span>

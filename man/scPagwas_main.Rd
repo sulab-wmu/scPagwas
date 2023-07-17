@@ -80,7 +80,7 @@ default is 300}
 \item{iters_celltype}{(integr)number of bootstrap iterations for celltype}
 
 \item{iters_singlecell}{(integr)number of bootstrap iterations for singlecell；
-The parameter "iters_singlecell" is used to calculate the significance p-value for individual cells. However, we have observed that this step requires a significant amount of computational memory. Therefore, we do not recommend selecting a large value for this parameter initially.}
+The parameter "iters_singlecell" is used to calculate the significance p-value for individual cells. However, we have observed that this step requires a significant amount of computational memory. Therefore, we do not recommend selecting a large value for this parameter initially.If you do not want to waste time calculating the p-value, you can choose to set it as 0.}
 
 \item{n_topgenes}{(integr)Number of top associated gene selected to
 calculate the scPagwas score;}
@@ -116,8 +116,8 @@ regression effects for each cells}
 cell data}
 {pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
 {lm_results:}{ the regression result for each cell.}
-{GeneticExpressionIndex:}{
-heritability correlation value for each gene;}
+{PCC:}{
+heritability correlation value for each gene;In the previous version, we referred to it as Pearson correlation coefficients.}
 {bootstrap_results:}{The bootstrap data frame results for celltypes
 including bootstrap pvalue and confidence interval.}
 }
@@ -135,7 +135,7 @@ lm and top gene score}
 {\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame
 results for celltypes including bootstrap pvalue and confidence
 interval}
-{}_GeneticExpressionIndex.csv:}{ heritability correlation
+{}_gene_PCC.csv:}{ heritability correlation
 value("cor" for pearson) for each gene;}
 }
 
@@ -150,8 +150,8 @@ effects for each cells}
 {Pathway_list:}{ The number of Lanczos iterations carried out}
 {pca_cell_df:}{ The total number of matrix vector products carried out}
 {sclm_results:}{ The total number of matrix vector products carried out}
-{GeneticExpressionIndex:}{ The total number of
-matrix vector products carried out}
+{PCC:}{ The total number of
+matrix vector products carried out;In the previous version, we referred to it as Pearson correlation coefficients}
 {Pathway_ctlm_results:}{ The total number of matrix vector products
 carried out}
 {lm_results:}{ The total number of matrix vector products carried out}

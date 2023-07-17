@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Conventional Parameters and Usage Instructions with Demo Example Data</h1>
             
-            <h4 data-toc-skip class="date">Last Updated on 01 六月,
+            <h4 data-toc-skip class="date">Last Updated on 17 七月,
 2023</h4>
       
       
@@ -224,10 +224,10 @@ for celltype only can omit many running processes.</p>
 <span>                     block_annotation <span class="op">=</span> <span class="va">block_annotation</span>,</span>
 <span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span><span class="op">)</span></span></code></pre></div>
 <p>The reuslt of celltypes is list format(not seurat format).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(Pagwas_celltypes)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"Celltype_anno"</span>     <span class="st">"data_mat"</span>          <span class="st">"VariableFeatures"</span>  <span class="st">"merge_scexpr"</span>     </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"rawPathway_list"</span>   <span class="st">"Pathway_list"</span>      <span class="st">"pca_scCell_mat"</span>    <span class="st">"pca_cell_df"</span>      </span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"snp_gene_df"</span>       <span class="st">"lm_results"</span>        <span class="st">"bootstrap_results"</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">names</span>(Pagwas_celltypes)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a> [<span class="dv">1</span>] <span class="st">"Celltype_anno"</span>     <span class="st">"data_mat"</span>          <span class="st">"VariableFeatures"</span>  <span class="st">"merge_scexpr"</span>     </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a> [<span class="dv">5</span>] <span class="st">"rawPathway_list"</span>   <span class="st">"Pathway_list"</span>      <span class="st">"pca_scCell_mat"</span>    <span class="st">"pca_cell_df"</span>      </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a> [<span class="dv">9</span>] <span class="st">"snp_gene_df"</span>       <span class="st">"lm_results"</span>        <span class="st">"bootstrap_results"</span></span></code></pre></div>
 <p>Pagwas_celltypes: A Result List with Distinct Characteristics and
 Inheritable Intermediate Data.</p>
 <ul>
@@ -472,11 +472,11 @@ overall contribution of all pathways.</li>
 </h3>
 <p>Run heritability correlation for all genes.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGet_gene_heritability_correlation.html">scGet_gene_heritability_correlation</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
+<code class="sourceCode R"><span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/scGet_PCC.html">scGet_PCC</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
 <span>                                    data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span></span></code></pre></div>
 <ul>
-<li>gene_heritability_correlation: Correlation coefficient between each
-gene and the genetic score.</li>
+<li>PCC: Pearson correlation coefficients, Correlation index between
+each gene and the genetic score.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -486,8 +486,8 @@ gene and the genetic score.</li>
 and running the p value for each cell by
 <code>Get_CorrectBg_p</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Obtain the top 1000 genes with the highest genetic correlation scores.</span></span>
-<span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">gene_heritability_correlation</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
+<code class="sourceCode R"><span><span class="co">#Obtain the top 1000 genes with the highest PCC.</span></span>
+<span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co">#Single_data refers to the single-cell data initially inputted.</span></span>
 <span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span><span class="op">)</span><span class="op">)</span></span>

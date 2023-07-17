@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Introduction to Data Input and Preprocessing in scPagwas</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 01, 六月, 2023
-at 15:39</h4>
+            <h4 data-toc-skip class="date">Last Updated: 17, 七月, 2023
+at 11:41</h4>
       
       
       <div class="d-none name"><code>Introduction to Data Input and Preprocessing in scPagwas.Rmd</code></div>
@@ -338,22 +338,22 @@ show here:</p>
 1,000 Genomes genotypes.</p>
 <p><code>./vcftools --vcf ./1000genomes_all_genotypes.vcf --plink-tped --out ./1000genomes_all_genotypes ./plink --tfile ./1000genomes_all_genotypes --recode --out ./1000genomes_all_genotypes ./plink --map ./1000genomes_all_genotypes.map --ped ./1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out ./ld_1000genome</code></p>
 <p>R environment to print out the scPagwas-needed data.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>covid_ld<span class="ot">&lt;-</span><span class="fu">read.delim</span>(<span class="st">"./ld_1000genome.ld"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#remove sex chrome</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>covid_ld<span class="ot">&lt;-</span>covid_ld[<span class="sc">!</span>(covid_ld<span class="sc">$</span> <span class="sc">%in%</span> <span class="dv">23</span>),]</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(covid_ld)[<span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"R"</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#print out the result in chrom number</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="fu">unique</span>(covid_ld<span class="sc">$</span>CHR_A), <span class="cf">function</span>(i){</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  a<span class="ot">&lt;-</span><span class="fu">data.table</span>(covid_ld[covid_ld<span class="sc">$</span>CHR_A <span class="sc">==</span> i,])</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"./LD/"</span>,i,<span class="st">".Rds"</span>)</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">saveRDS</span>(a, <span class="at">file =</span> file_name)</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#integrate the data</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>chrom_ld<span class="ot">&lt;-</span><span class="fu">lapply</span>(<span class="fu">as.character</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>),<span class="cf">function</span>(chrom){</span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  chrom_ld_file_path <span class="ot">&lt;-</span> <span class="fu">paste</span>(ld_folder, <span class="st">'/'</span>, chrom, <span class="st">'.Rds'</span>, <span class="at">sep =</span> <span class="st">''</span>)</span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a> ld_data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(chrom_ld_file_path)[(R<span class="sc">**</span><span class="dv">2</span> <span class="sc">&gt;</span> r2_threshold), .(SNP_A, SNP_B, R)]</span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(ld_data)</span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>covid_ld<span class="ot">&lt;-</span><span class="fu">read.delim</span>(<span class="st">"./ld_1000genome.ld"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co">#remove sex chrome</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>covid_ld<span class="ot">&lt;-</span>covid_ld[<span class="sc">!</span>(covid_ld<span class="sc">$</span> <span class="sc">%in%</span> <span class="dv">23</span>),]</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">colnames</span>(covid_ld)[<span class="dv">7</span>]<span class="ot">&lt;-</span><span class="st">"R"</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#print out the result in chrom number</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">lapply</span>(<span class="fu">unique</span>(covid_ld<span class="sc">$</span>CHR_A), <span class="cf">function</span>(i){</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  a<span class="ot">&lt;-</span><span class="fu">data.table</span>(covid_ld[covid_ld<span class="sc">$</span>CHR_A <span class="sc">==</span> i,])</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"./LD/"</span>,i,<span class="st">".Rds"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>  <span class="fu">saveRDS</span>(a, <span class="at">file =</span> file_name)</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>})</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#integrate the data</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>chrom_ld<span class="ot">&lt;-</span><span class="fu">lapply</span>(<span class="fu">as.character</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">22</span>),<span class="cf">function</span>(chrom){</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>  chrom_ld_file_path <span class="ot">&lt;-</span> <span class="fu">paste</span>(ld_folder, <span class="st">'/'</span>, chrom, <span class="st">'.Rds'</span>, <span class="at">sep =</span> <span class="st">''</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a> ld_data <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(chrom_ld_file_path)[(R<span class="sc">**</span><span class="dv">2</span> <span class="sc">&gt;</span> r2_threshold), .(SNP_A, SNP_B, R)]</span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>  <span class="fu">return</span>(ld_data)</span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>})</span></code></pre></div>
 </div>
 </div>
 </div>

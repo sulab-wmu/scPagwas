@@ -1,8 +1,8 @@
 
 #' heritability_cor_scatterplot
-#' @description Plot the scatterplot for the Genetic Expression Index(GEI) for each genes.
+#' @description Plot the scatterplot for the pearson correlation coefficients(PCC) for each genes.
 #' pearson methods for each gene expression and gPAS score in each cells.
-#' @param gene_heri_cor Genetic Expression Index result for scPagwas.
+#' @param gene_heri_cor PCC result for scPagwas.
 #' @param topn_genes_label 10, the number of top genes for correlation.
 #' @param color_low low color
 #' @param color_high high color
@@ -20,7 +20,7 @@
 #' @examples
 #' load(system.file("extdata", "Pagwas_data.RData", package = "scPagwas"))
 #' heritability_cor_scatterplot(
-#'   gene_heri_cor = Pagwas_data@misc$GeneticExpressionIndex,
+#'   gene_heri_cor = Pagwas_data@misc$PCC,
 #'   topn_genes_label = 10,
 #'   color_low = "#035397",
 #'   color_high = "#F32424",
@@ -33,7 +33,7 @@
 #' )
 #' @author Chunyu Deng
 #' @aliases heritability_cor_scatterplot
-#' @keywords heritability_cor_scatterplot, plot the scatterplot for the correlation coefficient for each genes.
+#' @keywords heritability_cor_scatterplot, plot the scatterplot for the PCC for each genes.
 heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
                                          topn_genes_label = 10,
                                          color_low = "#035397",

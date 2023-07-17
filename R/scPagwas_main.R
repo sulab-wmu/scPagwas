@@ -103,8 +103,8 @@
 #'   cell data}
 #'   {pca_cell_df:}{ a data frame for pathway pca result for each celltype.}
 #'   {lm_results:}{ the regression result for each cell.}
-#'   {GeneticExpressionIndex:}{
-#'   heritability correlation value for each gene;}
+#'   {PCC:}{
+#'   heritability correlation value for each gene;In the previous version, we referred to it as Pearson correlation coefficients.}
 #'   {bootstrap_results:}{The bootstrap data frame results for celltypes
 #'   including bootstrap pvalue and confidence interval.}
 #' }
@@ -122,7 +122,7 @@
 #'   {*_celltypes_bootstrap_results.csv:}{The bootstrap data frame
 #'   results for celltypes including bootstrap pvalue and confidence
 #'   interval}
-#'   {*_GeneticExpressionIndex.csv:}{ heritability correlation
+#'   {*_gene_PCC.csv:}{ heritability correlation
 #'   value("cor" for pearson) for each gene;}
 
 #' }
@@ -138,8 +138,8 @@
 #'   {Pathway_list:}{ The number of Lanczos iterations carried out}
 #'   {pca_cell_df:}{ The total number of matrix vector products carried out}
 #'   {sclm_results:}{ The total number of matrix vector products carried out}
-#'   {GeneticExpressionIndex:}{ The total number of
-#'   matrix vector products carried out}
+#'   {PCC:}{ The total number of
+#'   matrix vector products carried out;In the previous version, we referred to it as Pearson correlation coefficients}
 #'   {Pathway_ctlm_results:}{ The total number of matrix vector products
 #'   carried out}
 #'   {lm_results:}{ The total number of matrix vector products carried out}
@@ -533,20 +533,20 @@ scPagwas_main <- function(Pagwas = NULL,
     message("done!")
 
   #############################
-  ## 9.scGet_GEI
+  ## 9.scGet_PCC
   #############################
   if(!run_split){
   message(paste(utils::timestamp(quiet = T),
-    " ******* 9th: scGet_GEI function start! ********",
+    " ******* 9th: scGet_PCC function start! ********",
     sep = ""
   ))
 
   tt <- Sys.time()
 
-  Pagwas$GeneticExpressionIndex <- scGet_GEI(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
+  Pagwas$PCC <- scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
                                                                               data_mat=Pagwas$data_mat)
 
-  scPagwas_topgenes <- names(Pagwas$GeneticExpressionIndex[order(Pagwas$GeneticExpressionIndex, decreasing = T), ])[1:n_topgenes]
+  scPagwas_topgenes <- names(Pagwas$PCC[order(Pagwas$PCC, decreasing = T), ])[1:n_topgenes]
 
   message("done")
 
@@ -563,11 +563,11 @@ scPagwas_main <- function(Pagwas = NULL,
     quote = F, sep = "\t"
   )
 
-  utils::write.csv(Pagwas$GeneticExpressionIndex,
+  utils::write.csv(Pagwas$PCC,
     file = paste0(
       "./", output.dirs, "/",
       output.prefix,
-      "_GeneticExpressionIndex.csv"
+      "_gene_PCC.csv"
     ),
     quote = F
   )
@@ -654,8 +654,6 @@ scPagwas_main <- function(Pagwas = NULL,
     rm(scPagwas_pca)
 
     Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
-    #Single_data$ScalepValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "pValueHigh"]
-    #Single_data$ScaleqValue <- CellScalepValue[rownames(Pagwas$Celltype_anno), "qValueHigh"]
     if(iters_singlecell>0){
     Single_data$Random_Correct_BG_p <- correct_pdf$pooled_p
     Single_data$Random_Correct_BG_adjp <- correct_pdf$adj_p

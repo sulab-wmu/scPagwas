@@ -75,7 +75,7 @@ system.time(
                      iters_singlecell = 10,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
-                     celltype=T# Whether to run the celltype process.
+                     celltype=F# Whether to run the celltype process.
 )
 )
 ```
