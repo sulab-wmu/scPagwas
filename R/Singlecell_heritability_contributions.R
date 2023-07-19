@@ -199,7 +199,7 @@ scParameter_regression <- function(Pagwas_x,
 
     }else if(dim(Pagwas_x)[2] > 10000){
       # 将矩阵划分为n个块（按列划分）
-      n<- floor(ncol(Pagwas_x)/10000)
+      n<- ceiling(ncol(Pagwas_x)/10000)
       split_cols <- split(1:ncol(Pagwas_x), cut(1:ncol(Pagwas_x), n, labels = FALSE))
       # 逐个块处理，并将它们合并
       Pagwas_x <- do.call("cbind", lapply(split_cols, function(cols){
