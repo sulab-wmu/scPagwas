@@ -20,11 +20,11 @@ knitr::opts_chunk$set(
 
 ## 1.Utilizing Real-World Examples in scPagwas for Comprehensive Testing
 To showcase the visualization effects accurately, we have opted to use real-world examples from the referenced article instead of the software's provided demo dataset. In this scenario, we will be utilizing the BMMC scRNA-seq data in conjunction with the GWAS data for monocyte count. It is important to note that due to the large size of the data, the computation time for this analysis may take several minutes. Hence, we recommend directly downloading the result data for convenient examination and exploration.
-The processed monocytecount gwas data can be download from [here](https://1drv.ms/t/s!As-aKqXDnDUHi6sx7Hqblj2Sgl7P8w?e=cb5Ihf).
+The processed monocytecount gwas data can be download from [here](https://drive.google.com/file/d/1drlkNcU9QA_lGDiJZlK42DRpb0ac4e-k/view?usp=sharing).
 
-BMMC example scRNA-seq data can be obtained from [here](https://1drv.ms/u/s!As-aKqXDnDUHjfcMjN4VGtAw1Utm0w?e=ocUrEx).
+BMMC example scRNA-seq data can be obtained from [here](https://drive.google.com/file/d/1edkAtU5K1ljSyu2KMj5Q1ZVW9TxbqKgS/view?usp=sharing).
 
-We can download the result files from [here](https://1drv.ms/u/s!As-aKqXDnDUHjLNvq64d2GAK_pIGVA?e=EmwSmf)
+We can download the result files from [here](https://drive.google.com/file/d/1VUg9s4e-UhXL-XrKiBzTgdiBbKpX7AG1/view?usp=sharing)
 
 If you want to run the deno data, please go to **Conventional Usage Instructions for scPagwas with Demo Example Data**
 
