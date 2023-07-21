@@ -242,8 +242,11 @@ scPagwas_main <- function(Pagwas = NULL,
   if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
   }
-  if (!dir.exists(output.dirs)) {
-  dir.create(paste0("./", output.dirs, "/temp"))
+  if (dir.exists(paste0("./", output.dirs, "/temp"))) {
+    temp_folder_path <- paste0("./", output.dirs, "/temp")
+    files_to_remove <- list.files(temp_folder_path)
+    invisible(file.remove(file.path(temp_folder_path, files_to_remove)))
+    cat("bk files has been deleted")
   }
   ## miximal file path lenght;
   ## Windows OS support max. 259 characters
@@ -544,9 +547,9 @@ scPagwas_main <- function(Pagwas = NULL,
   tt <- Sys.time()
 
   Pagwas$PCC <- scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
-                                                                              data_mat=Pagwas$data_mat)
+                          data_mat=Pagwas$data_mat)
 
-  scPagwas_topgenes <- names(Pagwas$PCC[order(Pagwas$PCC, decreasing = T), ])[1:n_topgenes]
+  scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = T)[1:n_topgenes]]
 
   message("done")
 

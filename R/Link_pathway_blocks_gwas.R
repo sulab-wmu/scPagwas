@@ -96,14 +96,6 @@ Pathway_block_func <- function(Pagwas = NULL,
   options(bigmemory.allow.dimnames = TRUE)
   pb <- txtProgressBar(style = 3)
 
-  #Rn<-randomStrings(n=length(Pachrom_block_list),len=9,digits=TRUE,
-  #                          upperalpha=F,
-  #                          loweralpha=TRUE,
-  #                          unique=TRUE,
-  #                          check=F)
-  #Rn<-Rn[,1]
-  #names(Rn)<-names(Pachrom_block_list)
-
   for (pathway in names(Pachrom_block_list)) {
     Pa_chrom_block <- Pachrom_block_list[[pathway]]
 
