@@ -55,7 +55,7 @@ Or, download the package file from
 Then install it locally.
 
 ``` r
-devtools::install_local("sulab-wmu-scPagwas-****.tar")
+devtools::install_local("sulab-wmu-scPagwas-****.tar.gz")
 ```
 
 Another alternative approach is to download the package from a provided
