@@ -32,6 +32,8 @@ Code for reproducing the analysis from the paper is available [here](https://git
 
 For further usage on the scPagwas package, you can visit the  [website](https://dengchunyu.github.io/about/). A vignette for using also can be accessed using browseVignettes("scPagwas")
 
+Some important data can be download from [here](https://drive.google.com/drive/folders/1z7uQtzjnieJhYLhLmgmIz2jk6a6hes4l?usp=drive_link)
+
 ## Installation
 
 You can install the released version of scPagwas from [github](https://github.com/sulab-wmu/scPagwas) with: 
@@ -66,8 +68,7 @@ install.packages("scPagwas_1.2.0.tar.gz",repos=NULL,type="source")
 ## Usage 
 quick-start example: 
 ```{r message=FALSE, eval = FALSE}
- library(scPagwas)
-
+library(scPagwas)
 system.time(
  #1.start to run the wrapper functions for example.
  Pagwas_data<-scPagwas_main(Pagwas = NULL,
@@ -82,7 +83,7 @@ system.time(
                      iters_singlecell = 10,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
-                     celltype=F# Whether to run the celltype process.
+                     celltype=T# Whether to run the celltype process.
 )
 )
 ```

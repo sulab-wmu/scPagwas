@@ -208,13 +208,13 @@ scPagwas_main <- function(Pagwas = NULL,
                           remove_outlier = TRUE) {
 
 
-  # Pagwas =NULL
-  # gwas_data = "D:/tempdata/monocytecount_prune_gwas_data.txt"
-  # Single_data ="D:/tempdata/sim_data_8.16.rds"
-  # output.prefix="gobp"
-  # output.dirs="real_reduce_gobp"
-  # load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.gobp.pathway.RData")
-  # Pathway_list=reduce_genes.by.gobp.pathway
+  #Pagwas =NULL
+  #gwas_data = "D:/tempdata/monocytecount_prune_gwas_data.txt"
+  #Single_data ="D:/tempdata/sim_data_8.16.rds"
+  # output.prefix=""
+  # output.dirs="test"
+  # #load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.gobp.pathway.RData")
+  # Pathway_list=Genes_by_pathway_kegg
   # assay="RNA"
   # singlecell=T
   # celltype=F
@@ -575,7 +575,7 @@ scPagwas_main <- function(Pagwas = NULL,
     quote = F
   )
 
-  message("* Get scaled P for each single cell")
+  #message("* Get scaled P for each single cell")
   #CellScalepValue <- scGene_scaleP(
   #  Single_mat = Pagwas$data_mat[scPagwas_topgenes, ]
   #  )
