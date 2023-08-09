@@ -8,7 +8,7 @@ data.
 
 <img src="./man/figures/Figure1.png" width="100%" style="display: block; margin: auto;" />
 
-Please cite this article in press as:Ma et al.,Polygenic regression
+Please cite this article in press as: Ma et al.,Polygenic regression
 uncovers trait-relevant cellular contexts through pathway activation
 transformation of single-cell RNA sequencing data,Cell Genomics
 (2023),<https://doi.org/10.1016/j.xgen.2023.100383>
