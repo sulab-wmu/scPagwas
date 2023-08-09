@@ -87,27 +87,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
       ]
     ]
   if (!inherits(scCounts, "matrix")) {
-  tryCatch(
-  expr = {
     scCounts <- as_matrix(scCounts)
-  },
-  error = function(err) {
-    batch_size <- 10000
-    num_cols <- ncol(scCounts)
-    num_batches <- ceiling(num_cols / batch_size)
-
-    batch_matrices <- list()
-
-    for (i in 1:num_batches) {
-      start_col <- (i - 1) * batch_size + 1
-      end_col <- min(i * batch_size, num_cols)
-    
-      batch <- as.matrix(scCounts[, start_col:end_col])
-      batch_matrices[[i]] <- batch
-    }
-    scCounts <- do.call(cbind, batch_matrices)
-    }
-  )
   }
 
     scCounts <- scCounts[rowSums(scCounts) != 0, ]
@@ -140,27 +120,7 @@ Pathway_pcascore_run <- function(Pagwas = NULL,
       ]
     ]
   if (!inherits(scCounts, "matrix")) {
-  tryCatch(
-  expr = {
     scCounts <- as_matrix(scCounts)
-  },
-  error = function(err) {
-    batch_size <- 10000
-    num_cols <- ncol(scCounts)
-    num_batches <- ceiling(num_cols / batch_size)
-
-    batch_matrices <- list()
-
-    for (i in 1:num_batches) {
-      start_col <- (i - 1) * batch_size + 1
-      end_col <- min(i * batch_size, num_cols)
-    
-      batch <- as.matrix(scCounts[, start_col:end_col])
-      batch_matrices[[i]] <- batch
-    }
-    scCounts <- do.call(cbind, batch_matrices)
-    }
-  )
   }
     scPCAscore <- PathwayPCAtest(
       Pathway_list = Pagwas$Pathway_list,

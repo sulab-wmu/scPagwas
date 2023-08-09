@@ -260,17 +260,19 @@ scPagwas_score_filter <- function(scPagwas_score) {
 #' @export
 
 scGet_PCC <- function(scPagwas.gPAS.score,data_mat) {
-
+  if (!inherits(data_mat, "matrix")) {
+  data_mat <- as_matrix(data_mat)
+  }
   if (all(names(scPagwas.gPAS.score) == colnames(data_mat))) {
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(
-      X = t(as_matrix(data_mat)),
+      X = t(data_mat),
       Y = scPagwas.gPAS.score
     )
   } else {
     scPagwas.gPAS.score <- data.matrix(scPagwas.gPAS.score)
     sparse_cor <- corSparse(
-      X = t(as_matrix(data_mat)),
+      X = t(data_mat),
       Y = scPagwas.gPAS.score
     )
   }
