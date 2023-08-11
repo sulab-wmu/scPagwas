@@ -354,6 +354,10 @@ Corr_Random<-function(data_mat,scPagwas.gPAS.score,seed=1234,random=T,Nrandom=5,
 #'
 #' @examples
 Merge_gPas <-function(Pagwas,pmat_merge){
+  #判断Pagwas中是否包含pa_exp_mat
+  if(!exists("pa_exp_mat",where = Pagwas)){
+    Pagwas<-pa_meanexpr(Pagwas)
+  }
   pa_exp_mat <- t(Pagwas$pca_scCell_mat) * Pagwas$pa_exp_mat
   Pathway_names<-intersect(colnames(pmat_merge),colnames(Pagwas$pa_exp_mat))
   Pathway_single_results <- pmat_merge[, Pathway_names] * pa_exp_mat[, Pathway_names]
