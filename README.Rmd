@@ -88,6 +88,17 @@ system.time(
                      celltype=T# Whether to run the celltype process.
 )
 )
+
+ scPagwas_Visualization(Single_data=Pagwas_data,
+                        p_thre = 0.05,
+                        FigureType = "umap",
+                        width = 7,
+                        height = 7,
+                        lowColor = "white", 
+                        highColor = "red",
+                        output.dirs="figure",
+                        size = 0.5,
+                        do_plot = T)
 ```
 
 

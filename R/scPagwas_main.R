@@ -550,6 +550,8 @@ scPagwas_main <- function(Pagwas = NULL,
                           data_mat=Pagwas$data_mat)
 
   scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = T)[1:n_topgenes]]
+  scPagwas_downgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = F)[1:n_topgenes]]
+
 
   message("done")
 
@@ -590,6 +592,11 @@ scPagwas_main <- function(Pagwas = NULL,
     list(scPagwas_topgenes),
     name = c("scPagwas.TRS.Score")
   )
+  Single_data <- Seurat::AddModuleScore(Single_data,
+                                        assay = assay,
+                                        list(scPagwas_downgenes),
+                                        name = c("scPagwas.dTRS.Score")
+  )
 
     message("* Get Random Correct background pvalue for each single cell!")
     if(iters_singlecell>0){
@@ -604,10 +611,12 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$pooled_p,celltype=Pagwas$Celltype_anno$annotation)
 
   Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
+  Pagwas$scPagwas.dTRS.Score <- Single_data$scPagwas.dTRS.Score1
   #Pagwas$CellScalepValue <- CellScalepValue
 
    a <- data.frame(
     scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
+    scPagwas.dTRS.Score = Pagwas$scPagwas.dTRS.Score,
     scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
     Random_Correct_BG_p = correct_pdf$pooled_p,
   Random_Correct_BG_adjp = correct_pdf$adj_p,
@@ -623,8 +632,10 @@ scPagwas_main <- function(Pagwas = NULL,
       Pagwas$Random_Correct_BG_pdf <-NA
       Pagwas$Merged_celltype_pvalue <-NA
       Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
+      Pagwas$scPagwas.dTRS.Score <- Single_data$scPagwas.dTRS.Score1
       a <- data.frame(
         scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
+        scPagwas.dTRS.Score = Pagwas$scPagwas.dTRS.Score,
         scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score)
 
 }

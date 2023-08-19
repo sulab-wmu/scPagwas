@@ -192,7 +192,7 @@ scPagwas.TRS.Score1 and positive(p<0.05) cells showing in dimplot.
 
 <img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\scPagwas.TRS.Score_tsne.png" width="40%" />
 
-4) scPagwas_CellScaleqValue dimplot. 
+4)Random_Correct_BG_adjp dimplot.  
 
 <img src="D:\OneDrive\RPakage\scPagwas\vignettes\figures\scPagwas_CellScaleqValue0.05_tsne.png" width="30%" />
 

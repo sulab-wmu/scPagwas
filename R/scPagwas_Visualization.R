@@ -115,6 +115,32 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::dev.off()
     }
 
+    plot_scPagwas_score3 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "UMAP_1", y = "UMAP_2",
+                                              color = "scPagwas.dTRS.Score1",
+                                              fill = "scPagwas.dTRS.Score1",
+                                              size = size,
+                                              title = title,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = "#146C94") +
+      scale_color_gradient(low = lowColor, high = "#146C94") +
+      theme(aspect.ratio = 1) +
+      ggtitle("scPagwas.dTRS.Score")
+
+    if (do_plot) print(plot_scPagwas_score3)
+    if (!is.null(output.dirs)) {
+      grDevices::pdf(
+        file = paste0(
+          "./", output.dirs,
+          "/scPagwas.dTRS.Score_umap.pdf"
+        ),
+        height = height, width = width
+      )
+      print(plot_scPagwas_score3)
+      grDevices::dev.off()
+    }
+
     plots_sigp1 <- ggplot() +
       geom_point(
         data = all_fortify_can[all_fortify_can$Random_Correct_BG_adjp > p_thre, ],
@@ -233,6 +259,31 @@ scPagwas_Visualization <- function(Single_data = NULL,
       grDevices::dev.off()
     }
 
+    plot_scPagwas_score3 <- ggpubr::ggscatter(all_fortify_can,
+                                              x = "TSNE_1", y = "TSNE_2",
+                                              color = "scPagwas.dTRS.Score1",
+                                              fill = "scPagwas.dTRS.Score1",
+                                              size = size,
+                                              title = title,
+                                              repel = TRUE
+    ) + umap_theme() +
+      scale_fill_gradient(low = lowColor, high = "#146C94") +
+      scale_color_gradient(low = lowColor, high = "#146C94") +
+      theme(aspect.ratio = 1) +
+      ggtitle("scPagwas.dTRS.Score")
+
+    if (do_plot) print(plot_scPagwas_score3)
+    if (!is.null(output.dirs)) {
+      grDevices::pdf(
+        file = paste0(
+          "./", output.dirs,
+          "/scPagwas.dTRS.Score_tsne.pdf"
+        ),
+        height = height, width = width
+      )
+      print(plot_scPagwas_score3)
+      grDevices::dev.off()
+    }
 
     plots_sigp1 <- ggplot() +
       geom_point(

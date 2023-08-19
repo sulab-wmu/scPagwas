@@ -163,3 +163,25 @@ randomStrings <- function(n=10, len=5, digits=TRUE,
   return(randStrings)
 }
 
+
+#' skewness
+#'
+#' @param data
+#'
+#' @return
+#' @export
+#'
+#' @examples
+skewness<-function(data){
+  mean_data <- mean(data)
+  median_data <- median(data)
+  diff<- mean_data-median_data
+
+  if (diff > 0 ) {
+    return("right")
+  } else if (diff < 0) {
+    return("left")
+  } else {
+    return("symmetry")
+  }
+}
