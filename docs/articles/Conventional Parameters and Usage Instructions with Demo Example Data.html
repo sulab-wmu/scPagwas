@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Conventional Parameters and Usage Instructions with Demo Example Data</h1>
             
-            <h4 data-toc-skip class="date">Last Updated on 08 八月,
+            <h4 data-toc-skip class="date">Last Updated on 21 八月,
 2023</h4>
       
       
@@ -485,38 +485,64 @@ each gene and the genetic score.</li>
 <p>Calculate the TRS score for top genes by <code>AddModuleScore</code>
 and running the p value for each cell by
 <code>Get_CorrectBg_p</code>.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Obtain the top 1000 genes with the highest PCC.</span></span>
-<span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1000</span><span class="op">]</span></span>
-<span></span>
-<span><span class="co">#Single_data refers to the single-cell data initially inputted.</span></span>
-<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#Calculate the p-values of single cells after background correction.</span></span>
-<span><span class="va">correct_pdf</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/Get_CorrectBg_p.html">Get_CorrectBg_p</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Single_data</span>,</span>
-<span>                             scPagwas.TRS.Score<span class="op">=</span><span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.TRS.Score1</span>,</span>
-<span>                             iters_singlecell<span class="op">=</span><span class="fl">100</span>,</span>
-<span>                             n_topgenes<span class="op">=</span><span class="fl">1000</span>,</span>
-<span>                             scPagwas_topgenes<span class="op">=</span><span class="va">scPagwas_topgenes</span><span class="op">)</span></span>
-<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Random_Correct_BG_pdf</span> <span class="op">&lt;-</span> <span class="va">correct_pdf</span></span>
-<span></span>
-<span><span class="co">#Merge the p-values of cells belonging to the same cell type into a single p-value for each cell type.</span></span>
-<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Merged_celltype_pvalue</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/Merge_celltype_p.html">Merge_celltype_p</a></span><span class="op">(</span>single_p<span class="op">=</span><span class="va">correct_pdf</span><span class="op">$</span><span class="va">pooled_p</span>,celltype<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">Celltype_anno</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#Integrate and output the results of single-cell analysis.</span></span>
-<span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>     scPagwas.TRS.Score <span class="op">=</span> <span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.TRS.Score1</span>,</span>
-<span>     scPagwas.gPAS.score <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
-<span>     Random_Correct_BG_p <span class="op">=</span> <span class="va">correct_pdf</span><span class="op">$</span><span class="va">pooled_p</span>,</span>
-<span>     Random_Correct_BG_adjp <span class="op">=</span> <span class="va">correct_pdf</span><span class="op">$</span><span class="va">adj_p</span>,</span>
-<span>     Random_Correct_BG_z <span class="op">=</span> <span class="va">correct_pdf</span><span class="op">$</span><span class="va">pooled_z</span><span class="op">)</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span><span class="va">a</span>,file <span class="op">=</span> <span class="st">"_singlecell_scPagwas_score_pvalue.Result.csv"</span>,quote <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co">#Obtain the top 1000 genes with the highest PCC.</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>scPagwas_topgenes <span class="ot">&lt;-</span> <span class="fu">names</span>(Pagwas<span class="sc">$</span>PCC[<span class="fu">order</span>(Pagwas<span class="sc">$</span>PCC, <span class="at">decreasing =</span> T), ])[<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>scPagwas_downgenes <span class="ot">&lt;-</span> <span class="fu">rownames</span>(Pagwas<span class="sc">$</span>PCC)[<span class="fu">order</span>(Pagwas<span class="sc">$</span>PCC, <span class="at">decreasing =</span> F)[<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>]</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#Single_data refers to the single-cell data initially inputted.</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>Single_data <span class="ot">&lt;-</span> Seurat<span class="sc">::</span><span class="fu">AddModuleScore</span>(Single_data, <span class="at">assay =</span> <span class="st">"RNA"</span>, <span class="fu">list</span>(scPagwas_topgenes), <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"scPagwas.TRS.Score"</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>Single_data <span class="ot">&lt;-</span> Seurat<span class="sc">::</span><span class="fu">AddModuleScore</span>(Single_data,<span class="at">assay =</span> <span class="st">"RNA"</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>                                        <span class="fu">list</span>(scPagwas_downgenes),</span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="fu">c</span>(<span class="st">"scPagwas.dTRS.Score"</span>))</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#Calculate the p-values of single cells after background correction.</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>correct_pdf<span class="ot">&lt;-</span><span class="fu">Get_CorrectBg_p</span>(<span class="at">Single_data=</span>Single_data,</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>                             <span class="at">scPagwas.TRS.Score=</span>Single_data<span class="sc">$</span>scPagwas.TRS.Score1,</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>                             <span class="at">iters_singlecell=</span><span class="dv">100</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>                             <span class="at">n_topgenes=</span><span class="dv">1000</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>                             <span class="at">scPagwas_topgenes=</span>scPagwas_topgenes)</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>Pagwas<span class="sc">$</span>Random_Correct_BG_pdf <span class="ot">&lt;-</span> correct_pdf</span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#Merge the p-values of cells belonging to the same cell type into a single p-value for each cell type.</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>Pagwas<span class="sc">$</span>Merged_celltype_pvalue<span class="ot">&lt;-</span><span class="fu">Merge_celltype_p</span>(<span class="at">single_p=</span>correct_pdf<span class="sc">$</span>pooled_p,<span class="at">celltype=</span>Pagwas<span class="sc">$</span>Celltype_anno<span class="sc">$</span>annotation)</span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#Integrate and output the results of single-cell analysis.</span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a>     <span class="at">scPagwas.TRS.Score =</span> Single_data<span class="sc">$</span>scPagwas.TRS.Score1,</span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a>     <span class="at">scPagwas.dTRS.Score =</span> Single_data<span class="sc">$</span>scPagwas.dTRS.Score1,</span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>     <span class="at">scPagwas.gPAS.score =</span> Pagwas<span class="sc">$</span>scPagwas.gPAS.score,</span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>     <span class="at">Random_Correct_BG_p =</span> correct_pdf<span class="sc">$</span>pooled_p,</span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a>     <span class="at">Random_Correct_BG_adjp =</span> correct_pdf<span class="sc">$</span>adj_p,</span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a>     <span class="at">Random_Correct_BG_z =</span> correct_pdf<span class="sc">$</span>pooled_z)</span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a>utils<span class="sc">::</span><span class="fu">write.csv</span>(a,<span class="at">file =</span> <span class="st">"_singlecell_scPagwas_score_pvalue.Result.csv"</span>,<span class="at">quote =</span> F)</span></code></pre></div>
 <ul>
 <li><p>Single_data$scPagwas.TRS.Score1 : Trait relevant score based on
 top trait relevant genes.</p></li>
+<li>
+<p>Single_data$scPagwas.dTRS.Score1: Trait relevant score based on
+anti-relevant genes.</p>
+<p>Note: Although our article primarily focuses on the TRS scores, it
+does not imply that reverse dTRS are always devoid of significance.
+During our next research, we observed that in certain phenotypes, such
+as some cancer traits, when <strong>the gPas score</strong>, i.e., the
+sum of regression beta coefficients, <strong>skews to the left, the dTRS
+becomes notably more meaningful</strong>. However, we cannot ascertain
+whether this holds true for all data, nor can we pinpoint the specific
+reasons behind it. One possible reason for the overall leftward skewness
+in the distribution of “gPas” values could indicate a greater prevalence
+of negative associations between genotypes and phenotypes. In other
+words, specific genotypes may be more closely related to a reduced risk
+of the phenotype. However, It requires a case-by-case analysis. The
+question then arises: do GWAS genetic effect mainly have a positive or
+negative impact on phenotypes? What factors determine this impact? This
+is a highly intriguing question that we intend to explore further in
+subsequent research. We encourage researchers to consider the skewness
+in the distribution of scPagwas.gPAS.score as an adjunctive factor for
+assessing directionality, though it is not absolute and should be
+analyzed on a case-by-case basis.</p>
+</li>
 <li><p>Random_Correct_BG_pdf : Dataframe containing the calculated
-results of p-values after background correction for each cell, including
-pooled_p, adj_p, pooled_z, and other results.</p></li>
+results of p-values after background correction for TRS of each cell,
+including pooled_p, adj_p, pooled_z, and other results.</p></li>
 <li><p>Merged_celltype_pvalue : P-value results of cell types after
 merging the p-values of single cells.</p></li>
 </ul>

@@ -78,10 +78,10 @@
 </div>
 <p><strong>scPagwas</strong> employs a polygenic regression model to prioritize a set of trait-relevant genes and uncover trait-relevant cell subpopulations by incorporating pathway activity transformed single-cell RNA sequencing (scRNA-seq) data with genome-wide association studies (GWAS) summary data.</p>
 <p><img src="./reference/figures/Figure1.png" width="100%" style="display: block; margin: auto;"></p>
-<p>Reference paper:</p>
-<p>Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequence data.(2023)</p>
+<p>Please cite this article in press as: Ma et al.,Polygenic regression uncovers trait-relevant cellular contexts through pathway activation transformation of single-cell RNA sequencing data,Cell Genomics (2023),<a href="https://doi.org/10.1016/j.xgen.2023.100383" class="external-link uri">https://doi.org/10.1016/j.xgen.2023.100383</a></p>
 <p>Code for reproducing the analysis from the paper is available <a href="https://github.com/dengchunyu/scPagwas_reproduce" class="external-link">here</a>, or <a href="https://doi.org/10.5281/zenodo.8137370" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.8137370.svg" alt="DOI"></a></p>
 <p>For further usage on the scPagwas package, you can visit the <a href="https://dengchunyu.github.io/about/" class="external-link">website</a>. A vignette for using also can be accessed using browseVignettes(“scPagwas”)</p>
+<p>Some important data can be download from <a href="https://drive.google.com/drive/folders/1z7uQtzjnieJhYLhLmgmIz2jk6a6hes4l?usp=drive_link" class="external-link">here</a></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -100,17 +100,19 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_git.html" class="external-link">install_git</a></span><span class="op">(</span><span class="st">"https://github.com/sulab-wmu/scPagwas.git"</span>, ref <span class="op">=</span> <span class="st">"main"</span><span class="op">)</span></span></code></pre></div>
-<p>Another alternative approach is to download the package from a provided source URL and install it locally. Source package download from <a href="https://github.com/dengchunyu/scPagwas_source" class="external-link">here</a>. Before a successful installation, it is necessary to install many dependency packages based on the error messages.</p>
+<p>Or, download the package file from <a href="https://api.github.com/repos/sulab-wmu/scPagwas/tarball/HEAD" class="external-link">here</a> Then install it locally.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_local.html" class="external-link">install_local</a></span><span class="op">(</span><span class="st">"sulab-wmu-scPagwas-****.tar.gz"</span><span class="op">)</span></span></code></pre></div>
+<p>Another alternative approach is to download the package from a provided source URL and install it locally. Source package download from <a href="https://github.com/dengchunyu/scPagwas_source" class="external-link">here</a>. Before a successful installation, it is necessary to install many dependency packages based on the error messages.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"scPagwas_1.2.0.tar.gz"</span>,repos<span class="op">=</span><span class="cn">NULL</span>,type<span class="op">=</span><span class="st">"source"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
 <p>quick-start example:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
-<span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">scPagwas</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/system.time.html" class="external-link">system.time</a></span><span class="op">(</span></span>
 <span> <span class="co">#1.start to run the wrapper functions for example.</span></span>
 <span> <span class="va">Pagwas_data</span><span class="op">&lt;-</span><span class="fu"><a href="reference/scPagwas_main.html">scPagwas_main</a></span><span class="op">(</span>Pagwas <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -125,7 +127,7 @@
 <span>                     iters_singlecell <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>                     chrom_ld <span class="op">=</span> <span class="va">chrom_ld</span>,<span class="co"># The LD data is provided by package.</span></span>
 <span>                     singlecell<span class="op">=</span><span class="cn">T</span>, <span class="co"># Whether to run the singlecell process.</span></span>
-<span>                     celltype<span class="op">=</span><span class="cn">F</span><span class="co"># Whether to run the celltype process.</span></span>
+<span>                     celltype<span class="op">=</span><span class="cn">T</span><span class="co"># Whether to run the celltype process.</span></span>
 <span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
