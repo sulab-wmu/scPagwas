@@ -128,8 +128,6 @@ Returns files:
 \describe{
 {scPagwas.run.log:}{ the running log file for scPagwas}
 {\emph{_parameters.txt:}{parameters log file for scPagwas}
-{}_pca_scCell_mat.txt:}{ 1st svd result for pathways in each cell}
-{\emph{_pca_celltypes_mat.txt:}{ 1st svd results for pathways in celltypes}
 {}_singlecell_scPagwas_score.Result.csv:}{ The final result for
 lm and top gene score}
 {\emph{_celltypes_bootstrap_results.csv:}{The bootstrap data frame

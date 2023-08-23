@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,8 +78,8 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Conventional result and visualization Instructions with Real-World Examples</h1>
             
-            <h4 data-toc-skip class="date">Last Updated: 21, 八月, 2023
-at 09:49</h4>
+            <h4 data-toc-skip class="date">Last Updated: 23, 八月, 2023
+at 16:02</h4>
       
       
       <div class="d-none name"><code>Conventional result and visualization Instructions with Real-World Examples.Rmd</code></div>
@@ -184,31 +184,23 @@ data; the gPas score matrix for pathways in each cells;</p></li>
 <li>
 <p>In meta.data, four columns were added:</p>
 <ul>
-<li>
-<strong>scPagwas.TRS.Score1</strong>: inheritance related score,
-enrichment socre for genetics top genes;</li>
+<li><p><strong>scPagwas.TRS.Score1</strong>: inheritance related score,
+enrichment socre for genetics top genes;</p></li>
+<li><p>scPagwas.upTRS.Score: Trait relevant score based on genetic
+relevant genes</p></li>
+<li><p>scPagwas.downTRS.Score: Trait relevant score based on
+anti-genetic relevant genes</p></li>
+<li><p><strong>scPagwas.gPAS.score</strong>: Inheritance pathway
+regression effects score for each cells;</p></li>
+<li><p><strong>Random_Correct_BG_p</strong>: CellpValue for each
+cells;</p></li>
+<li><p><strong>Random_Correct_BG_adjp</strong>: fdr for each cells,
+adjust p value.</p></li>
+<li><p><strong>Random_Correct_BG_z</strong>：z score for eahc
+cells.</p></li>
 </ul>
 </li>
 </ol>
-<ul>
-<li>
-<strong>scPagwas.gPAS.score</strong>: Inheritance pathway regression
-effects score for each cells;
-<ul>
-<li>
-<strong>Random_Correct_BG_p</strong>: CellpValue for each
-cells;</li>
-</ul>
-</li>
-<li>
-<strong>Random_Correct_BG_adjp</strong>: fdr for each cells, adjust
-p value.
-<ul>
-<li>
-<strong>Random_Correct_BG_z</strong>：z score for eahc cells.</li>
-</ul>
-</li>
-</ul>
 <!-- --><ol start="3" style="list-style-type: decimal">
 <li>
 <p>A new element names misc is added in scPagwas’s result,
@@ -220,8 +212,12 @@ list;</p></li>
 for pathway svd(1’st pca) result for each celltype;</p></li>
 <li><p><strong>lm_results</strong>: the regression result for each
 celltype;</p></li>
-<li><p><strong>GeneticExpressionIndex</strong>: heritability correlation
+<li><p>PCC: pearson correlation coefficients,heritability correlation
 value for each gene;</p></li>
+<li><p>PCC_up: pearson correlation coefficients, high heritability
+correlation value for high gPas score of cells</p></li>
+<li><p>PCC_down: pearson correlation coefficients, Low heritability
+correlation value for Low gPas score of cells</p></li>
 <li><p><strong>bootstrap_results</strong>: The bootstrap data frame
 results for celltypes including bootstrap pvalue and confidence
 interval.</p></li>
@@ -262,22 +258,33 @@ option.</p>
 <h3 id="pagwas-output-files-result">3.2 Pagwas : output files result<a class="anchor" aria-label="anchor" href="#pagwas-output-files-result"></a>
 </h3>
 <div class="float">
-<img src="figures/resultfiles.png" alt="image-20230526142322858"><div class="figcaption">image-20230526142322858</div>
+<img src="figures/image-20230823151319500.png" alt="image-20230823151319500"><div class="figcaption">image-20230823151319500</div>
 </div>
 <p>In <strong>monocytecount_bmmc</strong> folder, There is several
 result files :</p>
 <ul>
-<li><p><strong>*_cellytpes_bootstrap_results.csv</strong> : The result
-of cellytpes for bootstrap p results;</p></li>
-<li><p><strong>*_GeneticExpressionIndex.csv</strong> : The result of
-gene heritability correlation with gPAS score.</p></li>
-<li><p><strong>*_Pathway_singlecell_lm_results.txt</strong> : The
-regression result for all pahtway and single cell matrix;</p></li>
-<li><p><strong>*_singlecell_scPagwas_score_pvalue.Result.csv</strong> :
-The data frame result for each cell inlcuding scPagwas.TRS.Score,
-scPagwas.gPAS.score, pValueHighScale, qValueHighScale;</p></li>
-<li><p><strong>*_Merged_celltype_pvalue.csv</strong> : The merged
-singlecell pvalue to celltype pvalue.</p></li>
+<li>
+<strong>*_cellytpes_bootstrap_results.csv</strong> : The result of
+cellytpes for bootstrap p results;</li>
+<li>
+<strong>*_gene_PCC.csv</strong> : The result of gene heritability
+correlation with gPAS score.</li>
+<li>
+<strong>*_upgene_PCC.csv</strong> : The result of gene expression
+correlation with High gPAS score of cells.</li>
+<li>
+<strong>*_downgene_PCC.csv</strong> : The result of gene expression
+correlation with Low gPAS score of cells.</li>
+<li>
+<strong>*_Pathway_singlecell_lm_results.txt</strong> : The
+regression result for all pahtway and single cell matrix;</li>
+<li>
+<strong>*_singlecell_scPagwas_score_pvalue.Result.csv</strong> : The
+data frame result for each cell inlcuding scPagwas.TRS.Score,
+scPagwas.gPAS.score, pValueHighScale, qValueHighScale;</li>
+<li>
+<strong>*_Merged_celltype_pvalue.csv</strong> : The merged
+singlecell pvalue to celltype pvalue.</li>
 </ul>
 <p><strong>scPagwas_cache</strong> is a temporary folder to save the
 SOAR data, you can remove it when finish the scPagwas.</p>

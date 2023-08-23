@@ -57,16 +57,6 @@ Then install it locally.
 devtools::install_local("sulab-wmu-scPagwas-****.tar.gz")
 ```
 
-Another alternative approach is to download the package from a provided
-source URL and install it locally. Source package download from
-[here](https://github.com/dengchunyu/scPagwas_source). Before a
-successful installation, it is necessary to install many dependency
-packages based on the error messages.
-
-``` r
-install.packages("scPagwas_1.2.0.tar.gz",repos=NULL,type="source")
-```
-
 ## Usage
 
 quick-start example:

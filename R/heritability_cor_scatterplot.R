@@ -46,15 +46,15 @@ heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
                                          width = 7,
                                          height = 7) {
   text <- NULL
-  cor_df <- data.frame(genes = rownames(gene_heri_cor), GEI = gene_heri_cor[, 1], text = rep(NA, nrow(gene_heri_cor)))
+  cor_df <- data.frame(genes = rownames(gene_heri_cor), PCC = gene_heri_cor[, 1], text = rep(NA, nrow(gene_heri_cor)))
 
-  cor_df <- cor_df[order(cor_df$GEI, decreasing = T), ]
+  cor_df <- cor_df[order(cor_df$PCC, decreasing = T), ]
   cor_df$text[1:topn_genes_label] <- cor_df$genes[1:topn_genes_label]
 
   cor_df$order <- seq_len(nrow(cor_df))
 
   p <- ggplot(data = cor_df) +
-    geom_point(mapping = aes(x = order, y = GEI, color = GEI)) +
+    geom_point(mapping = aes(x = order, y = PCC, color = PCC)) +
     scale_colour_gradient2(
       low = color_low,
       mid = color_mid,
@@ -63,7 +63,7 @@ heritability_cor_scatterplot <- function(gene_heri_cor = NULL,
     ) +
     theme_classic() +
     ggrepel::geom_text_repel(aes(
-      x = order, y = GEI,
+      x = order, y = PCC,
       label = text
     ),
     max.overlaps = max.overlaps,
