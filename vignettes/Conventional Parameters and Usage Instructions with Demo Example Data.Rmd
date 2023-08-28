@@ -317,30 +317,10 @@ Run heritability correlation for all genes.
 #pcc gene for all gPas score!
 Pagwas$PCC <- scPagwas::scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score,
                                     data_mat=Pagwas$data_mat)
-#
-mean_gpas<-mean(Pagwas$scPagwas.gPAS.score)
-a1<-which(Pagwas$scPagwas.gPAS.score >= mean_gpas)
-a2<-which(Pagwas$scPagwas.gPAS.score < mean_gpas)
-
-PCC_up <- scPagwas::scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score[a1],data_mat=Pagwas$data_mat[,a1])
-PCC1<- data.frame(PCC=PCC_up,genes=rownames(PCC_up))
-PCC1<-PCC1[order(PCC1$PCC,decreasing=T),]
-PCC<- data.frame(PCC=PCC1$PCC)
-rownames(PCC)<-PCC1$genes
-Pagwas$PCC_up<-PCC
-
-PCC_down <- scPagwas::scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score[a2],data_mat=Pagwas$data_mat[,a2])
-PCC1<- data.frame(PCC= -PCC_down,genes=rownames(PCC_down))
-PCC1<-PCC1[order(PCC1$PCC,decreasing=F),]
-PCC<- data.frame(PCC=PCC1$PCC)
-rownames(PCC)<-PCC1$genes
-Pagwas$PCC_down<-PCC
 
 ```
 
 - PCC: Pearson correlation coefficients, Correlation index between each gene and the genetic score.
-- PCC_up: Correlation index between gene and High genetic score
-- PCC_down:Correlation index between gene and Low genetic score
 
 
 ### 3.10 Calculate the TRS score for top genes. 
@@ -351,11 +331,10 @@ Calculate the TRS score for top genes by `AddModuleScore` and running the p valu
 #Obtain the top 500 genes with the highest PCC.
 n_topgenes=500
 scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = T)[1:n_topgenes]]
-scPagwas_upgenes <- rownames(Pagwas$PCC_up)[1:n_topgenes]
-scPagwas_downgenes <- rownames(Pagwas$PCC_down)[1:n_topgenes]
+scPagwas_downgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing =F)[1:n_topgenes]]
 
 #Single_data refers to the single-cell data initially inputted.
-Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes,scPagwas_upgenes,scPagwas_downgenes), name = c("scPagwas.TRS.Score","scPagwas.upTRS.Score","scPagwas.downTRS.Score"))
+Single_data <- Seurat::AddModuleScore(Single_data, assay = "RNA", list(scPagwas_topgenes,scPagwas_downgenes), name = c("scPagwas.TRS.Score","scPagwas.downTRS.Score"))
 
 #Calculate the p-values for scPagwas.TRS.Score of single cells after background correction.
 correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
@@ -371,8 +350,7 @@ Pagwas$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$pooled_p,ce
 #Integrate and output the results of single-cell analysis.
 a <- data.frame(
      scPagwas.TRS.Score = Single_data$scPagwas.TRS.Score1,
-    scPagwas.downTRS.Score = Single_data$scPagwas.downTRS.Score3,
-    scPagwas.upTRS.Score= Single_data$scPagwas.upTRS.Score2,
+    scPagwas.downTRS.Score = Single_data$scPagwas.downTRS.Score2,
      scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
      Random_Correct_BG_p = correct_pdf$pooled_p,
      Random_Correct_BG_adjp = correct_pdf$adj_p,
@@ -382,11 +360,7 @@ utils::write.csv(a,file = "_singlecell_scPagwas_score_pvalue.Result.csv",quote =
 
 - Single_data$scPagwas.TRS.Score1 : Trait relevant score based on top trait relevant genes.
 
-- Single_data$scPagwas.upTRS.Score2: Trait relevant score based on relevant genes, 
-
-  Note: "scPagwas.upTRS.Score2" and "scPagwas.TRS.Score1" are similar, with the difference that "scPagwas.upTRS.Score2" is derived from highly correlated genes calculated based on the high gPAS scores of cells, while "TRS.Score" is derived from highly correlated genes based on all cells. This is an alternative approach to computation, and the underlying principle is that we believe this way may be more targeted and specific.
-
-- Single_data$scPagwas.downTRS.Score3: Trait relevant score based on anti-relevant genes. 
+- Single_data$scPagwas.downTRS.Score2: Trait relevant score based on anti-relevant genes. 
 
   Note: Although our article primarily focuses on the TRS scores, it does not imply that reverse "downTRS" are always devoid of significance. During our following research, we observed that in certain phenotypes, such as some cancer traits.When observing the density distribution plot of gPas scores, it becomes evident that it exhibits a **high and sharp peak**. This indicates that the majority of cells have minor effects. However, if the distribution shows a more pronounced long-tail behavior, the direction of this long tail can influence the impact of PCC gene pairs on the phenotype. 
 

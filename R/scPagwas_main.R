@@ -555,32 +555,9 @@ scPagwas_main <- function(Pagwas = NULL,
                    ),
                    quote = F
   )
-  mean_gpas<-mean(Pagwas$scPagwas.gPAS.score)
-  a1<-which(Pagwas$scPagwas.gPAS.score >= mean_gpas)
-  a2<-which(Pagwas$scPagwas.gPAS.score < mean_gpas)
-
-  Pagwas$PCC_up <- scPagwas::scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score[a1],data_mat=Pagwas$data_mat[,a1])
-
-  utils::write.csv(Pagwas$PCC_up,file = paste0(
-    "./", output.dirs, "/",
-    output.prefix,
-    "_upgene_PCC.csv"
-  ),
-  quote = F
-  )
-  Pagwas$PCC_down <- scPagwas::scGet_PCC(scPagwas.gPAS.score=Pagwas$scPagwas.gPAS.score[a2],data_mat=Pagwas$data_mat[,a2])
-
-  utils::write.csv(Pagwas$PCC_down,file = paste0(
-    "./", output.dirs, "/",
-    output.prefix,
-    "_downgene_PCC.csv"
-  ),
-  quote = F
-  )
 
   scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = T)[1:n_topgenes]]
-  scPagwas_upgenes <- rownames(Pagwas$PCC_up)[order(Pagwas$PCC_up, decreasing = T)[1:n_topgenes]]
-  scPagwas_downgenes <- rownames(Pagwas$PCC_down)[order(Pagwas$PCC_down, decreasing = F)[1:n_topgenes]]
+  scPagwas_downgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = F)[1:n_topgenes]]
   message("done!")
 
 
@@ -603,7 +580,7 @@ scPagwas_main <- function(Pagwas = NULL,
   )] <- NULL
 
 
-  Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes,scPagwas_upgenes,scPagwas_downgenes), name = c("scPagwas.TRS.Score","scPagwas.upTRS.Score","scPagwas.downTRS.Score"))
+  Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes,scPagwas_downgenes), name = c("scPagwas.TRS.Score","scPagwas.downTRS.Score"))
 
     message("* Get Random Correct background pvalue for each single cell!")
     if(iters_singlecell>0){
@@ -618,13 +595,11 @@ scPagwas_main <- function(Pagwas = NULL,
     Pagwas$Merged_celltype_pvalue<-Merge_celltype_p(single_p=correct_pdf$pooled_p,celltype=Pagwas$Celltype_anno$annotation)
 
   Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
-  Pagwas$scPagwas.downTRS.Score <- Single_data$scPagwas.downTRS.Score3
-  Pagwas$scPagwas.upTRS.Score <- Single_data$scPagwas.upTRS.Score2
+  Pagwas$scPagwas.downTRS.Score <- Single_data$scPagwas.downTRS.Score2
 
 
    a <- data.frame(
     scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
-    scPagwas.upTRS.Score= Pagwas$scPagwas.upTRS.Score,
     scPagwas.downTRS.Score = Pagwas$scPagwas.downTRS.Score,
     scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score,
     Random_Correct_BG_p = correct_pdf$pooled_p,
@@ -641,12 +616,10 @@ scPagwas_main <- function(Pagwas = NULL,
       Pagwas$Random_Correct_BG_pdf <-NA
       Pagwas$Merged_celltype_pvalue <-NA
       Pagwas$scPagwas.TRS.Score <- Single_data$scPagwas.TRS.Score1
-      Pagwas$scPagwas.upTRS.Score <- Single_data$scPagwas.upTRS.Score3
       Pagwas$scPagwas.downTRS.Score <- Single_data$scPagwas.downTRS.Score2
 
       a <- data.frame(
         scPagwas.TRS.Score = Pagwas$scPagwas.TRS.Score,
-        scPagwas.upTRS.Score= Pagwas$scPagwas.upTRS.Score,
         scPagwas.downTRS.Score = Pagwas$scPagwas.downTRS.Score,
         scPagwas.gPAS.score = Pagwas$scPagwas.gPAS.score)
 
