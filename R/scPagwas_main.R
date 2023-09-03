@@ -588,7 +588,8 @@ scPagwas_main <- function(Pagwas = NULL,
                                  scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
                                  iters_singlecell=iters_singlecell,
                                  n_topgenes=n_topgenes,
-                                 scPagwas_topgenes=scPagwas_topgenes
+                                 scPagwas_topgenes=scPagwas_topgenes,
+                                 assay=assay
     )
     Pagwas$Random_Correct_BG_pdf <- correct_pdf
     message("* Get Merged pvalue for each celltype!")

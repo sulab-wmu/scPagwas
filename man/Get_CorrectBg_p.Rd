@@ -9,7 +9,8 @@ Get_CorrectBg_p(
   scPagwas.TRS.Score,
   iters_singlecell,
   n_topgenes,
-  scPagwas_topgenes
+  scPagwas_topgenes,
+  assay
 )
 }
 \arguments{

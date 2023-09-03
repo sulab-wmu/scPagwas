@@ -7,8 +7,8 @@
 #' @param scPagwas_topgenes gene list
 #' @return correct_pdf
 #' @export
-Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_topgenes,scPagwas_topgenes){
-    gene_matrix <- GetAssayData(Single_data, slot = "data", assay = 'RNA')
+Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_topgenes,scPagwas_topgenes,assay){
+    gene_matrix <- GetAssayData(Single_data, slot = "data", assay = assay)
     mat_ctrl_raw_score <- matrix(0, nrow =ncol(gene_matrix), ncol = iters_singlecell)
     dic_ctrl_list <- list()
     pb <- txtProgressBar(style = 3)
@@ -17,7 +17,7 @@ Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_top
         set.seed(i)
         dic_ctrl_list[[i]] <- sample(rownames(Single_data), n_topgenes)
         Single_data<-Seurat::AddModuleScore(Single_data,
-            assay = 'RNA',
+            assay = assay,
             list(dic_ctrl_list[[i]]),
             name = c("contr_genes")
             )
