@@ -341,6 +341,7 @@ correct_pdf<-Get_CorrectBg_p(Single_data=Single_data,
                              scPagwas.TRS.Score=Single_data$scPagwas.TRS.Score1,
                              iters_singlecell=100,
                              n_topgenes=1000,
+                             assay="RNA",
                              scPagwas_topgenes=scPagwas_topgenes)
 Pagwas$Random_Correct_BG_pdf <- correct_pdf
 
