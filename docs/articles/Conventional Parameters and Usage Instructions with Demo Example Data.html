@@ -78,7 +78,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Conventional Parameters and Usage Instructions with Demo Example Data</h1>
             
-            <h4 data-toc-skip class="date">Last Updated on 23 八月,
+            <h4 data-toc-skip class="date">Last Updated on 09 九月,
 2023</h4>
       
       
@@ -474,30 +474,10 @@ overall contribution of all pathways.</li>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#pcc gene for all gPas score!</span></span>
 <span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span> <span class="op">&lt;-</span> <span class="fu">scPagwas</span><span class="fu">::</span><span class="fu"><a href="../reference/scGet_PCC.html">scGet_PCC</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
-<span>                                    data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span></span>
-<span><span class="co">#</span></span>
-<span><span class="va">mean_gpas</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">)</span></span>
-<span><span class="va">a1</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span> <span class="op">&gt;=</span> <span class="va">mean_gpas</span><span class="op">)</span></span>
-<span><span class="va">a2</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span> <span class="op">&lt;</span> <span class="va">mean_gpas</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">PCC_up</span> <span class="op">&lt;-</span> <span class="fu">scPagwas</span><span class="fu">::</span><span class="fu"><a href="../reference/scGet_PCC.html">scGet_PCC</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">[</span><span class="va">a1</span><span class="op">]</span>,data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">[</span>,<span class="va">a1</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">PCC1</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PCC<span class="op">=</span><span class="va">PCC_up</span>,genes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PCC_up</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">PCC1</span><span class="op">&lt;-</span><span class="va">PCC1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">PCC1</span><span class="op">$</span><span class="va">PCC</span>,decreasing<span class="op">=</span><span class="cn">T</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="va">PCC</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PCC<span class="op">=</span><span class="va">PCC1</span><span class="op">$</span><span class="va">PCC</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PCC</span><span class="op">)</span><span class="op">&lt;-</span><span class="va">PCC1</span><span class="op">$</span><span class="va">genes</span></span>
-<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC_up</span><span class="op">&lt;-</span><span class="va">PCC</span></span>
-<span></span>
-<span><span class="va">PCC_down</span> <span class="op">&lt;-</span> <span class="fu">scPagwas</span><span class="fu">::</span><span class="fu"><a href="../reference/scGet_PCC.html">scGet_PCC</a></span><span class="op">(</span>scPagwas.gPAS.score<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span><span class="op">[</span><span class="va">a2</span><span class="op">]</span>,data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">[</span>,<span class="va">a2</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">PCC1</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PCC<span class="op">=</span> <span class="op">-</span><span class="va">PCC_down</span>,genes<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PCC_down</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">PCC1</span><span class="op">&lt;-</span><span class="va">PCC1</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">PCC1</span><span class="op">$</span><span class="va">PCC</span>,decreasing<span class="op">=</span><span class="cn">F</span><span class="op">)</span>,<span class="op">]</span></span>
-<span><span class="va">PCC</span><span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>PCC<span class="op">=</span><span class="va">PCC1</span><span class="op">$</span><span class="va">PCC</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">PCC</span><span class="op">)</span><span class="op">&lt;-</span><span class="va">PCC1</span><span class="op">$</span><span class="va">genes</span></span>
-<span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC_down</span><span class="op">&lt;-</span><span class="va">PCC</span></span></code></pre></div>
+<span>                                    data_mat<span class="op">=</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">data_mat</span><span class="op">)</span></span></code></pre></div>
 <ul>
 <li>PCC: Pearson correlation coefficients, Correlation index between
 each gene and the genetic score.</li>
-<li>PCC_up: Correlation index between gene and High genetic score</li>
-<li>PCC_down:Correlation index between gene and Low genetic score</li>
 </ul>
 </div>
 <div class="section level3">
@@ -510,11 +490,10 @@ and running the p value for each cell by
 <code class="sourceCode R"><span><span class="co">#Obtain the top 500 genes with the highest PCC.</span></span>
 <span><span class="va">n_topgenes</span><span class="op">=</span><span class="fl">500</span></span>
 <span><span class="va">scPagwas_topgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span>, decreasing <span class="op">=</span> <span class="cn">T</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n_topgenes</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">scPagwas_upgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC_up</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n_topgenes</span><span class="op">]</span></span>
-<span><span class="va">scPagwas_downgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC_down</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n_topgenes</span><span class="op">]</span></span>
+<span><span class="va">scPagwas_downgenes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">Pagwas</span><span class="op">$</span><span class="va">PCC</span>, decreasing <span class="op">=</span><span class="cn">F</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">n_topgenes</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span><span class="co">#Single_data refers to the single-cell data initially inputted.</span></span>
-<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span>,<span class="va">scPagwas_upgenes</span>,<span class="va">scPagwas_downgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span>,<span class="st">"scPagwas.upTRS.Score"</span>,<span class="st">"scPagwas.downTRS.Score"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">Single_data</span> <span class="op">&lt;-</span> <span class="fu">Seurat</span><span class="fu">::</span><span class="fu"><a href="https://satijalab.org/seurat/reference/AddModuleScore.html" class="external-link">AddModuleScore</a></span><span class="op">(</span><span class="va">Single_data</span>, assay <span class="op">=</span> <span class="st">"RNA"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">scPagwas_topgenes</span>,<span class="va">scPagwas_downgenes</span><span class="op">)</span>, name <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"scPagwas.TRS.Score"</span>,<span class="st">"scPagwas.downTRS.Score"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#Calculate the p-values for scPagwas.TRS.Score of single cells after background correction.</span></span>
 <span><span class="va">correct_pdf</span><span class="op">&lt;-</span><span class="fu"><a href="../reference/Get_CorrectBg_p.html">Get_CorrectBg_p</a></span><span class="op">(</span>Single_data<span class="op">=</span><span class="va">Single_data</span>,</span>
@@ -530,8 +509,7 @@ and running the p value for each cell by
 <span><span class="co">#Integrate and output the results of single-cell analysis.</span></span>
 <span><span class="va">a</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>     scPagwas.TRS.Score <span class="op">=</span> <span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.TRS.Score1</span>,</span>
-<span>    scPagwas.downTRS.Score <span class="op">=</span> <span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.downTRS.Score3</span>,</span>
-<span>    scPagwas.upTRS.Score<span class="op">=</span> <span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.upTRS.Score2</span>,</span>
+<span>    scPagwas.downTRS.Score <span class="op">=</span> <span class="va">Single_data</span><span class="op">$</span><span class="va">scPagwas.downTRS.Score2</span>,</span>
 <span>     scPagwas.gPAS.score <span class="op">=</span> <span class="va">Pagwas</span><span class="op">$</span><span class="va">scPagwas.gPAS.score</span>,</span>
 <span>     Random_Correct_BG_p <span class="op">=</span> <span class="va">correct_pdf</span><span class="op">$</span><span class="va">pooled_p</span>,</span>
 <span>     Random_Correct_BG_adjp <span class="op">=</span> <span class="va">correct_pdf</span><span class="op">$</span><span class="va">adj_p</span>,</span>
@@ -541,18 +519,7 @@ and running the p value for each cell by
 <li><p>Single_data$scPagwas.TRS.Score1 : Trait relevant score based on
 top trait relevant genes.</p></li>
 <li>
-<p>Single_data$scPagwas.upTRS.Score2: Trait relevant score based on
-relevant genes,</p>
-<p>Note: “scPagwas.upTRS.Score2” and “scPagwas.TRS.Score1” are similar,
-with the difference that “scPagwas.upTRS.Score2” is derived from highly
-correlated genes calculated based on the high gPAS scores of cells,
-while “TRS.Score” is derived from highly correlated genes based on all
-cells. This is an alternative approach to computation, and the
-underlying principle is that we believe this way may be more targeted
-and specific.</p>
-</li>
-<li>
-<p>Single_data$scPagwas.downTRS.Score3: Trait relevant score based
+<p>Single_data$scPagwas.downTRS.Score2: Trait relevant score based
 on anti-relevant genes.</p>
 <p>Note: Although our article primarily focuses on the TRS scores, it
 does not imply that reverse “downTRS” are always devoid of significance.

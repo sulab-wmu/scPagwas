@@ -78,28 +78,21 @@ library(tidyverse)
 
 seudata_path="./single.pagwas.RData"
 load(seudata_path)
-
 #In this case, the data will be divided into two partitions.
-n=2
-an<-ncol(Pagwas$pca_scCell_mat)
-m=an/n
-m=floor(m)
-
 pca_scCell_mat<-Pagwas$pca_scCell_mat
 data_mat<-Pagwas$data_mat
 
-#Here's an example code snippet to loop through and output each partitioned data:
-for (i in 1:n) {
-    if(i*m > an){
-     Pagwas$pca_scCell_mat=pca_scCell_mat[,((i-1)*m+1):an] 
-     Pagwas$data_mat=data_mat[,((i-1)*m+1):(i*m)]
-     }else{
-     Pagwas$pca_scCell_mat=pca_scCell_mat[,((i-1)*m+1):(i*m)]
-     Pagwas$data_mat=data_mat[,((i-1)*m+1):(i*m)]
-     }
-    save(Pagwas,file=paste0(i,"_Pagwas_singledata.RData"))
- }
+Pagwas$pca_scCell_mat=pca_scCell_mat[,1:350] 
+Pagwas$data_mat=data_mat[,1:350]
+save(Pagwas,file="1_Pagwas_singledata.RData")
 
+Pagwas$pca_scCell_mat=pca_scCell_mat[,351:700] 
+Pagwas$data_mat=data_mat[,351:700]
+save(Pagwas,file="2_Pagwas_singledata.RData")
+
+Pagwas$pca_scCell_mat=pca_scCell_mat[,701:1000] 
+Pagwas$data_mat=data_mat[,701:1000]
+save(Pagwas,file="3_Pagwas_singledata.RData")
 ```
 
 ### 1.3 Input the gwas data and save output
@@ -126,7 +119,8 @@ Given that we have divided the single-cell results into two partitions, the foll
 ```{r eval = FALSE}
 gwas_path <- "gwas_pagwas.RData"
 scmat_path <- "1_Pagwas_singledata.RData"
-#scmat_path <- "2_Pagwas_singledata.RData"
+scmat_path <- "2_Pagwas_singledata.RData"
+scmat_path <- "3_Pagwas_singledata.RData"
 
 #Import and integrate the two data results into a single list.
 load(gwas_path)
@@ -139,7 +133,8 @@ rm(Pagwas1)
 gc()
 
 output.prefix='1'
-#output.prefix='2'
+output.prefix='2'
+output.prefix='3'
 output.dirs='Test'
 if (!dir.exists(output.dirs)) {
     dir.create(output.dirs)
@@ -173,7 +168,7 @@ Here, it is necessary to run all the split single-cell data separately, and obta
 
 ```{r eval = FALSE}
 load(paste0("./", output.dirs, "/1_Pathway_sclm_results.RData"))
-n=2
+n=3
 pmat_merge<-pmat
 for (i in 2:n) {
 	print(i)
@@ -193,7 +188,7 @@ The number of cells randomly selected and the number of random iterations depend
 
 ```{r eval = FALSE}
 #Note: Here, we need to import the "single.pagwas.RData" data again.
-load("single.pagwas.RData")
+load("./single.pagwas.RData")
 load("pmat_merge.RData")
 
 #compute the gPas score.

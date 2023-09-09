@@ -242,7 +242,7 @@ dev.off()
 ### 4.3 Plot the heritability correlated genes
 
 ```{r eval = FALSE}
-heritability_cor_scatterplot(gene_heri_cor=Pagwas@misc$GeneticExpressionIndex,
+heritability_cor_scatterplot(gene_heri_cor=Pagwas@misc$PCC,
                              topn_genes_label=10,
                              color_low="#035397",
                              color_high ="#F32424",
