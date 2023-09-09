@@ -10,7 +10,7 @@ Get_CorrectBg_p(
   iters_singlecell,
   n_topgenes,
   scPagwas_topgenes,
-  assay
+  assay = "RNA"
 )
 }
 \arguments{
@@ -23,6 +23,8 @@ Get_CorrectBg_p(
 \item{n_topgenes}{number of genes}
 
 \item{scPagwas_topgenes}{gene list}
+
+\item{assay}{"RNA"}
 }
 \value{
 correct_pdf

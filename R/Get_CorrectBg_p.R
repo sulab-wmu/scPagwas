@@ -1,13 +1,16 @@
 #' @title Get_CorrectBg_p
 #' @description Get_CorrectBg_p
+#'
 #' @param Single_data Seurat object
 #' @param scPagwas.TRS.Score raw score
 #' @param iters_singlecell number of iterations
 #' @param n_topgenes number of genes
+#' @param assay "RNA"
 #' @param scPagwas_topgenes gene list
+#'
 #' @return correct_pdf
 #' @export
-Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_topgenes,scPagwas_topgenes,assay){
+Get_CorrectBg_p<-function(Single_data,scPagwas.TRS.Score, iters_singlecell,n_topgenes,scPagwas_topgenes,assay="RNA"){
     gene_matrix <- GetAssayData(Single_data, slot = "data", assay = assay)
     mat_ctrl_raw_score <- matrix(0, nrow =ncol(gene_matrix), ncol = iters_singlecell)
     dic_ctrl_list <- list()
