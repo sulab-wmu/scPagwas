@@ -82,7 +82,37 @@ system.time(
                      celltype=T# Whether to run the celltype process.
 )
 )
-
+library(scPagwas)
+  library(tidyverse)
+  library("rhdf5")
+ library(ggplot2)
+ library(grDevices)
+ library(stats)
+ library(FactoMineR)
+ library(scales)
+ library(reshape2)
+ library(ggdendro)
+ library(grImport2)
+ library(gridExtra)
+ library(grid)
+ library(sisal)
+plot_scpathway_dot(Pagwas= Pagwas_data,
+                               celltypes = unique(Idents(Pagwas_data))[1:5],
+                               topn_path_celltype = 20,
+                               filter_p = 0.05,
+                               max_logp = 10,
+                               display_max_sizes = F,
+                               size_var = "CellqValue",
+                               col_var = "proportion",
+                               shape.scale = 8,
+                               cols.use = c("lightgrey", "#E45826"),
+                               dend_x_var = "CellqValue",
+                               dist_method = "euclidean",
+                               hclust_method = "ward.D",
+                               do_plot = T,
+                               figurenames = NULL,
+                               width = 7,
+                               height = 7) 
 ```
 
 

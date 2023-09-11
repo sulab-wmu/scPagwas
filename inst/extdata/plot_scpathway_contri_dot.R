@@ -142,7 +142,7 @@ plot_scpathway_dot <- function(Pagwas,
   gg_rankp <- reshape2::melt(scPathrankP,
                              id.vars = "pathways",
                              variable.name = "celltypes",
-                             value.name = "CellqValue")
+                             value.name = size_var)
 
   gg_dot <- merge(gg_rankp, gg_proportion)
   p <- plot_scpathway_contri_dot(
