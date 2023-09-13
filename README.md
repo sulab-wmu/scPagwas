@@ -70,7 +70,7 @@ system.time(
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),# scRNA-seq data in seruat format with "RNA" assays and normalized.
                      output.prefix="test", # the prefix name for output files
                      output.dirs="scPagwastest_output",# the directory file's name for output
-                     block_annotation = block_annotation,# gene position in chromosome is provided by package.
+                     block_annotation = block_annotation,# gene position in chromosome is provided by package. default is hg38, block_annotation_37 is hg37.
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      n.cores=1,
