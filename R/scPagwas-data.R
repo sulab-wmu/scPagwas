@@ -86,43 +86,6 @@ NULL
 NULL
 
 
-#' genes.by.immunesigdb.pathway
-#'
-#' @description A immunesigdb pathway gene set from \code{
-#' x <- readLines("c7.immunesigdb.v7.5.1.symbols.gmt")
-#' res <- strsplit(x, "\t")
-#' names(res) <- vapply(res, function(y) y[1], character(1))
-#' genes.by.immunesigdb.pathway <- lapply(res, "[", -c(1:2))
-#' }
-#'
-#' @docType data
-#' @name genes.by.immunesigdb.pathway
-#' @usage data(genes.by.immunesigdb.pathway)
-#' @format list
-#' @keywords datasets
-#' @examples data(genes.by.immunesigdb.pathway)
-#' str(genes.by.immunesigdb.pathway)
-NULL
-
-
-#' genes.by.immunologic.pathway
-#'
-#' @description A celltype pathway gene set from \code{
-#' x <- readLines("c7.all.v7.5.1.symbols.gmt")
-#' res <- strsplit(x, "\t")
-#' names(res) <- vapply(res, function(y) y[1], character(1))
-#' genes.by.immunologic.pathway <- lapply(res, "[", -c(1:2))
-#' }
-#'
-#' @docType data
-#' @name genes.by.immunologic.pathway
-#' @usage data(genes.by.immunologic.pathway)
-#' @format list
-#' @keywords datasets
-#' @examples data(genes.by.immunologic.pathway)
-#' str(genes.by.immunologic.pathway)
-NULL
-
 #' genes.by.reactome.pathway
 #'
 #' @description A celltype pathway gene set from \code{
@@ -181,28 +144,31 @@ NULL
 
 #' block_annotation
 #'
-#' @description
-#' A gene annotation files from \code{
-#' library("rtracklayer")
-#' gtf_df<- rtracklayer::import("/share/pub/dengcy/GWAS_Multiomics/pagwas/data/gencode.v34.annotation.gtf.gz")
-#' gtf_df <- as.data.frame(gtf)
-#' gtf_df <- gtf_df[,c("seqnames","start","end","type","gene_name")]
-#' gtf_df <- gtf_df[gtf_df$type=="gene",]
-#' block_annotation<-gtf_df[,c(1,2,3,5)]
-#' colnames(block_annotation)<-c("chrom", "start","end","label")
-#' save(block_annotation,file = "/share/pub/dengcy/GWAS_Multiomics/pagwas/data/block_annotation.RData")
-#' }
+#' @description GRCh38 gencode.v44.annotation.gff3.gz
 #'
 #' @docType data
 #' @name block_annotation
 #' @usage data(block_annotation)
 #' @format a data.frame,
-#' @source Generated from gencode.v34.annotation.gtf.gz
+#' @source Generated from gencode.v44.annotation.gff3.gz
 #' @keywords datasets
 #' @examples data(block_annotation)
 #' str(block_annotation)
 NULL
 
+#' block_annotation_hg37
+#'
+#' @description GRCh37 gencode.v44lift37.annotation.gff3
+#'
+#' @docType data
+#' @name block_annotation_hg37
+#' @usage data(block_annotation_hg37)
+#' @format a data.frame,
+#' @source Generated from gencode.v44lift37.annotation.gff3
+#' @keywords datasets
+#' @examples data(block_annotation_hg37)
+#' str(block_annotation_hg37)
+NULL
 
 #' chrom_ld
 #'

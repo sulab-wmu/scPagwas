@@ -8,22 +8,13 @@
 a data.frame,
 }
 \source{
-Generated from gencode.v34.annotation.gtf.gz
+Generated from gencode.v44.annotation.gff3.gz
 }
 \usage{
 data(block_annotation)
 }
 \description{
-A gene annotation files from \code{
-library("rtracklayer")
-gtf_df<- rtracklayer::import("/share/pub/dengcy/GWAS_Multiomics/pagwas/data/gencode.v34.annotation.gtf.gz")
-gtf_df <- as.data.frame(gtf)
-gtf_df <- gtf_df[,c("seqnames","start","end","type","gene_name")]
-gtf_df <- gtf_df[gtf_df$type=="gene",]
-block_annotation<-gtf_df[,c(1,2,3,5)]
-colnames(block_annotation)<-c("chrom", "start","end","label")
-save(block_annotation,file = "/share/pub/dengcy/GWAS_Multiomics/pagwas/data/block_annotation.RData")
-}
+GRCh38 gencode.v44.annotation.gff3.gz
 }
 \examples{
 data(block_annotation)
