@@ -189,9 +189,14 @@ The block_annotation data provided by scPagwas is used to obtain the precise coo
 ### 5.LD data
 
 The LD data provided by the scPagwas software package is fixed and generally does not require modification.
+
+
+http://topld.genetics.unc.edu/downloads/downloads/
+
+
+
 The 1,000 Genomes Project Phase 3 Panel was applied to calculate the linkage disequilibrium (LD) among SNPs extracted from GWAS summary statistics.
 the processed LD data are show here:
-
 We use `vcftools` and `plink` to deal with the 1,000 Genomes genotypes.
 
 
