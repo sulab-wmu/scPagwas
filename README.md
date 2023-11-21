@@ -36,7 +36,6 @@ install.packages("ggpubr")
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("GenomicRanges")
-BiocManager::install("IRanges")
 
 devtools::install_github("sulab-wmu/scPagwas")
 ```
@@ -47,14 +46,6 @@ fail.
 ``` r
 library(devtools)
 install_git("https://github.com/sulab-wmu/scPagwas.git", ref = "main")
-```
-
-Or, download the package file from
-[here](https://api.github.com/repos/sulab-wmu/scPagwas/tarball/HEAD)
-Then install it locally.
-
-``` r
-devtools::install_local("sulab-wmu-scPagwas-****.tar.gz")
 ```
 
 ## Usage

@@ -125,6 +125,7 @@ plot_scpathway_dot <- function(Pagwas,
   spe <- unique(spe2$path)
 
   ######### 合并产生画图函数
+  spe<-intersect(rownames(proportion_df),spe)
   scPathrankP <- scPathrankP[spe, celltypes]
   proportion_df <- proportion_df[spe, celltypes]
   proportion_df <- as.data.frame(proportion_df)
