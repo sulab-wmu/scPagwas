@@ -48,6 +48,10 @@ library(devtools)
 install_git("https://github.com/sulab-wmu/scPagwas.git", ref = "main")
 ```
 
+We uploaded the installation package onto the Baidu cloud disk. If you're unable to connect to GitHub in China, you can download it from here. I'll keep it updated in sync with GitHub.
+Link: https://pan.baidu.com/s/1X7pRzevQUIfLIATd2I0Dvw?pwd=1234
+Extract code: 1234
+
 ## Usage
 
 quick-start example:
