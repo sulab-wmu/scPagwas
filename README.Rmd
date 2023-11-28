@@ -30,8 +30,6 @@ Code for reproducing the analysis from the paper is available [here](https://git
 
 For further usage on the scPagwas package, you can visit the  [website](https://dengchunyu.github.io/about/). A vignette for using also can be accessed using browseVignettes("scPagwas")
 
-Some important data can be download from [here](https://drive.google.com/drive/folders/1z7uQtzjnieJhYLhLmgmIz2jk6a6hes4l?usp=drive_link)
-
 ## Installation
 
 You can install the released version of scPagwas from [github](https://github.com/sulab-wmu/scPagwas) with: 

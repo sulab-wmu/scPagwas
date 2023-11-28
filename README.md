@@ -21,8 +21,6 @@ For further usage on the scPagwas package, you can visit the
 [website](https://dengchunyu.github.io/about/). A vignette for using
 also can be accessed using browseVignettes(“scPagwas”)
 
-Some important data can be download from
-[here](https://drive.google.com/drive/folders/1z7uQtzjnieJhYLhLmgmIz2jk6a6hes4l?usp=drive_link)
 
 ## Installation
 
