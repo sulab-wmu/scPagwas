@@ -4,6 +4,12 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>/articles/Bmmc_monocytecount_singlecell_celltype_vignette.html</loc>
   </url>
   <url>
@@ -16,9 +22,6 @@
     <loc>/articles/Data_input_preproccess_for_scPagwas.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
     <loc>/articles/Introduction to Data Input and Preprocessing in scPagwas.html</loc>
   </url>
   <url>
@@ -26,9 +29,6 @@
   </url>
   <url>
     <loc>/articles/Multi_TraitFiles_for_one_SingleData_running.html</loc>
-  </url>
-  <url>
-    <loc>/articles/my-vignette.html</loc>
   </url>
   <url>
     <loc>/articles/Perform calculations for multiple traits based on a single-cell dataset.html</loc>
@@ -49,19 +49,91 @@
     <loc>/articles/Strategies for Large-scale Single-cell Data Subsetting and Computation.html</loc>
   </url>
   <url>
+    <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/my-vignette.html</loc>
+  </url>
+  <url>
     <loc>/authors.html</loc>
   </url>
   <url>
     <loc>/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>/news/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Boot_evaluate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Bootstrap_P_Barplot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Bootstrap_estimate_Plot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Corr_Random.html</loc>
+  </url>
+  <url>
+    <loc>/reference/GWAS_summary_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Genes_by_pathway_hallmark.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Genes_by_pathway_kegg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Genes_by_pathway_reactome.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Get_CorrectBg_p.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Get_Pathway_heritability_contributions.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Get_bootresults_df.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Link_pathway_blocks_gwas.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Merge_celltype_p.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Merge_gPas.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Pagwas_perform_regression.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Parameter_regression.html</loc>
+  </url>
+  <url>
+    <loc>/reference/PathwayPCAtest.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Pathway_annotation_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Pathway_block_func.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Pathway_pcascore_run.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Single_data_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Snp2Gene.html</loc>
+  </url>
+  <url>
+    <loc>/reference/SnpToGene.html</loc>
+  </url>
+  <url>
+    <loc>/reference/Tissue_eqtls_Input.html</loc>
   </url>
   <url>
     <loc>/reference/as_matrix.html</loc>
@@ -73,25 +145,16 @@
     <loc>/reference/block_annotation.html</loc>
   </url>
   <url>
-    <loc>/reference/Bootstrap_estimate_Plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Bootstrap_P_Barplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Boot_evaluate.html</loc>
+    <loc>/reference/block_annotation_hg37.html</loc>
   </url>
   <url>
     <loc>/reference/chrom_ld.html</loc>
   </url>
   <url>
-    <loc>/reference/correct_background.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Corr_Random.html</loc>
-  </url>
-  <url>
     <loc>/reference/corSparse.html</loc>
+  </url>
+  <url>
+    <loc>/reference/correct_background.html</loc>
   </url>
   <url>
     <loc>/reference/fortify.Seurat.tsne.html</loc>
@@ -124,31 +187,10 @@
     <loc>/reference/genes.by.tft.pathway.html</loc>
   </url>
   <url>
-    <loc>/reference/Genes_by_pathway_hallmark.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Genes_by_pathway_kegg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Genes_by_pathway_reactome.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Get_bootresults_df.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Get_CorrectBg_p.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Get_Pathway_heritability_contributions.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_Pathway_sclm.html</loc>
   </url>
   <url>
     <loc>/reference/get_p_from_empi_null.html</loc>
-  </url>
-  <url>
-    <loc>/reference/GWAS_summary_input.html</loc>
   </url>
   <url>
     <loc>/reference/heritability_cor_scatterplot.html</loc>
@@ -160,40 +202,16 @@
     <loc>/reference/lfdr.html</loc>
   </url>
   <url>
-    <loc>/reference/Link_pathway_blocks_gwas.html</loc>
-  </url>
-  <url>
     <loc>/reference/link_pwpca_block.html</loc>
   </url>
   <url>
     <loc>/reference/make_ld_matrix.html</loc>
   </url>
   <url>
-    <loc>/reference/Merge_celltype_p.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Merge_gPas.html</loc>
-  </url>
-  <url>
     <loc>/reference/merge_pagwas.html</loc>
   </url>
   <url>
-    <loc>/reference/Pagwas_perform_regression.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Parameter_regression.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PathwayPCAtest.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Pathway_annotation_input.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Pathway_block_func.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Pathway_pcascore_run.html</loc>
+    <loc>/reference/p_merge.html</loc>
   </url>
   <url>
     <loc>/reference/pa_meanexpr.html</loc>
@@ -209,9 +227,6 @@
   </url>
   <url>
     <loc>/reference/plot_vln_Corgenes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/p_merge.html</loc>
   </url>
   <url>
     <loc>/reference/qvalue.html</loc>
@@ -232,10 +247,13 @@
     <loc>/reference/scGene_scaleP.html</loc>
   </url>
   <url>
+    <loc>/reference/scGet_PCC.html</loc>
+  </url>
+  <url>
     <loc>/reference/scGet_gene_heritability_correlation.html</loc>
   </url>
   <url>
-    <loc>/reference/scGet_PCC.html</loc>
+    <loc>/reference/scPagwas_Visualization.html</loc>
   </url>
   <url>
     <loc>/reference/scPagwas_main.html</loc>
@@ -247,25 +265,10 @@
     <loc>/reference/scPagwas_score_filter.html</loc>
   </url>
   <url>
-    <loc>/reference/scPagwas_Visualization.html</loc>
-  </url>
-  <url>
     <loc>/reference/scParameter_regression.html</loc>
   </url>
   <url>
-    <loc>/reference/Single_data_input.html</loc>
-  </url>
-  <url>
     <loc>/reference/skewness.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Snp2Gene.html</loc>
-  </url>
-  <url>
-    <loc>/reference/SnpToGene.html</loc>
-  </url>
-  <url>
-    <loc>/reference/Tissue_eqtls_Input.html</loc>
   </url>
   <url>
     <loc>/reference/umap_theme.html</loc>

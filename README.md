@@ -21,7 +21,6 @@ For further usage on the scPagwas package, you can visit the
 [website](https://dengchunyu.github.io/about/). A vignette for using
 also can be accessed using browseVignettes(“scPagwas”)
 
-
 ## Installation
 
 You can install the released version of scPagwas from
@@ -34,7 +33,7 @@ install.packages("ggpubr")
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("GenomicRanges")
-#Note: Do not update dependency packages during installation!!! Spaces skip update alerts
+
 devtools::install_github("sulab-wmu/scPagwas")
 ```
 
@@ -45,10 +44,6 @@ fail.
 library(devtools)
 install_git("https://github.com/sulab-wmu/scPagwas.git", ref = "main")
 ```
-
-We uploaded the installation package onto the Baidu cloud disk. If you're unable to connect to GitHub in China, you can download it from here. I'll keep it updated in sync with GitHub.
-Link: https://pan.baidu.com/s/1X7pRzevQUIfLIATd2I0Dvw?pwd=1234
-Extract code: 1234
 
 ## Usage
 

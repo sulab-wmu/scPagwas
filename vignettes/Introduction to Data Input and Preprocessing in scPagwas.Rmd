@@ -42,8 +42,8 @@ Since we have downloaded pre-annotated scRNA-seq data, we will skip the steps of
 ```{r eval=FALSE}
 library(Seurat)
 library(SeuratObject)
-counts <- read.csv("GSE115978_counts.csv.gz",row.names=1)
-Anno<- read.csv("GSE115978_cell.annotations.csv.gz")
+counts <- read.csv("/Users/chunyudeng/Downloads/GSE115978_counts.csv.gz",row.names=1)
+Anno<- read.csv("/Users/chunyudeng/Downloads/GSE115978_cell.annotations.csv.gz")
 ##create the SeuratObject
 Single_data<-Seurat::CreateSeuratObject(
   counts,
@@ -51,7 +51,7 @@ Single_data<-Seurat::CreateSeuratObject(
   meta.data=Anno
 )
 
-Idents(Single_data)<-Single_data$BioClassification
+Idents(Single_data)<-Single_data$cell.types
 Single_data <- NormalizeData(Single_data, normalization.method = "LogNormalize", scale.factor = 10000)
 Single_data <- ScaleData(Single_data)
 ```

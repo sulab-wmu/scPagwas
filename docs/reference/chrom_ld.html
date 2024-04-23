@@ -15,7 +15,7 @@ lapply(unique(covid_ld$CHR_A), function(i){
  ld_data &amp;lt;- readRDS(chrom_ld_file_path)[(R**2 &amp;gt; r2_threshold), .(SNP_A, SNP_B, R)]
   return(ld_data)
 })
-save(chrom_ld,file=&quot;/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.RData&quot;)"><title>chrom_ld — chrom_ld • scPagwas</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="chrom_ld — chrom_ld"><meta property="og:description" content="use vcftools to get ped and map files
+save(chrom_ld,file=&quot;/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.RData&quot;)"><title>chrom_ld — chrom_ld • scPagwas</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="chrom_ld — chrom_ld"><meta property="og:description" content="use vcftools to get ped and map files
 LD data from 
 /share/apps/vcftools/bin/vcftools --vcf /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.vcf --plink-tped --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes/share/pub/dengcy/Singlecell/COVID19/PLINK/plink --tfile /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes --recode --out /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes
 /share/pub/dengcy/Singlecell/COVID19/PLINK/plink --map /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.map --ped /share/pub/dengcy/Singlecell/COVID19/1000genomes_all_genotypes.ped --allow-no-sex --autosome --r2 --ld-window-kb 1000 --ld-window-r2 0.2 --out /share/pub/dengcy/Singlecell/COVID19/ld_1000genome
@@ -38,11 +38,11 @@ save(chrom_ld,file=&quot;/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">scPagwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,112 +121,112 @@ save(chrom_ld,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.RData
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">chrom_ld</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">chrom_ld</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 22</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr1 :Classes 'data.table' and 'data.frame':	523930 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr1 :Classes ‘data.table’ and 'data.frame':	523930 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:523930] "rs548419688" "rs575272151" "rs62635286" "rs531646671" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:523930] "rs568405545" "rs544419019" "rs200579949" "rs541940975" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:523930] 1 1 1 1 0.58 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr2 :Classes 'data.table' and 'data.frame':	541488 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr2 :Classes ‘data.table’ and 'data.frame':	541488 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:541488] "rs552101438" "rs533902406" "rs533902406" "rs549374620" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:541488] "rs567175903" "rs549374620" "rs538321555" "rs538321555" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:541488] 0.544 0.666 1 0.666 0.999 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr3 :Classes 'data.table' and 'data.frame':	469670 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr3 :Classes ‘data.table’ and 'data.frame':	469670 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:469670] "rs183190499" "rs183190499" "rs188073721" "rs9755941" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:469670] "rs188073721" "rs192023809" "rs192023809" "rs9756992" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:469670] 1 1 1 0.902 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr4 :Classes 'data.table' and 'data.frame':	527899 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr4 :Classes ‘data.table’ and 'data.frame':	527899 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:527899] "rs577504332" "rs186311976" "rs545830862" "rs529058006" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:527899] "rs186311976" "rs550071552" "rs563917451" "rs556408334" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:527899] 0.994 0.971 1 1 0.672 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr5 :Classes 'data.table' and 'data.frame':	409781 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr5 :Classes ‘data.table’ and 'data.frame':	409781 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:409781] "rs547354230" "rs570403504" "rs557111298" "rs557111298" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:409781] "rs562245928" "rs528095804" "rs568993481" "rs563082128" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:409781] 0.555 0.84 1 0.753 0.753 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr6 :Classes 'data.table' and 'data.frame':	497374 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr6 :Classes ‘data.table’ and 'data.frame':	497374 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:497374] "rs561313667" "rs530559365" "rs546455495" "rs546367294" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:497374] "rs530120680" "rs550155737" "rs566451461" "rs562984996" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:497374] 0.941 1 1 1 0.73 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr7 :Classes 'data.table' and 'data.frame':	401877 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr7 :Classes ‘data.table’ and 'data.frame':	401877 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:401877] "rs183052695" "rs534884799" "rs201453340" "rs573113489" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:401877] "rs559579537" "rs574584754" "rs62429385" "rs187952787" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:401877] 1 1 0.674 0.843 0.98 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr8 :Classes 'data.table' and 'data.frame':	368594 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr8 :Classes ‘data.table’ and 'data.frame':	368594 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:368594] "rs143233250" "rs143233250" "rs564896271" "rs75979472" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:368594] "rs75979472" "rs138143518" "rs374194469" "rs138143518" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:368594] 0.958 0.955 0.537 0.997 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr9 :Classes 'data.table' and 'data.frame':	280586 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr9 :Classes ‘data.table’ and 'data.frame':	280586 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:280586] "rs535827433" "rs527713335" "rs561207592" "rs561207592" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:280586] "rs555670059" "rs543039485" "rs531595271" "rs549710705" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:280586] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr10:Classes 'data.table' and 'data.frame':	342933 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr10:Classes ‘data.table’ and 'data.frame':	342933 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:342933] "rs575152224" "rs537869321" "rs536439816" "rs558589576" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:342933] "rs560406661" "rs538894539" "rs558589576" "rs546443136" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:342933] 1 0.839 0.981 0.981 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr11:Classes 'data.table' and 'data.frame':	334124 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr11:Classes ‘data.table’ and 'data.frame':	334124 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:334124] "rs550957044" "rs550957044" "rs567928095" "rs558796212" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:334124] "rs567928095" "rs536286399" "rs536286399" "rs575477783" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:334124] 1 1 1 1 0.87 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr12:Classes 'data.table' and 'data.frame':	313320 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr12:Classes ‘data.table’ and 'data.frame':	313320 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:313320] "rs537376773" "rs369785183" "rs539189283" "rs546015167" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:313320] "rs574457226" "rs530183219" "rs546015167" "rs564617523" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:313320] 0.875 1 0.523 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr13:Classes 'data.table' and 'data.frame':	248742 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr13:Classes ‘data.table’ and 'data.frame':	248742 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:248742] "rs12018140" "rs182776109" "rs12381094" "rs58784443" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:248742] "rs11149434" "rs149988745" "rs12381056" "rs60436648" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:248742] 0.992 1 1 0.567 0.451 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr14:Classes 'data.table' and 'data.frame':	220390 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr14:Classes ‘data.table’ and 'data.frame':	220390 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:220390] "rs551865059" "rs551865059" "rs551865059" "rs570094597" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:220390] "rs570094597" "rs537135209" "rs61973512" "rs537135209" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:220390] 0.571 0.571 0.571 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr15:Classes 'data.table' and 'data.frame':	194020 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr15:Classes ‘data.table’ and 'data.frame':	194020 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:194020] "rs60733375" "rs369201715" "rs369201715" "rs543584092" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:194020] "rs60723211" "rs543584092" "rs565083980" "rs565083980" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:194020] 0.774 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr16:Classes 'data.table' and 'data.frame':	202406 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr16:Classes ‘data.table’ and 'data.frame':	202406 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:202406] "rs181534180" "rs190993388" "rs547092078" "rs201731689" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:202406] "rs375524167" "rs544623727" "rs566683167" "rs572534626" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:202406] 0.519 0.926 1 0.648 0.554 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr17:Classes 'data.table' and 'data.frame':	186421 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr17:Classes ‘data.table’ and 'data.frame':	186421 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:186421] "rs62053745" "rs530075600" "rs556217481" "rs557861022" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:186421] "rs9747082" "rs548643565" "rs574351215" "rs149228065" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:186421] 0.616 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr18:Classes 'data.table' and 'data.frame':	189285 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr18:Classes ‘data.table’ and 'data.frame':	189285 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:189285] "rs574502329" "rs574502329" "rs550985930" "rs550985930" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:189285] "rs550985930" "rs530200462" "rs530200462" "rs566603231" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:189285] 1 1 1 1 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr19:Classes 'data.table' and 'data.frame':	188302 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr19:Classes ‘data.table’ and 'data.frame':	188302 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:188302] "rs530896527" "rs542947521" "rs540059996" "rs576576542" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:188302] "rs549990280" "rs561126109" "rs544137048" "rs537613516" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:188302] 1 1 0.5 0.737 1 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr20:Classes 'data.table' and 'data.frame':	144108 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr20:Classes ‘data.table’ and 'data.frame':	144108 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:144108] "rs578019153" "rs551073389" "rs188652106" "rs75670495" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:144108] "rs543872993" "rs536670517" "rs565905334" "rs76004960" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:144108] 0.75 1 0.5 1 0.81 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr21:Classes 'data.table' and 'data.frame':	102736 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr21:Classes ‘data.table’ and 'data.frame':	102736 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:102736] "rs563044983" "rs565919691" "rs558430818" "rs533498244" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:102736] "rs564085573" "rs535026321" "rs578215950" "rs573620631" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:102736] 0.5 1 1 1 0.562 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..- attr(*, ".internal.selfref")=&lt;externalptr&gt; </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr22:Classes 'data.table' and 'data.frame':	101692 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ chr22:Classes ‘data.table’ and 'data.frame':	101692 obs. of  3 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_A: chr [1:101692] "rs587638893" "rs587631814" "rs587751754" "rs3001810" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ SNP_B: chr [1:101692] "rs587682556" "rs587639206" "rs587766389" "rs3013001" ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ R    : num [1:101692] 0.5 1 1 1 1 ...</span>
@@ -238,11 +238,11 @@ save(chrom_ld,file="/share/pub/dengcy/GWAS_Multiomics/pagwas/data/chrom_ld.RData
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by Chunyu Deng.</p>
+  <p>Developed by Chunyu Deng.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.</p>
 </div>
 
     </footer></div>

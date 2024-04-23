@@ -365,7 +365,7 @@ utils::write.csv(a,file = "_singlecell_scPagwas_score_pvalue.Result.csv",quote =
 
   Note: Although our article primarily focuses on the TRS scores, it does not imply that reverse "downTRS" are always devoid of significance. During our following research, we observed that in certain phenotypes, such as some cancer traits.When observing the density distribution plot of gPas scores, it becomes evident that it exhibits a **high and sharp peak**. This indicates that the majority of cells have minor effects. However, if the distribution shows a more pronounced long-tail behavior, the direction of this long tail can influence the impact of PCC gene pairs on the phenotype. 
 
-  ![image-20230823150635803](D:\OneDrive\RPakage\scPagwas\vignettes\figures\image-20230823150635803.png)
+  ![image-20230823150635803](/Users/chunyudeng/Library/CloudStorage/OneDrive-共享的库-Onedrive/RPakage/scPagwas/docs/articles/figures/image-20230823150635803.png)
 
   In other words, specific genotypes may be more closely related to a reduced risk of the phenotype. However, It  requires a case-by-case analysis. The question then arises: do GWAS genetic effect mainly have a positive or negative impact on phenotypes? What factors determine this impact? This is a highly intriguing question that we intend to explore further in subsequent research. We encourage researchers to consider the distribution of scPagwas.gPAS.score as an adjunctive factor for assessing directionality, though it is not absolute and should be analyzed on a case-by-case basis.
 
