@@ -64,7 +64,7 @@ Single_data_input <- function(Pagwas,
 
   Pagwas$data_mat <- GetAssayData(Single_data, slot = "data", assay = assay)
 
-  merge_scexpr <- Seurat::AverageExpression(Single_data, assays = assay)[[assay]]
+  merge_scexpr <- Seurat::AggregateExpression(Single_data, assays = assay)[[assay]]
 
   # 5.VariableFeatures
 
@@ -99,7 +99,7 @@ Single_data_input <- function(Pagwas,
 #' @param meta_data (data.frame) meta data of your single cell data to use, the first column is cell names. the cell names should be the same as the first row of count_data. It should include the "cell_type" column.
 #' @param Pathway_list (list,character) pathway gene sets list
 #' @param min_clustercells Threshold for total cells fo each cluster.
-#' 
+#'
 #' @return Pagwas list including:
 #' "Celltype_anno"    "data_mat"  "merge_scexpr"
 #' @export

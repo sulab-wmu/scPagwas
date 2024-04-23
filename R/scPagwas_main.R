@@ -207,8 +207,8 @@ scPagwas_main <- function(Pagwas = NULL,
 
 
   #Pagwas =NULL
-  #gwas_data = "D:/tempdata/monocytecount_prune_gwas_data.txt"
-  #Single_data ="D:/tempdata/sim_data_8.16.rds"
+  #gwas_data = system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas")
+  #Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas")
   # output.prefix=""
   # output.dirs="test"
   # #load("D:/OneDrive/GWAS_Multiomics/Manuscripts/Revise_comments/pathway_add/reduce_genes.by.gobp.pathway.RData")
@@ -222,7 +222,6 @@ scPagwas_main <- function(Pagwas = NULL,
   # run_split=FALSE
   # n.cores=1
   # marg = 10000
-  # pa_method = "SVD"
   # maf_filter = 0.01
   # min_clustercells = 10
   # min.pathway.size = 5

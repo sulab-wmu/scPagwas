@@ -239,7 +239,7 @@ PathwayPCAtest <- function(Pathway_list,
     mat <- scCounts[, lab]
     result <- tryCatch(
       {
-    pcs <- irlba::irlba(methods::as(mat, "dgCMatrix"),
+    pcs <- irlba::irlba(mat,
       nv = nPcs, nu = 0, center = cm[lab]
     )
     pcs$d <- pcs$d / sqrt(nrow(mat))
