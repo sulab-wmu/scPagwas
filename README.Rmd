@@ -36,7 +36,7 @@ You can install the released version of scPagwas from [github](https://github.co
 
 ``` r
 #install some dependence packages
-install.packages("Seurat")
+install.packages("Seurat")#‘5.0.3’
 install.packages("ggpubr")
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
