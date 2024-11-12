@@ -87,3 +87,66 @@ Pathway_annotation_input <- function(Pagwas,
   Pagwas$pathway_blocks <- pathway_blocks
   return(Pagwas)
 }
+
+
+import pandas as pd
+
+def pathway_annotation_input(Pagwas, block_annotation):
+    # Check the input types
+    if not isinstance(Pagwas['Pathway_list'], dict):
+        raise ValueError("Pathway_list must be a dictionary")
+
+    if not isinstance(block_annotation, pd.DataFrame):
+        raise ValueError("block_annotation must be a pandas DataFrame")
+
+    required_columns = {'chrom', 'start', 'end', 'label'}
+    if not required_columns.issubset(block_annotation.columns):
+        raise ValueError("block_annotation must contain columns: 'chrom', 'start', 'end', 'label'")
+
+    # Remove duplicated labels in block_annotation
+    block_annotation = block_annotation.drop_duplicates(subset='label')
+
+    # Intersect variable features with gene labels
+    proper_gene_names = set(Pagwas['VariableFeatures']).intersection(Pagwas['snp_gene_df']['label'])
+
+    if len(set().union(*Pagwas['Pathway_list'].values()).intersection(proper_gene_names)) < 1:
+        raise ValueError("No match between Pathway genes and VariableFeatures")
+
+    # Filter the Pathway_list to only include valid genes
+    Pathway_list = {
+        pa: list(set(genes).intersection(proper_gene_names))
+        for pa, genes in Pagwas['Pathway_list'].items()
+    }
+
+    # Filter out empty pathways
+    Pathway_list = {k: v for k, v in Pathway_list.items() if len(v) > 0}
+
+    # Keep only pathways present in pca_cell_df's rows
+    Pa_index = set(Pathway_list.keys()).intersection(Pagwas['pca_cell_df'].index)
+    Pathway_list = {k: Pathway_list[k] for k in Pa_index}
+
+    print("Obtaining pathway block information...")
+
+    # Filter pathways based on block_annotation
+    valid_pa_index = [
+        pa for pa in Pathway_list if block_annotation['label'].isin(Pathway_list[pa]).sum() >= 10
+    ]
+    Pathway_list = {pa: Pathway_list[pa] for pa in valid_pa_index}
+
+    # Create a DataFrame for each pathway and label it
+    paan_df = []
+    for pa, genes in Pathway_list.items():
+        pa_block = block_annotation[block_annotation['label'].isin(genes)].copy()
+        pa_block['pathway'] = pa
+        paan_df.append(pa_block)
+
+    # Sort the blocks by chromosome and start position
+    pathway_blocks = {
+        pa: df.sort_values(['chrom', 'start']) for pa, df in zip(Pathway_list.keys(), paan_df)
+    }
+
+    # Update Pagwas object with filtered Pathway_list and pathway_blocks
+    Pagwas['Pathway_list'] = Pathway_list
+    Pagwas['pathway_blocks'] = pathway_blocks
+
+    return Pagwas
