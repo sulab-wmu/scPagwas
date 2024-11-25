@@ -1,38 +1,7 @@
-#' scPagwas, A single-cell pathway-based principal component (PC)-scoring
-#' algorithm named for integrating polygenic signals from GWAS with
-#' single cell data to infer disease-relevant cell populations and score
-#' the associations of individual cells with complex diseases.
 #'
-#'
-#' @importFrom dplyr mutate filter inner_join %>%
-#' @importFrom irlba irlba
-#' @importFrom Seurat Assays FindVariableFeatures AverageExpression VariableFeatures GetAssayData RunPCA RunTSNE RunUMAP Embeddings CreateAssayObject DefaultAssay AddModuleScore VlnPlot
-#' @importFrom SeuratObject Idents DefaultAssay GetAssayData SetAssayData
-#' @importFrom Matrix Matrix colSums rowSums crossprod
-#' @importFrom glmnet cv.glmnet
-#' @importFrom GenomicRanges GRanges resize resize
-#' @importFrom IRanges IRanges
-#' @importFrom utils timestamp
-#' @import ggplot2
-#' @importFrom SOAR Store Objects Remove
-#' @importFrom ggpubr ggscatter
-#' @importFrom RMTstat qWishartMax
-#' @importFrom gridExtra grid.arrange
-#' @importFrom data.table setkey data.table as.data.table
-#' @importFrom bigreadr fread2 rbind_df
-#' @importFrom reshape2 dcast
-#' @importFrom Rcpp sourceCpp
-#' @importFrom bigmemory as.big.matrix is.big.matrix
-#' @importFrom bigstatsr as_FBM big_apply big_univLinReg covar_from_df big_transpose big_cprodMat
-#' @importFrom biganalytics apply
-#' @importFrom graphics text
-#' @importFrom grDevices colorRampPalette pdf dev.off
-#' @importFrom utils txtProgressBar setTxtProgressBar write.table write.csv timestamp globalVariables
-#' @importFrom stats reorder cor qnorm density smooth.spline predict dnorm quantile offset
-#' @importFrom methods as is
-#' @title Main wrapper functions for scPagwas
-#' @name scPagwas_main
-#' @description Main Pagwas wrapper functions.
+#' @title Main wrapper functions for scPagwas in version 2.0
+#' @name scPagwas_main2
+#' @description Main Pagwas wrapper functions in version 2.0.
 #' @details The entry point for Pagwas analysis.
 #' Including the data input functions and the main progress functions;
 #' It can also output the
@@ -179,8 +148,8 @@
 #'   singlecell = TRUE,
 #'   celltype = TRUE)
 #' @author Chunyu Deng
-#' @aliases scPagwas_main
-#' @keywords scPagwas_main, wrapper of scPagwas functions.
+#' @aliases scPagwas_main2
+#' @keywords scPagwas_main2, wrapper of scPagwas functions in version 2.0.
 scPagwas_main2 <- function(Pagwas = NULL,
                           gwas_data = NULL,
                           output.prefix = "Test",
