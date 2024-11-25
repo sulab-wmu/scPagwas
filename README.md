@@ -48,7 +48,7 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("GenomicRanges")
 
-devtools::install_github("sulab-wmu/scPagwas")
+devtools::install_github("WMU-SuLab/scPagwas")
 ```
 
 In many cases, installing packages using `devtools::install_github` may
@@ -56,7 +56,7 @@ fail.
 
 ``` r
 library(devtools)
-install_git("https://github.com/sulab-wmu/scPagwas.git", ref = "main")
+install_git("https://github.com/WMU-SuLab/scPagwas.git", ref = "main")
 ```
 
 ## Usage
