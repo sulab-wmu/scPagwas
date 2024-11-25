@@ -7,7 +7,7 @@
 scPagwas_perform_score(Pagwas, remove_outlier = TRUE)
 }
 \arguments{
-\item{Pagwas}{pagwas}
+\item{Pagwas}{a list data including all Intermediate result}
 
 \item{remove_outlier}{Whether to remove the outlier for scPagwas score.
 storage, you can set a large number to save time.}
