@@ -1,8 +1,7 @@
 #'
 #' @title Main wrapper functions for scPagwas in version 2.0
-#' @name scPagwas_main2
 #' @description Main Pagwas wrapper functions in version 2.0.
-#' @details The entry point for Pagwas analysis.
+#' @details The entry point for Pagwas analysis. Including the data input...
 #' Including the data input functions and the main progress functions;
 #' It can also output the
 #' running log and parameter log for scPagwas, and construct the folder
@@ -113,40 +112,8 @@
 #'   {Pathway_ct_results:}{ The total number of matrix vector products
 #'   carried out}
 #' }
-#'
-#' @note
-#' 1.When you run the package in linux server, you can run
-#' \code{export OPENBLAS_NUM_THREADS=1}
-#' before enter into R environment, It can help you to avoid core errors.
-#' 2. When the code is kill for some wrong, you can run
-#' \code{SOAR::Objects()} to check the objects, or
-#' run \code{SOAR::Remove(SOAR::Objects())} to remove it.
-#' 3. When your data is too big to run the function(bus error), you can
-#' split your data into several sub-data and run the merge_pagwas
-#' to merge them.
-#' @references
-#' Polygenic regression identifies trait-relevant cell subpopulations
-#' through pathway activity transformed single-cell RNA sequencing data.(2022)
 #' @export
 #'
-#' @examples
-#' library(scPagwas)
-#' Pagwas_data <- scPagwas_main(
-#'   Pagwas = NULL,
-#'   gwas_data = system.file("extdata", "GWAS_summ_example.txt",
-#'     package = "scPagwas"
-#'   ),
-#'   Single_data = system.file("extdata", "scRNAexample.rds",
-#'     package = "scPagwas"
-#'   ),
-#'   output.prefix = "test",
-#'   output.dirs = "scPagwastest_output",
-#'   block_annotation = block_annotation,
-#'   assay = "RNA",
-#'   Pathway_list = Genes_by_pathway_kegg,
-#'   chrom_ld = chrom_ld,
-#'   singlecell = TRUE,
-#'   celltype = TRUE)
 #' @author Chunyu Deng
 #' @aliases scPagwas_main2
 #' @keywords scPagwas_main2, wrapper of scPagwas functions in version 2.0.
@@ -490,7 +457,7 @@ scPagwas_main2 <- function(Pagwas = NULL,
                      quote = F
     )
 
-    scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC, decreasing = T)[1:n_topgenes]]
+    scPagwas_topgenes <- rownames(Pagwas$PCC)[order(Pagwas$PCC$weight_pcc, decreasing = T)[1:n_topgenes]]
     message("done!")
 
     #############################
@@ -512,7 +479,7 @@ scPagwas_main2 <- function(Pagwas = NULL,
     )] <- NULL
 
 
-    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, list(scPagwas_topgenes,scPagwas_downgenes), name = c("scPagwas.TRS.Score","scPagwas.downTRS.Score"))
+    Single_data <- Seurat::AddModuleScore(Single_data, assay = assay, scPagwas_topgenes, name ="scPagwas.TRS.Score")
 
     message("* Get Random Correct background pvalue for each single cell!")
     if(iters_singlecell>0){

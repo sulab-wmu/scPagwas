@@ -414,7 +414,10 @@ Random_PCC<- function(gPas,datamat,seed=1234,random_times=100,select_num=10000){
 #'
 scGet_PCC2<-function(Pagwas,random_times=100){
   scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score
-  pcc <- Random_PCC(gPas=Pagwas$scPagwas.gPAS.score,datamat=Pagwas$data_mat,
+  if (!inherits(Pagwas$data_mat, "matrix")) {
+    data_mat <- as_matrix(Pagwas$data_mat)
+  }
+  pcc <- Random_PCC(gPas=Pagwas$scPagwas.gPAS.score,datamat=data_mat,
                     seed=1234,random_times=random_times,
                     select_num=floor(ncol(Pagwas$Pathway_single_results)/5))
   colnames(pcc)<-'PCC'
