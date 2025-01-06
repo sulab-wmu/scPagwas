@@ -547,7 +547,7 @@ scPagwas_main2 <- function(Pagwas = NULL,
 
       message("* Get  pvalue for mp in each cell type!")
 
-      Idents(Single_data)<-Pagwas$Celltype_anno$annotation
+      Seurat::Idents(Single_data)<-Pagwas$Celltype_anno$annotation
       PaHeritability_marker<-FindAllMarkers(Single_data,
           assay = "scPagwasPaHeritability",
           logfc.threshold = 0,
