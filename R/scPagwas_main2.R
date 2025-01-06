@@ -548,12 +548,12 @@ scPagwas_main2 <- function(Pagwas = NULL,
       message("* Get  pvalue for mp in each cell type!")
 
       Seurat::Idents(Single_data)<-Pagwas$Celltype_anno$annotation
-      PaHeritability_marker<-FindAllMarkers(Single_data,
+      PaHeritability_marker <- Seurat::FindAllMarkers(Single_data,
           assay = "scPagwasPaHeritability",
           logfc.threshold = 0,
           test.use = "wilcox",
           slot = "data")
-      PaHeritability_marker<-PaHeritability_marker[PaHeritability_marker$avg_log2FC>0,]
+      PaHeritability_marker <- PaHeritability_marker[PaHeritability_marker$avg_log2FC>0,]
 
       rm(scPagwas_pathway)
       rm(scPagwas_pca)
