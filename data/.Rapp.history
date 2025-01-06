@@ -1,0 +1,8 @@
+load("/Users/chunyudeng/Library/CloudStorage/OneDrive-共享的库-Onedrive/RPakage/scPagwas/data/chrom_ld.RData")
+ls
+ls()
+chrom_ld
+head(chrom_ld)
+class(chrom_ld)
+class(chrom_ld[1])
+head(chrom_ld[[1]])

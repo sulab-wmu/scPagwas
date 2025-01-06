@@ -545,8 +545,21 @@ scPagwas_main2 <- function(Pagwas = NULL,
       Single_data[["scPagwasPaHeritability"]] <- scPagwas_pathway
       Single_data[["scPagwasPaPca"]] <- scPagwas_pca
 
+      message("* Get  pvalue for mp in each cell type!")
+
+      Idents(Single_data)<-Celltype_anno$merge_anno
+      PaHeritability_marker<-FindAllMarkers(Single_data,
+          assay = "scPagwasPaHeritability",
+          logfc.threshold = 0,
+          test.use = "wilcox",
+          slot = "data")
+      PaHeritability_marker<-PaHeritability_marker[PaHeritability_marker$avg_log2FC>0,]
+
       rm(scPagwas_pathway)
       rm(scPagwas_pca)
+      utils::write.csv(PaHeritability_marker,file = paste0("./", output.dirs, "/", output.prefix,
+                              "_MP_celltype_pvalue.Result.csv"
+                            ),quote = F)
 
       Single_data$scPagwas.gPAS.score <- Pagwas$scPagwas.gPAS.score[rownames(Pagwas$Celltype_anno)]
       if(iters_singlecell>0){
