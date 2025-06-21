@@ -47,7 +47,6 @@ install.packages("ggpubr")
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("GenomicRanges")
-
 devtools::install_github("WMU-SuLab/scPagwas")
 ```
 
