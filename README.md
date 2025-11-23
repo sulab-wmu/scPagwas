@@ -16,11 +16,6 @@ addressed issues with synchronizing results across single-cell data and
 cell-type data. Please note that scPagwas2 requires the use of the
 scPagwas_main2 function to replace the original scPagwas_main.
 
-To accommodate the substantial memory demands of single-cell data
-calculations in R, we have developed a Python version, scPagwas_py
-(<https://github.com/dengchunyu/scPagwas_py>), fully synchronized with
-scPagwas2.0. We will continue to provide updates to further enhance
-computational efficiency.
 
 Please cite this article in press as: Ma et al.,Polygenic regression
 uncovers trait-relevant cellular contexts through pathway activation
@@ -66,7 +61,7 @@ quick-start example:
 library(scPagwas)
 system.time(
  #1.start to run the wrapper functions for example.
- Pagwas_data<-scPagwas_main2(Pagwas = NULL,
+ Pagwas_data<-scPagwas_main(Pagwas = NULL,
                      gwas_data =system.file("extdata", "GWAS_summ_example.txt", package = "scPagwas"), # The GWAS Summary statistics files 
                      Single_data =system.file("extdata", "scRNAexample.rds", package = "scPagwas"),# scRNA-seq data in seruat format with "RNA" assays and normalized.
                      output.prefix="test", # the prefix name for output files
@@ -75,7 +70,7 @@ system.time(
                      assay="RNA", # the assays for scRNA-seq data to use.
                      Pathway_list=Genes_by_pathway_kegg,# pathway list is provided by package, including gene symbols.
                      n.cores=1,
-                     iters_singlecell = 10,
+                     iters_singlecell = 100,
                      chrom_ld = chrom_ld,# The LD data is provided by package.
                      singlecell=T, # Whether to run the singlecell process.
                      celltype=T# Whether to run the celltype process.
